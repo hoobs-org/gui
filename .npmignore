@@ -1,0 +1,15 @@
+.vscode
+bin/
+lib/gui.tgz
+node_modules/
+var/
+src/
+.browserslistrc
+.editorconfig
+.eslintrc.js
+.gitignore
+.npmignore
+babel.config.js
+CHANGELOG.md
+tsconfig.json
+vue.config.js

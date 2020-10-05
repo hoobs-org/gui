@@ -1,0 +1,146 @@
+#!/usr/bin/env node
+
+/**************************************************************************************************
+ * hoobs-gui                                                                                      *
+ * Copyright (C) 2020 HOOBS                                                                       *
+ *                                                                                                *
+ * This program is free software: you can redistribute it and/or modify                           *
+ * it under the terms of the GNU General Public License as published by                           *
+ * the Free Software Foundation, either version 3 of the License, or                              *
+ * (at your option) any later version.                                                            *
+ *                                                                                                *
+ * This program is distributed in the hope that it will be useful,                                *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of                                 *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                  *
+ * GNU General Public License for more details.                                                   *
+ *                                                                                                *
+ * You should have received a copy of the GNU General Public License                              *
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
+ **************************************************************************************************/
+
+const Program = require("commander");
+const Prompt = require("prompts");
+const { join, dirname } = require("path");
+const { execSync } = require("child_process");
+
+const {
+    existsSync,
+    mkdirSync,
+    realpathSync,
+    readFileSync,
+    writeFileSync,
+} = require("fs-extra");
+
+const root = join(dirname(realpathSync(__filename)), "../");
+const pjson = JSON.parse(readFileSync(join(root, "package.json")).toString());
+
+Program.version(pjson.version, "-v, --version", "output the current version")
+    .allowUnknownOption();
+
+Program.command("gui", { isDefault: true })
+    .description("build hoobs gui")
+    .action(() => {
+        execSync(`${join(root, "node_modules", ".bin", "vue-cli-service")} lint`, {
+            cwd: root,
+            stdio: "inherit",
+        });
+
+        if (!existsSync(join(root, "lib"))) {
+            mkdirSync(join(root, "lib"));
+        }
+
+        execSync(`${join(root, "node_modules", ".bin", "rimraf")} ${join(root, "lib")}`, {
+            cwd: root,
+            stdio: "inherit",
+        });
+
+        execSync(`${join(root, "node_modules", ".bin", "vue-cli-service")} build`, {
+            cwd: root,
+            stdio: "inherit",
+        });
+
+        execSync(`cp ${join(root, "var", "manifest.json")} ${join(root, "lib", "manifest.json")}`, {
+            cwd: root,
+            stdio: "inherit",
+        });
+
+        execSync(`cp ${join(root, "var", "robots.txt")} ${join(root, "lib", "robots.txt")}`, {
+            cwd: root,
+            stdio: "inherit",
+        });
+
+        execSync(`cp ${join(root, "var", "favicon.png")} ${join(root, "lib", "favicon.png")}`, {
+            cwd: root,
+            stdio: "inherit",
+        });
+
+        execSync(`cp -R ${join(root, "var", "icons")} ${join(root, "lib", "img/")}`, {
+            cwd: root,
+            stdio: "inherit",
+        });
+
+        const pack = JSON.parse(JSON.stringify(pjson));
+
+        delete pack.scripts;
+        delete pack.dependencies;
+        delete pack.devDependencies;
+
+        writeFileSync(join(root, "package.json"), JSON.stringify(pack, null, 4));
+
+        execSync("npm pack", {
+            cwd: root,
+            stdio: "inherit",
+        });
+
+        execSync(`mv ${join(root, `hoobs-gui-${pjson.version}.tgz`)} ${join(root, "lib", "package.tgz")}`, {
+            cwd: root,
+            stdio: "inherit",
+        });
+
+        execSync(`chmod 755 ${join(root, "lib", "package.tgz")}`, {
+            cwd: root,
+            stdio: "inherit",
+        });
+
+        writeFileSync(join(root, "package.json"), JSON.stringify(pjson, null, 4));
+    });
+
+Program.command("publish")
+    .description("publish the gui to npm")
+    .action(() => {
+        const questions = [
+            {
+                type: "text",
+                name: "confirm",
+                initial: "no",
+                message: "type yes to confirm",
+                format: (value) => value.toLowerCase(),
+            },
+        ];
+
+        Prompt(questions).then((result) => {
+            if (result && result.confirm === "yes") {
+                execSync(`${join(root, "bin", "build")} gui`, {
+                    cwd: root,
+                    stdio: "inherit",
+                });
+
+                const pack = JSON.parse(JSON.stringify(pjson));
+
+                delete pack.scripts;
+                delete pack.dependencies;
+                delete pack.devDependencies;
+
+                writeFileSync(join(root, "package.json"), JSON.stringify(pack, null, 4));
+
+                execSync("npm publish --access public", {
+                    cwd: root,
+                    stdio: "inherit",
+                });
+
+                writeFileSync(join(root, "package.json"), JSON.stringify(pjson, null, 4));
+            }
+        });
+    });
+
+Program.parse(process.argv);
