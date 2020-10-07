@@ -21,13 +21,33 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
-        name: "Status",
-        component: () => import(/* webpackChunkName: "status" */ "../views/status.vue"),
+        name: "Dashboard",
+        component: () => import(/* webpackChunkName: "dashboard" */ "../views/dashboard.vue"),
     },
     {
         path: "/accessories",
         name: "Accessories",
         component: () => import(/* webpackChunkName: "accessories" */ "../views/accessories.vue"),
+    },
+    {
+        path: "/log",
+        name: "Log",
+        component: () => import(/* webpackChunkName: "log" */ "../views/log.vue"),
+    },
+    {
+        path: "/instances",
+        name: "Instances",
+        component: () => import(/* webpackChunkName: "instances" */ "../views/instances.vue"),
+    },
+    {
+        path: "/plugins",
+        name: "Plugins",
+        component: () => import(/* webpackChunkName: "plugins" */ "../views/plugins.vue"),
+    },
+    {
+        path: "/config",
+        name: "Config",
+        component: () => import(/* webpackChunkName: "config" */ "../views/config.vue"),
     },
 ];
 
