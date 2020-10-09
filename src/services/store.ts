@@ -16,11 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-import { createStore } from "vuex";
+import Vue from "vue";
+import Vuex from "vuex";
 import Persistence from "vuex-persist";
 import { units, timespan } from "./formatters";
 
-export default createStore({
+Vue.use(Vuex);
+
+export default new Vuex.Store({
     state: {
         log: [],
         instances: {},
@@ -50,7 +53,15 @@ export default createStore({
         session: null,
         notifications: [],
         accessory: null,
+        theme: "dark",
     },
+
+    getters: {
+        theme(state) {
+            return state.theme;
+        },
+    },
+
     mutations: {
         "IO:LOG": (state: { [key: string ]: any }, payload: any) => {
             console.log(payload);
@@ -135,6 +146,10 @@ export default createStore({
                 state.notifications.splice(index, 1);
             }
         },
+
+        "THEME:SET": (state: { [key: string ]: any }, theme: number) => {
+            state.theme = theme;
+        },
     },
 
     plugins: [new Persistence({
@@ -146,6 +161,7 @@ export default createStore({
             temp: state.temp,
             session: state.session,
             notifications: state.notifications,
+            theme: state.theme,
         }),
     }).plugin],
 });

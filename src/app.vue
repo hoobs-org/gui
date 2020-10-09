@@ -17,5 +17,17 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <router-view />
+    <div id="app" :class="theme">
+        <router-view />
+    </div>
 </template>
+
+<script>
+    export default {
+        computed: {
+            theme() {
+                return this.$store.state.theme;
+            },
+        },
+    };
+</script>
