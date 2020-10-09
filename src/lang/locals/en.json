@@ -1,0 +1,17 @@
+{
+    "en": {
+        "accessories": "Accessories",
+        "dashboard": "Dashboard",
+        "debug": "Debug",
+        "device": "Device",
+        "download": "Download",
+        "information": "Information",
+        "instances": "Instances",
+        "level": "Level",
+        "log": "Log",
+        "plugins": "Plugins",
+        "settings": "Settings",
+        "unkonwn": "Unkonwn",
+        "warnings": "Warnings"
+    }
+}

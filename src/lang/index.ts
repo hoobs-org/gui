@@ -17,22 +17,59 @@
  **************************************************************************************************/
 
 import Vue from "vue";
-import socket from "./services/socket";
-import root from "./app.vue";
-import router from "./services/router";
-import store from "./services/store";
-import lang from "./lang";
+import VueI18n from "vue-i18n";
+import Languages from "./languages";
 
-socket.on("log", (data) => store.commit("IO:LOG", data));
-socket.on("monitor", (data) => store.commit("IO:MONITOR", data));
-socket.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
-socket.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
+function supported(locale: string) {
+    switch (locale) {
+        case "ar":
+        case "bg":
+        case "cs":
+        case "de":
+        case "el":
+        case "es":
+        case "fr":
+        case "he":
+        case "it":
+        case "ja":
+        case "ko":
+        case "nl":
+        case "no":
+        case "pl":
+        case "pt":
+        case "ro":
+        case "ru":
+        case "sv":
+        case "vi":
+        case "zh":
+            return locale;
 
-Vue.config.productionTip = false;
+        default:
+            return "en";
+    }
+}
 
-new Vue({
-    router,
-    store,
-    i18n: lang,
-    render: (h) => h(root),
-}).$mount("#app");
+function current(locale?: string) {
+    if ((!locale || locale === "") && window.navigator && window.navigator.language) {
+        return supported(Languages[window.navigator.language]);
+    }
+
+    if (!locale || locale === "") {
+        return supported("en");
+    }
+
+    return supported(Languages[locale]);
+}
+
+function load(locale: string) {
+    return require(`./locals/${current(locale)}.json`);
+}
+
+Vue.use(VueI18n);
+
+const locale = current();
+
+export default new VueI18n({
+    locale,
+    messages: load(locale),
+});

@@ -59,26 +59,6 @@ Program.command("gui", { isDefault: true })
             stdio: "inherit",
         });
 
-        execSync(`cp ${join(root, "var", "manifest.json")} ${join(root, "lib", "manifest.json")}`, {
-            cwd: root,
-            stdio: "inherit",
-        });
-
-        execSync(`cp ${join(root, "var", "robots.txt")} ${join(root, "lib", "robots.txt")}`, {
-            cwd: root,
-            stdio: "inherit",
-        });
-
-        execSync(`cp ${join(root, "var", "favicon.png")} ${join(root, "lib", "favicon.png")}`, {
-            cwd: root,
-            stdio: "inherit",
-        });
-
-        execSync(`cp -R ${join(root, "var", "icons")} ${join(root, "lib", "img/")}`, {
-            cwd: root,
-            stdio: "inherit",
-        });
-
         const pack = JSON.parse(JSON.stringify(pjson));
 
         delete pack.scripts;

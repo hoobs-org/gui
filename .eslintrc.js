@@ -99,5 +99,14 @@ module.exports = {
                 "vue/comment-directive": "off",
             },
         },
+        {
+            files: [
+                "src/lang/index.ts",
+            ],
+            rules: {
+                "import/no-dynamic-require": "off",
+                "global-require": "off",
+            },
+        },
     ],
 };
