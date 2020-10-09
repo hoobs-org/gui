@@ -16,21 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-import Vue from "vue";
-import socket from "./services/socket";
-import root from "./app.vue";
-import router from "./services/router";
-import store from "./services/store";
+export default class Themes {
+    static path(theme: string) {
+        switch (theme) {
+            case "light":
+            case "dark":
+                return `/defaults/${theme}.css`;
 
-socket.on("log", (data) => store.commit("IO:LOG", data));
-socket.on("monitor", (data) => store.commit("IO:MONITOR", data));
-socket.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
-socket.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
+            default:
+                if (process.env.NODE_ENV !== "production") {
+                    return `http://localhost:50826/themes/${theme}.css`;
+                }
 
-Vue.config.productionTip = false;
+                if (window.location.port !== "80" && window.location.port !== "443") {
+                    return `:${window.location.port}/themes/${theme}.css`;
+                }
 
-new Vue({
-    router,
-    store,
-    render: (h) => h(root),
-}).$mount("#app");
+                return `/themes/${theme}`;
+        }
+    }
+}

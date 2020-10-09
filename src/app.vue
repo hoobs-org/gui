@@ -26,6 +26,8 @@
 <script>
     import Navigation from "@/components/navigation.vue";
 
+    import Themes from "./services/themes";
+
     export default {
         components: {
             navigation: Navigation,
@@ -34,6 +36,20 @@
         computed: {
             theme() {
                 return this.$store.state.theme;
+            },
+        },
+
+        created() {
+            this.setup(this.theme);
+        },
+
+        methods: {
+            setup(theme) {
+                if (theme !== this.theme) {
+                    this.$store.commit("THEME:SET", theme);
+                }
+
+                document.getElementById("theme").setAttribute("href", Themes.path(theme));
             },
         },
     };
