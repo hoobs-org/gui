@@ -17,46 +17,17 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="app" :theme="theme">
-        <navigation />
-        <router-view class="view" />
-    </div>
+    <div id="navigation"></div>
 </template>
 
 <script>
-    import Navigation from "@/components/navigation.vue";
-
     export default {
-        components: {
-            navigation: Navigation,
-        },
-
-        computed: {
-            theme() {
-                return this.$store.state.theme;
-            },
-        },
+        name: "navigation",
     };
 </script>
 
-<style lang="scss">
-    html, body {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        overflow: hidden;
-    }
-
-    #app {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        background: var(--application-background);
-    }
-
-    #app .view {
-        flex: 1;
+<style lang="scss" scoped>
+    #navigation {
+        min-width: 45px;
     }
 </style>

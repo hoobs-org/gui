@@ -22,6 +22,9 @@ import root from "./app.vue";
 import router from "./services/router";
 import store from "./services/store";
 
+import "./themes/light.scss";
+import "./themes/dark.scss";
+
 socket.on("log", (data) => store.commit("IO:LOG", data));
 socket.on("monitor", (data) => store.commit("IO:MONITOR", data));
 socket.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
