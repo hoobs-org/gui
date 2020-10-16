@@ -107,9 +107,10 @@ export default new Vuex.Store({
         },
 
         "IO:NOTIFICATION": (state: { [key: string ]: any }, payload: any) => {
-            const index = state.notifications.length;
+            const id = `${new Date().getTime()}:${Math.random()}`;
 
             state.notifications.push({
+                id,
                 event: payload.event,
                 instance: payload.instance,
                 type: payload.data.type,
@@ -119,8 +120,10 @@ export default new Vuex.Store({
             });
 
             setTimeout(() => {
-                state.notifications.splice(index, 1);
-            }, (3 * 1000));
+                const index = state.notifications.findIndex((item: { [key: string ]: any }) => item.id === id);
+
+                if (index >= 0) state.notifications.splice(index, 1);
+            }, (5 * 1000));
         },
 
         "IO:ACCESSORY:CHANGE": (state: { [key: string ]: any }, payload: any) => {
