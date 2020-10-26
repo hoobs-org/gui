@@ -31,7 +31,9 @@
         "serve": "vue-cli-service serve --port 54826"
     },
     "dependencies": {
+        "axios": "^0.21.0",
         "core-js": "^3.6.5",
+        "sanitize-filename": "^1.6.3",
         "socket.io-client": "^2.3.0",
         "vue": "^2.6.11",
         "vue-class-component": "^7.2.3",

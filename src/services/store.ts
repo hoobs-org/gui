@@ -130,7 +130,7 @@ export default new Vuex.Store({
             state.accessory = payload.data;
         },
 
-        "SESSION:SET": (state: { [key: string ]: any }, token: number) => {
+        "SESSION:SET": (state: { [key: string ]: any }, token: string) => {
             state.session = token;
         },
 

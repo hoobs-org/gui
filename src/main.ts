@@ -18,10 +18,13 @@
 
 import Vue from "vue";
 import socket from "./services/socket";
+import api from "./services/api";
 import root from "./app.vue";
 import router from "./services/router";
 import store from "./services/store";
 import lang from "./lang";
+
+Vue.mixin(api(store));
 
 socket.on("log", (data) => store.commit("IO:LOG", data));
 socket.on("monitor", (data) => store.commit("IO:MONITOR", data));
