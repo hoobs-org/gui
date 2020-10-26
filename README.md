@@ -727,7 +727,7 @@ Fetches the accessory and persisted connections cache on this instance.
 
 ```js
 {
-    parings: {
+    parings: [{
         id: string,
         version: string,
         username: string,
@@ -737,7 +737,7 @@ Fetches the accessory and persisted connections cache on this instance.
         setup_id: string,
         clients: [any],
         permissions: [any]
-    },
+    }],
     accessories: [any],
 }
 ```
