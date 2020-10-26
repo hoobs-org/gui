@@ -19,7 +19,7 @@ This fetches the status of the authentication system. It will return one of thes
 #### **this.api.auth.disable()**
 This will disable the auth system.
 
-The auth system can only be deleted is there are no users. If you would like to disable the auth system after users have been created, you must first remove the `access` file from the storage path.
+The auth system can only be disabled if there are no users. If you would like to disable the auth system after users have been created, you must first remove the `access` file from the storage path.
 
 This will return the auth system status.
 
