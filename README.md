@@ -253,7 +253,7 @@ Returns a system information object.
 }
 ```
 
-#### **this.api.system().cpu()**
+#### **system.cpu()**
 Returns the current CPU load.
 
 ```js
