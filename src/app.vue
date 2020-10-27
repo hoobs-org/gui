@@ -62,6 +62,40 @@
 </script>
 
 <style lang="scss">
+    @font-face {
+        font-family: "Montserrat";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: local("Montserrat Regular"),
+             local("Montserrat-Regular"),
+             url(./assets/montserrat.woff2) format("woff2");
+        unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    }
+
+    @font-face {
+        font-family: "Montserrat Black";
+        font-style: normal;
+        font-weight: 900;
+        font-display: swap;
+        src: local("Montserrat Black"),
+             local("Montserrat-Black"),
+             url(./assets/montserrat-black.woff2) format("woff2");
+        unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    }
+
+    @font-face {
+        font-family: "Material Icons";
+        font-style: normal;
+        font-weight: 400;
+        src: url(./assets/material.eot);
+        src: local("Material Icons"),
+             local("MaterialIcons-Regular"),
+             url(./assets/material.woff2) format('woff2'),
+             url(./assets/material.woff) format('woff'),
+             url(./assets/material.ttf) format('truetype');
+    }
+
     html, body {
         width: 100%;
         height: 100%;
@@ -75,10 +109,81 @@
         width: 100%;
         height: 100%;
         display: flex;
+        font-family: "Montserrat", sans-serif;
+        color: var(--application-text);
         background: var(--application-background);
+    }
+
+    #app .button,
+    #app .button:link,
+    #app .button:active,
+    #app .button:visited {
+        background: var(--button);
+        color: var(--button-text) !important;
+        text-decoration: none !important;
+        display: inline-block;
+        border: 1px var(--button-border) solid;
+        border-radius: 3px;
+        padding: 10px;
+        cursor: pointer;
+        user-select: none;
+        margin: 0 10px 0 0;
+        white-space: pre;
+    }
+
+    #app .button.primary,
+    #app .button.primary:link,
+    #app .button.primary:active,
+    #app .button.primary:visited {
+        background: var(--button-primary);
+        color: var(--button-primary-text) !important;
+        border: 1px var(--button-primary-border) solid;
+    }
+
+    #app .button.light,
+    #app .button.light:link,
+    #app .button.light:active,
+    #app .button.light:visited {
+        background: var(--button-light);
+        color: var(--button-light-text) !important;
+        border: 1px var(--button-light-border) solid;
+    }
+
+    #app .button:hover {
+        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24),
+                    0 2px 1px -1px rgba(0, 0, 0, 0.22),
+                    0 1px 3px 1px rgba(0, 0, 0, 0.3);
     }
 
     #app .view {
         flex: 1;
+    }
+
+    #app input {
+        background: var(--application-input);
+        color: var(--application-input-text);
+        border: 1px var(--application-border) solid;
+    }
+
+    #app input:focus {
+        border-color: var(--application-highlight);
+    }
+
+    #app .modal input {
+        background: var(--modal-input);
+        color: var(--modal-input-text);
+        border: 1px var(--modal-border) solid;
+    }
+
+    #app .modal input:focus {
+        border-color: var(--modal-highlight);
+    }
+
+    #app .hidden-submit {
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        opacity: 0;
+        position: absolute;
     }
 </style>

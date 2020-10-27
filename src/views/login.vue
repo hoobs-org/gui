@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div class="login"></div>
+    <div id="login"></div>
 </template>
 
 <script>
@@ -36,3 +36,12 @@
         },
     };
 </script>
+
+<style lang="scss" scoped>
+    #login {
+        background: var(--splash-background);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+    }
+</style>

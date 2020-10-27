@@ -21,7 +21,7 @@ export default class Themes {
         switch (theme) {
             case "light":
             case "dark":
-                return `/defaults/${theme}.css`;
+                return `/defaults/${theme}/theme.css`;
 
             default:
                 if (process.env.NODE_ENV !== "production") {

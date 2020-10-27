@@ -71,6 +71,7 @@ module.exports = {
             ],
             rules: {
                 indent: "off",
+                "quote-props": "off",
                 "@typescript-eslint/indent": "off",
             },
         },

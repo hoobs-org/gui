@@ -24,6 +24,11 @@ import router from "./services/router";
 import store from "./services/store";
 import lang from "./lang";
 
+const open = [
+    "/login",
+    "/setup",
+];
+
 const hoobs = sdk(store);
 
 socket.on("log", (data) => store.commit("IO:LOG", data));
@@ -36,9 +41,9 @@ hoobs.log().then((messages) => {
 });
 
 router.beforeEach(async (to, _from, next) => {
-    if (to.path !== "/login" && to.path !== "/setup" && ((await hoobs.auth.status()) === "uninitialized" || (await hoobs.instances.list()).length === 0)) {
+    if (open.indexOf(to.path) === -1 && ((await hoobs.auth.status()) === "uninitialized" || (await hoobs.instances.list()).length === 0)) {
         router.push({ path: "/setup" });
-    } else if (to.path !== "/login" && to.path !== "/setup" && !(await hoobs.auth.validate())) {
+    } else if (open.indexOf(to.path) === -1 && !(await hoobs.auth.validate())) {
         router.push({ path: "/login", query: { url: to.path } });
     } else {
         next();

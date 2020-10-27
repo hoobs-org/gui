@@ -1,0 +1,30 @@
+[theme="dark"] {
+    --application-text: #999;
+    --application-highlight-text: #fff;
+    --application-input-text: #fff;
+    --application-error-text: #e30505;
+    --application-background: #141414;
+    --application-highlight: #feb400;
+    --application-input: #262626;
+    --application-border: #252525;
+
+    --button: #1a1a1a;
+    --button-text: #fff;
+    --button-border: #1a1a1a;
+    --button-primary: #feb400;
+    --button-primary-text: #fff;
+    --button-primary-border: #feb400;
+    --button-light: #fff;
+    --button-light-text: #777;
+    --button-light-border: #e5e5e5;
+
+    --modal-text: #515151;
+    --modal-input-text: #000;
+    --modal-error-text: #a11;
+    --modal-background: #fff;
+    --modal-highlight: #feb400;
+    --modal-input: #fff;
+    --modal-border: #e5e5e5;
+
+    --splash-background: url('/defaults/dark/splash.jpg');
+}

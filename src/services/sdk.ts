@@ -80,10 +80,34 @@ export function sanitize(value: string, prevent?: string): string {
     return Sanitize(value).toLowerCase().replace(/ /gi, "-");
 }
 
+export function sleep(timeout: number): Promise<void> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, timeout);
+    });
+}
+
+export async function wait(saftey?: number): Promise<string> {
+    try {
+        return (await Request.get(`${prefix}`)).data.version;
+    } catch (error) {
+        if ((saftey || 0) > 50) {
+            throw error;
+        }
+    }
+
+    await sleep(250);
+
+    return wait((saftey || 0) + 1);
+}
+
 export default function sdk(store: Store<any>) {
     return {
         auth: {
             async status(): Promise<string> {
+                await wait();
+
                 return (await Request.get(`${prefix}/auth`, {
                     headers: {
                         authorization: store.state.session,
@@ -92,6 +116,8 @@ export default function sdk(store: Store<any>) {
             },
 
             async validate(): Promise<boolean> {
+                await wait();
+
                 return (await Request.get(`${prefix}/auth/validate`, {
                     headers: {
                         authorization: store.state.session,
@@ -99,22 +125,18 @@ export default function sdk(store: Store<any>) {
                 })).data.valid;
             },
 
-            async disable(): Promise<string> {
-                return (await Request.post(`${prefix}/auth`, null, {
-                    headers: {
-                        authorization: store.state.session,
-                    },
-                })).data.session;
+            async disable(): Promise<void> {
+                await wait();
+
+                await Request.post(`${prefix}/auth/disable`);
             },
 
             async login(username: string, password: string): Promise<boolean> {
+                await wait();
+
                 const { token } = (await Request.post(`${prefix}/auth/logon`, {
                     username,
                     password,
-                }, {
-                    headers: {
-                        authorization: store.state.session,
-                    },
                 })).data;
 
                 if (token) {
@@ -129,6 +151,8 @@ export default function sdk(store: Store<any>) {
 
         users: {
             async list(): Promise<UserRecord[]> {
+                await wait();
+
                 return (await Request.get(`${prefix}/users`, {
                     headers: {
                         authorization: store.state.session,
@@ -137,6 +161,8 @@ export default function sdk(store: Store<any>) {
             },
 
             async add(username: string, password: string, name?: string, admin?: boolean): Promise<UserRecord[]> {
+                await wait();
+
                 return (await Request.put(`${prefix}/users`, {
                     name: name || username,
                     username,
@@ -151,6 +177,8 @@ export default function sdk(store: Store<any>) {
         },
 
         async user(id: number): Promise<UserRecord> {
+            await wait();
+
             const results: UserRecord = (await Request.get(`${prefix}/users/${id}`, {
                 headers: {
                     authorization: store.state.session,
@@ -158,6 +186,8 @@ export default function sdk(store: Store<any>) {
             })).data;
 
             results.update = async (username: string, password: string, name?: string, admin?: boolean): Promise<void> => {
+                await wait();
+
                 (await Request.post(`${prefix}/users/${id}`, {
                     name: name || username,
                     username,
@@ -171,6 +201,8 @@ export default function sdk(store: Store<any>) {
             };
 
             results.remove = async () => {
+                await wait();
+
                 (await Request.delete(`${prefix}/users/${id}`, {
                     headers: {
                         authorization: store.state.session,
@@ -182,13 +214,19 @@ export default function sdk(store: Store<any>) {
         },
 
         config: {
-            get: async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/config`, {
-                headers: {
-                    authorization: store.state.session,
-                },
-            })).data,
+            get: async (): Promise<{ [key: string]: any }> => {
+                await wait();
+
+                return (await Request.get(`${prefix}/config`, {
+                    headers: {
+                        authorization: store.state.session,
+                    },
+                })).data;
+            },
 
             update: async (data: { [key: string]: any }): Promise<void> => {
+                await wait();
+
                 (await Request.post(`${prefix}/config`, data, {
                     headers: {
                         authorization: store.state.session,
@@ -198,6 +236,8 @@ export default function sdk(store: Store<any>) {
         },
 
         async log(tail?: number): Promise<Message[]> {
+            await wait();
+
             if (tail) {
                 return (await Request.get(`${prefix}/log/${tail}`, {
                     headers: {
@@ -206,14 +246,12 @@ export default function sdk(store: Store<any>) {
                 })).data;
             }
 
-            return (await Request.get(`${prefix}/log`, {
-                headers: {
-                    authorization: store.state.session,
-                },
-            })).data;
+            return (await Request.get(`${prefix}/log`)).data;
         },
 
         async status(): Promise<{ [key: string]: any }> {
+            await wait();
+
             return (await Request.get(`${prefix}/status`, {
                 headers: {
                     authorization: store.state.session,
@@ -222,6 +260,8 @@ export default function sdk(store: Store<any>) {
         },
 
         async backup(): Promise<{ [key: string]: any }> {
+            await wait();
+
             return (await Request.get(`${prefix}/system/backup`, {
                 headers: {
                     authorization: store.state.session,
@@ -230,6 +270,8 @@ export default function sdk(store: Store<any>) {
         },
 
         async restore(form: FormData): Promise<void> {
+            await wait();
+
             (await Request.post(`${prefix}/system/restore`, form, {
                 headers: {
                     authorization: store.state.session,
@@ -238,43 +280,67 @@ export default function sdk(store: Store<any>) {
         },
 
         async system(): Promise<{ [key: string]: any }> {
+            await wait();
+
             const results = (await Request.get(`${prefix}/system`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data;
 
-            results.cpu = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/system/cpu`, {
-                headers: {
-                    authorization: store.state.session,
-                },
-            })).data;
+            results.cpu = async (): Promise<{ [key: string]: any }> => {
+                await wait();
 
-            results.memory = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/system/memory`, {
-                headers: {
-                    authorization: store.state.session,
-                },
-            })).data;
+                return (await Request.get(`${prefix}/system/cpu`, {
+                    headers: {
+                        authorization: store.state.session,
+                    },
+                })).data;
+            };
 
-            results.network = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/system/network`, {
-                headers: {
-                    authorization: store.state.session,
-                },
-            })).data;
+            results.memory = async (): Promise<{ [key: string]: any }> => {
+                await wait();
 
-            results.filesystem = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/system/filesystem`, {
-                headers: {
-                    authorization: store.state.session,
-                },
-            })).data;
+                return (await Request.get(`${prefix}/system/memory`, {
+                    headers: {
+                        authorization: store.state.session,
+                    },
+                })).data;
+            };
 
-            results.activity = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/system/activity`, {
-                headers: {
-                    authorization: store.state.session,
-                },
-            })).data;
+            results.network = async (): Promise<{ [key: string]: any }> => {
+                await wait();
+
+                return (await Request.get(`${prefix}/system/network`, {
+                    headers: {
+                        authorization: store.state.session,
+                    },
+                })).data;
+            };
+
+            results.filesystem = async (): Promise<{ [key: string]: any }> => {
+                await wait();
+
+                return (await Request.get(`${prefix}/system/filesystem`, {
+                    headers: {
+                        authorization: store.state.session,
+                    },
+                })).data;
+            };
+
+            results.activity = async (): Promise<{ [key: string]: any }> => {
+                await wait();
+
+                return (await Request.get(`${prefix}/system/activity`, {
+                    headers: {
+                        authorization: store.state.session,
+                    },
+                })).data;
+            };
 
             results.temp = async (): Promise<{ [key: string]: any } | undefined> => {
+                await wait();
+
                 const info = (await Request.get(`${prefix}/system/temp`, {
                     headers: {
                         authorization: store.state.session,
@@ -289,6 +355,8 @@ export default function sdk(store: Store<any>) {
             };
 
             results.upgrade = async (): Promise<void> => {
+                await wait();
+
                 (await Request.post(`${prefix}/system/upgrade`, null, {
                     headers: {
                         authorization: store.state.session,
@@ -297,6 +365,8 @@ export default function sdk(store: Store<any>) {
             };
 
             results.reboot = async (): Promise<void> => {
+                await wait();
+
                 (await Request.put(`${prefix}/system/reboot`, null, {
                     headers: {
                         authorization: store.state.session,
@@ -305,6 +375,8 @@ export default function sdk(store: Store<any>) {
             };
 
             results.reset = async (): Promise<void> => {
+                await wait();
+
                 (await Request.put(`${prefix}/system/reset`, null, {
                     headers: {
                         authorization: store.state.session,
@@ -316,6 +388,8 @@ export default function sdk(store: Store<any>) {
         },
 
         async extentions(): Promise<{ [key: string]: any }[]> {
+            await wait();
+
             return (await Request.get(`${prefix}/extentions`, {
                 headers: {
                     authorization: store.state.session,
@@ -325,6 +399,8 @@ export default function sdk(store: Store<any>) {
 
         extention: {
             async add(name: string): Promise<boolean> {
+                await wait();
+
                 (await Request.put(`${prefix}/extentions/${name}`, null, {
                     headers: {
                         authorization: store.state.session,
@@ -335,12 +411,14 @@ export default function sdk(store: Store<any>) {
                     headers: {
                         authorization: store.state.session,
                     },
-                })).data;
+                })).data || [];
 
                 return (current.findIndex((e: { [key: string]: string | boolean}) => e.feature === name && e.enabled) >= 0);
             },
 
             async remove(name: string): Promise<boolean> {
+                await wait();
+
                 (await Request.delete(`${prefix}/extentions/${name}`, {
                     headers: {
                         authorization: store.state.session,
@@ -351,13 +429,15 @@ export default function sdk(store: Store<any>) {
                     headers: {
                         authorization: store.state.session,
                     },
-                })).data;
+                })).data || [];
 
                 return (current.findIndex((e: { [key: string]: string | boolean}) => e.feature === name && e.enabled) === -1);
             },
         },
 
         async plugins(): Promise<{ [key: string]: any }[]> {
+            await wait();
+
             return (await Request.get(`${prefix}/plugins`, {
                 headers: {
                     authorization: store.state.session,
@@ -367,6 +447,8 @@ export default function sdk(store: Store<any>) {
 
         instances: {
             async list(): Promise<InstanceRecord[]> {
+                await wait();
+
                 return (await Request.get(`${prefix}/instances`, {
                     headers: {
                         authorization: store.state.session,
@@ -375,11 +457,9 @@ export default function sdk(store: Store<any>) {
             },
 
             async add(name: string, port: number): Promise<boolean> {
-                const current = (await Request.get(`${prefix}/instances`, {
-                    headers: {
-                        authorization: store.state.session,
-                    },
-                })).data;
+                await wait();
+
+                const current = (await Request.get(`${prefix}/instances`)).data || [];
 
                 if (!port || Number.isNaN(port)) return false;
                 if (port < 1 || port > 65535) return false;
@@ -393,7 +473,7 @@ export default function sdk(store: Store<any>) {
                     headers: {
                         authorization: store.state.session,
                     },
-                })).data;
+                })).data || [];
 
                 if (results.findIndex((n: any) => n.id === sanitize(name)) >= 0) return true;
 
@@ -402,6 +482,8 @@ export default function sdk(store: Store<any>) {
         },
 
         async instance(name: string): Promise<InstanceRecord | undefined> {
+            await wait();
+
             const id = sanitize(name);
 
             if (!name || name === "") return undefined;
@@ -411,7 +493,7 @@ export default function sdk(store: Store<any>) {
                 headers: {
                     authorization: store.state.session,
                 },
-            })).data;
+            })).data || [];
 
             const index = current.findIndex((n: any) => n.id === id);
 
@@ -426,13 +508,19 @@ export default function sdk(store: Store<any>) {
             })).data;
 
             results.config = {
-                get: async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/config/${id}`, {
-                    headers: {
-                        authorization: store.state.session,
-                    },
-                })).data,
+                get: async (): Promise<{ [key: string]: any }> => {
+                    await wait();
+
+                    return (await Request.get(`${prefix}/config/${id}`, {
+                        headers: {
+                            authorization: store.state.session,
+                        },
+                    })).data;
+                },
 
                 update: async (data: { [key: string]: any }): Promise<void> => {
+                    await wait();
+
                     (await Request.post(`${prefix}/config/${id}`, data, {
                         headers: {
                             authorization: store.state.session,
@@ -441,14 +529,20 @@ export default function sdk(store: Store<any>) {
                 },
             };
 
-            results.plugins = async (): Promise<{ [key: string]: any }[]> => (await Request.get(`${prefix}/plugins/${id}`, {
-                headers: {
-                    authorization: store.state.session,
-                },
-            })).data;
+            results.plugins = async (): Promise<{ [key: string]: any }[]> => {
+                await wait();
+
+                return (await Request.get(`${prefix}/plugins/${id}`, {
+                    headers: {
+                        authorization: store.state.session,
+                    },
+                })).data;
+            };
 
             results.plugin = {
                 install: async (identifier: string): Promise<void> => {
+                    await wait();
+
                     (await Request.put(`${prefix}/plugins/${id}/${identifier}`, null, {
                         headers: {
                             authorization: store.state.session,
@@ -457,6 +551,8 @@ export default function sdk(store: Store<any>) {
                 },
 
                 upgrade: async (identifier: string): Promise<void> => {
+                    await wait();
+
                     (await Request.post(`${prefix}/plugins/${id}/${identifier}`, null, {
                         headers: {
                             authorization: store.state.session,
@@ -465,6 +561,8 @@ export default function sdk(store: Store<any>) {
                 },
 
                 uninstall: async (identifier: string): Promise<void> => {
+                    await wait();
+
                     (await Request.delete(`${prefix}/plugins/${id}/${identifier}`, {
                         headers: {
                             authorization: store.state.session,
@@ -474,6 +572,8 @@ export default function sdk(store: Store<any>) {
             };
 
             results.rename = async (value: string): Promise<void> => {
+                await wait();
+
                 (await Request.post(`${prefix}/instances/${id}`, {
                     name: value,
                 }, {
@@ -483,13 +583,19 @@ export default function sdk(store: Store<any>) {
                 }));
             };
 
-            results.accessories = async (): Promise<{ [key: string]: any }[]> => (await Request.get(`${prefix}/accessories/${id}`, {
-                headers: {
-                    authorization: store.state.session,
-                },
-            })).data;
+            results.accessories = async (): Promise<{ [key: string]: any }[]> => {
+                await wait();
+
+                return (await Request.get(`${prefix}/accessories/${id}`, {
+                    headers: {
+                        authorization: store.state.session,
+                    },
+                })).data;
+            };
 
             results.start = async (): Promise<void> => {
+                await wait();
+
                 (await Request.get(`${prefix}/bridge/${id}/start`, {
                     headers: {
                         authorization: store.state.session,
@@ -498,6 +604,8 @@ export default function sdk(store: Store<any>) {
             };
 
             results.stop = async (): Promise<void> => {
+                await wait();
+
                 (await Request.get(`${prefix}/bridge/${id}/stop`, {
                     headers: {
                         authorization: store.state.session,
@@ -506,6 +614,8 @@ export default function sdk(store: Store<any>) {
             };
 
             results.restart = async (): Promise<void> => {
+                await wait();
+
                 (await Request.get(`${prefix}/bridge/${id}/restart`, {
                     headers: {
                         authorization: store.state.session,
@@ -514,6 +624,8 @@ export default function sdk(store: Store<any>) {
             };
 
             results.purge = async (): Promise<void> => {
+                await wait();
+
                 (await Request.get(`${prefix}/bridge/${id}/purge`, {
                     headers: {
                         authorization: store.state.session,
@@ -521,18 +633,24 @@ export default function sdk(store: Store<any>) {
                 }));
             };
 
-            results.cache = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/cache/${id}`, {
-                headers: {
-                    authorization: store.state.session,
-                },
-            })).data;
+            results.cache = async (): Promise<{ [key: string]: any }> => {
+                await wait();
 
-            results.remove = async (): Promise<boolean> => {
-                const updated = (await Request.delete(`${prefix}/instances/${id}`, {
+                return (await Request.get(`${prefix}/cache/${id}`, {
                     headers: {
                         authorization: store.state.session,
                     },
                 })).data;
+            };
+
+            results.remove = async (): Promise<boolean> => {
+                await wait();
+
+                const updated = (await Request.delete(`${prefix}/instances/${id}`, {
+                    headers: {
+                        authorization: store.state.session,
+                    },
+                })).data || [];
 
                 if (updated.findIndex((n: any) => n.id === id) >= 0) return false;
 
@@ -543,6 +661,8 @@ export default function sdk(store: Store<any>) {
         },
 
         async accessories(): Promise<{ [key: string]: any }[]> {
+            await wait();
+
             return (await Request.get(`${prefix}/accessories`, {
                 headers: {
                     authorization: store.state.session,
@@ -551,6 +671,8 @@ export default function sdk(store: Store<any>) {
         },
 
         async accessory(instance: string, aid: string): Promise<{ [key: string]: any }> {
+            await wait();
+
             const results = (await Request.get(`${prefix}/accessory/${instance}/${aid}`, {
                 headers: {
                     authorization: store.state.session,
@@ -558,6 +680,8 @@ export default function sdk(store: Store<any>) {
             })).data;
 
             results.control = async (iid: string, data: { [key: string]: any }): Promise<void> => {
+                await wait();
+
                 (await Request.put(`${prefix}/accessory/${instance}/${aid}/${iid}`, data, {
                     headers: {
                         authorization: store.state.session,
@@ -570,6 +694,8 @@ export default function sdk(store: Store<any>) {
 
         remote: {
             async status(): Promise<{ [key: string]: any }> {
+                await wait();
+
                 return (await Request.get(`${prefix}/remote`, {
                     headers: {
                         authorization: store.state.session,
@@ -578,6 +704,8 @@ export default function sdk(store: Store<any>) {
             },
 
             async connect(): Promise<{ [key: string]: any }> {
+                await wait();
+
                 return (await Request.get(`${prefix}/remote/start`, {
                     headers: {
                         authorization: store.state.session,
@@ -586,6 +714,8 @@ export default function sdk(store: Store<any>) {
             },
 
             async disconnect(): Promise<void> {
+                await wait();
+
                 (await Request.get(`${prefix}/remote/disconnect`, {
                     headers: {
                         authorization: store.state.session,
