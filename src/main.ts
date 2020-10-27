@@ -41,6 +41,11 @@ router.beforeEach(async (to, _from, next) => {
             path: (await hoobs.auth.status()) === "uninitialized" ? "/setup" : "/login",
             query: { url: to.path },
         });
+    } else if (to.path !== "/login" && to.path !== "/setup" && (await hoobs.instances.list()).length === 0) {
+        router.push({
+            path: "/setup",
+            query: { url: to.path },
+        });
     } else {
         next();
     }
