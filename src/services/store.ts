@@ -64,7 +64,6 @@ export default new Vuex.Store({
 
     mutations: {
         "IO:LOG": (state: { [key: string ]: any }, payload: any) => {
-            console.log(payload);
             state.log.push(payload);
 
             while (state.log.length > 500) {

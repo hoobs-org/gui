@@ -24,14 +24,26 @@ import router from "./services/router";
 import store from "./services/store";
 import lang from "./lang";
 
-Vue.mixin(api(store));
+const hoobs = api(store);
 
 socket.on("log", (data) => store.commit("IO:LOG", data));
 socket.on("monitor", (data) => store.commit("IO:MONITOR", data));
 socket.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
 socket.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
 
+router.beforeEach(async (to, _from, next) => {
+    if (to.path !== "/login" && to.path !== "/setup" && !(await hoobs.auth.validate())) {
+        router.push({
+            path: (await hoobs.auth.status()) === "uninitialized" ? "/setup" : "/login",
+            query: { url: to.path },
+        });
+    } else {
+        next();
+    }
+});
+
 Vue.config.productionTip = false;
+Vue.mixin({ data: () => ({ hoobs }) });
 
 new Vue({
     router,

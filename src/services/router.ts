@@ -28,6 +28,16 @@ const routes: Array<RouteConfig> = [
         component: () => import(/* webpackChunkName: "dashboard" */ "../views/dashboard.vue"),
     },
     {
+        path: "/setup",
+        name: "Setup",
+        component: () => import(/* webpackChunkName: "setup" */ "../views/setup.vue"),
+    },
+    {
+        path: "/login",
+        name: "Login",
+        component: () => import(/* webpackChunkName: "login" */ "../views/login.vue"),
+    },
+    {
         path: "/accessories",
         name: "Accessories",
         component: () => import(/* webpackChunkName: "accessories" */ "../views/accessories.vue"),
