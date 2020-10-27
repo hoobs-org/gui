@@ -131,12 +131,13 @@ export default function sdk(store: Store<any>) {
                 await Request.post(`${prefix}/auth/disable`);
             },
 
-            async login(username: string, password: string): Promise<boolean> {
+            async login(username: string, password: string, remember?: boolean): Promise<boolean> {
                 await wait();
 
                 const { token } = (await Request.post(`${prefix}/auth/logon`, {
                     username,
                     password,
+                    remember,
                 })).data;
 
                 if (token) {
@@ -446,6 +447,12 @@ export default function sdk(store: Store<any>) {
         },
 
         instances: {
+            async count(): Promise<number> {
+                await wait();
+
+                return (await Request.get(`${prefix}/instances/count`)).data.instances;
+            },
+
             async list(): Promise<InstanceRecord[]> {
                 await wait();
 
@@ -459,7 +466,11 @@ export default function sdk(store: Store<any>) {
             async add(name: string, port: number): Promise<boolean> {
                 await wait();
 
-                const current = (await Request.get(`${prefix}/instances`)).data || [];
+                const current = (await Request.get(`${prefix}/instances`, {
+                    headers: {
+                        authorization: store.state.session,
+                    },
+                })).data || [];
 
                 if (!port || Number.isNaN(port)) return false;
                 if (port < 1 || port > 65535) return false;
@@ -574,7 +585,7 @@ export default function sdk(store: Store<any>) {
             results.rename = async (value: string): Promise<void> => {
                 await wait();
 
-                (await Request.post(`${prefix}/instances/${id}`, {
+                (await Request.post(`${prefix}/instance/${id}`, {
                     name: value,
                 }, {
                     headers: {
@@ -646,7 +657,7 @@ export default function sdk(store: Store<any>) {
             results.remove = async (): Promise<boolean> => {
                 await wait();
 
-                const updated = (await Request.delete(`${prefix}/instances/${id}`, {
+                const updated = (await Request.delete(`${prefix}/instance/${id}`, {
                     headers: {
                         authorization: store.state.session,
                     },

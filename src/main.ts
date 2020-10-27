@@ -41,7 +41,7 @@ hoobs.log().then((messages) => {
 });
 
 router.beforeEach(async (to, _from, next) => {
-    if (open.indexOf(to.path) === -1 && ((await hoobs.auth.status()) === "uninitialized" || (await hoobs.instances.list()).length === 0)) {
+    if (open.indexOf(to.path) === -1 && ((await hoobs.auth.status()) === "uninitialized" || (await hoobs.instances.count()) === 0)) {
         router.push({ path: "/setup" });
     } else if (open.indexOf(to.path) === -1 && !(await hoobs.auth.validate())) {
         router.push({ path: "/login", query: { url: to.path } });

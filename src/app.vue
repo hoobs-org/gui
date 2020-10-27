@@ -95,7 +95,9 @@
              url(./assets/material.woff) format('woff'),
              url(./assets/material.ttf) format('truetype');
     }
+</style>
 
+<style lang="scss">
     html, body {
         width: 100%;
         height: 100%;
@@ -177,6 +179,44 @@
 
     #app .modal input:focus {
         border-color: var(--modal-highlight);
+    }
+
+    #app .m-chckbox--container {
+        margin: 0 !important;
+        height: 28px !important;
+        min-height: 28px !important;
+    }
+
+    #app .m-chckbox--container label {
+        user-select: none;
+    }
+
+    #app .m-chckbox--container .m-chckbox--group {
+        background-color: var(--application-input);
+        border: 1px var(--application-border) solid;
+    }
+
+    #app .m-chckbox--container.active .m-chckbox--group {
+        background-color: var(--application-highlight) !important;
+        border: 1px var(--application-highlight) solid !important;
+    }
+
+    #app .m-chckbox--ripple {
+        display: none !important;
+    }
+
+    #app .m-chckbox--label {
+        padding-left: 7px !important;
+    }
+
+    #app .modal .m-chckbox--container .m-chckbox--group {
+        background-color: var(--modal-input);
+        border: 1px var(--modal-border) solid;
+    }
+
+    #app .modal .m-chckbox--container.active .m-chckbox--group {
+        background-color: var(--modal-highlight) !important;
+        border: 1px var(--modal-highlight) solid !important;
     }
 
     #app .hidden-submit {

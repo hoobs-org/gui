@@ -6,6 +6,7 @@
     --application-background: #141414;
     --application-highlight: #feb400;
     --application-input: #262626;
+    --application-input-accent: #444;
     --application-border: #252525;
 
     --button: #1a1a1a;
@@ -24,6 +25,7 @@
     --modal-background: #fff;
     --modal-highlight: #feb400;
     --modal-input: #fff;
+    --modal-input-accent: #fcfcfc;
     --modal-border: #e5e5e5;
 
     --splash-background: url('/defaults/dark/splash.jpg');

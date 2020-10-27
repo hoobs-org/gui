@@ -499,6 +499,9 @@ This will list all plugins installed across all instances.
 }]
 ```
 
+#### **this.hoobs.instances.count()**
+Returns the count of instances.
+
 #### **this.hoobs.instances.list()**
 Returns a list of instances on the device.
 

@@ -19,13 +19,13 @@
 <template>
     <div v-if="step >= 0" id="setup">
         <div v-if="step === 0" class="form">
-            <welcome />
+            <welcome :message="$t('welcome')" />
             <div class="loading">
                 <spinner v-model="message" />
             </div>
         </div>
         <div v-else-if="step === 1" class="form">
-            <welcome />
+            <welcome :message="$t('welcome')" />
             <p>
                 {{ $t("user_add_admin_account") }}
             </p>
@@ -49,7 +49,7 @@
             </div>
         </div>
         <div v-else-if="step === 2" class="form">
-            <welcome />
+            <welcome :message="$t('welcome')" />
             <p>
                 {{ $t("instance_create_default") }}
             </p>
@@ -113,7 +113,7 @@
                 }
 
                 const status = await this.hoobs.auth.status();
-                const instances = await this.hoobs.instances.list();
+                const instances = await this.hoobs.instances.count();
 
                 this.message = "";
 
@@ -121,7 +121,11 @@
                     return 1;
                 }
 
-                if (instances.length === 0) {
+                if (instances === 0 && !(await this.hoobs.auth.validate())) {
+                    this.$router.push({ path: "/login", query: { url: "/setup" } });
+                }
+
+                if (instances === 0) {
                     return 2;
                 }
 
