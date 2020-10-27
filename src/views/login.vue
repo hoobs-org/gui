@@ -19,3 +19,20 @@
 <template>
     <div class="login"></div>
 </template>
+
+<script>
+    export default {
+        data() {
+            return {
+                url: "/",
+            };
+        },
+
+        async mounted() {
+            this.url = this.$route.query.url || "/";
+
+            if (this.url.startsWith("/login") || this.url.startsWith("/setup")) this.url = "/";
+            if ((await this.hoobs.auth.status()) === "uninitialized" || (await this.hoobs.instances.list()).length === 0) this.$router.push({ path: "/setup" });
+        },
+    };
+</script>

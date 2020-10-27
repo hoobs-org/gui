@@ -36,16 +36,10 @@ hoobs.log().then((messages) => {
 });
 
 router.beforeEach(async (to, _from, next) => {
-    if (to.path !== "/login" && to.path !== "/setup" && !(await hoobs.auth.validate())) {
-        router.push({
-            path: (await hoobs.auth.status()) === "uninitialized" ? "/setup" : "/login",
-            query: { url: to.path },
-        });
-    } else if (to.path !== "/login" && to.path !== "/setup" && (await hoobs.instances.list()).length === 0) {
-        router.push({
-            path: "/setup",
-            query: { url: to.path },
-        });
+    if (to.path !== "/login" && to.path !== "/setup" && ((await hoobs.auth.status()) === "uninitialized" || (await hoobs.instances.list()).length === 0)) {
+        router.push({ path: "/setup" });
+    } else if (to.path !== "/login" && to.path !== "/setup" && !(await hoobs.auth.validate())) {
+        router.push({ path: "/login", query: { url: to.path } });
     } else {
         next();
     }

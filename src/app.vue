@@ -18,14 +18,13 @@
 
 <template>
     <div id="app" :theme="theme">
-        <navigation />
+        <navigation v-if="authenticated()" />
         <router-view class="view" />
     </div>
 </template>
 
 <script>
-    import Navigation from "@/components/navigation.vue";
-
+    import Navigation from "./components/navigation.vue";
     import Themes from "./services/themes";
 
     export default {
@@ -50,6 +49,13 @@
                 }
 
                 document.getElementById("theme").setAttribute("href", Themes.path(theme));
+            },
+
+            authenticated() {
+                return ([
+                    "Login",
+                    "Setup",
+                ]).indexOf(this.$route.name) === -1;
             },
         },
     };
