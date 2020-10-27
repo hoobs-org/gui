@@ -18,18 +18,22 @@
 
 import Vue from "vue";
 import socket from "./services/socket";
-import api from "./services/api";
+import sdk from "./services/sdk";
 import root from "./app.vue";
 import router from "./services/router";
 import store from "./services/store";
 import lang from "./lang";
 
-const hoobs = api(store);
+const hoobs = sdk(store);
 
 socket.on("log", (data) => store.commit("IO:LOG", data));
 socket.on("monitor", (data) => store.commit("IO:MONITOR", data));
 socket.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
 socket.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
+
+hoobs.log().then((messages) => {
+    store.commit("LOG:HISTORY", messages);
+});
 
 router.beforeEach(async (to, _from, next) => {
     if (to.path !== "/login" && to.path !== "/setup" && !(await hoobs.auth.validate())) {

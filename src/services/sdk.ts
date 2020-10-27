@@ -18,11 +18,59 @@
 
 import Request from "axios";
 import Sanitize from "sanitize-filename";
+import { Store } from "vuex";
 
 let prefix = "/api";
 
 if (process.env.NODE_ENV !== "production") {
     prefix = "http://localhost:50826/api";
+}
+
+export declare const enum LogLevel {
+    INFO = "info",
+    WARN = "warn",
+    ERROR = "error",
+    DEBUG = "debug",
+}
+
+export interface Message {
+    level: LogLevel;
+    instance?: string;
+    display?: string;
+    timestamp: number;
+    plugin?: string;
+    prefix?: string;
+    message: string;
+}
+
+export interface InstanceRecord {
+    id: string;
+    type: string;
+    display: string;
+    port: number;
+    host?: string;
+    service?: string;
+    status?: () => Promise<{ [key: string]: any }>;
+    config?: { [key: string]: any };
+    plugins?: () => Promise<{ [key: string]: any }[]> | string;
+    plugin?: { [key: string]: any };
+    rename?: () => Promise<void>;
+    accessories?: () => Promise<{ [key: string]: any }[]>;
+    start?: () => Promise<void>;
+    stop?: () => Promise<void>;
+    restart?: () => Promise<void>;
+    purge?: () => Promise<void>;
+    cache?: () => Promise<{ [key: string]: any }>;
+    remove?: () => Promise<boolean>;
+}
+
+export interface UserRecord {
+    id: number;
+    name: string;
+    admin: boolean;
+    username: string;
+    update?: (username: string, password: string, name?: string, admin?: boolean) => Promise<void>;
+    remove?: () => Promise<void>;
 }
 
 export function sanitize(value: string, prevent?: string): string {
@@ -32,7 +80,7 @@ export function sanitize(value: string, prevent?: string): string {
     return Sanitize(value).toLowerCase().replace(/ /gi, "-");
 }
 
-export default function api(store: any) {
+export default function sdk(store: Store<any>) {
     return {
         auth: {
             async status(): Promise<string> {
@@ -80,7 +128,7 @@ export default function api(store: any) {
         },
 
         users: {
-            async list() {
+            async list(): Promise<UserRecord[]> {
                 return (await Request.get(`${prefix}/users`, {
                     headers: {
                         authorization: store.state.session,
@@ -88,7 +136,7 @@ export default function api(store: any) {
                 })).data;
             },
 
-            async add(username: string, password: string, name?: string, admin?: boolean) {
+            async add(username: string, password: string, name?: string, admin?: boolean): Promise<UserRecord[]> {
                 return (await Request.put(`${prefix}/users`, {
                     name: name || username,
                     username,
@@ -102,14 +150,14 @@ export default function api(store: any) {
             },
         },
 
-        async user(id: number) {
-            const results = (await Request.get(`${prefix}/users/${id}`, {
+        async user(id: number): Promise<UserRecord> {
+            const results: UserRecord = (await Request.get(`${prefix}/users/${id}`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data;
 
-            results.update = async (username: string, password: string, name?: string, admin?: boolean) => {
+            results.update = async (username: string, password: string, name?: string, admin?: boolean): Promise<void> => {
                 (await Request.post(`${prefix}/users/${id}`, {
                     name: name || username,
                     username,
@@ -129,16 +177,18 @@ export default function api(store: any) {
                     },
                 }));
             };
+
+            return results;
         },
 
         config: {
-            get: async () => (await Request.get(`${prefix}/config`, {
+            get: async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/config`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data,
 
-            update: async (data: { [key: string]: any }) => {
+            update: async (data: { [key: string]: any }): Promise<void> => {
                 (await Request.post(`${prefix}/config`, data, {
                     headers: {
                         authorization: store.state.session,
@@ -147,7 +197,7 @@ export default function api(store: any) {
             },
         },
 
-        async log(tail?: number) {
+        async log(tail?: number): Promise<Message[]> {
             if (tail) {
                 return (await Request.get(`${prefix}/log/${tail}`, {
                     headers: {
@@ -163,7 +213,7 @@ export default function api(store: any) {
             })).data;
         },
 
-        async status() {
+        async status(): Promise<{ [key: string]: any }> {
             return (await Request.get(`${prefix}/status`, {
                 headers: {
                     authorization: store.state.session,
@@ -171,7 +221,7 @@ export default function api(store: any) {
             })).data;
         },
 
-        async backup() {
+        async backup(): Promise<{ [key: string]: any }> {
             return (await Request.get(`${prefix}/system/backup`, {
                 headers: {
                     authorization: store.state.session,
@@ -179,7 +229,7 @@ export default function api(store: any) {
             })).data;
         },
 
-        async restore(form: FormData) {
+        async restore(form: FormData): Promise<void> {
             (await Request.post(`${prefix}/system/restore`, form, {
                 headers: {
                     authorization: store.state.session,
@@ -187,44 +237,44 @@ export default function api(store: any) {
             }));
         },
 
-        async system() {
+        async system(): Promise<{ [key: string]: any }> {
             const results = (await Request.get(`${prefix}/system`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data;
 
-            results.cpu = async () => (await Request.get(`${prefix}/system/cpu`, {
+            results.cpu = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/system/cpu`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data;
 
-            results.memory = async () => (await Request.get(`${prefix}/system/memory`, {
+            results.memory = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/system/memory`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data;
 
-            results.network = async () => (await Request.get(`${prefix}/system/network`, {
+            results.network = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/system/network`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data;
 
-            results.filesystem = async () => (await Request.get(`${prefix}/system/filesystem`, {
+            results.filesystem = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/system/filesystem`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data;
 
-            results.activity = async () => (await Request.get(`${prefix}/system/activity`, {
+            results.activity = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/system/activity`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data;
 
-            results.temp = async () => {
+            results.temp = async (): Promise<{ [key: string]: any } | undefined> => {
                 const info = (await Request.get(`${prefix}/system/temp`, {
                     headers: {
                         authorization: store.state.session,
@@ -238,7 +288,7 @@ export default function api(store: any) {
                 return info;
             };
 
-            results.upgrade = async () => {
+            results.upgrade = async (): Promise<void> => {
                 (await Request.post(`${prefix}/system/upgrade`, null, {
                     headers: {
                         authorization: store.state.session,
@@ -246,7 +296,7 @@ export default function api(store: any) {
                 }));
             };
 
-            results.reboot = async () => {
+            results.reboot = async (): Promise<void> => {
                 (await Request.put(`${prefix}/system/reboot`, null, {
                     headers: {
                         authorization: store.state.session,
@@ -254,16 +304,18 @@ export default function api(store: any) {
                 }));
             };
 
-            results.reset = async () => {
+            results.reset = async (): Promise<void> => {
                 (await Request.put(`${prefix}/system/reset`, null, {
                     headers: {
                         authorization: store.state.session,
                     },
                 }));
             };
+
+            return results;
         },
 
-        async extentions() {
+        async extentions(): Promise<{ [key: string]: any }[]> {
             return (await Request.get(`${prefix}/extentions`, {
                 headers: {
                     authorization: store.state.session,
@@ -272,7 +324,7 @@ export default function api(store: any) {
         },
 
         extention: {
-            async add(name: string) {
+            async add(name: string): Promise<boolean> {
                 (await Request.put(`${prefix}/extentions/${name}`, null, {
                     headers: {
                         authorization: store.state.session,
@@ -288,7 +340,7 @@ export default function api(store: any) {
                 return (current.findIndex((e: { [key: string]: string | boolean}) => e.feature === name && e.enabled) >= 0);
             },
 
-            async remove(name: string) {
+            async remove(name: string): Promise<boolean> {
                 (await Request.delete(`${prefix}/extentions/${name}`, {
                     headers: {
                         authorization: store.state.session,
@@ -305,7 +357,7 @@ export default function api(store: any) {
             },
         },
 
-        async plugins() {
+        async plugins(): Promise<{ [key: string]: any }[]> {
             return (await Request.get(`${prefix}/plugins`, {
                 headers: {
                     authorization: store.state.session,
@@ -314,7 +366,7 @@ export default function api(store: any) {
         },
 
         instances: {
-            async list() {
+            async list(): Promise<InstanceRecord[]> {
                 return (await Request.get(`${prefix}/instances`, {
                     headers: {
                         authorization: store.state.session,
@@ -322,7 +374,7 @@ export default function api(store: any) {
                 })).data;
             },
 
-            async add(name: string, port: number) {
+            async add(name: string, port: number): Promise<boolean> {
                 const current = (await Request.get(`${prefix}/instances`, {
                     headers: {
                         authorization: store.state.session,
@@ -349,7 +401,7 @@ export default function api(store: any) {
             },
         },
 
-        async instance(name: string) {
+        async instance(name: string): Promise<InstanceRecord | undefined> {
             const id = sanitize(name);
 
             if (!name || name === "") return undefined;
@@ -367,20 +419,20 @@ export default function api(store: any) {
 
             const results = current[index];
 
-            results.status = async () => (await Request.get(`${prefix}/bridge/${id}`, {
+            results.status = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/bridge/${id}`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data;
 
             results.config = {
-                get: async () => (await Request.get(`${prefix}/config/${id}`, {
+                get: async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/config/${id}`, {
                     headers: {
                         authorization: store.state.session,
                     },
                 })).data,
 
-                update: async (data: { [key: string]: any }) => {
+                update: async (data: { [key: string]: any }): Promise<void> => {
                     (await Request.post(`${prefix}/config/${id}`, data, {
                         headers: {
                             authorization: store.state.session,
@@ -389,14 +441,14 @@ export default function api(store: any) {
                 },
             };
 
-            results.plugins = async () => (await Request.get(`${prefix}/plugins/${id}`, {
+            results.plugins = async (): Promise<{ [key: string]: any }[]> => (await Request.get(`${prefix}/plugins/${id}`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data;
 
             results.plugin = {
-                install: async (identifier: string) => {
+                install: async (identifier: string): Promise<void> => {
                     (await Request.put(`${prefix}/plugins/${id}/${identifier}`, null, {
                         headers: {
                             authorization: store.state.session,
@@ -404,7 +456,7 @@ export default function api(store: any) {
                     }));
                 },
 
-                upgrade: async (identifier: string) => {
+                upgrade: async (identifier: string): Promise<void> => {
                     (await Request.post(`${prefix}/plugins/${id}/${identifier}`, null, {
                         headers: {
                             authorization: store.state.session,
@@ -412,7 +464,7 @@ export default function api(store: any) {
                     }));
                 },
 
-                uninstall: async (identifier: string) => {
+                uninstall: async (identifier: string): Promise<void> => {
                     (await Request.delete(`${prefix}/plugins/${id}/${identifier}`, {
                         headers: {
                             authorization: store.state.session,
@@ -421,7 +473,7 @@ export default function api(store: any) {
                 },
             };
 
-            results.rename = async (value: string) => {
+            results.rename = async (value: string): Promise<void> => {
                 (await Request.post(`${prefix}/instances/${id}`, {
                     name: value,
                 }, {
@@ -431,13 +483,13 @@ export default function api(store: any) {
                 }));
             };
 
-            results.accessories = async () => (await Request.get(`${prefix}/accessories/${id}`, {
+            results.accessories = async (): Promise<{ [key: string]: any }[]> => (await Request.get(`${prefix}/accessories/${id}`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data;
 
-            results.start = async () => {
+            results.start = async (): Promise<void> => {
                 (await Request.get(`${prefix}/bridge/${id}/start`, {
                     headers: {
                         authorization: store.state.session,
@@ -445,7 +497,7 @@ export default function api(store: any) {
                 }));
             };
 
-            results.stop = async () => {
+            results.stop = async (): Promise<void> => {
                 (await Request.get(`${prefix}/bridge/${id}/stop`, {
                     headers: {
                         authorization: store.state.session,
@@ -453,7 +505,7 @@ export default function api(store: any) {
                 }));
             };
 
-            results.restart = async () => {
+            results.restart = async (): Promise<void> => {
                 (await Request.get(`${prefix}/bridge/${id}/restart`, {
                     headers: {
                         authorization: store.state.session,
@@ -461,7 +513,7 @@ export default function api(store: any) {
                 }));
             };
 
-            results.purge = async () => {
+            results.purge = async (): Promise<void> => {
                 (await Request.get(`${prefix}/bridge/${id}/purge`, {
                     headers: {
                         authorization: store.state.session,
@@ -469,13 +521,13 @@ export default function api(store: any) {
                 }));
             };
 
-            results.cache = async () => (await Request.get(`${prefix}/cache/${id}`, {
+            results.cache = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/cache/${id}`, {
                 headers: {
                     authorization: store.state.session,
                 },
             })).data;
 
-            results.remove = async () => {
+            results.remove = async (): Promise<boolean> => {
                 const updated = (await Request.delete(`${prefix}/instances/${id}`, {
                     headers: {
                         authorization: store.state.session,
@@ -490,7 +542,7 @@ export default function api(store: any) {
             return results;
         },
 
-        async accessories() {
+        async accessories(): Promise<{ [key: string]: any }[]> {
             return (await Request.get(`${prefix}/accessories`, {
                 headers: {
                     authorization: store.state.session,
@@ -505,7 +557,7 @@ export default function api(store: any) {
                 },
             })).data;
 
-            results.control = async (iid: string, data: { [key: string]: any }) => {
+            results.control = async (iid: string, data: { [key: string]: any }): Promise<void> => {
                 (await Request.put(`${prefix}/accessory/${instance}/${aid}/${iid}`, data, {
                     headers: {
                         authorization: store.state.session,
@@ -517,7 +569,7 @@ export default function api(store: any) {
         },
 
         remote: {
-            async status() {
+            async status(): Promise<{ [key: string]: any }> {
                 return (await Request.get(`${prefix}/remote`, {
                     headers: {
                         authorization: store.state.session,
@@ -525,7 +577,7 @@ export default function api(store: any) {
                 })).data;
             },
 
-            async connect() {
+            async connect(): Promise<{ [key: string]: any }> {
                 return (await Request.get(`${prefix}/remote/start`, {
                     headers: {
                         authorization: store.state.session,
@@ -533,7 +585,7 @@ export default function api(store: any) {
                 })).data;
             },
 
-            async disconnect() {
+            async disconnect(): Promise<void> {
                 (await Request.get(`${prefix}/remote/disconnect`, {
                     headers: {
                         authorization: store.state.session,

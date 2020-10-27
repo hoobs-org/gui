@@ -133,6 +133,14 @@ export default new Vuex.Store({
             state.session = token;
         },
 
+        "LOG:HISTORY": (state: { [key: string ]: any }, messages: string) => {
+            state.log.unshift(...messages);
+
+            while (state.log.length > 500) {
+                state.log.shift();
+            }
+        },
+
         "NOTIFICATION:ADD": (state: { [key: string ]: any }, payload: any) => {
             const index = state.notifications.length;
 
