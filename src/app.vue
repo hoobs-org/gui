@@ -20,7 +20,13 @@
     <div id="app" :theme="theme">
         <navigation v-if="authenticated()" />
         <div class="screen">
-            <div v-if="authenticated()" class="header"></div>
+            <div v-if="authenticated()" class="header">
+                <div class="icon">
+                    notifications_none
+                    <div v-if="notifications.length > 0" class="active">&bull;</div>
+                </div>
+                <div class="icon">more_vert</div>
+            </div>
             <router-view class="view" />
         </div>
     </div>
@@ -38,6 +44,10 @@
         computed: {
             theme() {
                 return this.$store.state.theme;
+            },
+
+            notifications() {
+                return this.$store.state.notifications;
             },
         },
 
@@ -117,142 +127,168 @@
         font-family: "Montserrat", sans-serif;
         color: var(--application-text);
         background: var(--application-background);
-    }
 
-    #app .button,
-    #app .button:link,
-    #app .button:active,
-    #app .button:visited {
-        background: var(--button);
-        color: var(--button-text) !important;
-        text-decoration: none !important;
-        display: inline-block;
-        border: 1px var(--button-border) solid;
-        border-radius: 3px;
-        padding: 10px;
-        cursor: pointer;
-        user-select: none;
-        margin: 0 10px 0 0;
-        white-space: pre;
-    }
+        .button {
+            background: var(--button);
+            color: var(--button-text) !important;
+            text-decoration: none !important;
+            display: inline-block;
+            border: 1px var(--button-border) solid;
+            border-radius: 3px;
+            padding: 10px;
+            user-select: none;
+            margin: 0 10px 0 0;
+            white-space: pre;
+            cursor: pointer;
 
-    #app .button.primary,
-    #app .button.primary:link,
-    #app .button.primary:active,
-    #app .button.primary:visited {
-        background: var(--button-primary);
-        color: var(--button-primary-text) !important;
-        border: 1px var(--button-primary-border) solid;
-    }
+            &.primary {
+                background: var(--button-primary);
+                color: var(--button-primary-text) !important;
+                border: 1px var(--button-primary-border) solid;
+            }
 
-    #app .button.light,
-    #app .button.light:link,
-    #app .button.light:active,
-    #app .button.light:visited {
-        background: var(--button-light);
-        color: var(--button-light-text) !important;
-        border: 1px var(--button-light-border) solid;
-    }
+            &.light {
+                background: var(--button-light);
+                color: var(--button-light-text) !important;
+                border: 1px var(--button-light-border) solid;
+            }
 
-    #app .button:hover {
-        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24),
-                    0 2px 1px -1px rgba(0, 0, 0, 0.22),
-                    0 1px 3px 1px rgba(0, 0, 0, 0.3);
-    }
+            &:hover {
+                box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24),
+                            0 2px 1px -1px rgba(0, 0, 0, 0.22),
+                            0 1px 3px 1px rgba(0, 0, 0, 0.3);
+            }
+        }
 
-    #app .icon {
-        font-family: "Material Icons";
-        font-weight: normal;
-        font-style: normal;
-        font-size: 24px;
-        line-height: 1;
-        letter-spacing: normal;
-        text-transform: none;
-        display: inline-block;
-        white-space: nowrap;
-        word-wrap: normal;
-        direction: ltr;
-        font-feature-settings: "liga";
-        -webkit-font-smoothing: antialiased;
-    }
+        .icon {
+            font-family: "Material Icons";
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            font-feature-settings: "liga";
+            -webkit-font-smoothing: antialiased;
+        }
 
-    #app .screen {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
+        .screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
-    #app .header {
-        display: flex;
-    }
+        .header {
+            display: flex;
+            justify-content: flex-end;
 
-    #app .view {
-        flex: 1;
-    }
+            .icon {
+                width: 34px;
+                height: 34px;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: relative;
+                border-radius: 17px;
+                margin: 7px 7px 7px 0;
+                cursor: pointer;
 
-    #app input {
-        background: var(--application-input);
-        color: var(--application-input-text);
-        border: 1px var(--application-border) solid;
-    }
+                .active {
+                    font-size: 32px;
+                    position: absolute;
+                    right: 4px;
+                    color: var(--application-error-text);
+                }
 
-    #app input:focus {
-        border-color: var(--application-highlight);
-    }
+                &:hover {
+                    background: var(--application-input-accent);
+                    color: var(--application-highlight-text);
+                }
+            }
+        }
 
-    #app .modal input {
-        background: var(--modal-input);
-        color: var(--modal-input-text);
-        border: 1px var(--modal-border) solid;
-    }
+        .view {
+            flex: 1;
+        }
 
-    #app .modal input:focus {
-        border-color: var(--modal-highlight);
-    }
+        input {
+            background: var(--application-input);
+            color: var(--application-input-text);
+            border: 1px var(--application-border) solid;
 
-    #app .m-chckbox--container {
-        margin: 0 !important;
-        height: 28px !important;
-        min-height: 28px !important;
-    }
+            &:focus {
+                border-color: var(--application-highlight);
+            }
+        }
 
-    #app .m-chckbox--container label {
-        user-select: none;
-    }
+        .modal {
+            input {
+                background: var(--modal-input);
+                color: var(--modal-input-text);
+                border: 1px var(--modal-border) solid;
 
-    #app .m-chckbox--container .m-chckbox--group {
-        background-color: var(--application-input);
-        border: 1px var(--application-border) solid;
-    }
+                &:focus {
+                    border-color: var(--modal-highlight);
+                }
+            }
+        }
 
-    #app .m-chckbox--container.active .m-chckbox--group {
-        background-color: var(--application-highlight) !important;
-        border: 1px var(--application-highlight) solid !important;
-    }
+        .m-chckbox--container {
+            margin: 0 !important;
+            height: 28px !important;
+            min-height: 28px !important;
 
-    #app .m-chckbox--ripple {
-        display: none !important;
-    }
+            label {
+                user-select: none;
+            }
 
-    #app .m-chckbox--label {
-        padding-left: 7px !important;
-    }
+            .m-chckbox--group {
+                background-color: var(--application-input);
+                border: 1px var(--application-border) solid;
+            }
 
-    #app .modal .m-chckbox--container .m-chckbox--group {
-        background-color: var(--modal-input);
-        border: 1px var(--modal-border) solid;
-    }
+            &.active {
+                .m-chckbox--group {
+                    background-color: var(--application-highlight) !important;
+                    border: 1px var(--application-highlight) solid !important;
+                }
+            }
+        }
 
-    #app .modal .m-chckbox--container.active .m-chckbox--group {
-        background-color: var(--modal-highlight) !important;
-        border: 1px var(--modal-highlight) solid !important;
-    }
+        .m-chckbox--ripple {
+            display: none !important;
+        }
 
-    #app .hidden-submit {
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        opacity: 0;
-        position: absolute;
+        .m-chckbox--label {
+            padding-left: 7px !important;
+        }
+
+        .modal {
+            .m-chckbox--container {
+                .m-chckbox--group {
+                    background-color: var(--modal-input);
+                    border: 1px var(--modal-border) solid;
+                }
+
+                &.active {
+                    .m-chckbox--group {
+                        background-color: var(--modal-highlight) !important;
+                        border: 1px var(--modal-highlight) solid !important;
+                    }
+                }
+            }
+        }
+
+        .hidden-submit {
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            opacity: 0;
+            position: absolute;
+        }
     }
 </style>
