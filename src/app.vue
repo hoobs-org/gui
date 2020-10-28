@@ -20,7 +20,7 @@
     <div id="app" :theme="theme">
         <navigation v-if="authenticated()" />
         <div class="screen">
-            <div class="header"></div>
+            <div v-if="authenticated()" class="header"></div>
             <router-view class="view" />
         </div>
     </div>
