@@ -16,51 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-import Vue from "vue";
-import socket from "./services/socket";
-import sdk from "./services/sdk";
-import root from "./app.vue";
-import router from "./services/router";
-import store from "./services/store";
-import tasks from "./services/tasks";
-import lang from "./lang";
+import { Store } from "vuex";
 
-const open = [
-    "/login",
-    "/setup",
-];
+export default function tasks(store: Store<any>) {
+    store.commit("NOTIFICATION:DISMISS");
 
-const hoobs = sdk(() => store.state.session, (token) => {
-    store.commit("SESSION:SET", token);
-});
-
-socket.on("log", (data) => store.commit("IO:LOG", data));
-socket.on("monitor", (data) => store.commit("IO:MONITOR", data));
-socket.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
-socket.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
-
-hoobs.log().then((messages) => {
-    store.commit("LOG:HISTORY", messages);
-});
-
-router.beforeEach(async (to, _from, next) => {
-    if (open.indexOf(to.path) === -1 && ((await hoobs.auth.status()) === "uninitialized" || (await hoobs.instances.count()) === 0)) {
-        router.push({ path: "/setup" });
-    } else if (open.indexOf(to.path) === -1 && !(await hoobs.auth.validate())) {
-        router.push({ path: "/login", query: { url: to.path } });
-    } else {
-        next();
-    }
-});
-
-Vue.config.productionTip = false;
-Vue.mixin({ data: () => ({ hoobs }) });
-
-tasks(store);
-
-new Vue({
-    router,
-    store,
-    i18n: lang,
-    render: (h) => h(root),
-}).$mount("#app");
+    setTimeout(() => {
+        tasks(store);
+    }, 5 * 1000);
+}

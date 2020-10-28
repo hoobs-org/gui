@@ -18,7 +18,6 @@
 
 import Request from "axios";
 import Sanitize from "sanitize-filename";
-import { Store } from "vuex";
 
 let prefix = "/api";
 
@@ -102,7 +101,7 @@ export async function wait(saftey?: number): Promise<string> {
     return wait((saftey || 0) + 1);
 }
 
-export default function sdk(store: Store<any>) {
+export default function sdk(get: () => string, set: (token: string) => void) {
     return {
         auth: {
             async status(): Promise<string> {
@@ -110,7 +109,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/auth`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data.state;
             },
@@ -120,7 +119,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/auth/validate`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data.valid;
             },
@@ -141,7 +140,7 @@ export default function sdk(store: Store<any>) {
                 })).data;
 
                 if (token) {
-                    store.commit("SESSION:SET", token);
+                    set(token);
 
                     return true;
                 }
@@ -156,7 +155,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/users`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             },
@@ -171,7 +170,7 @@ export default function sdk(store: Store<any>) {
                     admin,
                 }, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             },
@@ -182,7 +181,7 @@ export default function sdk(store: Store<any>) {
 
             const results: UserRecord = (await Request.get(`${prefix}/users/${id}`, {
                 headers: {
-                    authorization: store.state.session,
+                    authorization: get(),
                 },
             })).data;
 
@@ -196,7 +195,7 @@ export default function sdk(store: Store<any>) {
                     admin,
                 }, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             };
@@ -206,7 +205,7 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.delete(`${prefix}/users/${id}`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             };
@@ -220,7 +219,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/config`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             },
@@ -230,7 +229,7 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.post(`${prefix}/config`, data, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             },
@@ -242,7 +241,7 @@ export default function sdk(store: Store<any>) {
             if (tail) {
                 return (await Request.get(`${prefix}/log/${tail}`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             }
@@ -255,7 +254,7 @@ export default function sdk(store: Store<any>) {
 
             return (await Request.get(`${prefix}/status`, {
                 headers: {
-                    authorization: store.state.session,
+                    authorization: get(),
                 },
             })).data;
         },
@@ -265,7 +264,7 @@ export default function sdk(store: Store<any>) {
 
             return (await Request.get(`${prefix}/system/backup`, {
                 headers: {
-                    authorization: store.state.session,
+                    authorization: get(),
                 },
             })).data;
         },
@@ -275,7 +274,7 @@ export default function sdk(store: Store<any>) {
 
             (await Request.post(`${prefix}/system/restore`, form, {
                 headers: {
-                    authorization: store.state.session,
+                    authorization: get(),
                 },
             }));
         },
@@ -285,7 +284,7 @@ export default function sdk(store: Store<any>) {
 
             const results = (await Request.get(`${prefix}/system`, {
                 headers: {
-                    authorization: store.state.session,
+                    authorization: get(),
                 },
             })).data;
 
@@ -294,7 +293,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/system/cpu`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             };
@@ -304,7 +303,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/system/memory`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             };
@@ -314,7 +313,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/system/network`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             };
@@ -324,7 +323,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/system/filesystem`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             };
@@ -334,7 +333,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/system/activity`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             };
@@ -344,7 +343,7 @@ export default function sdk(store: Store<any>) {
 
                 const info = (await Request.get(`${prefix}/system/temp`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
 
@@ -360,7 +359,7 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.post(`${prefix}/system/upgrade`, null, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             };
@@ -370,7 +369,7 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.put(`${prefix}/system/reboot`, null, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             };
@@ -380,7 +379,7 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.put(`${prefix}/system/reset`, null, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             };
@@ -393,7 +392,7 @@ export default function sdk(store: Store<any>) {
 
             return (await Request.get(`${prefix}/extentions`, {
                 headers: {
-                    authorization: store.state.session,
+                    authorization: get(),
                 },
             })).data;
         },
@@ -404,13 +403,13 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.put(`${prefix}/extentions/${name}`, null, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
 
                 const current = (await Request.get(`${prefix}/extentions`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data || [];
 
@@ -422,13 +421,13 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.delete(`${prefix}/extentions/${name}`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
 
                 const current = (await Request.get(`${prefix}/extentions`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data || [];
 
@@ -441,7 +440,7 @@ export default function sdk(store: Store<any>) {
 
             return (await Request.get(`${prefix}/plugins`, {
                 headers: {
-                    authorization: store.state.session,
+                    authorization: get(),
                 },
             })).data;
         },
@@ -458,7 +457,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/instances`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             },
@@ -468,7 +467,7 @@ export default function sdk(store: Store<any>) {
 
                 const current = (await Request.get(`${prefix}/instances`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data || [];
 
@@ -482,7 +481,7 @@ export default function sdk(store: Store<any>) {
                     port,
                 }, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data || [];
 
@@ -502,7 +501,7 @@ export default function sdk(store: Store<any>) {
 
             const current = (await Request.get(`${prefix}/instances`, {
                 headers: {
-                    authorization: store.state.session,
+                    authorization: get(),
                 },
             })).data || [];
 
@@ -514,7 +513,7 @@ export default function sdk(store: Store<any>) {
 
             results.status = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/bridge/${id}`, {
                 headers: {
-                    authorization: store.state.session,
+                    authorization: get(),
                 },
             })).data;
 
@@ -524,7 +523,7 @@ export default function sdk(store: Store<any>) {
 
                     return (await Request.get(`${prefix}/config/${id}`, {
                         headers: {
-                            authorization: store.state.session,
+                            authorization: get(),
                         },
                     })).data;
                 },
@@ -534,7 +533,7 @@ export default function sdk(store: Store<any>) {
 
                     (await Request.post(`${prefix}/config/${id}`, data, {
                         headers: {
-                            authorization: store.state.session,
+                            authorization: get(),
                         },
                     }));
                 },
@@ -545,7 +544,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/plugins/${id}`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             };
@@ -556,7 +555,7 @@ export default function sdk(store: Store<any>) {
 
                     (await Request.put(`${prefix}/plugins/${id}/${identifier}`, null, {
                         headers: {
-                            authorization: store.state.session,
+                            authorization: get(),
                         },
                     }));
                 },
@@ -566,7 +565,7 @@ export default function sdk(store: Store<any>) {
 
                     (await Request.post(`${prefix}/plugins/${id}/${identifier}`, null, {
                         headers: {
-                            authorization: store.state.session,
+                            authorization: get(),
                         },
                     }));
                 },
@@ -576,7 +575,7 @@ export default function sdk(store: Store<any>) {
 
                     (await Request.delete(`${prefix}/plugins/${id}/${identifier}`, {
                         headers: {
-                            authorization: store.state.session,
+                            authorization: get(),
                         },
                     }));
                 },
@@ -589,7 +588,7 @@ export default function sdk(store: Store<any>) {
                     name: value,
                 }, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             };
@@ -599,7 +598,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/accessories/${id}`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             };
@@ -609,7 +608,7 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.get(`${prefix}/bridge/${id}/start`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             };
@@ -619,7 +618,7 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.get(`${prefix}/bridge/${id}/stop`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             };
@@ -629,7 +628,7 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.get(`${prefix}/bridge/${id}/restart`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             };
@@ -639,7 +638,7 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.get(`${prefix}/bridge/${id}/purge`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             };
@@ -649,7 +648,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/cache/${id}`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             };
@@ -659,7 +658,7 @@ export default function sdk(store: Store<any>) {
 
                 const updated = (await Request.delete(`${prefix}/instance/${id}`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data || [];
 
@@ -676,7 +675,7 @@ export default function sdk(store: Store<any>) {
 
             return (await Request.get(`${prefix}/accessories`, {
                 headers: {
-                    authorization: store.state.session,
+                    authorization: get(),
                 },
             })).data;
         },
@@ -686,7 +685,7 @@ export default function sdk(store: Store<any>) {
 
             const results = (await Request.get(`${prefix}/accessory/${instance}/${aid}`, {
                 headers: {
-                    authorization: store.state.session,
+                    authorization: get(),
                 },
             })).data;
 
@@ -695,7 +694,7 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.put(`${prefix}/accessory/${instance}/${aid}/${iid}`, data, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             };
@@ -709,7 +708,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/remote`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             },
@@ -719,7 +718,7 @@ export default function sdk(store: Store<any>) {
 
                 return (await Request.get(`${prefix}/remote/start`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 })).data;
             },
@@ -729,7 +728,7 @@ export default function sdk(store: Store<any>) {
 
                 (await Request.get(`${prefix}/remote/disconnect`, {
                     headers: {
-                        authorization: store.state.session,
+                        authorization: get(),
                     },
                 }));
             },

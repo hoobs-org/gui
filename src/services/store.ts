@@ -50,7 +50,7 @@ export default new Vuex.Store({
             ],
         },
         temp: null,
-        session: null,
+        session: "",
         notifications: [],
         accessory: null,
         theme: "dark",
