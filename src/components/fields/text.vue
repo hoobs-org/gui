@@ -54,26 +54,26 @@
         display: flex;
         flex-direction: column;
         padding: 0 0 20px 0;
-    }
 
-    #text-field .title {
-        font-size: 14px;
-        margin: 0 0 7px 0;
-    }
+        .title {
+            font-size: 14px;
+            margin: 0 0 7px 0;
+        }
 
-    #text-field .description {
-        font-size: 12px;
-        margin: -7px 0 7px 0;
-    }
+        .description {
+            font-size: 12px;
+            margin: -7px 0 7px 0;
+        }
 
-    #text-field input {
-        flex: 1;
-        padding: 7px;
-        font-size: 14px;
-        border-radius: 5px;
-    }
+        input {
+            flex: 1;
+            padding: 7px;
+            font-size: 14px;
+            border-radius: 5px;
 
-    #text-field input:focus {
-        outline: 0 none;
+            &:focus {
+                outline: 0 none;
+            }
+        }
     }
 </style>

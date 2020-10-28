@@ -61,17 +61,17 @@
         align-content: center;
         align-items: center;
         user-select: none;
-    }
 
-    #welcome .logo {
-        margin: 0 10px 0 0;
-    }
+        .logo {
+            margin: 0 10px 0 0;
 
-    #welcome .logo .background {
-        fill: var(--modal-highlight);
-    }
+            .background {
+                fill: var(--modal-highlight);
+            }
 
-    #welcome .logo .foreground {
-        fill: var(--modal-background);
+            .foreground {
+                fill: var(--modal-background);
+            }
+        }
     }
 </style>

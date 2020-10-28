@@ -17,7 +17,10 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="display" id="spinner">
+    <div
+        v-if="display"
+        id="spinner"
+    >
         <div class="inner">
             <div class="grid">
                 <div></div>
@@ -31,7 +34,10 @@
                 <div></div>
             </div>
         </div>
-        <div class="message" v-html="value" />
+        <div
+            class="message"
+            v-html="value"
+        />
     </div>
 </template>
 
@@ -58,106 +64,6 @@
 </script>
 
 <style lang="scss" scoped>
-    #spinner {
-        height: 50%;
-        display: inline-flex;
-        flex-direction: column;
-        align-content: center;
-        align-items: center;
-    }
-
-    #spinner .message {
-        margin: 14px 0 0 0;
-        font-size: 17px;
-        opacity: 0.7;
-    }
-
-    #spinner .inner {
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        align-content: center;
-        align-items: center;
-    }
-
-    #spinner .inner .grid,
-    #spinner .inner .grid > div {
-        position: relative;
-        box-sizing: border-box;
-    }
-
-    #spinner .inner .grid {
-        display: block;
-        font-size: 0;
-        color: var(--application-highlight);
-    }
-
-    #spinner .inner .grid > div {
-        display: inline-block;
-        float: none;
-        background-color: currentColor;
-        border: 0 solid currentColor;
-    }
-
-    #spinner .inner .grid {
-        width: 36px;
-        height: 36px;
-    }
-
-    #spinner .inner .grid > div {
-        width: 8px;
-        height: 8px;
-        margin: 2px;
-        border-radius: 100%;
-        animation-name: grid-beat;
-        animation-iteration-count: infinite;
-    }
-
-    #spinner .inner .grid > div:nth-child(1) {
-        animation-duration: .65s;
-        animation-delay: .03s;
-    }
-
-    #spinner .inner .grid > div:nth-child(2) {
-        animation-duration: 1.02s;
-        animation-delay: .09s;
-    }
-
-    #spinner .inner .grid > div:nth-child(3) {
-        animation-duration: 1.06s;
-        animation-delay: -.69s;
-    }
-
-    #spinner .inner .grid > div:nth-child(4) {
-        animation-duration: 1.5s;
-        animation-delay: -.41s;
-    }
-
-    #spinner .inner .grid > div:nth-child(5) {
-        animation-duration: 1.6s;
-        animation-delay: .04s;
-    }
-
-    #spinner .inner .grid > div:nth-child(6) {
-        animation-duration: .84s;
-        animation-delay: .07s;
-    }
-
-    #spinner .inner .grid > div:nth-child(7) {
-        animation-duration: .68s;
-        animation-delay: -.66s;
-    }
-
-    #spinner .inner .grid > div:nth-child(8) {
-        animation-duration: .93s;
-        animation-delay: -.76s;
-    }
-
-    #spinner .inner .grid > div:nth-child(9) {
-        animation-duration: 1.24s;
-        animation-delay: -.76s;
-    }
-
     @-webkit-keyframes grid-beat {
         0% {
             opacity: 1;
@@ -203,6 +109,98 @@
         }
         100% {
             opacity: 1;
+        }
+    }
+
+    #spinner {
+        height: 50%;
+        display: inline-flex;
+        flex-direction: column;
+        align-content: center;
+        align-items: center;
+
+        .message {
+            margin: 14px 0 0 0;
+            font-size: 17px;
+            opacity: 0.7;
+        }
+
+        .inner {
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: center;
+
+            .grid {
+                position: relative;
+                box-sizing: border-box;
+                display: block;
+                font-size: 0;
+                color: var(--application-highlight);
+                width: 36px;
+                height: 36px;
+
+                > div {
+                    position: relative;
+                    box-sizing: border-box;
+                    display: inline-block;
+                    float: none;
+                    background-color: currentColor;
+                    border: 0 solid currentColor;
+                    width: 8px;
+                    height: 8px;
+                    margin: 2px;
+                    border-radius: 100%;
+                    animation-name: grid-beat;
+                    animation-iteration-count: infinite;
+
+                    &:nth-child(1) {
+                        animation-duration: 0.65s;
+                        animation-delay: 0.03s;
+                    }
+
+                    &:nth-child(2) {
+                        animation-duration: 1.02s;
+                        animation-delay: 0.09s;
+                    }
+
+                    &:nth-child(3) {
+                        animation-duration: 1.06s;
+                        animation-delay: -0.69s;
+                    }
+
+                    &:nth-child(4) {
+                        animation-duration: 1.5s;
+                        animation-delay: -0.41s;
+                    }
+
+                    &:nth-child(5) {
+                        animation-duration: 1.6s;
+                        animation-delay: 0.04s;
+                    }
+
+                    &:nth-child(6) {
+                        animation-duration: 0.84s;
+                        animation-delay: 0.07s;
+                    }
+
+                    &:nth-child(7) {
+                        animation-duration: 0.68s;
+                        animation-delay: -0.66s;
+                    }
+
+                    &:nth-child(8) {
+                        animation-duration: 0.93s;
+                        animation-delay: -0.76s;
+                    }
+
+                    &:nth-child(9) {
+                        animation-duration: 1.24s;
+                        animation-delay: -0.76s;
+                    }
+                }
+            }
         }
     }
 </style>
