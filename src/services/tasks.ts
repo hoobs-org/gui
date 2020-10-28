@@ -19,7 +19,7 @@
 import { Store } from "vuex";
 
 export default function tasks(store: Store<any>) {
-    store.commit("NOTIFICATION:DISMISS");
+    store.commit("NOTIFICATION:DISMISS:OLD");
 
     setTimeout(() => {
         tasks(store);

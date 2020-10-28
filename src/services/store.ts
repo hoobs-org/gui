@@ -118,8 +118,6 @@ export default new Vuex.Store({
                 icon: payload.data.icon,
                 ttl: now + (1 * 60 * 60 * 1000),
             });
-
-            state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.ttl || 0) > now);
         },
 
         "IO:ACCESSORY:CHANGE": (state: { [key: string ]: any }, payload: any) => {
@@ -145,13 +143,9 @@ export default new Vuex.Store({
             notification.id = `${now}:${Math.random()}`;
             notification.ttl = now + (1 * 60 * 60 * 1000);
             state.notifications.push(notification);
-
-            state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.ttl || 0) > now);
         },
 
         "NOTIFICATION:DISMISS": (state: { [key: string ]: any }, id: string | string[] | undefined) => {
-            const now = (new Date()).getTime();
-
             if (id && id !== "") {
                 if (Array.isArray(id)) {
                     state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.id || "") !== "" && id.indexOf(item.id) === -1);
@@ -159,6 +153,10 @@ export default new Vuex.Store({
                     state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.id || "") !== "" && (item.id || "") !== id);
                 }
             }
+        },
+
+        "NOTIFICATION:DISMISS:OLD": (state: { [key: string ]: any }) => {
+            const now = (new Date()).getTime();
 
             state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.ttl || 0) > now);
         },
