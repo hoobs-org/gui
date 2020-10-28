@@ -119,7 +119,7 @@ export default new Vuex.Store({
                 ttl: now + (1 * 60 * 60 * 1000),
             });
 
-            state.notifications = state.notifications.filter((item) => (item.ttl || 0) > now);
+            state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.ttl || 0) > now);
         },
 
         "IO:ACCESSORY:CHANGE": (state: { [key: string ]: any }, payload: any) => {
@@ -140,26 +140,27 @@ export default new Vuex.Store({
 
         "NOTIFICATION:ADD": (state: { [key: string ]: any }, payload: any) => {
             const now = (new Date()).getTime();
+            const { ...notification } = payload;
 
-            payload.id = id: `${now}:${Math.random()}`;
-            payload.ttl = now + (1 * 60 * 60 * 1000);
-            state.notifications.push(payload);
+            notification.id = `${now}:${Math.random()}`;
+            notification.ttl = now + (1 * 60 * 60 * 1000);
+            state.notifications.push(notification);
 
-            state.notifications = state.notifications.filter((item) => (item.ttl || 0) > now);
+            state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.ttl || 0) > now);
         },
 
         "NOTIFICATION:DISMISS": (state: { [key: string ]: any }, id: string | string[] | undefined) => {
             const now = (new Date()).getTime();
 
-            if (string && string !== "") {
+            if (id && id !== "") {
                 if (Array.isArray(id)) {
-                    state.notifications = state.notifications.filter((item) => (item.id || "") !== "" && id.indexOf(item.id) === -1);
+                    state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.id || "") !== "" && id.indexOf(item.id) === -1);
                 } else {
-                    state.notifications = state.notifications.filter((item) => (item.id || "") !== "" && (item.id || "") !== id);
+                    state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.id || "") !== "" && (item.id || "") !== id);
                 }
             }
 
-            state.notifications = state.notifications.filter((item) => (item.ttl || 0) > now);
+            state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.ttl || 0) > now);
         },
 
         "THEME:SET": (state: { [key: string ]: any }, theme: number) => {
