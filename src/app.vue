@@ -19,7 +19,10 @@
 <template>
     <div id="app" :theme="theme">
         <navigation v-if="authenticated()" />
-        <router-view class="view" />
+        <div class="screen">
+            <div class="header"></div>
+            <router-view class="view" />
+        </div>
     </div>
 </template>
 
@@ -155,6 +158,32 @@
         box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24),
                     0 2px 1px -1px rgba(0, 0, 0, 0.22),
                     0 1px 3px 1px rgba(0, 0, 0, 0.3);
+    }
+
+    #app .icon {
+        font-family: "Material Icons";
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        font-feature-settings: "liga";
+        -webkit-font-smoothing: antialiased;
+    }
+
+    #app .screen {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #app .header {
+        display: flex;
     }
 
     #app .view {
