@@ -194,7 +194,7 @@
                 align-items: center;
                 position: relative;
                 border-radius: 17px;
-                margin: 7px 7px 7px 0;
+                margin: 7px 0;
                 cursor: pointer;
 
                 .active {
@@ -202,6 +202,10 @@
                     position: absolute;
                     right: 4px;
                     color: var(--application-error-text);
+                }
+
+                &:last-child {
+                    margin: 7px 7px 7px 0;
                 }
 
                 &:hover {
