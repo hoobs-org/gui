@@ -108,6 +108,7 @@
 </template>
 
 <script>
+    import { sleep } from "../services/sdk";
     import Modal from "../components/elements/modal.vue";
     import Welcome from "../components/elements/welcome.vue";
     import Spinner from "../components/elements/spinner.vue";
@@ -204,6 +205,22 @@
                 }
             },
 
+            async waitForInstance(saftey) {
+                const instances = await this.hoobs.instances.count();
+
+                if (instances > 0) {
+                    return instances;
+                }
+
+                if ((saftey || 0) >= 300) {
+                    return 0;
+                }
+
+                await sleep(1000);
+
+                return this.waitForInstance((saftey || 0) + 1);
+            },
+
             async createInstance() {
                 this.errors = [];
 
@@ -226,9 +243,26 @@
                     this.message = `${this.$t("instance_create")} ...`;
 
                     await this.hoobs.instances.add(this.instance, parseInt(this.port, 10));
+                    await this.waitForInstance();
 
                     this.step = await this.getStep();
                 }
+            },
+
+            async waitForDisable(saftey) {
+                const status = await this.hoobs.auth.status();
+
+                if (status === "disabled") {
+                    return status;
+                }
+
+                if ((saftey || 0) >= 300) {
+                    return "disabled";
+                }
+
+                await sleep(1000);
+
+                return this.waitForDisable((saftey || 0) + 1);
             },
 
             async disableAuth() {
@@ -236,6 +270,7 @@
                 this.message = `${this.$t("disable_login_disabling")} ...`;
 
                 await this.hoobs.auth.disable();
+                await this.waitForDisable();
 
                 this.step = await this.getStep();
             },

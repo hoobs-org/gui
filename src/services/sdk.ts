@@ -96,7 +96,7 @@ export async function wait(saftey?: number): Promise<string> {
         }
     }
 
-    await sleep(250);
+    await sleep(1000);
 
     return wait((saftey || 0) + 1);
 }
