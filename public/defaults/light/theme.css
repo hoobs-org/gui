@@ -5,6 +5,7 @@
     --application-error-text: #a11;
     --application-background: #fff;
     --application-highlight: #feb400;
+    --application-drawer: #ffffff9d;
     --application-input: #fff;
     --application-input-accent: #fcfcfc;
     --application-border: #e5e5e5;
@@ -22,11 +23,21 @@
     --modal-text: #515151;
     --modal-input-text: #000;
     --modal-error-text: #a11;
-    --modal-background: #fff;
+    --modal-background: #ffffffe0;
     --modal-highlight: #feb400;
-    --modal-input: #fff;
+    --modal-input: #ffffff9f;
     --modal-input-accent: #fcfcfc;
     --modal-border: #e5e5e5;
+
+    --menu-text: #515151;
+    --menu-highlight-text: #000;
+    --menu-background: #ffffffe0;
+    --menu-highlight: #f0f0f0;
+    --menu-border: #e5e5e5;
+
+    --navigation-text: #999;
+    --navigation-highlight-text: #fff;
+    --navigation-background: #141414;
 
     --splash-background: url('/defaults/light/splash.jpg');
 }
