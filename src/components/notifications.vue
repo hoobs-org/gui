@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="value" v-on:mouseenter="toggle(true)" v-on:mouseleave="toggle(false)" id="notifications">
+    <div v-if="value" v-on:click.stop v-on:mouseenter="toggle(true)" v-on:mouseleave="toggle(false)" id="notifications">
         <div class="title">{{ $t("notifications") }}</div>
         <div v-if="notifications.length === 0" class="empty">{{ $t("notifications_empty") }}</div>
         <div v-else class="list">

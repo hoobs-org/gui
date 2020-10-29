@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="menu">
+    <div v-on:click.stop id="menu">
         <div v-if="auth" class="profile">
             <span class="icon">account_circle</span>
             <div class="details">

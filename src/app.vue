@@ -17,9 +17,9 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="app" :theme="theme">
+    <div v-on:click="resetMenus()" id="app" :theme="theme">
         <navigation v-if="authenticated()" />
-        <div v-on:click="resetMenus()" class="screen">
+        <div class="screen">
             <div v-if="authenticated()" class="header">
                 <div v-on:click.stop="toggleNotifications()" class="icon">
                     notifications_none
