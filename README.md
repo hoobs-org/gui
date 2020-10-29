@@ -39,6 +39,9 @@ Parameters
 | username | Yes      | string | The username defined on the user record |
 | password | Yes      | string | The password defined on the user record |
 
+#### **this.hoobs.auth.logout()**
+This takes the session token from the store and logs out the current user.
+
 #### **this.hoobs.users.list()**
 This will fetch a list of user records.
 
