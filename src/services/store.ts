@@ -51,6 +51,7 @@ export default new Vuex.Store({
         },
         temp: null,
         session: "",
+        user: {},
         notifications: [],
         accessory: null,
         theme: "dark",
@@ -108,8 +109,9 @@ export default new Vuex.Store({
         "IO:NOTIFICATION": (state: { [key: string ]: any }, payload: any) => {
             const now = (new Date()).getTime();
 
-            state.notifications.push({
+            state.notifications.unshift({
                 id: `${now}:${Math.random()}`,
+                time: now,
                 event: payload.event,
                 instance: payload.instance,
                 type: payload.data.type,
@@ -126,6 +128,17 @@ export default new Vuex.Store({
 
         "SESSION:SET": (state: { [key: string ]: any }, token: string) => {
             state.session = token;
+
+            if (token && token !== "") {
+                const user = JSON.parse(atob(token));
+
+                state.user = {
+                    id: user.id,
+                    name: user.name,
+                    username: user.username,
+                    admin: user.admin,
+                };
+            }
         },
 
         "LOG:HISTORY": (state: { [key: string ]: any }, messages: string) => {
@@ -141,8 +154,9 @@ export default new Vuex.Store({
             const { ...notification } = payload;
 
             notification.id = `${now}:${Math.random()}`;
+            notification.time = now;
             notification.ttl = now + (1 * 60 * 60 * 1000);
-            state.notifications.push(notification);
+            state.notifications.unshift(notification);
         },
 
         "NOTIFICATION:DISMISS": (state: { [key: string ]: any }, id: string) => {
@@ -168,6 +182,7 @@ export default new Vuex.Store({
             memory: state.memory,
             temp: state.temp,
             session: state.session,
+            user: state.user,
             notifications: state.notifications,
             theme: state.theme,
         }),

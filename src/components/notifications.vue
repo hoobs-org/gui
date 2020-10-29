@@ -20,7 +20,9 @@
     <div v-if="value" v-on:mouseenter="toggle(true)" v-on:mouseleave="toggle(false)" id="notifications">
         <div class="title">{{ $t("notifications") }}</div>
         <div v-if="notifications.length === 0" class="empty">{{ $t("notifications_empty") }}</div>
-        <notification  v-for="(notification, index) in notifications.reverse()" :key="index" :message="notification" />
+        <div v-else class="list">
+            <notification  v-for="(notification, index) in notifications" :key="index" :message="notification" />
+        </div>
     </div>
 </template>
 
@@ -61,7 +63,7 @@
 
                 this.timeout = setTimeout(() => {
                     this.close();
-                }, 1 * 1000);
+                }, 2 * 1000);
             },
 
             close(now) {
@@ -88,15 +90,20 @@
         box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.4),
                 0 4px 5px 0 rgba(0, 0, 0, 0.5), 0 1px 10px 0 rgba(0, 0, 0, 0.7);
 
-        &:hover {
-            overflow: overlay;
-        }
-
         .title {
             color: var(--application-highlight);
             border-bottom: var(--application-border) 1px solid;
             margin: 14px;
             padding: 0 0 7px 0;
+        }
+
+        .list {
+            flex: 1;
+            overflow: hidden;
+
+            &:hover {
+                overflow: overlay;
+            }
         }
 
         .empty {

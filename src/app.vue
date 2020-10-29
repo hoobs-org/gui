@@ -19,29 +19,32 @@
 <template>
     <div id="app" :theme="theme">
         <navigation v-if="authenticated()" />
-        <div class="screen">
+        <div v-on:click="resetMenus()" class="screen">
             <div v-if="authenticated()" class="header">
-                <div v-on:click="toggleNotifications()" class="icon">
+                <div v-on:click.stop="toggleNotifications()" class="icon">
                     notifications_none
                     <div v-if="notifications.length > 0" class="active">&bull;</div>
                 </div>
-                <div class="icon">more_vert</div>
+                <div v-on:click.stop="toggleServiceMenu()" class="icon">more_vert</div>
             </div>
             <router-view class="view" />
         </div>
         <notifications v-if="showNotifications" v-model="showNotifications" />
+        <service-menu v-if="showServiceMenu" :about="toggleAbout" :help="toggleHelp" :logout="logout" />
     </div>
 </template>
 
 <script>
+    import Themes from "./services/themes";
     import Navigation from "./components/navigation.vue";
     import Notifications from "./components/notifications.vue";
-    import Themes from "./services/themes";
+    import ServiceMenu from "./components/menus/service.vue";
 
     export default {
         components: {
             "navigation": Navigation,
             "notifications": Notifications,
+            "service-menu": ServiceMenu,
         },
 
         computed: {
@@ -57,6 +60,9 @@
         data() {
             return {
                 showNotifications: false,
+                showServiceMenu: false,
+                showAbout: false,
+                showHelp: false,
             };
         },
 
@@ -73,8 +79,37 @@
                 document.getElementById("theme").setAttribute("href", Themes.path(theme));
             },
 
+            async logout() {
+                this.showServiceMenu = false;
+
+                await this.hoobs.auth.logout();
+
+                this.$router.push({ path: "/login", query: { url: "/" } });
+            },
+
+            resetMenus() {
+                this.showNotifications = false;
+                this.showServiceMenu = false;
+            },
+
             toggleNotifications() {
+                this.showServiceMenu = false;
                 this.showNotifications = !this.showNotifications;
+            },
+
+            toggleServiceMenu() {
+                this.showNotifications = false;
+                this.showServiceMenu = !this.showServiceMenu;
+            },
+
+            toggleAbout() {
+                this.showServiceMenu = false;
+                this.showAbout = !this.showAbout;
+            },
+
+            toggleHelp() {
+                this.showServiceMenu = false;
+                this.showHelp = !this.showHelp;
             },
 
             authenticated() {

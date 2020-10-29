@@ -147,6 +147,18 @@ export default function sdk(get: () => string, set: (token: string) => void) {
 
                 return false;
             },
+
+            async logout(): Promise<void> {
+                await wait();
+
+                await Request.get(`${prefix}/auth/logout`, {
+                    headers: {
+                        authorization: get(),
+                    },
+                });
+
+                set("");
+            },
         },
 
         users: {

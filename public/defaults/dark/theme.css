@@ -29,6 +29,12 @@
     --modal-input-accent: #fcfcfc;
     --modal-border: #e5e5e5;
 
+    --menu-text: #b4b4b4;
+    --menu-highlight-text: #fff;
+    --menu-background: #1b1b1b9d;
+    --menu-highlight: #4949499d;
+    --menu-border: #303030;
+
     --navigation-text: #999;
     --navigation-highlight-text: #fff;
     --navigation-background: #141414;
