@@ -139,7 +139,7 @@
             .icon {
                 color: var( --application-highlight);
                 margin: 0 14px 0 0;
-                font-size: 42px;
+                font-size: 47px;
             }
 
             .title {
