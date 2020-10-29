@@ -109,23 +109,8 @@
 
 <script>
     import { sleep } from "../services/sdk";
-    import Modal from "../components/elements/modal.vue";
-    import Welcome from "../components/elements/welcome.vue";
-    import Spinner from "../components/elements/spinner.vue";
-    import TextField from "../components/fields/text.vue";
-    import PasswordField from "../components/fields/password.vue";
-    import PortField from "../components/fields/port.vue";
 
     export default {
-        components: {
-            "modal": Modal,
-            "welcome": Welcome,
-            "spinner": Spinner,
-            "text-field": TextField,
-            "password-field": PasswordField,
-            "port-field": PortField,
-        },
-
         data() {
             return {
                 step: -1,

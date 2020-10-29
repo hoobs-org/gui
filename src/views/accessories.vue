@@ -17,5 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="accessories"></div>
+    <layout>
+        <div id="accessories"></div>
+    </layout>
 </template>

@@ -87,19 +87,13 @@
         name: "navigation",
 
         computed: {
+            auth() {
+                return this.$store.state.auth;
+            },
+
             expanded() {
                 return this.$store.state.navigation;
             },
-        },
-
-        data() {
-            return {
-                auth: false,
-            };
-        },
-
-        async mounted() {
-            this.auth = await this.hoobs.auth.status() === "enabled";
         },
 
         methods: {

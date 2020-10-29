@@ -52,6 +52,7 @@ export default new Vuex.Store({
         temp: null,
         session: "",
         user: {},
+        auth: false,
         notifications: [],
         navigation: false,
         accessory: null,
@@ -174,6 +175,14 @@ export default new Vuex.Store({
 
         "NAVIGATION:STATE": (state: { [key: string ]: any }, value: boolean) => {
             state.navigation = value;
+        },
+
+        "AUTH:STATE": (state: { [key: string ]: any }, value: string) => {
+            if (value === "enabled") {
+                state.auth = true;
+            } else {
+                state.auth = false;
+            }
         },
 
         "THEME:SET": (state: { [key: string ]: any }, theme: number) => {

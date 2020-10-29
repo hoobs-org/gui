@@ -17,5 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="dashboard"></div>
+    <layout>
+        <div id="dashboard"></div>
+    </layout>
 </template>

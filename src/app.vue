@@ -17,55 +17,15 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-on:click="reset()" id="app" :theme="theme">
-        <navigation v-if="authenticated()" />
-        <div class="screen">
-            <div v-if="authenticated()" class="header">
-                <div v-on:click.stop="toggle('notifications')" class="icon">
-                    notifications_none
-                    <div v-if="notifications.length > 0" class="active">&bull;</div>
-                </div>
-                <div v-on:click.stop="toggle('service')" class="icon">more_vert</div>
-            </div>
-            <router-view class="view" />
-        </div>
-        <notifications v-if="authenticated() && show.notifications" v-model="show.notifications" />
-        <service-menu
-            v-if="authenticated() && show.service"
-            :about="() => { toggle('about') }"
-            :help="() => navigate('https://support.hoobs.org/docs')"
-            :close="() => { toggle('service') }"
-            :logout="logout"
-        />
-        <modal v-if="authenticated() && show.about" width="720px" height="420px">
-            <welcome message="HOOBS™" />
-            <about
-                :donate="() => { navigate('https://paypal.me/hoobsorg') }"
-                :close="() => { toggle('about') }"
-            />
-        </modal>
+    <div id="app" :theme="theme">
+        <router-view class="view" />
     </div>
 </template>
 
 <script>
     import Themes from "./services/themes";
-    import Modal from "./components/elements/modal.vue";
-    import Welcome from "./components/elements/welcome.vue";
-    import About from "./components/elements/about.vue";
-    import Navigation from "./components/navigation.vue";
-    import Notifications from "./components/notifications.vue";
-    import ServiceMenu from "./components/menus/service.vue";
 
     export default {
-        components: {
-            "modal": Modal,
-            "welcome": Welcome,
-            "about": About,
-            "navigation": Navigation,
-            "notifications": Notifications,
-            "service-menu": ServiceMenu,
-        },
-
         computed: {
             theme() {
                 return this.$store.state.theme;
@@ -74,16 +34,6 @@
             notifications() {
                 return this.$store.state.notifications;
             },
-        },
-
-        data() {
-            return {
-                show: {
-                    notifications: false,
-                    service: false,
-                    about: false,
-                },
-            };
         },
 
         created() {
@@ -97,47 +47,6 @@
                 }
 
                 document.getElementById("theme").setAttribute("href", Themes.path(theme));
-            },
-
-            async logout() {
-                this.reset();
-
-                this.showServiceMenu = false;
-
-                await this.hoobs.auth.logout();
-
-                this.$router.push({ path: "/login", query: { url: "/" } });
-            },
-
-            reset(ignore) {
-                const keys = Object.keys(this.show);
-
-                for (let i = 0; i < keys.length; i += 1) {
-                    if (keys[i] !== (ignore || "")) {
-                        this.show[keys[i]] = false;
-                    }
-                }
-            },
-
-            help() {
-                this.reset();
-            },
-
-            toggle(value) {
-                this.reset(value);
-
-                this.show[value] = !this.show[value];
-            },
-
-            authenticated() {
-                return ([
-                    "Login",
-                    "Setup",
-                ]).indexOf(this.$route.name) === -1;
-            },
-
-            navigate(url) {
-                window.open(url);
             },
         },
     };
@@ -251,45 +160,6 @@
             direction: ltr;
             font-feature-settings: "liga";
             -webkit-font-smoothing: antialiased;
-        }
-
-        .screen {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            display: flex;
-            justify-content: flex-end;
-
-            .icon {
-                width: 34px;
-                height: 34px;
-                display: flex;
-                justify-content: space-around;
-                align-items: center;
-                position: relative;
-                border-radius: 17px;
-                margin: 7px 0;
-                cursor: pointer;
-
-                .active {
-                    font-size: 32px;
-                    position: absolute;
-                    right: 4px;
-                    color: var(--application-error-text);
-                }
-
-                &:last-child {
-                    margin: 7px 7px 7px 0;
-                }
-
-                &:hover {
-                    background: var(--application-input-accent);
-                    color: var(--application-highlight-text);
-                }
-            }
         }
 
         .view {

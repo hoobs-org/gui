@@ -17,5 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="instances"></div>
+    <layout>
+        <div id="instances"></div>
+    </layout>
 </template>

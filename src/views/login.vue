@@ -73,14 +73,10 @@
 
 <script>
     import Checkbox from "vue-material-checkbox";
-    import Modal from "../components/elements/modal.vue";
-    import Welcome from "../components/elements/welcome.vue";
 
     export default {
         components: {
             "checkbox": Checkbox,
-            "modal": Modal,
-            "welcome": Welcome,
         },
 
         data() {

@@ -25,6 +25,14 @@ import store from "./services/store";
 import tasks from "./services/tasks";
 import lang from "./lang";
 
+import Layout from "./layout.vue";
+import Welcome from "./components/elements/welcome.vue";
+import Modal from "./components/elements/modal.vue";
+import Spinner from "./components/elements/spinner.vue";
+import TextField from "./components/fields/text.vue";
+import PasswordField from "./components/fields/password.vue";
+import PortField from "./components/fields/port.vue";
+
 const open = [
     "/login",
     "/setup",
@@ -55,6 +63,14 @@ router.beforeEach(async (to, _from, next) => {
 
 Vue.config.productionTip = false;
 Vue.mixin({ data: () => ({ hoobs }) });
+
+Vue.component("layout", Layout);
+Vue.component("welcome", Welcome);
+Vue.component("modal", Modal);
+Vue.component("spinner", Spinner);
+Vue.component("text-field", TextField);
+Vue.component("password-field", PasswordField);
+Vue.component("port-field", PortField);
 
 tasks(store);
 
