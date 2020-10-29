@@ -138,6 +138,8 @@ export default new Vuex.Store({
                     username: user.username,
                     admin: user.admin,
                 };
+            } else {
+                state.user = {};
             }
         },
 
