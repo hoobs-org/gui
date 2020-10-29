@@ -5,6 +5,9 @@ This is the official HOOBS User Interface.
 ## SDK
 The SDK in this project defines the HOOBS API and added into Vue using a Mixin. Below, defines the properties and methods available in this SDK.
 
+#### **this.hoobs.version()**
+This returns the current HOOBS version instanned.
+
 #### **this.hoobs.auth.status()**
 This fetches the status of the authentication system. It will return one of these values.
 

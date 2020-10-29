@@ -10,6 +10,7 @@
         "dashboard": "Dashboard",
         "debug": "Debug",
         "device": "Device",
+        "donate": "Donate",
         "download": "Download",
         "help": "Help",
         "information": "Information",
@@ -25,6 +26,8 @@
         "instances": "Instances",
         "invalid_username_password": "Invalid username or password.",
         "level": "Level",
+        "license_title": "HOOBS™ is licensed under the GNU General Public License version 3 (GPL-3).",
+        "license_summary": "You may copy, distribute and modify the software as long as you track changes/dates in source files. Any modifications to or software including (via compiler) GPL-licensed code must also be made available under the GPL along with build & install instructions.",
         "log": "Log",
         "login": "Log In",
         "logout": "Log Out",
@@ -32,6 +35,8 @@
         "name_description": "Enter your full name.",
         "notifications": "Notifications",
         "notifications_empty": "No new notifications",
+        "ok": "OK",
+        "open_source": "Open Source",
         "password": "Password",
         "password_description": "Enter you desired password. Passwords must be at least 5 characters long.",
         "password_confirm": "Reenter Password",
@@ -39,8 +44,10 @@
         "password_mismatch": "Passwords don't match.",
         "password_weak": "Password too weak.",
         "plugins": "Plugins",
+        "privacy_policy": "Privacy Policy",
         "remember_me": "Remember Me",
         "settings": "Settings",
+        "terms_conditions": "Terms & Conditions",
         "unkonwn": "Unkonwn",
         "user_add_admin_account": "To start you need to setup the administrator account.",
         "user_add_creating": "Creating User",
@@ -48,7 +55,9 @@
         "username": "Username",
         "username_description": "Define your desired username. Usernames must be at least 3 characters long.",
         "username_required": "Username is required.",
+        "users": "Users",
+        "version": "Version",
         "warnings": "Warnings",
-        "welcome": "Welcome to HOOBS"
+        "welcome": "Welcome to HOOBS™"
     }
 }

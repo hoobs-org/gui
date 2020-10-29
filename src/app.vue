@@ -17,31 +17,50 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-on:click="resetMenus()" id="app" :theme="theme">
+    <div v-on:click="reset()" id="app" :theme="theme">
         <navigation v-if="authenticated()" />
         <div class="screen">
             <div v-if="authenticated()" class="header">
-                <div v-on:click.stop="toggleNotifications()" class="icon">
+                <div v-on:click.stop="toggle('notifications')" class="icon">
                     notifications_none
                     <div v-if="notifications.length > 0" class="active">&bull;</div>
                 </div>
-                <div v-on:click.stop="toggleServiceMenu()" class="icon">more_vert</div>
+                <div v-on:click.stop="toggle('service')" class="icon">more_vert</div>
             </div>
             <router-view class="view" />
         </div>
-        <notifications v-if="showNotifications" v-model="showNotifications" />
-        <service-menu v-if="showServiceMenu" :about="toggleAbout" :help="toggleHelp" :logout="logout" />
+        <notifications v-if="authenticated() && show.notifications" v-model="show.notifications" />
+        <service-menu
+            v-if="authenticated() && show.service"
+            :about="() => { toggle('about') }"
+            :help="() => navigate('https://support.hoobs.org/docs')"
+            :close="() => { toggle('service') }"
+            :logout="logout"
+        />
+        <modal v-if="authenticated() && show.about" width="720px" height="420px">
+            <welcome message="HOOBS™" />
+            <about
+                :donate="() => { navigate('https://paypal.me/hoobsorg') }"
+                :close="() => { toggle('about') }"
+            />
+        </modal>
     </div>
 </template>
 
 <script>
     import Themes from "./services/themes";
+    import Modal from "./components/elements/modal.vue";
+    import Welcome from "./components/elements/welcome.vue";
+    import About from "./components/elements/about.vue";
     import Navigation from "./components/navigation.vue";
     import Notifications from "./components/notifications.vue";
     import ServiceMenu from "./components/menus/service.vue";
 
     export default {
         components: {
+            "modal": Modal,
+            "welcome": Welcome,
+            "about": About,
             "navigation": Navigation,
             "notifications": Notifications,
             "service-menu": ServiceMenu,
@@ -59,10 +78,11 @@
 
         data() {
             return {
-                showNotifications: false,
-                showServiceMenu: false,
-                showAbout: false,
-                showHelp: false,
+                show: {
+                    notifications: false,
+                    service: false,
+                    about: false,
+                },
             };
         },
 
@@ -80,6 +100,8 @@
             },
 
             async logout() {
+                this.reset();
+
                 this.showServiceMenu = false;
 
                 await this.hoobs.auth.logout();
@@ -87,29 +109,24 @@
                 this.$router.push({ path: "/login", query: { url: "/" } });
             },
 
-            resetMenus() {
-                this.showNotifications = false;
-                this.showServiceMenu = false;
+            reset(ignore) {
+                const keys = Object.keys(this.show);
+
+                for (let i = 0; i < keys.length; i += 1) {
+                    if (keys[i] !== (ignore || "")) {
+                        this.show[keys[i]] = false;
+                    }
+                }
             },
 
-            toggleNotifications() {
-                this.showServiceMenu = false;
-                this.showNotifications = !this.showNotifications;
+            help() {
+                this.reset();
             },
 
-            toggleServiceMenu() {
-                this.showNotifications = false;
-                this.showServiceMenu = !this.showServiceMenu;
-            },
+            toggle(value) {
+                this.reset(value);
 
-            toggleAbout() {
-                this.showServiceMenu = false;
-                this.showAbout = !this.showAbout;
-            },
-
-            toggleHelp() {
-                this.showServiceMenu = false;
-                this.showHelp = !this.showHelp;
+                this.show[value] = !this.show[value];
             },
 
             authenticated() {
@@ -117,6 +134,10 @@
                     "Login",
                     "Setup",
                 ]).indexOf(this.$route.name) === -1;
+            },
+
+            navigate(url) {
+                window.open(url);
             },
         },
     };
@@ -176,6 +197,15 @@
         color: var(--application-text);
         background: var(--application-background);
 
+        a {
+            color: var(--application-highlight) !important;
+            text-decoration: none !important;
+
+            &:hover {
+                text-decoration: underline !important;
+            }
+        }
+
         .button {
             background: var(--button);
             color: var(--button-text) !important;
@@ -202,9 +232,7 @@
             }
 
             &:hover {
-                box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24),
-                    0 2px 1px -1px rgba(0, 0, 0, 0.22),
-                    0 1px 3px 1px rgba(0, 0, 0, 0.3);
+                box-shadow: var(--elevation-button);
             }
         }
 
@@ -342,6 +370,22 @@
             overflow: hidden;
             opacity: 0;
             position: absolute;
+        }
+
+        .mobile-only {
+            display: none !important;
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #app {
+            .mobile-only {
+                display: block !important;
+            }
+
+            .desktop-only {
+                display: none !important;
+            }
         }
     }
 </style>

@@ -25,11 +25,12 @@
                 <span class="identity">{{ user.name || user.username }}</span>
             </div>
         </div>
-        <div class="seperator"></div>
+        <div v-if="auth" class="seperator desktop-only"></div>
         <div v-on:click="about()" class="item">{{ $t("about") }}</div>
         <div v-on:click="help()" class="item">{{ $t("help") }}</div>
-        <div class="seperator"></div>
-        <div v-on:click="logout()" class="item">{{ $t("logout") }}</div>
+        <div v-if="auth" class="seperator desktop-only"></div>
+        <div v-if="auth" v-on:click="logout()" class="item">{{ $t("logout") }}</div>
+        <div v-on:click="close()" class="icon close mobile-only">close</div>
     </div>
 </template>
 
@@ -41,6 +42,7 @@
             about: Function,
             help: Function,
             logout: Function,
+            close: Function,
         },
 
         computed: {
@@ -74,8 +76,7 @@
         backdrop-filter: blur(4px);
         border-radius: 4px;
         z-index: 300;
-        box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.4),
-            0 4px 5px 0 rgba(0, 0, 0, 0.5), 0 1px 10px 0 rgba(0, 0, 0, 0.7);
+        box-shadow: var(--elevation);
 
         .seperator {
             height: 1px;
@@ -83,37 +84,34 @@
             background: var(--menu-border);
         }
 
+        .close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            font-size: 17px;
+            color: var(--application-text);
+            cursor: pointer;
+        }
+
         .item {
             padding: 10px 20px;
-            color: var(--menu-text);
             display: block;
-            text-decoration: none;
+            color: var(--menu-text) !important;
+            text-decoration: none !important;
             cursor: pointer;
             user-select: none;
+
+            &:first-child {
+                border-radius: 4px 4px 0 0;
+            }
 
             &:last-child {
                 border-radius: 0 0 4px 4px;
             }
 
-            &:link {
-                color: var(--menu-text);
-                text-decoration: none;
-            }
-
-            &:active {
-                color: var(--menu-text);
-                text-decoration: none;
-            }
-
-            &:visited {
-                color: var(--menu-text);
-                text-decoration: none;
-            }
-
             &:hover {
                 background: var(--menu-highlight);
-                text-decoration: none;
-                color: var(--menu-highlight-text);
+                color: var(--menu-highlight-text) !important;
             }
 
             &.disabled {
@@ -122,8 +120,7 @@
 
                 &:hover {
                     background: unset;
-                    text-decoration: none;
-                    color: var(--menu-text);
+                    color: var(--menu-text) !important;
                 }
             }
         }
@@ -155,6 +152,55 @@
                 flex: 1;
                 display: flex;
                 flex-direction: column;
+            }
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #menu {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            min-width: unset;
+            background: var(--modal-mobile);
+            color: var(--modal-text);
+            border-radius: unset;
+            top: 0;
+            right: unset;
+            left: 0;
+
+            .item {
+                color: var(--modal-text) !important;
+                border-top: var(--modal-border) 1px solid;
+                padding: 20px;
+
+                &:first-child {
+                    border-top: 0 none;
+                    border-radius: unset;
+                }
+
+                &:last-child {
+                    border-radius: unset;
+                }
+
+                &:hover {
+                    background: var(--menu-highlight);
+                    color: var(--menu-highlight-text) !important;
+                }
+
+                &.disabled {
+                    opacity: 0.4;
+                    cursor: default;
+
+                    &:hover {
+                        background: unset;
+                        color: var(--menu-text) !important;
+                    }
+                }
+            }
+
+            .profile {
+                color: var(--modal-text);
             }
         }
     }

@@ -53,6 +53,7 @@ export default new Vuex.Store({
         session: "",
         user: {},
         notifications: [],
+        navigation: false,
         accessory: null,
         theme: "dark",
     },
@@ -171,6 +172,10 @@ export default new Vuex.Store({
             state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.ttl || 0) > now);
         },
 
+        "NAVIGATION:STATE": (state: { [key: string ]: any }, value: boolean) => {
+            state.navigation = value;
+        },
+
         "THEME:SET": (state: { [key: string ]: any }, theme: number) => {
             state.theme = theme;
         },
@@ -186,6 +191,7 @@ export default new Vuex.Store({
             session: state.session,
             user: state.user,
             notifications: state.notifications,
+            navigation: state.navigation,
             theme: state.theme,
         }),
     }).plugin],

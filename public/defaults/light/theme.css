@@ -1,18 +1,19 @@
 [theme="light"] {
-    --application-text: #515151;
+    --application-text: #616161;
     --application-highlight-text: #e75a0e;
     --application-input-text: #000;
     --application-error-text: #a11;
-    --application-background: #fff;
+    --application-background: #fcfcfc;
     --application-highlight: #feb400;
-    --application-drawer: #ffffff9d;
-    --application-input: #fff;
-    --application-input-accent: #fcfcfc;
-    --application-border: #e5e5e5;
+    --application-dark: #e7e7e7;
+    --application-drawer: #fcfcfc9d;
+    --application-input: #fcfcfc;
+    --application-input-accent: #f1f1f1;
+    --application-border: #dfdfdf;
 
-    --button: #1a1a1a;
-    --button-text: #fff;
-    --button-border: #1a1a1a;
+    --button: #fcfcfc;
+    --button-text: #1a1a1a;
+    --button-border: #dfdfdf;
     --button-primary: #feb400;
     --button-primary-text: #fff;
     --button-primary-border: #feb400;
@@ -24,6 +25,9 @@
     --modal-input-text: #000;
     --modal-error-text: #a11;
     --modal-background: #ffffffe0;
+    --modal-dark: #f1f1f1;
+    --modal-mobile: #ffffff;
+    --modal-mask: #ffffff00;
     --modal-highlight: #feb400;
     --modal-input: #ffffff9f;
     --modal-input-accent: #fcfcfc;
@@ -35,9 +39,20 @@
     --menu-highlight: #f0f0f0;
     --menu-border: #e5e5e5;
 
-    --navigation-text: #999;
+    --navigation-text: #a3a3a3;
     --navigation-highlight-text: #fff;
-    --navigation-background: #141414;
+    --navigation-active-text: #feb400;
+    --navigation-background: #444;
+    --navigation-highlight: #feb400;
+    --navigation-border: #6e6e6e;
 
     --splash-background: url('/defaults/light/splash.jpg');
+
+    --elevation: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
+                 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+
+    --elevation-button: 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+                        0 2px 1px -1px rgba(0, 0, 0, 0.12),
+                        0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }

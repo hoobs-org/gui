@@ -103,6 +103,12 @@ export async function wait(saftey?: number): Promise<string> {
 
 export default function sdk(get: () => string, set: (token: string) => void) {
     return {
+        async version(): Promise<string> {
+            await wait();
+
+            return (await Request.get(`${prefix}`)).data.version;
+        },
+
         auth: {
             async status(): Promise<string> {
                 await wait();

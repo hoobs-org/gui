@@ -49,7 +49,7 @@
         height: 70px;
         margin: 0 20px 14px 20px;
         display: flex;
-        background: var(--application-border);
+        background: var(--application-dark);
         border-radius: 4px;
 
         .type {
@@ -108,6 +108,19 @@
 
             .description {
                 font-size: 12px;
+            }
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #notification {
+            background: var(--modal-dark);
+            color: var(--modal-text);
+
+            .close {
+                width: 17px;
+                height: 17px;
+                font-size: 17px;
             }
         }
     }

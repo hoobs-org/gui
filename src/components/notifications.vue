@@ -18,7 +18,10 @@
 
 <template>
     <div v-if="value" v-on:click.stop v-on:mouseenter="toggle(true)" v-on:mouseleave="toggle(false)" id="notifications">
-        <div class="title">{{ $t("notifications") }}</div>
+        <div class="title">
+            {{ $t("notifications") }}
+            <div v-on:click="close(true)" class="icon">close</div>
+        </div>
         <div v-if="notifications.length === 0" class="empty">{{ $t("notifications_empty") }}</div>
         <div v-else class="list">
             <notification  v-for="(notification, index) in notifications" :key="index" :message="notification" />
@@ -87,14 +90,21 @@
         overflow: hidden;
         background: var(--application-drawer);
         backdrop-filter: blur(4px);
-        box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.4),
-                0 4px 5px 0 rgba(0, 0, 0, 0.5), 0 1px 10px 0 rgba(0, 0, 0, 0.7);
+        box-shadow: var(--elevation);
 
         .title {
+            display: flex;
+            justify-content: space-between;
             color: var(--application-highlight);
             border-bottom: var(--application-border) 1px solid;
             margin: 14px;
             padding: 0 0 7px 0;
+
+            .icon {
+                font-size: 17px;
+                color: var(--application-text);
+                cursor: pointer;
+            }
         }
 
         .list {
@@ -119,7 +129,20 @@
 
     @media (min-width: 300px) and (max-width: 815px) {
         #notifications {
+            width: 100%;
+            background: var(--modal-mobile);
+            box-shadow: unset;
+            backdrop-filter: unset;
             overflow: auto;
+
+            .title {
+                color: var(--modal-highlight);
+                border-bottom: var(--modal-border) 1px solid;
+
+                .icon {
+                    color: var(--modal-text);
+                }
+            }
         }
     }
 </style>

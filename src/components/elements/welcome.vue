@@ -20,8 +20,6 @@
     <h2 id="welcome">
         <svg
             class="logo"
-            width="27"
-            height="27"
             viewBox="0 0 80 80.92"
             xmlns="http://www.w3.org/2000/svg"
         >
@@ -61,7 +59,7 @@
 
 <style lang="scss" scoped>
     #welcome {
-        margin: 0 0 15px 0;
+        margin: 0 0 14px 0;
         padding: 0;
         line-height: normal;
         font-size: 22px;
@@ -72,7 +70,9 @@
         user-select: none;
 
         .logo {
-            margin: 0 10px 0 0;
+            width: 27px;
+            height: 27px;
+            margin: 0 7px 0 0;
 
             .background {
                 fill: var(--modal-highlight);

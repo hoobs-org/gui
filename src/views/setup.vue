@@ -15,16 +15,15 @@
  | You should have received a copy of the GNU General Public License                              |
  | along with this program.  If not, see <http://www.gnu.org/licenses/>.                          |
  -------------------------------------------------------------------------------------------------->
-
 <template>
     <div v-if="step >= 0" id="setup">
-        <div v-if="step === 0" class="form">
+        <modal v-if="step === 0" width="760px" height="670px">
             <welcome :message="$t('welcome')" />
             <div class="loading">
                 <spinner v-model="message" />
             </div>
-        </div>
-        <div v-else-if="step === 1" class="form">
+        </modal>
+        <modal v-else-if="step === 1" width="760px" height="670px">
             <welcome :message="$t('welcome')" />
             <p>{{ $t("user_add_admin_account") }}</p>
             <form
@@ -64,13 +63,13 @@
             <div class="actions modal">
                 <div class="copyright">
                     HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
-                    <br />Copyright &copy; 2020 HOOBS, Inc. All rights reserved.
+                    <br />Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
                 <div class="button light" @click="disableAuth()">{{ $t("disable_login") }}</div>
                 <div class="button primary" @click="createAccount()">{{ $t("create_account") }}</div>
             </div>
-        </div>
-        <div v-else-if="step === 2" class="form">
+        </modal>
+        <modal v-else-if="step === 2" width="760px" height="670px">
             <welcome :message="$t('welcome')" />
             <p>{{ $t("instance_create_default") }}</p>
             <form
@@ -100,15 +99,16 @@
             <div class="actions modal">
                 <div class="copyright">
                     HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
-                    <br />Copyright &copy; 2020 HOOBS, Inc. All rights reserved.
+                    <br />Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
                 <div class="button primary" @click="createInstance()">{{ $t("create_instance") }}</div>
             </div>
-        </div>
+        </modal>
     </div>
 </template>
 
 <script>
+    import Modal from "../components/elements/modal.vue";
     import Welcome from "../components/elements/welcome.vue";
     import Spinner from "../components/elements/spinner.vue";
     import TextField from "../components/fields/text.vue";
@@ -117,6 +117,7 @@
 
     export default {
         components: {
+            "modal": Modal,
             "welcome": Welcome,
             "spinner": Spinner,
             "text-field": TextField,
@@ -244,10 +245,6 @@
 
 <style lang="scss" scoped>
     #setup {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        padding: 20px 20px 10em 20px;
         background: var(--splash-background);
         background-repeat: no-repeat;
         background-position: center center;
@@ -261,56 +258,36 @@
             padding: 0 0 20% 0;
         }
 
-        .form {
-            width: 760px;
-            min-height: 670px;
-            max-height: 100%;
-            overflow: hidden;
+        .errors {
+            margin: 0 0 20px 0;
+            padding: 0 0 20px 0;
             display: flex;
             flex-direction: column;
-            padding: 20px;
-            color: var(--modal-text);
+            font-size: 14px;
+            color: var(--modal-error-text);
+            border-bottom: var(--modal-border) 1px solid;
+        }
+
+        form {
+            flex: 1;
+            border: var(--modal-border) 1px solid;
             background: var(--modal-background);
-            backdrop-filter: blur(4px);
+            padding: 20px;
             border-radius: 4px;
-            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.4),
-                0 4px 5px 0 rgba(0, 0, 0, 0.5), 0 1px 10px 0 rgba(0, 0, 0, 0.7);
+        }
 
-            &:hover {
-                overflow: overlay;
-            }
+        .actions {
+            margin: 10px -10px 0 0;
+            display: flex;
+            justify-content: flex-end;
 
-            .errors {
-                margin: 0 0 20px 0;
-                padding: 0 0 20px 0;
+            .copyright {
+                flex: 1;
+                font-size: 9px;
                 display: flex;
                 flex-direction: column;
-                font-size: 14px;
-                color: var(--modal-error-text);
-                border-bottom: var(--modal-border) 1px solid;
-            }
-
-            form {
-                flex: 1;
-                border: var(--modal-border) 1px solid;
-                background: var(--modal-background);
-                padding: 20px;
-                border-radius: 4px;
-            }
-
-            .actions {
-                margin: 10px -10px 0 0;
-                display: flex;
                 justify-content: flex-end;
-
-                .copyright {
-                    flex: 1;
-                    font-size: 9px;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: flex-end;
-                    opacity: 0.4;
-                }
+                opacity: 0.4;
             }
         }
     }
@@ -321,24 +298,19 @@
             background: unset;
             align-items: unset;
 
-            .form {
-                flex: 1;
-                width: unset;
-                min-height: unset;
-                max-height: unset;
+            .errors {
+                border-bottom: 0 none;
+            }
+
+            form {
+                border: unset;
+                padding: unset;
                 border-radius: unset;
-                overflow: auto;
+            }
 
-                form {
-                    border: unset;
-                    padding: unset;
-                    border-radius: unset;
-                }
-
-                .actions {
-                    .copyright {
-                        display: none;
-                    }
+            .actions {
+                .copyright {
+                    display: none;
                 }
             }
         }

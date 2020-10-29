@@ -5,6 +5,7 @@
     --application-error-text: #e30505;
     --application-background: #141414;
     --application-highlight: #feb400;
+    --application-dark: #252525;
     --application-drawer: #1414149d;
     --application-input: #262626;
     --application-input-accent: #444;
@@ -24,6 +25,9 @@
     --modal-input-text: #000;
     --modal-error-text: #a11;
     --modal-background: #ffffffe0;
+    --modal-dark: #f1f1f1;
+    --modal-mobile: #ffffff;
+    --modal-mask: #14141400;
     --modal-highlight: #feb400;
     --modal-input: #ffffff9f;
     --modal-input-accent: #fcfcfc;
@@ -37,7 +41,18 @@
 
     --navigation-text: #999;
     --navigation-highlight-text: #fff;
+    --navigation-active-text: #feb400;
     --navigation-background: #141414;
+    --navigation-highlight: #feb400;
+    --navigation-border: #4b4b4b;
 
     --splash-background: url('/defaults/dark/splash.jpg');
+
+    --elevation: 0 1px 1px 0 rgba(0, 0, 0, 0.24),
+                 0 2px 1px -1px rgba(0, 0, 0, 0.22),
+                 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+
+    --elevation-button: 0 1px 1px 0 rgba(0, 0, 0, 0.24),
+                        0 2px 1px -1px rgba(0, 0, 0, 0.22),
+                        0 1px 3px 1px rgba(0, 0, 0, 0.3);
 }
