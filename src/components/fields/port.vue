@@ -17,10 +17,21 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="port-field">
+    <div id="field">
         <span class="title">{{ name }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <input type="number" ref="field" autocomplete="false" min="1" step="1" max="65535" :value="value" @input="update()" @change="change" v-bind:required="required" />
+        <input
+            type="number"
+            ref="field"
+            autocomplete="false"
+            min="1"
+            step="1"
+            max="65535"
+            :value="value"
+            @input="update()"
+            @change="change"
+            v-bind:required="required"
+        />
     </div>
 </template>
 
@@ -50,7 +61,7 @@
 </script>
 
 <style lang="scss" scoped>
-    #port-field {
+    #field {
         display: flex;
         flex-direction: column;
         padding: 0 0 20px 0;
@@ -69,7 +80,7 @@
             flex: 1;
             padding: 7px;
             font-size: 14px;
-            border-radius: 5px;
+            border-radius: 4px;
 
             &:focus {
                 outline: 0 none;

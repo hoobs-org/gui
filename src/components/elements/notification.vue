@@ -17,70 +17,97 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="field">
-        <span class="title">{{ name }}</span>
-        <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <input
-            type="password"
-            ref="field"
-            autocomplete="false"
-            :value="value"
-            @input="update()"
-            @change="change"
-            v-bind:required="required"
-        />
+    <div id="notification">
+        <div :class="`type ${message.type}`"></div>
+        <div v-if="message.icon" class="icon display" v-html="message.icon"></div>
+        <div class="details">
+            <div class="title">{{ message.title }}</div>
+            <div class="description">{{ message.description }}</div>
+        </div>
+        <div v-on:click="dismiss(message.id)" class="icon close">close</div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "password-field",
+        name: "notification",
+
         props: {
-            name: String,
-            description: String,
-            value: String,
-            required: {
-                type: Boolean,
-                default: false,
-            },
+            message: Object,
         },
 
         methods: {
-            update() {
-                this.$emit("input", this.$refs.field.value);
-            },
-
-            change() {
-                this.$emit("change", this.$refs.field.value);
+            dismiss(id) {
+                this.$store.commit("NOTIFICATION:DISMISS", id);
             },
         },
     };
 </script>
 
 <style lang="scss" scoped>
-    #field {
+    #notification {
+        height: 70px;
+        margin: 0 20px 14px 20px;
         display: flex;
-        flex-direction: column;
-        padding: 0 0 20px 0;
+        background: var(--application-border);
+        border-radius: 4px;
 
-        .title {
+        .type {
+            width: 7px;
+            height: 100%;
+            border-radius: 4px 0 0 4px;
+            background: var(--application-text);
+
+            &.success {
+                background: #019420;
+            }
+
+            &.warn {
+                background: #feb400;
+            }
+
+            &.error {
+                background: #e30505;
+            }
+        }
+
+        .display {
+            width: 60px;
+            height: 70px;
+            font-size: 37px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            opacity: 0.7;
+        }
+
+        .close {
+            width: 14px;
+            height: 14px;
             font-size: 14px;
-            margin: 0 0 7px 0;
+            opacity: 0.7;
+            margin: 7px;
+            cursor: pointer;
+
+            &:hover {
+                opacity: 1;
+            }
         }
 
-        .description {
-            font-size: 12px;
-            margin: -7px 0 7px 0;
-        }
-
-        input {
+        .details {
             flex: 1;
-            padding: 7px;
-            font-size: 14px;
-            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 14px 0;
 
-            &:focus {
-                outline: 0 none;
+            .title {
+                font-weight: bold;
+                font-size: 14px;
+            }
+
+            .description {
+                font-size: 12px;
             }
         }
     }

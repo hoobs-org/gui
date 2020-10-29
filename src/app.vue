@@ -21,7 +21,7 @@
         <navigation v-if="authenticated()" />
         <div class="screen">
             <div v-if="authenticated()" class="header">
-                <div class="icon">
+                <div v-on:click="toggleNotifications()" class="icon">
                     notifications_none
                     <div v-if="notifications.length > 0" class="active">&bull;</div>
                 </div>
@@ -29,16 +29,19 @@
             </div>
             <router-view class="view" />
         </div>
+        <notifications v-if="showNotifications" v-model="showNotifications" />
     </div>
 </template>
 
 <script>
     import Navigation from "./components/navigation.vue";
+    import Notifications from "./components/notifications.vue";
     import Themes from "./services/themes";
 
     export default {
         components: {
-            navigation: Navigation,
+            "navigation": Navigation,
+            "notifications": Notifications,
         },
 
         computed: {
@@ -49,6 +52,12 @@
             notifications() {
                 return this.$store.state.notifications;
             },
+        },
+
+        data() {
+            return {
+                showNotifications: false,
+            };
         },
 
         created() {
@@ -62,6 +71,10 @@
                 }
 
                 document.getElementById("theme").setAttribute("href", Themes.path(theme));
+            },
+
+            toggleNotifications() {
+                this.showNotifications = !this.showNotifications;
             },
 
             authenticated() {
@@ -80,10 +93,10 @@
         font-style: normal;
         font-weight: 400;
         font-display: swap;
-        src: local("Montserrat Regular"),
-             local("Montserrat-Regular"),
-             url(./assets/montserrat.woff2) format("woff2");
-        unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+        src: local("Montserrat Regular"), local("Montserrat-Regular"),
+            url(./assets/montserrat.woff2) format("woff2");
+        unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F,
+            U+FE2E-FE2F;
     }
 
     @font-face {
@@ -91,10 +104,10 @@
         font-style: normal;
         font-weight: 900;
         font-display: swap;
-        src: local("Montserrat Black"),
-             local("Montserrat-Black"),
-             url(./assets/montserrat-black.woff2) format("woff2");
-        unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+        src: local("Montserrat Black"), local("Montserrat-Black"),
+            url(./assets/montserrat-black.woff2) format("woff2");
+        unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F,
+            U+FE2E-FE2F;
     }
 
     @font-face {
@@ -102,16 +115,16 @@
         font-style: normal;
         font-weight: 400;
         src: url(./assets/material.eot);
-        src: local("Material Icons"),
-             local("MaterialIcons-Regular"),
-             url(./assets/material.woff2) format('woff2'),
-             url(./assets/material.woff) format('woff'),
-             url(./assets/material.ttf) format('truetype');
+        src: local("Material Icons"), local("MaterialIcons-Regular"),
+            url(./assets/material.woff2) format("woff2"),
+            url(./assets/material.woff) format("woff"),
+            url(./assets/material.ttf) format("truetype");
     }
 </style>
 
 <style lang="scss">
-    html, body {
+    html,
+    body {
         width: 100%;
         height: 100%;
         margin: 0;
@@ -134,7 +147,7 @@
             text-decoration: none !important;
             display: inline-block;
             border: 1px var(--button-border) solid;
-            border-radius: 3px;
+            border-radius: 4px;
             padding: 10px;
             user-select: none;
             margin: 0 10px 0 0;
@@ -155,8 +168,8 @@
 
             &:hover {
                 box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24),
-                            0 2px 1px -1px rgba(0, 0, 0, 0.22),
-                            0 1px 3px 1px rgba(0, 0, 0, 0.3);
+                    0 2px 1px -1px rgba(0, 0, 0, 0.22),
+                    0 1px 3px 1px rgba(0, 0, 0, 0.3);
             }
         }
 
@@ -169,6 +182,7 @@
             letter-spacing: normal;
             text-transform: none;
             display: inline-block;
+            user-select: none;
             white-space: nowrap;
             word-wrap: normal;
             direction: ltr;

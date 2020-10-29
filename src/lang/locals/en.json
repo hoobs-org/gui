@@ -26,6 +26,8 @@
         "login": "Log In",
         "name": "Name",
         "name_description": "Enter your full name.",
+        "notifications": "Notifications",
+        "notifications_empty": "No new notifications",
         "password": "Password",
         "password_description": "Enter you desired password. Passwords must be at least 5 characters long.",
         "password_confirm": "Reenter Password",

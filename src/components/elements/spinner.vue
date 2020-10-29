@@ -17,10 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div
-        v-if="display"
-        id="spinner"
-    >
+    <div v-if="display" id="spinner">
         <div class="inner">
             <div class="grid">
                 <div></div>
@@ -34,10 +31,7 @@
                 <div></div>
             </div>
         </div>
-        <div
-            class="message"
-            v-html="value"
-        />
+        <div class="message" v-html="value" />
     </div>
 </template>
 
@@ -69,7 +63,7 @@
             opacity: 1;
         }
         50% {
-            opacity: .35;
+            opacity: 0.35;
         }
         100% {
             opacity: 1;
@@ -81,7 +75,7 @@
             opacity: 1;
         }
         50% {
-            opacity: .35;
+            opacity: 0.35;
         }
         100% {
             opacity: 1;
@@ -93,7 +87,7 @@
             opacity: 1;
         }
         50% {
-            opacity: .35;
+            opacity: 0.35;
         }
         100% {
             opacity: 1;
@@ -105,7 +99,7 @@
             opacity: 1;
         }
         50% {
-            opacity: .35;
+            opacity: 0.35;
         }
         100% {
             opacity: 1;

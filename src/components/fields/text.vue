@@ -17,10 +17,20 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="text-field">
+    <div id="field">
         <span class="title">{{ name }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <input type="text" ref="field" autocomplete="false" autocorrect="off" autocapitalize="none" :value="value" @input="update()" @change="change" v-bind:required="required" />
+        <input
+            type="text"
+            ref="field"
+            autocomplete="false"
+            autocorrect="off"
+            autocapitalize="none"
+            :value="value"
+            @input="update()"
+            @change="change"
+            v-bind:required="required"
+        />
     </div>
 </template>
 
@@ -50,7 +60,7 @@
 </script>
 
 <style lang="scss" scoped>
-    #text-field {
+    #field {
         display: flex;
         flex-direction: column;
         padding: 0 0 20px 0;
@@ -69,7 +79,7 @@
             flex: 1;
             padding: 7px;
             font-size: 14px;
-            border-radius: 5px;
+            border-radius: 4px;
 
             &:focus {
                 outline: 0 none;

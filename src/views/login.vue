@@ -20,14 +20,8 @@
     <div id="login">
         <div class="form">
             <welcome :message="$t('login')" />
-            <div
-                v-if="errors.length > 0"
-                class="errors"
-            >
-                <span
-                    v-for="(error, index) in errors"
-                    :key="index"
-                >{{ error }}</span>
+            <div v-if="errors.length > 0" class="errors">
+                <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
             </div>
             <form
                 class="modal"
@@ -38,10 +32,7 @@
             >
                 <div class="group">
                     <div class="upper">
-                        <label
-                            for="username"
-                            class="title"
-                        >{{ $t("username") }}</label>
+                        <label for="username" class="title">{{ $t("username") }}</label>
                         <input
                             type="text"
                             id="username"
@@ -52,10 +43,7 @@
                         />
                     </div>
                     <div class="lower">
-                        <label
-                            for="password"
-                            class="title"
-                        >{{ $t("password") }}</label>
+                        <label for="password" class="title">{{ $t("password") }}</label>
                         <input
                             type="password"
                             id="password"
@@ -67,21 +55,17 @@
                     </div>
                 </div>
                 <div class="remember">
-                    <checkbox
-                        id="remember"
-                        v-model="remember"
-                    > <label for="remember">{{ $t("remember_me") }}</label></checkbox>
+                    <checkbox id="remember" v-model="remember">
+                        <label for="remember">{{ $t("remember_me") }}</label>
+                    </checkbox>
                 </div>
             </form>
             <div class="actions modal">
                 <div class="copyright">
-                    HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.<br>
-                    Copyright &copy; 2020 HOOBS, Inc. All rights reserved.
+                    HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
+                    <br />Copyright &copy; 2020 HOOBS, Inc. All rights reserved.
                 </div>
-                <div
-                    class="button primary"
-                    @click="login()"
-                >{{ $t("login") }}</div>
+                <div class="button primary" @click="login()">{{ $t("login") }}</div>
             </div>
         </div>
     </div>
@@ -151,20 +135,23 @@
             width: 420px;
             min-height: 20px;
             max-height: 100%;
-            overflow: auto;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             padding: 20px;
             color: var(--modal-text);
             background: var(--modal-background);
-            border-radius: 3px;
+            backdrop-filter: blur(4px);
+            border-radius: 4px;
             box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.4),
-                        0 4px 5px 0 rgba(0, 0, 0, 0.5),
-                        0 1px 10px 0 rgba(0, 0, 0, 0.7);
+                0 4px 5px 0 rgba(0, 0, 0, 0.5), 0 1px 10px 0 rgba(0, 0, 0, 0.7);
+
+            &:hover {
+                overflow: overlay;
+            }
 
             .errors {
-                margin: 0 0 20px 0;
-                padding: 0 0 20px 0;
+                margin: 0 0 10px 0;
                 display: flex;
                 flex-direction: column;
                 font-size: 14px;
@@ -218,7 +205,7 @@
                     border-radius: 0 0 3px 3px;
 
                     &:focus-within {
-                        background: var(--background-accent);
+                        background: var(--modal-input-accent);
                     }
                 }
 
@@ -279,6 +266,7 @@
                 min-height: unset;
                 max-height: unset;
                 border-radius: unset;
+                overflow: auto;
 
                 .actions {
                     .copyright {

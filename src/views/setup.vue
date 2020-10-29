@@ -17,27 +17,16 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div
-        v-if="step >= 0"
-        id="setup"
-    >
-        <div
-            v-if="step === 0"
-            class="form"
-        >
+    <div v-if="step >= 0" id="setup">
+        <div v-if="step === 0" class="form">
             <welcome :message="$t('welcome')" />
             <div class="loading">
                 <spinner v-model="message" />
             </div>
         </div>
-        <div
-            v-else-if="step === 1"
-            class="form"
-        >
+        <div v-else-if="step === 1" class="form">
             <welcome :message="$t('welcome')" />
-            <p>
-                {{ $t("user_add_admin_account") }}
-            </p>
+            <p>{{ $t("user_add_admin_account") }}</p>
             <form
                 class="modal"
                 autocomplete="false"
@@ -45,20 +34,10 @@
                 action="/setup"
                 v-on:submit.prevent="createAccount()"
             >
-                <div
-                    v-if="errors.length > 0"
-                    class="errors"
-                >
-                    <span
-                        v-for="(error, index) in errors"
-                        :key="index"
-                    >{{ error }}</span>
+                <div v-if="errors.length > 0" class="errors">
+                    <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
                 </div>
-                <input
-                    type="submit"
-                    class="hidden-submit"
-                    value="submit"
-                >
+                <input type="submit" class="hidden-submit" value="submit" />
                 <text-field
                     :name="$t('name')"
                     :description="$t('name_description')"
@@ -84,27 +63,16 @@
             </form>
             <div class="actions modal">
                 <div class="copyright">
-                    HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.<br>
-                    Copyright &copy; 2020 HOOBS, Inc. All rights reserved.
+                    HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
+                    <br />Copyright &copy; 2020 HOOBS, Inc. All rights reserved.
                 </div>
-                <div
-                    class="button light"
-                    @click="disableAuth()"
-                >{{ $t("disable_login") }}</div>
-                <div
-                    class="button primary"
-                    @click="createAccount()"
-                >{{ $t("create_account") }}</div>
+                <div class="button light" @click="disableAuth()">{{ $t("disable_login") }}</div>
+                <div class="button primary" @click="createAccount()">{{ $t("create_account") }}</div>
             </div>
         </div>
-        <div
-            v-else-if="step === 2"
-            class="form"
-        >
+        <div v-else-if="step === 2" class="form">
             <welcome :message="$t('welcome')" />
-            <p>
-                {{ $t("instance_create_default") }}
-            </p>
+            <p>{{ $t("instance_create_default") }}</p>
             <form
                 class="modal"
                 autocomplete="false"
@@ -112,20 +80,10 @@
                 action="/setup"
                 v-on:submit.prevent="createInstance()"
             >
-                <div
-                    v-if="errors.length > 0"
-                    class="errors"
-                >
-                    <span
-                        v-for="(error, index) in errors"
-                        :key="index"
-                    >{{ error }}</span>
+                <div v-if="errors.length > 0" class="errors">
+                    <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
                 </div>
-                <input
-                    type="submit"
-                    class="hidden-submit"
-                    value="submit"
-                >
+                <input type="submit" class="hidden-submit" value="submit" />
                 <text-field
                     :name="$t('instance_name')"
                     :description="$t('instance_name_description')"
@@ -141,13 +99,10 @@
             </form>
             <div class="actions modal">
                 <div class="copyright">
-                    HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.<br>
-                    Copyright &copy; 2020 HOOBS, Inc. All rights reserved.
+                    HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
+                    <br />Copyright &copy; 2020 HOOBS, Inc. All rights reserved.
                 </div>
-                <div
-                    class="button primary"
-                    @click="createInstance()"
-                >{{ $t("create_instance") }}</div>
+                <div class="button primary" @click="createInstance()">{{ $t("create_instance") }}</div>
             </div>
         </div>
     </div>
@@ -310,16 +265,20 @@
             width: 760px;
             min-height: 670px;
             max-height: 100%;
-            overflow: auto;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             padding: 20px;
             color: var(--modal-text);
             background: var(--modal-background);
-            border-radius: 3px;
+            backdrop-filter: blur(4px);
+            border-radius: 4px;
             box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.4),
-                        0 4px 5px 0 rgba(0, 0, 0, 0.5),
-                        0 1px 10px 0 rgba(0, 0, 0, 0.7);
+                0 4px 5px 0 rgba(0, 0, 0, 0.5), 0 1px 10px 0 rgba(0, 0, 0, 0.7);
+
+            &:hover {
+                overflow: overlay;
+            }
 
             .errors {
                 margin: 0 0 20px 0;
@@ -334,8 +293,9 @@
             form {
                 flex: 1;
                 border: var(--modal-border) 1px solid;
+                background: var(--modal-background);
                 padding: 20px;
-                border-radius: 3px;
+                border-radius: 4px;
             }
 
             .actions {
@@ -367,6 +327,7 @@
                 min-height: unset;
                 max-height: unset;
                 border-radius: unset;
+                overflow: auto;
 
                 form {
                     border: unset;

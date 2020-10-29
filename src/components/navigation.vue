@@ -29,5 +29,7 @@
 <style lang="scss" scoped>
     #navigation {
         min-width: 45px;
+        background: var(--navigation-background);
+        color: var(--navigation-text);
     }
 </style>

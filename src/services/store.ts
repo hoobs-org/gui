@@ -145,14 +145,8 @@ export default new Vuex.Store({
             state.notifications.push(notification);
         },
 
-        "NOTIFICATION:DISMISS": (state: { [key: string ]: any }, id: string | string[] | undefined) => {
-            if (id && id !== "") {
-                if (Array.isArray(id)) {
-                    state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.id || "") !== "" && id.indexOf(item.id) === -1);
-                } else {
-                    state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.id || "") !== "" && (item.id || "") !== id);
-                }
-            }
+        "NOTIFICATION:DISMISS": (state: { [key: string ]: any }, id: string) => {
+            state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.id || "") !== "" && (item.id || "") !== id);
         },
 
         "NOTIFICATION:DISMISS:OLD": (state: { [key: string ]: any }) => {
