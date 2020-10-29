@@ -65,7 +65,7 @@
                     HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
                     <br />Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
-                <div class="button primary" @click="login()">{{ $t("login") }}</div>
+                <div class="button primary" v-on:click="login()">{{ $t("login") }}</div>
             </div>
         </modal>
     </div>

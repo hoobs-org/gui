@@ -31,7 +31,7 @@
                 autocomplete="false"
                 method="post"
                 action="/setup"
-                v-on:submit.prevent="createAccount()"
+                v-on:submit.prevent="account()"
             >
                 <div v-if="errors.length > 0" class="errors">
                     <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
@@ -65,8 +65,8 @@
                     HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
                     <br />Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
-                <div class="button light" @click="disableAuth()">{{ $t("disable_login") }}</div>
-                <div class="button primary" @click="createAccount()">{{ $t("create_account") }}</div>
+                <div class="button light" v-on:click="disable()">{{ $t("disable_login") }}</div>
+                <div class="button primary" v-on:click="account()">{{ $t("create_account") }}</div>
             </div>
         </modal>
         <modal v-else-if="step === 2" width="760px" height="670px">
@@ -77,7 +77,7 @@
                 autocomplete="false"
                 method="post"
                 action="/setup"
-                v-on:submit.prevent="createInstance()"
+                v-on:submit.prevent="setup()"
             >
                 <div v-if="errors.length > 0" class="errors">
                     <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
@@ -101,7 +101,7 @@
                     HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
                     <br />Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
-                <div class="button primary" @click="createInstance()">{{ $t("create_instance") }}</div>
+                <div class="button primary" v-on:click="setup()">{{ $t("create_instance") }}</div>
             </div>
         </modal>
     </div>
@@ -126,11 +126,27 @@
         },
 
         async mounted() {
-            this.step = await this.getStep();
+            this.step = await this.progress();
         },
 
         methods: {
-            async getStep() {
+            async wait(callback, compare, saftey) {
+                const results = await callback();
+
+                if (compare(results)) {
+                    return results;
+                }
+
+                if ((saftey || 0) >= 300) {
+                    return results;
+                }
+
+                await sleep(1000);
+
+                return this.wait(callback, compare, (saftey || 0) + 1);
+            },
+
+            async progress() {
                 if (this.step > 0) {
                     this.step = 0;
                 }
@@ -157,7 +173,7 @@
                 return -1;
             },
 
-            async createAccount() {
+            async account() {
                 this.errors = [];
 
                 if (this.username.length < 3) {
@@ -186,27 +202,11 @@
                         this.errors.push(this.$t("user_add_failed"));
                     }
 
-                    this.step = await this.getStep();
+                    this.step = await this.progress();
                 }
             },
 
-            async waitForInstance(saftey) {
-                const instances = await this.hoobs.instances.count();
-
-                if (instances > 0) {
-                    return instances;
-                }
-
-                if ((saftey || 0) >= 300) {
-                    return 0;
-                }
-
-                await sleep(1000);
-
-                return this.waitForInstance((saftey || 0) + 1);
-            },
-
-            async createInstance() {
+            async setup() {
                 this.errors = [];
 
                 if (this.instance.length < 3) {
@@ -228,36 +228,20 @@
                     this.message = `${this.$t("instance_create")} ...`;
 
                     await this.hoobs.instances.add(this.instance, parseInt(this.port, 10));
-                    await this.waitForInstance();
+                    await this.wait(this.hoobs.instances.count, (value) => value > 0);
 
-                    this.step = await this.getStep();
+                    this.step = await this.progress();
                 }
             },
 
-            async waitForDisable(saftey) {
-                const status = await this.hoobs.auth.status();
-
-                if (status === "disabled") {
-                    return status;
-                }
-
-                if ((saftey || 0) >= 300) {
-                    return "disabled";
-                }
-
-                await sleep(1000);
-
-                return this.waitForDisable((saftey || 0) + 1);
-            },
-
-            async disableAuth() {
+            async disable() {
                 this.step = 0;
                 this.message = `${this.$t("disable_login_disabling")} ...`;
 
                 await this.hoobs.auth.disable();
-                await this.waitForDisable();
+                await this.wait(this.hoobs.auth.status, (value) => value === "disabled");
 
-                this.step = await this.getStep();
+                this.step = await this.progress();
             },
         },
     };
