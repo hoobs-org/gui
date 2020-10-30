@@ -46,7 +46,7 @@
                 :close="() => { toggle('about') }"
             />
         </modal>
-        <modal v-if="show.settings" :title="$t('settings')" width="760px" height="387px">
+        <modal v-if="show.settings" :title="$t('settings')" width="760px" height="392px">
             <settings :close="() => { toggle('settings') }" />
         </modal>
         <modal v-if="show.personalize" :title="$t('personalize')" width="760px" height="670px">

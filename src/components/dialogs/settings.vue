@@ -23,6 +23,7 @@
                 <div class="row title">
                     {{ $t("weather") }}
                 </div>
+                <div class="seperator"></div>
                 <div class="row title">
                     {{ $t("temperature_units") }}
                 </div>
@@ -129,6 +130,12 @@
                 padding: 20px;
                 margin: 10px 0 0 0;
                 border-radius: 4px;
+
+                .seperator {
+                    height: 1px;
+                    background: var(--modal-border);
+                    margin: 7px 0 0 0;
+                }
 
                 .row {
                     display: flex;
