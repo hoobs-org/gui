@@ -151,7 +151,6 @@
                 width: 12px;
                 height: 12px;
                 border-radius: 6px;
-                margin: 1px 0 0 0;
             }
         }
 

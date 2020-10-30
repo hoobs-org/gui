@@ -34,6 +34,7 @@
             v-if="show.application"
             :about="() => { toggle('about') }"
             :help="() => navigate('https://support.hoobs.org/docs')"
+            :settings="() => { toggle('settings') }"
             :personalize="() => { toggle('personalize') }"
             :close="() => { toggle('application') }"
             :logout="logout"
@@ -45,6 +46,9 @@
                 :close="() => { toggle('about') }"
             />
         </modal>
+        <modal v-if="show.settings" :title="$t('settings')" width="760px" height="387px">
+            <settings :close="() => { toggle('settings') }" />
+        </modal>
         <modal v-if="show.personalize" :title="$t('personalize')" width="760px" height="670px">
             <personalize :close="() => { toggle('personalize') }" />
         </modal>
@@ -52,17 +56,19 @@
 </template>
 
 <script>
-    import About from "./components/elements/about.vue";
+    import About from "./components/dialogs/about.vue";
     import Navigation from "./components/navigation.vue";
     import Notifications from "./components/notifications.vue";
     import ApplicationMenu from "./components/menus/application.vue";
-    import Personalize from "./components/elements/personalize.vue";
+    import Personalize from "./components/dialogs/personalize.vue";
+    import Settings from "./components/dialogs/settings.vue";
 
     export default {
         components: {
             "about": About,
-            "personalize": Personalize,
+            "settings": Settings,
             "navigation": Navigation,
+            "personalize": Personalize,
             "notifications": Notifications,
             "application-menu": ApplicationMenu,
         },
@@ -79,6 +85,7 @@
                     notifications: false,
                     application: false,
                     about: false,
+                    settings: false,
                     personalize: false,
                 },
             };

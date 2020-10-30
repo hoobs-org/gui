@@ -6,6 +6,7 @@
         "accessories": "Accessories",
         "backdrop": "Backdrop",
         "cancel": "Cancel",
+        "celsius": "Celsius",
         "color": "Color",
         "create_account": "Create Account",
         "create_instance": "Create Instance",
@@ -18,6 +19,7 @@
         "device": "Device",
         "donate": "Donate",
         "download": "Download",
+        "fahrenheit": "Fahrenheit",
         "help": "Help",
         "information": "Information",
         "instance_create": "Creating Instance",
@@ -53,9 +55,12 @@
         "password_weak": "Password too weak.",
         "personalize": "Personalize",
         "plugins": "Plugins",
+        "postal_code": "Postal Code",
+        "postal_code_description": "This is used for weather forecasts, set the postal code to your desired city.",
         "privacy_policy": "Privacy Policy",
         "remember_me": "Remember Me",
         "settings": "Settings",
+        "temperature_units": "Temperature Units",
         "terms_conditions": "Terms & Conditions",
         "text": "Text",
         "title": "Title",
@@ -69,6 +74,7 @@
         "users": "Users",
         "version": "Version",
         "warnings": "Warnings",
+        "weather": "Weather",
         "welcome": "Welcome to HOOBS™"
     }
 }

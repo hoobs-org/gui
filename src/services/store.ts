@@ -50,6 +50,8 @@ export default new Vuex.Store({
             ],
         },
         temp: null,
+        units: "celsius",
+        postalcode: null,
         session: "",
         user: {},
         auth: false,
@@ -188,6 +190,22 @@ export default new Vuex.Store({
         "THEME:SET": (state: { [key: string ]: any }, theme: number) => {
             state.theme = theme;
         },
+
+        "UNITS:SET": (state: { [key: string ]: any }, value: string) => {
+            switch (value.toLowerCase()) {
+                case "fahrenheit":
+                    state.units = "fahrenheit";
+                    break;
+
+                default:
+                    state.units = "celsius";
+                    break;
+            }
+        },
+
+        "POSTALCODE:SET": (state: { [key: string ]: any }, value: string) => {
+            state.postalcode = value;
+        },
     },
 
     plugins: [new Persistence({
@@ -197,6 +215,8 @@ export default new Vuex.Store({
             cpu: state.cpu,
             memory: state.memory,
             temp: state.temp,
+            units: state.units,
+            postalcode: state.postalcode,
             session: state.session,
             user: state.user,
             notifications: state.notifications,

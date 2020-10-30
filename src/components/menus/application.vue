@@ -29,6 +29,7 @@
         <div v-on:click="about()" class="item">{{ $t("about") }}</div>
         <div v-on:click="help()" class="item">{{ $t("help") }}</div>
         <div v-if="auth" class="seperator desktop-only"></div>
+        <div v-on:click="settings()" class="item">{{ $t("settings") }}</div>
         <div v-on:click="personalize()" class="item">{{ $t("personalize") }}</div>
         <div v-if="auth" class="seperator desktop-only"></div>
         <div v-if="auth" v-on:click="logout()" class="item">{{ $t("logout") }}</div>
@@ -46,6 +47,10 @@
                 default: () => { /* null */ },
             },
             help: {
+                type: Function,
+                default: () => { /* null */ },
+            },
+            settings: {
                 type: Function,
                 default: () => { /* null */ },
             },

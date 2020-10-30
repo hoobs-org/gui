@@ -68,13 +68,13 @@
                     {{ $t("mode") }}
                 </div>
                 <div class="row">
-                    <radio name="mode" v-model="mode" value="light">
+                    <radio id="light" name="mode" v-model="mode" value="light">
                         <label for="light">{{ $t("light") }}</label>
                     </radio>
                 </div>
                 <div class="row">
-                    <radio name="mode" v-model="mode" value="dark">
-                        <label for="light">{{ $t("dark") }}</label>
+                    <radio id="dark" name="mode" v-model="mode" value="dark">
+                        <label for="dark">{{ $t("dark") }}</label>
                     </radio>
                 </div>
                 <div class="row title">
@@ -133,8 +133,8 @@
 </template>
 
 <script>
-    import Color from "./color.vue";
-    import Backdrop from "./backdrop.vue";
+    import Color from "../elements/color.vue";
+    import Backdrop from "../elements/backdrop.vue";
 
     export default {
         name: "personalize",
