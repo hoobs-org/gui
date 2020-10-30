@@ -1,0 +1,171 @@
+<template>
+    <div class="radio" :class="[classes]">
+        <div
+            class="group"
+            v-on:click="toggle()"
+        >
+            <div v-if="state">
+                <div class="marker"></div>
+            </div>
+            <input
+                type="radio"
+                :id="id || uuid"
+                :name="name"
+                :value="value"
+                :disabled="disabled"
+                :required="required"
+                :checked="state"
+            />
+        </div>
+        <label
+            class="label"
+            :for="id || uuid"
+        >
+            <slot />
+        </label>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: "radio",
+
+        model: {
+            prop: "model",
+            event: "change",
+        },
+
+        props: {
+            id: {
+                type: String,
+                default: undefined,
+            },
+            model: {
+                type: [String, Boolean, Number, Object],
+                default: undefined,
+            },
+            checked: Boolean,
+            value: {
+                type: [String, Boolean, Number, Object],
+                default: undefined,
+            },
+            name: String,
+            required: Boolean,
+            disabled: Boolean,
+            size: Number,
+        },
+
+        data() {
+            return {
+                uuid: "",
+                view: this.model,
+            };
+        },
+
+        computed: {
+            state() {
+                return this.model === this.value;
+            },
+
+            classes() {
+                return {
+                    "disabled": this.disabled,
+                    "active": this.state,
+                };
+            },
+        },
+
+        methods: {
+            toggle() {
+                if (this.disabled) return;
+
+                this.view = this.model === this.value;
+                this.$emit("change", this.value, this.value);
+            },
+        },
+
+        watch: {
+            checked(value) {
+                if (value !== this.state) this.toggle();
+            },
+
+            model(value) {
+                this.view = this.model === value;
+            },
+        },
+
+        mounted() {
+            if (this.id === undefined || typeof String) {
+                this.uuid = `checkbox_${Math.random().toString(36).substring(2, 10)}`;
+            } else {
+                this.uuid = this.id;
+            }
+
+            if (this.checked && !this.state) {
+                this.toggle();
+            }
+        },
+    };
+</script>
+
+<style lang="scss" scoped>
+    .radio {
+        width: 100%;
+        height: 28px;
+        min-height: 28px;
+        box-sizing: border-box;
+        display: inline-flex;
+        align-items: center;
+        position: relative;
+        margin: 0;
+        line-height: 20px;
+        border-radius: 14px;
+        cursor: pointer;
+
+        .label {
+            position: relative;
+            padding-left: 7px;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .group {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            box-sizing: border-box;
+            position: relative;
+            border-radius: 10px;
+            transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+            input[type="radio"] {
+                position: absolute;
+                appearance: none;
+                display: none;
+                left: -999rem;
+            }
+
+            .marker {
+                width: 12px;
+                height: 12px;
+                border-radius: 6px;
+                margin: 1px 0 0 0;
+            }
+        }
+
+        &.disabled {
+            cursor: not-allowed;
+
+            .group {
+                opacity: 0.14;
+            }
+
+            .label {
+                opacity: 0.24;
+                cursor: not-allowed;
+            }
+        }
+    }
+</style>

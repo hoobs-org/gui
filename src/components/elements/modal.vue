@@ -18,7 +18,7 @@
 
 <template>
     <div v-on:click.stop id="dialog">
-        <div class="window" :style="`width: ${width}; height: ${height};`">
+        <div class="window modal" :style="`width: ${width}; height: ${height};`">
             <div v-if="title" class="title">{{ title }}</div>
             <slot />
         </div>

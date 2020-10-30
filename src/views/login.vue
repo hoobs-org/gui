@@ -72,13 +72,7 @@
 </template>
 
 <script>
-    import Checkbox from "vue-material-checkbox";
-
     export default {
-        components: {
-            "checkbox": Checkbox,
-        },
-
         data() {
             return {
                 url: "/",

@@ -17,72 +17,68 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="field">
-        <span class="title">{{ name }}</span>
-        <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <input
-            type="text"
-            ref="field"
-            autocomplete="false"
-            autocorrect="off"
-            autocapitalize="none"
-            :value="value"
-            v-on:input="update()"
-            v-on:change="change"
-            v-bind:required="required"
-        />
+    <div
+        id="color"
+        v-on:click="select()"
+        :class="value === name ? 'active' : ''"
+        :style="`background-color: ${color};`"
+    >
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#fff" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+        </svg>
     </div>
 </template>
 
 <script>
     export default {
-        name: "text-field",
+        name: "color",
+
         props: {
-            name: String,
-            description: String,
             value: String,
-            required: {
-                type: Boolean,
-                default: false,
-            },
+            name: String,
+            color: String,
         },
 
         methods: {
-            update() {
-                this.$emit("input", this.$refs.field.value);
-            },
-
-            change() {
-                this.$emit("change", this.$refs.field.value);
+            select() {
+                this.$emit("input", this.name);
             },
         },
     };
 </script>
 
 <style lang="scss" scoped>
-    #field {
+    #color {
+        width: 41px;
+        height: 34px;
         display: flex;
-        flex-direction: column;
-        padding: 0 0 20px 0;
+        align-items: center;
+        justify-content: space-around;
+        margin: 0 7px 0 0;
+        box-sizing: border-box;
+        cursor: pointer;
 
-        .title {
-            font-size: 14px;
-            margin: 0 0 7px 0;
+        &:last-child {
+            margin: 0;
         }
 
-        .description {
-            font-size: 12px;
-            margin: -7px 0 7px 0;
+        svg {
+            width: 24px;
+            height: 24px;
+            display: none;
         }
 
-        input {
-            flex: 1;
-            padding: 7px;
-            font-size: 14px;
-            border-radius: 4px;
+        &:hover {
+            border: var(--modal-highlight) 2px solid;
+        }
 
-            &:focus {
-                outline: 0 none;
+        &.active {
+            &:hover {
+                border: 0 none;
+            }
+
+            svg {
+                display: block;
             }
         }
     }

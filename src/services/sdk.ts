@@ -89,6 +89,7 @@ export interface ApplicationTheme {
     text: TextTheme;
     background: string;
     highlight: string;
+    accent: string;
     dark: string;
     drawer: string;
     input: InputTheme;
@@ -137,6 +138,8 @@ export interface ElevationTheme {
 export interface Theme {
     name: string;
     display: string;
+    mode: string;
+    color: string;
     transparency: string;
     application: ApplicationTheme;
     button: ButtonTheme;

@@ -168,47 +168,67 @@
             }
         }
 
-        .m-chckbox--container {
-            margin: 0 !important;
-            height: 28px !important;
-            min-height: 28px !important;
-
-            label {
-                user-select: none;
-            }
-
-            .m-chckbox--group {
+        .checkbox {
+            .group {
                 background-color: var(--application-input);
                 border: 1px var(--application-border) solid;
             }
 
             &.active {
-                .m-chckbox--group {
-                    background-color: var(--application-highlight) !important;
-                    border: 1px var(--application-highlight) solid !important;
+                .group {
+                    background-color: var(--application-highlight);
+                    border: 1px var(--application-highlight) solid;
                 }
             }
         }
 
-        .m-chckbox--ripple {
-            display: none !important;
-        }
-
-        .m-chckbox--label {
-            padding-left: 7px !important;
-        }
-
         .modal {
-            .m-chckbox--container {
-                .m-chckbox--group {
+            .checkbox {
+                .group {
                     background-color: var(--modal-input);
                     border: 1px var(--modal-border) solid;
                 }
 
                 &.active {
-                    .m-chckbox--group {
-                        background-color: var(--modal-highlight) !important;
-                        border: 1px var(--modal-highlight) solid !important;
+                    .group {
+                        background-color: var(--modal-highlight);
+                        border: 1px var(--modal-highlight) solid;
+                    }
+                }
+            }
+        }
+
+        .radio {
+            .group {
+                background-color: var(--application-input);
+                border: 1px var(--application-border) solid;
+            }
+
+            &.active {
+                .group {
+                    border: 2px var(--application-highlight) solid;
+                }
+
+                .marker {
+                    background-color: var(--application-highlight);
+                }
+            }
+        }
+
+        .modal {
+            .radio {
+                .group {
+                    background-color: var(--modal-input);
+                    border: 1px var(--modal-border) solid;
+                }
+
+                &.active {
+                    .group {
+                        border: 2px var(--modal-highlight) solid;
+                    }
+
+                    .marker {
+                        background-color: var(--modal-highlight);
                     }
                 }
             }

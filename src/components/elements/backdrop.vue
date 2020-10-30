@@ -17,72 +17,73 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="field">
-        <span class="title">{{ name }}</span>
-        <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <input
-            type="text"
-            ref="field"
-            autocomplete="false"
-            autocorrect="off"
-            autocapitalize="none"
-            :value="value"
-            v-on:input="update()"
-            v-on:change="change"
-            v-bind:required="required"
-        />
-    </div>
+    <div
+        id="backdrop"
+        v-on:click="select()"
+        :class="value === `url('/defaults/backdrops/${image}')` ? 'active' : ''"
+        :style="`background-image: url('/defaults/backdrops/${image}');`"
+    ></div>
 </template>
 
 <script>
     export default {
-        name: "text-field",
+        name: "backdrop",
+
         props: {
-            name: String,
-            description: String,
+            image: String,
             value: String,
-            required: {
-                type: Boolean,
-                default: false,
-            },
         },
 
         methods: {
-            update() {
-                this.$emit("input", this.$refs.field.value);
-            },
-
-            change() {
-                this.$emit("change", this.$refs.field.value);
+            select() {
+                this.$emit("input", `url('/defaults/backdrops/${this.image}')`);
             },
         },
     };
 </script>
 
 <style lang="scss" scoped>
-    #field {
-        display: flex;
-        flex-direction: column;
-        padding: 0 0 20px 0;
+    #backdrop {
+        width: 104px;
+        height: 59px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        box-sizing: border-box;
+        user-select: none;
+        opacity: 0.6;
+        cursor: pointer;
 
-        .title {
-            font-size: 14px;
-            margin: 0 0 7px 0;
+        &:first-child {
+            margin: 0 10px 0 0;
         }
 
-        .description {
-            font-size: 12px;
-            margin: -7px 0 7px 0;
+        &:last-child {
+            margin: 0;
         }
 
-        input {
-            flex: 1;
-            padding: 7px;
-            font-size: 14px;
-            border-radius: 4px;
+        &:hover {
+            opacity: 0.8;
+        }
 
-            &:focus {
-                outline: 0 none;
+        &.active {
+            border: var(--modal-highlight) 2px solid;
+            opacity: 1;
+        }
+
+        &.add {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border: var(--modal-border) 1px solid;
+            opacity: 1;
+
+            &:hover {
+                border: var(--modal-highlight) 1px solid;
+            }
+
+            .icon {
+                color: var(--modal-border);
             }
         }
     }

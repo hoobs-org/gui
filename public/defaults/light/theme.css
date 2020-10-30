@@ -1,12 +1,13 @@
 [theme="light"] {
     --transparency: blur(4px);
 
-    --application-text: #616161;
-    --application-highlight-text: #e75a0e;
+    --application-text: #727272;
+    --application-highlight-text: #000;
     --application-input-text: #000;
     --application-error-text: #a11;
     --application-background: #fcfcfc;
     --application-highlight: #feb400;
+    --application-accent: #e3954b;
     --application-dark: #e7e7e7;
     --application-drawer: #fcfcfc9d;
     --application-input: #fcfcfc;
