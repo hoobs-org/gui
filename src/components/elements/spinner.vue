@@ -112,6 +112,7 @@
         flex-direction: column;
         align-content: center;
         align-items: center;
+        user-select: none;
 
         .message {
             margin: 14px 0 0 0;

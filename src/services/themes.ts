@@ -16,7 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
+import { Store } from "vuex";
+import { sanitize } from "./sdk";
+
 export default class Themes {
+    static set(name: string, store?: Store<any>) {
+        const style = document.getElementById("theme");
+
+        if (style) style.setAttribute("href", Themes.path(sanitize(name)));
+        if (store) store.commit("THEME:SET", sanitize(name));
+    }
+
     static path(theme: string) {
         switch (theme) {
             case "light":
@@ -25,11 +35,11 @@ export default class Themes {
 
             default:
                 if (process.env.NODE_ENV !== "production") {
-                    return `http://localhost:50826/themes/${theme}.css`;
+                    return `http://localhost:50826/themes/${theme}/theme.css`;
                 }
 
                 if (window.location.port !== "80" && window.location.port !== "443") {
-                    return `:${window.location.port}/themes/${theme}.css`;
+                    return `:${window.location.port}/themes/${theme}/theme.css`;
                 }
 
                 return `/themes/${theme}`;

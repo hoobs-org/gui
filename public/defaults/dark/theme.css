@@ -1,4 +1,6 @@
 [theme="dark"] {
+    --transparency: blur(4px);
+
     --application-text: #999;
     --application-highlight-text: #fff;
     --application-input-text: #fff;
@@ -35,7 +37,7 @@
 
     --menu-text: #b4b4b4;
     --menu-highlight-text: #fff;
-    --menu-background: #1b1b1b9d;
+    --menu-background: #2727279d;
     --menu-highlight: #4949499d;
     --menu-border: #303030;
 
@@ -46,7 +48,7 @@
     --navigation-highlight: #feb400;
     --navigation-border: #4b4b4b;
 
-    --splash-background: url('/defaults/dark/splash.jpg');
+    --backdrop: url('/defaults/backdrops/default.jpg');
 
     --elevation: 0 1px 1px 0 rgba(0, 0, 0, 0.24),
                  0 2px 1px -1px rgba(0, 0, 0, 0.22),

@@ -89,7 +89,7 @@
         flex-direction: column;
         overflow: hidden;
         background: var(--application-drawer);
-        backdrop-filter: blur(4px);
+        backdrop-filter: var(--transparency);
         box-shadow: var(--elevation);
 
         .title {

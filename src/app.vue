@@ -23,30 +23,10 @@
 </template>
 
 <script>
-    import Themes from "./services/themes";
-
     export default {
         computed: {
             theme() {
                 return this.$store.state.theme;
-            },
-
-            notifications() {
-                return this.$store.state.notifications;
-            },
-        },
-
-        created() {
-            this.setup(this.theme);
-        },
-
-        methods: {
-            setup(theme) {
-                if (theme !== this.theme) {
-                    this.$store.commit("THEME:SET", theme);
-                }
-
-                document.getElementById("theme").setAttribute("href", Themes.path(theme));
             },
         },
     };

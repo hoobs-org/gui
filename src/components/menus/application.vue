@@ -29,6 +29,8 @@
         <div v-on:click="about()" class="item">{{ $t("about") }}</div>
         <div v-on:click="help()" class="item">{{ $t("help") }}</div>
         <div v-if="auth" class="seperator desktop-only"></div>
+        <div v-on:click="personalize()" class="item">{{ $t("personalize") }}</div>
+        <div v-if="auth" class="seperator desktop-only"></div>
         <div v-if="auth" v-on:click="logout()" class="item">{{ $t("logout") }}</div>
         <div v-on:click="close()" class="icon close mobile-only">close</div>
     </div>
@@ -39,10 +41,26 @@
         name: "service-menu",
 
         props: {
-            about: Function,
-            help: Function,
-            logout: Function,
-            close: Function,
+            about: {
+                type: Function,
+                default: () => { /* null */ },
+            },
+            help: {
+                type: Function,
+                default: () => { /* null */ },
+            },
+            personalize: {
+                type: Function,
+                default: () => { /* null */ },
+            },
+            logout: {
+                type: Function,
+                default: () => { /* null */ },
+            },
+            close: {
+                type: Function,
+                default: () => { /* null */ },
+            },
         },
 
         computed: {
@@ -73,7 +91,7 @@
         flex-direction: column;
         color: var(--menu-text);
         background: var(--menu-background);
-        backdrop-filter: blur(4px);
+        backdrop-filter: var(--transparency);
         border-radius: 4px;
         z-index: 300;
         box-shadow: var(--elevation);

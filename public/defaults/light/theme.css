@@ -1,4 +1,6 @@
 [theme="light"] {
+    --transparency: blur(4px);
+
     --application-text: #616161;
     --application-highlight-text: #e75a0e;
     --application-input-text: #000;
@@ -46,7 +48,7 @@
     --navigation-highlight: #feb400;
     --navigation-border: #6e6e6e;
 
-    --splash-background: url('/defaults/light/splash.jpg');
+    --backdrop: url('/defaults/backdrops/default.jpg');
 
     --elevation: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
                  0 4px 5px 0 rgba(0, 0, 0, 0.14),

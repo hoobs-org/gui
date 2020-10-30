@@ -24,6 +24,7 @@ import router from "./services/router";
 import store from "./services/store";
 import tasks from "./services/tasks";
 import lang from "./lang";
+import themes from "./services/themes";
 
 import Layout from "./layout.vue";
 import Welcome from "./components/elements/welcome.vue";
@@ -62,7 +63,18 @@ router.beforeEach(async (to, _from, next) => {
 });
 
 Vue.config.productionTip = false;
+
 Vue.mixin({ data: () => ({ hoobs }) });
+
+Vue.mixin({
+    methods: {
+        $theme(name: string) {
+            themes.set(name, store);
+        },
+    },
+});
+
+themes.set(store.state.theme, store);
 
 Vue.component("layout", Layout);
 Vue.component("welcome", Welcome);

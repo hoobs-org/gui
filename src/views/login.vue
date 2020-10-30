@@ -32,7 +32,7 @@
             >
                 <div class="group">
                     <div class="upper">
-                        <label for="username" class="title">{{ $t("username") }}</label>
+                        <label for="username" class="label">{{ $t("username") }}</label>
                         <input
                             type="text"
                             id="username"
@@ -43,7 +43,7 @@
                         />
                     </div>
                     <div class="lower">
-                        <label for="password" class="title">{{ $t("password") }}</label>
+                        <label for="password" class="label">{{ $t("password") }}</label>
                         <input
                             type="password"
                             id="password"
@@ -120,13 +120,13 @@
 
 <style lang="scss" scoped>
     #login {
-        background: var(--splash-background);
+        background-image: var(--backdrop);
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
 
         .errors {
-            margin: 0 0 10px 0;
+            margin: 0 10px 10px 10px;
             display: flex;
             flex-direction: column;
             font-size: 14px;
@@ -136,6 +136,7 @@
 
         form {
             flex: 1;
+            margin: 0 10px;
         }
 
         .group {
@@ -198,7 +199,7 @@
                 }
             }
 
-            .title {
+            .label {
                 padding: 0 5px;
                 font-size: 12px;
                 user-select: none;
@@ -213,7 +214,7 @@
         }
 
         .actions {
-            margin: 10px -10px 0 0;
+            margin: 10px 0 10px 10px;
             display: flex;
             justify-content: flex-end;
 
@@ -223,6 +224,7 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-end;
+                user-select: none;
                 opacity: 0.4;
             }
         }

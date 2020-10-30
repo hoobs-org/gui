@@ -1,7 +1,10 @@
 {
     "en": {
         "about": "About",
+        "apply": "Apply",
         "accessories": "Accessories",
+        "backdrop": "Backdrop",
+        "cancel": "Cancel",
         "create_account": "Create Account",
         "create_instance": "Create Instance",
         "current_user": "Loged In As",
@@ -43,6 +46,7 @@
         "password_confirm_description": "Enter your desired password again.",
         "password_mismatch": "Passwords don't match.",
         "password_weak": "Password too weak.",
+        "personalize": "Personalize",
         "plugins": "Plugins",
         "privacy_policy": "Privacy Policy",
         "remember_me": "Remember Me",

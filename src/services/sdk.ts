@@ -72,6 +72,81 @@ export interface UserRecord {
     remove?: () => Promise<void>;
 }
 
+export interface InputTheme {
+    background: string;
+    accent: string;
+}
+
+export interface TextTheme {
+    default: string;
+    highlight?: string;
+    active?: string;
+    input?: string;
+    error?: string;
+}
+
+export interface ApplicationTheme {
+    text: TextTheme;
+    background: string;
+    highlight: string;
+    dark: string;
+    drawer: string;
+    input: InputTheme;
+    border: string;
+}
+
+export interface ButtonTheme {
+    background: string;
+    text: string;
+    border: string;
+    primary?: ButtonTheme;
+    light?: ButtonTheme;
+}
+
+export interface ModalTheme {
+    text: TextTheme;
+    background: string;
+    dark: string;
+    mobile: string;
+    mask: string;
+    highlight: string;
+    input: string;
+    accent: string;
+    border: string;
+}
+
+export interface MenuTheme {
+    text: TextTheme;
+    background: string;
+    highlight: string;
+    border: string;
+}
+
+export interface NavigationTheme {
+    text: TextTheme;
+    background: string;
+    highlight: string;
+    border: string;
+}
+
+export interface ElevationTheme {
+    default: string;
+    button: string;
+}
+
+export interface Theme {
+    name: string;
+    display: string;
+    transparency: string;
+    application: ApplicationTheme;
+    button: ButtonTheme;
+    modal: ModalTheme;
+    menu: MenuTheme;
+    navigation: NavigationTheme;
+    splash: string;
+    elevation: ElevationTheme;
+}
+
 export function sanitize(value: string, prevent?: string): string {
     if (!value || value === "") return "default";
     if (prevent && prevent !== "" && prevent.toLowerCase() === value.toLowerCase()) return "default";
@@ -718,6 +793,38 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             };
 
             return results;
+        },
+
+        theme: {
+            async get(name: string): Promise<Theme> {
+                await wait();
+
+                return (await Request.get(`${prefix}/theme/${name}`, {
+                    headers: {
+                        authorization: get(),
+                    },
+                })).data;
+            },
+
+            async save(name: string, theme: Theme) {
+                await wait();
+
+                (await Request.post(`${prefix}/theme/${name}`, theme, {
+                    headers: {
+                        authorization: get(),
+                    },
+                }));
+            },
+
+            async backdrop(form: FormData): Promise<string> {
+                await wait();
+
+                return (await Request.post(`${prefix}/themes/backdrop`, form, {
+                    headers: {
+                        authorization: get(),
+                    },
+                })).data.filename;
+            },
         },
 
         remote: {

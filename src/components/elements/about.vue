@@ -50,8 +50,14 @@
         name: "about",
 
         props: {
-            close: Function,
-            donate: Function,
+            close: {
+                type: Function,
+                default: () => { /* null */ },
+            },
+            donate: {
+                type: Function,
+                default: () => { /* null */ },
+            },
         },
 
         data() {
@@ -71,14 +77,16 @@
         flex: 1;
         display: flex;
         flex-direction: column;
+        margin: 0 0 0 10px;
 
         .content {
             flex: 1;
             font-size: 14px;
+            margin: 0 10px 0 0;
         }
 
         .actions {
-            margin: 10px -10px 0 0;
+            margin: 10px 0 10px 10px;
             display: flex;
             justify-content: flex-end;
 
@@ -88,6 +96,7 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-end;
+                user-select: none;
                 opacity: 0.4;
             }
         }

@@ -25,16 +25,17 @@
                     notifications_none
                     <div v-if="notifications.length > 0" class="active">&bull;</div>
                 </div>
-                <div v-on:click.stop="toggle('service')" class="icon">more_vert</div>
+                <div v-on:click.stop="toggle('application')" class="icon">more_vert</div>
             </div>
             <slot />
         </div>
         <notifications v-if="show.notifications" v-model="show.notifications" />
-        <service-menu
-            v-if="show.service"
+        <application-menu
+            v-if="show.application"
             :about="() => { toggle('about') }"
             :help="() => navigate('https://support.hoobs.org/docs')"
-            :close="() => { toggle('service') }"
+            :personalize="() => { toggle('personalize') }"
+            :close="() => { toggle('application') }"
             :logout="logout"
         />
         <modal v-if="show.about" width="720px" height="420px">
@@ -44,6 +45,9 @@
                 :close="() => { toggle('about') }"
             />
         </modal>
+        <modal v-if="show.personalize" :title="$t('personalize')" width="760px" height="670px">
+            <personalize :close="() => { toggle('personalize') }" />
+        </modal>
     </div>
 </template>
 
@@ -51,14 +55,16 @@
     import About from "./components/elements/about.vue";
     import Navigation from "./components/navigation.vue";
     import Notifications from "./components/notifications.vue";
-    import ServiceMenu from "./components/menus/service.vue";
+    import ApplicationMenu from "./components/menus/application.vue";
+    import Personalize from "./components/elements/personalize.vue";
 
     export default {
         components: {
             "about": About,
+            "personalize": Personalize,
             "navigation": Navigation,
             "notifications": Notifications,
-            "service-menu": ServiceMenu,
+            "application-menu": ApplicationMenu,
         },
 
         computed: {
@@ -71,8 +77,9 @@
             return {
                 show: {
                     notifications: false,
-                    service: false,
+                    application: false,
                     about: false,
+                    personalize: false,
                 },
             };
         },
@@ -86,8 +93,6 @@
         methods: {
             async logout() {
                 this.reset();
-
-                this.showServiceMenu = false;
 
                 await this.hoobs.auth.logout();
 

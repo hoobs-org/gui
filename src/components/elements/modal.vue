@@ -19,6 +19,7 @@
 <template>
     <div v-on:click.stop id="dialog">
         <div class="window" :style="`width: ${width}; height: ${height};`">
+            <div v-if="title" class="title">{{ title }}</div>
             <slot />
         </div>
     </div>
@@ -29,6 +30,7 @@
         name: "modal",
 
         props: {
+            title: String,
             width: {
                 type: String,
                 default: "auto",
@@ -55,14 +57,22 @@
         justify-content: space-around;
         padding: 20px 20px 10em 20px;
 
+        .title {
+            color: var(--modal-highlight);
+            font-weight: bold;
+            font-size: 17px;
+            padding: 10px 10px 0 10px;
+            user-select: none;
+        }
+
         .window {
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            padding: 20px;
+            padding: 10px;
             color: var(--modal-text);
             background: var(--modal-background);
-            backdrop-filter: blur(4px);
+            backdrop-filter: var(--transparency);
             border-radius: 4px;
             box-shadow: var(--elevation);
 

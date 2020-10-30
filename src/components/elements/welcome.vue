@@ -60,7 +60,7 @@
 <style lang="scss" scoped>
     #welcome {
         margin: 0 0 14px 0;
-        padding: 0;
+        padding: 10px 10px 0 10px;
         line-height: normal;
         font-size: 22px;
         color: var(--modal-highlight);

@@ -249,7 +249,7 @@
 
 <style lang="scss" scoped>
     #setup {
-        background: var(--splash-background);
+        background-image: var(--backdrop);
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
@@ -259,7 +259,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            padding: 0 0 20% 0;
+            padding: 0 10px 20% 10px;
         }
 
         .errors {
@@ -272,16 +272,21 @@
             border-bottom: var(--modal-border) 1px solid;
         }
 
+        p {
+            padding: 0 10px;
+        }
+
         form {
             flex: 1;
             border: var(--modal-border) 1px solid;
             background: var(--modal-background);
             padding: 20px;
+            margin: 0 10px;
             border-radius: 4px;
         }
 
         .actions {
-            margin: 10px -10px 0 0;
+            margin: 10px 0 10px 10px;
             display: flex;
             justify-content: flex-end;
 
@@ -291,6 +296,7 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-end;
+                user-select: none;
                 opacity: 0.4;
             }
         }
