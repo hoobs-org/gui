@@ -51,9 +51,9 @@
             <div v-else class="loading">
                 <spinner />
             </div>
-            <div class="actions modal">
+            <div v-if="!loading" class="actions modal">
                 <div class="button light" v-on:click="close()">{{ $t("cancel") }}</div>
-                <div v-if="!loading" class="button primary" v-on:click="save()">{{ $t("apply") }}</div>
+                <div class="button primary" v-on:click="save()">{{ $t("apply") }}</div>
             </div>
         </div>
     </modal>
