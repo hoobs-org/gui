@@ -89,37 +89,5 @@
         display: flex;
         flex-direction: column;
         margin: 0 0 0 10px;
-
-        .content {
-            flex: 1;
-            font-size: 14px;
-            margin: 0 10px 0 0;
-        }
-
-        .actions {
-            margin: 10px 0 10px 10px;
-            display: flex;
-            justify-content: flex-end;
-
-            .copyright {
-                flex: 1;
-                font-size: 9px;
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-end;
-                user-select: none;
-                opacity: 0.4;
-            }
-        }
-    }
-
-    @media (min-width: 300px) and (max-width: 815px) {
-        #about {
-            .actions {
-                .copyright {
-                    display: none;
-                }
-            }
-        }
     }
 </style>

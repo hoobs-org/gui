@@ -138,6 +138,8 @@
     import Color from "../elements/color.vue";
     import Backdrop from "../elements/backdrop.vue";
 
+    const THEMES_URL = process.env.VUE_APP_THEMES || "/themes";
+
     export default {
         name: "personalize",
 
@@ -483,13 +485,7 @@
 
                 const filename = await this.hoobs.theme.backdrop(data);
 
-                let url = `:${window.location.port}/themes/${filename}`;
-
-                if (process.env.NODE_ENV !== "production") {
-                    url = `http://localhost:50826/themes/${filename}`;
-                }
-
-                this.working.backdrop = `url('${url}')`;
+                this.working.backdrop = `url('${THEMES_URL}/${filename}')`;
 
                 this.dirty();
             },
@@ -505,167 +501,116 @@
         flex-direction: column;
         margin: 0 0 0 10px;
 
-        .loading {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            padding: 0 0 20% 0;
-        }
+        .backdrop {
+            width: 470px;
+            height: 263px;
+            position: relative;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            box-sizing: border-box;
+            user-select: none;
 
-        .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            font-size: 14px;
-            overflow: hidden;
-            margin: 0 10px 0 0;
-
-            &:hover {
-                overflow: overlay;
-            }
-
-            .form {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                border: var(--modal-border) 1px solid;
-                background: var(--modal-background);
-                padding: 20px;
-                margin: 10px 0 0 0;
-                border-radius: 4px;
-
-                .row {
-                    display: flex;
-                    flex-direction: row;
-
-                    &.title {
-                        padding: 20px 0 7px 0;
-
-                        &:first-child {
-                            padding: 0 0 7px 0;
-                        }
-                    }
-                }
-            }
-
-            .backdrop {
-                width: 470px;
-                height: 263px;
-                position: relative;
-                background-repeat: no-repeat;
-                background-position: center center;
-                background-size: cover;
+            .display {
+                position: absolute;
+                width: 150px;
+                height: 200px;
                 box-sizing: border-box;
-                user-select: none;
 
-                .display {
-                    position: absolute;
-                    width: 150px;
-                    height: 200px;
-                    box-sizing: border-box;
-
-                    &.light {
-                        top: 14px;
-                        right: 14px;
-                        padding: 10px;
-                        border-radius: 3px;
-                    }
-
-                    &.dark {
-                        top: 47px;
-                        right: 114px;
-                        padding: 10px;
-                        border-radius: 3px;
-                    }
-
-                    .title {
-                        font-size: 14px;
-                    }
-
-                    .accent {
-                        font-size: 12px;
-                    }
-
-                    .text {
-                        font-size: 12px;
-                    }
-
-                    &.navigation {
-                        top: 0;
-                        left: 0;
-                        width: 20px;
-                        height: 100%;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-
-                        .icon {
-                            font-size: 12px;
-                            margin: 10px 0 0 0;
-                            box-sizing: border-box;
-                        }
-                    }
-                }
-            }
-
-            .backdrops {
-                flex: 1;
-                margin: 0 0 0 10px;
-                overflow: hidden;
-
-                .row {
-                    height: 59px;
-                    overflow: hidden;
-                    margin: 0 0 9px 0;
-
-                    &:last-child {
-                        margin: 0;
-                    }
+                &.light {
+                    top: 14px;
+                    right: 14px;
+                    padding: 10px;
+                    border-radius: 3px;
                 }
 
-                .add {
-                    width: 104px;
-                    height: 59px;
-                    margin: 0;
+                &.dark {
+                    top: 47px;
+                    right: 114px;
+                    padding: 10px;
+                    border-radius: 3px;
+                }
+
+                .title {
+                    font-size: 14px;
+                }
+
+                .accent {
+                    font-size: 12px;
+                }
+
+                .text {
+                    font-size: 12px;
+                }
+
+                &.navigation {
+                    top: 0;
+                    left: 0;
+                    width: 20px;
+                    height: 100%;
                     display: flex;
+                    flex-direction: column;
                     align-items: center;
-                    justify-content: space-around;
-                    border: var(--modal-border) 1px solid;
-                    box-sizing: border-box;
-                    user-select: none;
-                    cursor: pointer;
-
-                    &:hover {
-                        border: var(--modal-highlight) 1px solid;
-                    }
 
                     .icon {
-                        color: var(--modal-border);
-                    }
-                }
-            }
-
-            .colors {
-                display: flex !important;
-                flex-direction: column !important;
-
-                .row {
-                    height: 34px;
-                    overflow: hidden;
-                    margin: 0 0 7px 0;
-
-                    &:last-child {
-                        margin: 0;
+                        font-size: 12px;
+                        margin: 10px 0 0 0;
+                        box-sizing: border-box;
                     }
                 }
             }
         }
 
-        .actions {
-            margin: 10px 0 10px 10px;
-            display: flex;
-            justify-content: flex-end;
+        .backdrops {
+            flex: 1;
+            margin: 0 0 0 10px;
+            overflow: hidden;
+
+            .row {
+                height: 59px;
+                overflow: hidden;
+                margin: 0 0 9px 0;
+
+                &:last-child {
+                    margin: 0;
+                }
+            }
+
+            .add {
+                width: 104px;
+                height: 59px;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+                border: var(--modal-border) 1px solid;
+                box-sizing: border-box;
+                user-select: none;
+                cursor: pointer;
+
+                &:hover {
+                    border: var(--modal-highlight) 1px solid;
+                }
+
+                .icon {
+                    color: var(--modal-border);
+                }
+            }
+        }
+
+        .colors {
+            display: flex !important;
+            flex-direction: column !important;
+
+            .row {
+                height: 34px;
+                overflow: hidden;
+                margin: 0 0 7px 0;
+
+                &:last-child {
+                    margin: 0;
+                }
+            }
         }
     }
 </style>

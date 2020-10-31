@@ -291,22 +291,6 @@
             margin: 0 10px;
             border-radius: 4px;
         }
-
-        .actions {
-            margin: 10px 0 10px 10px;
-            display: flex;
-            justify-content: flex-end;
-
-            .copyright {
-                flex: 1;
-                font-size: 9px;
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-end;
-                user-select: none;
-                opacity: 0.4;
-            }
-        }
     }
 
     @media (min-width: 300px) and (max-width: 815px) {
@@ -323,12 +307,6 @@
                 border: unset;
                 padding: unset;
                 border-radius: unset;
-            }
-
-            .actions {
-                .copyright {
-                    display: none;
-                }
             }
         }
     }

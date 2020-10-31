@@ -42,12 +42,12 @@
     --menu-highlight: #f0f0f0;
     --menu-border: #e5e5e5;
 
-    --navigation-text: #a3a3a3;
+    --navigation-text: #a1a1a1;
     --navigation-highlight-text: #fff;
     --navigation-active-text: #feb400;
-    --navigation-background: #444;
+    --navigation-background: #262626;
     --navigation-highlight: #feb400;
-    --navigation-border: #6e6e6e;
+    --navigation-border: #5a5a5a;
 
     --backdrop: url('/defaults/backdrops/default.jpg');
 

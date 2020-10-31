@@ -19,11 +19,7 @@
 import Request from "axios";
 import Sanitize from "sanitize-filename";
 
-let prefix = "/api";
-
-if (process.env.NODE_ENV !== "production") {
-    prefix = "http://localhost:50826/api";
-}
+const API_URL = process.env.VUE_APP_API || "/api";
 
 export declare const enum LogLevel {
     INFO = "info",
@@ -167,7 +163,7 @@ export function sleep(timeout: number): Promise<void> {
 
 export async function wait(saftey?: number): Promise<string> {
     try {
-        return (await Request.get(`${prefix}`)).data.version;
+        return (await Request.get(`${API_URL}`)).data.version;
     } catch (error) {
         if ((saftey || 0) > 50) {
             throw error;
@@ -184,14 +180,14 @@ export default function sdk(get: () => string, set: (token: string) => void) {
         async version(): Promise<string> {
             await wait();
 
-            return (await Request.get(`${prefix}`)).data.version;
+            return (await Request.get(`${API_URL}`)).data.version;
         },
 
         auth: {
             async status(): Promise<string> {
                 await wait();
 
-                return (await Request.get(`${prefix}/auth`, {
+                return (await Request.get(`${API_URL}/auth`, {
                     headers: {
                         authorization: get(),
                     },
@@ -201,7 +197,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async validate(): Promise<boolean> {
                 await wait();
 
-                return (await Request.get(`${prefix}/auth/validate`, {
+                return (await Request.get(`${API_URL}/auth/validate`, {
                     headers: {
                         authorization: get(),
                     },
@@ -211,13 +207,13 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async disable(): Promise<void> {
                 await wait();
 
-                await Request.post(`${prefix}/auth/disable`);
+                await Request.post(`${API_URL}/auth/disable`);
             },
 
             async login(username: string, password: string, remember?: boolean): Promise<boolean> {
                 await wait();
 
-                const { token } = (await Request.post(`${prefix}/auth/logon`, {
+                const { token } = (await Request.post(`${API_URL}/auth/logon`, {
                     username,
                     password,
                     remember,
@@ -235,7 +231,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async logout(): Promise<void> {
                 await wait();
 
-                await Request.get(`${prefix}/auth/logout`, {
+                await Request.get(`${API_URL}/auth/logout`, {
                     headers: {
                         authorization: get(),
                     },
@@ -249,7 +245,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async list(): Promise<UserRecord[]> {
                 await wait();
 
-                return (await Request.get(`${prefix}/users`, {
+                return (await Request.get(`${API_URL}/users`, {
                     headers: {
                         authorization: get(),
                     },
@@ -259,7 +255,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async add(username: string, password: string, name?: string, admin?: boolean): Promise<UserRecord[]> {
                 await wait();
 
-                return (await Request.put(`${prefix}/users`, {
+                return (await Request.put(`${API_URL}/users`, {
                     name: name || username,
                     username,
                     password,
@@ -275,7 +271,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
         async user(id: number): Promise<UserRecord> {
             await wait();
 
-            const results: UserRecord = (await Request.get(`${prefix}/users/${id}`, {
+            const results: UserRecord = (await Request.get(`${API_URL}/users/${id}`, {
                 headers: {
                     authorization: get(),
                 },
@@ -284,7 +280,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.update = async (username: string, password: string, name?: string, admin?: boolean): Promise<void> => {
                 await wait();
 
-                (await Request.post(`${prefix}/users/${id}`, {
+                (await Request.post(`${API_URL}/users/${id}`, {
                     name: name || username,
                     username,
                     password,
@@ -299,7 +295,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.remove = async () => {
                 await wait();
 
-                (await Request.delete(`${prefix}/users/${id}`, {
+                (await Request.delete(`${API_URL}/users/${id}`, {
                     headers: {
                         authorization: get(),
                     },
@@ -313,7 +309,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             get: async (): Promise<{ [key: string]: any }> => {
                 await wait();
 
-                return (await Request.get(`${prefix}/config`, {
+                return (await Request.get(`${API_URL}/config`, {
                     headers: {
                         authorization: get(),
                     },
@@ -323,7 +319,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             update: async (data: { [key: string]: any }): Promise<void> => {
                 await wait();
 
-                (await Request.post(`${prefix}/config`, data, {
+                (await Request.post(`${API_URL}/config`, data, {
                     headers: {
                         authorization: get(),
                     },
@@ -335,20 +331,20 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             await wait();
 
             if (tail) {
-                return (await Request.get(`${prefix}/log/${tail}`, {
+                return (await Request.get(`${API_URL}/log/${tail}`, {
                     headers: {
                         authorization: get(),
                     },
                 })).data;
             }
 
-            return (await Request.get(`${prefix}/log`)).data;
+            return (await Request.get(`${API_URL}/log`)).data;
         },
 
         async status(): Promise<{ [key: string]: any }> {
             await wait();
 
-            return (await Request.get(`${prefix}/status`, {
+            return (await Request.get(`${API_URL}/status`, {
                 headers: {
                     authorization: get(),
                 },
@@ -358,7 +354,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
         async backup(): Promise<{ [key: string]: any }> {
             await wait();
 
-            return (await Request.get(`${prefix}/system/backup`, {
+            return (await Request.get(`${API_URL}/system/backup`, {
                 headers: {
                     authorization: get(),
                 },
@@ -368,7 +364,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
         async restore(form: FormData): Promise<void> {
             await wait();
 
-            (await Request.post(`${prefix}/system/restore`, form, {
+            (await Request.post(`${API_URL}/system/restore`, form, {
                 headers: {
                     authorization: get(),
                 },
@@ -378,7 +374,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
         async system(): Promise<{ [key: string]: any }> {
             await wait();
 
-            const results = (await Request.get(`${prefix}/system`, {
+            const results = (await Request.get(`${API_URL}/system`, {
                 headers: {
                     authorization: get(),
                 },
@@ -387,7 +383,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.cpu = async (): Promise<{ [key: string]: any }> => {
                 await wait();
 
-                return (await Request.get(`${prefix}/system/cpu`, {
+                return (await Request.get(`${API_URL}/system/cpu`, {
                     headers: {
                         authorization: get(),
                     },
@@ -397,7 +393,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.memory = async (): Promise<{ [key: string]: any }> => {
                 await wait();
 
-                return (await Request.get(`${prefix}/system/memory`, {
+                return (await Request.get(`${API_URL}/system/memory`, {
                     headers: {
                         authorization: get(),
                     },
@@ -407,7 +403,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.network = async (): Promise<{ [key: string]: any }> => {
                 await wait();
 
-                return (await Request.get(`${prefix}/system/network`, {
+                return (await Request.get(`${API_URL}/system/network`, {
                     headers: {
                         authorization: get(),
                     },
@@ -417,7 +413,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.filesystem = async (): Promise<{ [key: string]: any }> => {
                 await wait();
 
-                return (await Request.get(`${prefix}/system/filesystem`, {
+                return (await Request.get(`${API_URL}/system/filesystem`, {
                     headers: {
                         authorization: get(),
                     },
@@ -427,7 +423,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.activity = async (): Promise<{ [key: string]: any }> => {
                 await wait();
 
-                return (await Request.get(`${prefix}/system/activity`, {
+                return (await Request.get(`${API_URL}/system/activity`, {
                     headers: {
                         authorization: get(),
                     },
@@ -437,7 +433,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.temp = async (): Promise<{ [key: string]: any } | undefined> => {
                 await wait();
 
-                const info = (await Request.get(`${prefix}/system/temp`, {
+                const info = (await Request.get(`${API_URL}/system/temp`, {
                     headers: {
                         authorization: get(),
                     },
@@ -453,7 +449,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.upgrade = async (): Promise<void> => {
                 await wait();
 
-                (await Request.post(`${prefix}/system/upgrade`, null, {
+                (await Request.post(`${API_URL}/system/upgrade`, null, {
                     headers: {
                         authorization: get(),
                     },
@@ -463,7 +459,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.reboot = async (): Promise<void> => {
                 await wait();
 
-                (await Request.put(`${prefix}/system/reboot`, null, {
+                (await Request.put(`${API_URL}/system/reboot`, null, {
                     headers: {
                         authorization: get(),
                     },
@@ -473,7 +469,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.reset = async (): Promise<void> => {
                 await wait();
 
-                (await Request.put(`${prefix}/system/reset`, null, {
+                (await Request.put(`${API_URL}/system/reset`, null, {
                     headers: {
                         authorization: get(),
                     },
@@ -486,7 +482,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
         async extentions(): Promise<{ [key: string]: any }[]> {
             await wait();
 
-            return (await Request.get(`${prefix}/extentions`, {
+            return (await Request.get(`${API_URL}/extentions`, {
                 headers: {
                     authorization: get(),
                 },
@@ -497,13 +493,13 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async add(name: string): Promise<boolean> {
                 await wait();
 
-                (await Request.put(`${prefix}/extentions/${name}`, null, {
+                (await Request.put(`${API_URL}/extentions/${name}`, null, {
                     headers: {
                         authorization: get(),
                     },
                 }));
 
-                const current = (await Request.get(`${prefix}/extentions`, {
+                const current = (await Request.get(`${API_URL}/extentions`, {
                     headers: {
                         authorization: get(),
                     },
@@ -515,13 +511,13 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async remove(name: string): Promise<boolean> {
                 await wait();
 
-                (await Request.delete(`${prefix}/extentions/${name}`, {
+                (await Request.delete(`${API_URL}/extentions/${name}`, {
                     headers: {
                         authorization: get(),
                     },
                 }));
 
-                const current = (await Request.get(`${prefix}/extentions`, {
+                const current = (await Request.get(`${API_URL}/extentions`, {
                     headers: {
                         authorization: get(),
                     },
@@ -534,7 +530,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
         async plugins(): Promise<{ [key: string]: any }[]> {
             await wait();
 
-            return (await Request.get(`${prefix}/plugins`, {
+            return (await Request.get(`${API_URL}/plugins`, {
                 headers: {
                     authorization: get(),
                 },
@@ -545,13 +541,13 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async count(): Promise<number> {
                 await wait();
 
-                return (await Request.get(`${prefix}/instances/count`)).data.instances;
+                return (await Request.get(`${API_URL}/instances/count`)).data.instances;
             },
 
             async list(): Promise<InstanceRecord[]> {
                 await wait();
 
-                return (await Request.get(`${prefix}/instances`, {
+                return (await Request.get(`${API_URL}/instances`, {
                     headers: {
                         authorization: get(),
                     },
@@ -561,7 +557,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async add(name: string, port: number): Promise<boolean> {
                 await wait();
 
-                const current = (await Request.get(`${prefix}/instances`, {
+                const current = (await Request.get(`${API_URL}/instances`, {
                     headers: {
                         authorization: get(),
                     },
@@ -572,7 +568,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
                 if (current.findIndex((n: any) => n.port === port) >= 0) return false;
                 if (current.findIndex((n: any) => n.id === sanitize(name)) >= 0) return false;
 
-                const results = (await Request.put(`${prefix}/instances`, {
+                const results = (await Request.put(`${API_URL}/instances`, {
                     name,
                     port,
                 }, {
@@ -595,7 +591,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             if (!name || name === "") return undefined;
             if (id === "api") return undefined;
 
-            const current = (await Request.get(`${prefix}/instances`, {
+            const current = (await Request.get(`${API_URL}/instances`, {
                 headers: {
                     authorization: get(),
                 },
@@ -607,7 +603,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
 
             const results = current[index];
 
-            results.status = async (): Promise<{ [key: string]: any }> => (await Request.get(`${prefix}/bridge/${id}`, {
+            results.status = async (): Promise<{ [key: string]: any }> => (await Request.get(`${API_URL}/bridge/${id}`, {
                 headers: {
                     authorization: get(),
                 },
@@ -617,7 +613,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
                 get: async (): Promise<{ [key: string]: any }> => {
                     await wait();
 
-                    return (await Request.get(`${prefix}/config/${id}`, {
+                    return (await Request.get(`${API_URL}/config/${id}`, {
                         headers: {
                             authorization: get(),
                         },
@@ -627,7 +623,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
                 update: async (data: { [key: string]: any }): Promise<void> => {
                     await wait();
 
-                    (await Request.post(`${prefix}/config/${id}`, data, {
+                    (await Request.post(`${API_URL}/config/${id}`, data, {
                         headers: {
                             authorization: get(),
                         },
@@ -638,7 +634,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.plugins = async (): Promise<{ [key: string]: any }[]> => {
                 await wait();
 
-                return (await Request.get(`${prefix}/plugins/${id}`, {
+                return (await Request.get(`${API_URL}/plugins/${id}`, {
                     headers: {
                         authorization: get(),
                     },
@@ -649,7 +645,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
                 install: async (identifier: string): Promise<void> => {
                     await wait();
 
-                    (await Request.put(`${prefix}/plugins/${id}/${identifier}`, null, {
+                    (await Request.put(`${API_URL}/plugins/${id}/${identifier}`, null, {
                         headers: {
                             authorization: get(),
                         },
@@ -659,7 +655,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
                 upgrade: async (identifier: string): Promise<void> => {
                     await wait();
 
-                    (await Request.post(`${prefix}/plugins/${id}/${identifier}`, null, {
+                    (await Request.post(`${API_URL}/plugins/${id}/${identifier}`, null, {
                         headers: {
                             authorization: get(),
                         },
@@ -669,7 +665,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
                 uninstall: async (identifier: string): Promise<void> => {
                     await wait();
 
-                    (await Request.delete(`${prefix}/plugins/${id}/${identifier}`, {
+                    (await Request.delete(`${API_URL}/plugins/${id}/${identifier}`, {
                         headers: {
                             authorization: get(),
                         },
@@ -680,7 +676,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.rename = async (value: string): Promise<void> => {
                 await wait();
 
-                (await Request.post(`${prefix}/instance/${id}`, {
+                (await Request.post(`${API_URL}/instance/${id}`, {
                     name: value,
                 }, {
                     headers: {
@@ -692,7 +688,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.accessories = async (): Promise<{ [key: string]: any }[]> => {
                 await wait();
 
-                return (await Request.get(`${prefix}/accessories/${id}`, {
+                return (await Request.get(`${API_URL}/accessories/${id}`, {
                     headers: {
                         authorization: get(),
                     },
@@ -702,7 +698,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.start = async (): Promise<void> => {
                 await wait();
 
-                (await Request.get(`${prefix}/bridge/${id}/start`, {
+                (await Request.get(`${API_URL}/bridge/${id}/start`, {
                     headers: {
                         authorization: get(),
                     },
@@ -712,7 +708,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.stop = async (): Promise<void> => {
                 await wait();
 
-                (await Request.get(`${prefix}/bridge/${id}/stop`, {
+                (await Request.get(`${API_URL}/bridge/${id}/stop`, {
                     headers: {
                         authorization: get(),
                     },
@@ -722,7 +718,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.restart = async (): Promise<void> => {
                 await wait();
 
-                (await Request.get(`${prefix}/bridge/${id}/restart`, {
+                (await Request.get(`${API_URL}/bridge/${id}/restart`, {
                     headers: {
                         authorization: get(),
                     },
@@ -732,7 +728,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.purge = async (): Promise<void> => {
                 await wait();
 
-                (await Request.get(`${prefix}/bridge/${id}/purge`, {
+                (await Request.get(`${API_URL}/bridge/${id}/purge`, {
                     headers: {
                         authorization: get(),
                     },
@@ -742,7 +738,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.cache = async (): Promise<{ [key: string]: any }> => {
                 await wait();
 
-                return (await Request.get(`${prefix}/cache/${id}`, {
+                return (await Request.get(`${API_URL}/cache/${id}`, {
                     headers: {
                         authorization: get(),
                     },
@@ -752,7 +748,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.remove = async (): Promise<boolean> => {
                 await wait();
 
-                const updated = (await Request.delete(`${prefix}/instance/${id}`, {
+                const updated = (await Request.delete(`${API_URL}/instance/${id}`, {
                     headers: {
                         authorization: get(),
                     },
@@ -769,7 +765,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
         async accessories(): Promise<{ [key: string]: any }[]> {
             await wait();
 
-            return (await Request.get(`${prefix}/accessories`, {
+            return (await Request.get(`${API_URL}/accessories`, {
                 headers: {
                     authorization: get(),
                 },
@@ -779,7 +775,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
         async accessory(instance: string, aid: string): Promise<{ [key: string]: any }> {
             await wait();
 
-            const results = (await Request.get(`${prefix}/accessory/${instance}/${aid}`, {
+            const results = (await Request.get(`${API_URL}/accessory/${instance}/${aid}`, {
                 headers: {
                     authorization: get(),
                 },
@@ -788,7 +784,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.control = async (iid: string, data: { [key: string]: any }): Promise<void> => {
                 await wait();
 
-                (await Request.put(`${prefix}/accessory/${instance}/${aid}/${iid}`, data, {
+                (await Request.put(`${API_URL}/accessory/${instance}/${aid}/${iid}`, data, {
                     headers: {
                         authorization: get(),
                     },
@@ -802,7 +798,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async get(name: string): Promise<Theme> {
                 await wait();
 
-                return (await Request.get(`${prefix}/theme/${name}`, {
+                return (await Request.get(`${API_URL}/theme/${name}`, {
                     headers: {
                         authorization: get(),
                     },
@@ -812,7 +808,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async save(name: string, theme: Theme) {
                 await wait();
 
-                (await Request.post(`${prefix}/theme/${name}`, theme, {
+                (await Request.post(`${API_URL}/theme/${name}`, theme, {
                     headers: {
                         authorization: get(),
                     },
@@ -822,7 +818,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async backdrop(form: FormData): Promise<string> {
                 await wait();
 
-                return (await Request.post(`${prefix}/themes/backdrop`, form, {
+                return (await Request.post(`${API_URL}/themes/backdrop`, form, {
                     headers: {
                         authorization: get(),
                     },
@@ -834,7 +830,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async status(): Promise<{ [key: string]: any }> {
                 await wait();
 
-                return (await Request.get(`${prefix}/remote`, {
+                return (await Request.get(`${API_URL}/remote`, {
                     headers: {
                         authorization: get(),
                     },
@@ -844,7 +840,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async connect(): Promise<{ [key: string]: any }> {
                 await wait();
 
-                return (await Request.get(`${prefix}/remote/start`, {
+                return (await Request.get(`${API_URL}/remote/start`, {
                     headers: {
                         authorization: get(),
                     },
@@ -854,7 +850,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             async disconnect(): Promise<void> {
                 await wait();
 
-                (await Request.get(`${prefix}/remote/disconnect`, {
+                (await Request.get(`${API_URL}/remote/disconnect`, {
                     headers: {
                         authorization: get(),
                     },

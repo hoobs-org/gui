@@ -18,6 +18,8 @@
 
 import SocketIO from "socket.io-client";
 
+const SOCKET_URL = process.env.VUE_APP_SOCKET || "/";
+
 class Socket {
     declare private io: SocketIOClient.Socket;
 
@@ -27,17 +29,7 @@ class Socket {
 
     constructor() {
         this.events = {};
-        this.url = `${window.location.protocol}//${window.location.hostname}`;
-
-        if (process.env.NODE_ENV === "production") {
-            if (window.location.port !== "80" && window.location.port !== "443") {
-                this.url += `:${window.location.port}`;
-            }
-        } else {
-            this.url = "http://localhost:50826";
-        }
-
-        this.io = SocketIO(this.url);
+        this.io = SocketIO(SOCKET_URL);
     }
 
     on(event: string, callback: (args: any) => any) {

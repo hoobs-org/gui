@@ -214,22 +214,6 @@
             align-items: center;
             padding: 7px 0 0 2px;
         }
-
-        .actions {
-            margin: 10px 0 10px 10px;
-            display: flex;
-            justify-content: flex-end;
-
-            .copyright {
-                flex: 1;
-                font-size: 9px;
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-end;
-                user-select: none;
-                opacity: 0.4;
-            }
-        }
     }
 
     @media (min-width: 300px) and (max-width: 815px) {
@@ -240,12 +224,6 @@
 
             .errors {
                 border-bottom: 0 none;
-            }
-
-            .actions {
-                .copyright {
-                    display: none;
-                }
             }
         }
     }

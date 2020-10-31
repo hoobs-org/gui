@@ -80,6 +80,73 @@
                 overflow: overlay;
             }
         }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+            overflow: hidden;
+            margin: 0 10px 0 0;
+
+            &:hover {
+                overflow: overlay;
+            }
+
+            .form {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                border: var(--modal-border) 1px solid;
+                background: var(--modal-background);
+                padding: 20px;
+                margin: 10px 0 0 0;
+                border-radius: 4px;
+
+                .seperator {
+                    height: 1px;
+                    background: var(--modal-border);
+                    margin: 7px 0 0 0;
+                }
+
+                .row {
+                    display: flex;
+                    flex-direction: row;
+
+                    &.title {
+                        padding: 20px 0 7px 0;
+
+                        &:first-child {
+                            padding: 0 0 7px 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        .actions {
+            margin: 10px 0 10px 10px;
+            display: flex;
+            justify-content: flex-end;
+
+            .copyright {
+                flex: 1;
+                font-size: 9px;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                user-select: none;
+                opacity: 0.4;
+            }
+        }
+
+        .loading {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 0 0 20% 0;
+        }
     }
 
     @media (min-width: 300px) and (max-width: 815px) {
@@ -97,6 +164,12 @@
                 border-radius: unset;
                 overflow: auto;
                 box-shadow: unset;
+            }
+
+            .actions {
+                .copyright {
+                    display: none;
+                }
             }
         }
     }

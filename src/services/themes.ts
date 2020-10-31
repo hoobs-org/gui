@@ -19,6 +19,8 @@
 import { Store } from "vuex";
 import { sanitize } from "./sdk";
 
+const THEMES_URL = process.env.VUE_APP_THEMES || "/themes";
+
 export default class Themes {
     static set(name: string, store?: Store<any>) {
         const style = document.getElementById("theme");
@@ -34,15 +36,7 @@ export default class Themes {
                 return `/defaults/${theme}/theme.css`;
 
             default:
-                if (process.env.NODE_ENV !== "production") {
-                    return `http://localhost:50826/themes/${theme}/theme.css`;
-                }
-
-                if (window.location.port !== "80" && window.location.port !== "443") {
-                    return `:${window.location.port}/themes/${theme}/theme.css`;
-                }
-
-                return `/themes/${theme}`;
+                return `${THEMES_URL}/${theme}/theme.css`;
         }
     }
 }

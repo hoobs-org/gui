@@ -34,6 +34,7 @@ import PasswordField from "./components/fields/password.vue";
 import PortField from "./components/fields/port.vue";
 import Spinner from "./components/elements/spinner.vue";
 
+console.log(process.env);
 const open = [
     "/login",
     "/setup",
