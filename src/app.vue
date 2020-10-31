@@ -18,12 +18,24 @@
 
 <template>
     <div id="app" :theme="theme">
-        <router-view class="view" />
+        <component :is="$route.meta.layout">
+            <router-view class="view" />
+        </component>
     </div>
 </template>
 
 <script>
+    import Public from "./layouts/public.vue";
+    import Authenticated from "./layouts/authenticated.vue";
+
     export default {
+        name: "app",
+
+        components: {
+            "public": Public,
+            "authenticated": Authenticated,
+        },
+
         computed: {
             theme() {
                 return this.$store.state.theme;

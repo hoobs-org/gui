@@ -17,7 +17,11 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <layout>
-        <div id="accessories"></div>
-    </layout>
+    <div id="accessories"></div>
 </template>
+
+<script>
+    export default {
+        name: "accessories",
+    };
+</script>

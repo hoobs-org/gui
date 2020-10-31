@@ -17,7 +17,11 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <layout>
-        <div id="dashboard"></div>
-    </layout>
+    <div id="dashboard"></div>
 </template>
+
+<script>
+    export default {
+        name: "dashboard",
+    };
+</script>

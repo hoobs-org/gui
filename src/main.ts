@@ -26,15 +26,13 @@ import tasks from "./services/tasks";
 import lang from "./lang";
 import themes from "./services/themes";
 
-import Layout from "./layout.vue";
-import Welcome from "./components/elements/welcome.vue";
 import Modal from "./components/elements/modal.vue";
-import Spinner from "./components/elements/spinner.vue";
 import Radio from "./components/fields/radio.vue";
 import Checkbox from "./components/fields/checkbox.vue";
 import TextField from "./components/fields/text.vue";
 import PasswordField from "./components/fields/password.vue";
 import PortField from "./components/fields/port.vue";
+import Spinner from "./components/elements/spinner.vue";
 
 const open = [
     "/login",
@@ -78,15 +76,13 @@ Vue.mixin({
 
 themes.set(store.state.theme, store);
 
-Vue.component("layout", Layout);
-Vue.component("welcome", Welcome);
 Vue.component("modal", Modal);
-Vue.component("spinner", Spinner);
 Vue.component("radio", Radio);
 Vue.component("checkbox", Checkbox);
 Vue.component("text-field", TextField);
 Vue.component("password-field", PasswordField);
 Vue.component("port-field", PortField);
+Vue.component("spinner", Spinner);
 
 tasks(store);
 

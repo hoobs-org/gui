@@ -108,9 +108,16 @@
 </template>
 
 <script>
+    import Welcome from "../components/elements/welcome.vue";
     import { sleep } from "../services/sdk";
 
     export default {
+        name: "setup",
+
+        components: {
+            "welcome": Welcome,
+        },
+
         data() {
             return {
                 step: -1,

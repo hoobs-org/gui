@@ -39,31 +39,23 @@
             :close="() => { toggle('application') }"
             :logout="logout"
         />
-        <modal v-if="show.about" width="720px" height="420px">
-            <welcome message="HOOBS™" />
-            <about
-                :donate="() => { navigate('https://paypal.me/hoobsorg') }"
-                :close="() => { toggle('about') }"
-            />
-        </modal>
-        <modal v-if="show.settings" :title="$t('settings')" width="760px" height="392px">
-            <settings :close="() => { toggle('settings') }" />
-        </modal>
-        <modal v-if="show.personalize" :title="$t('personalize')" width="760px" height="670px">
-            <personalize :close="() => { toggle('personalize') }" />
-        </modal>
+        <about v-if="show.about" :close="() => { toggle('about') }" />
+        <settings v-if="show.settings" :close="() => { toggle('settings') }" />
+        <personalize v-if="show.personalize" :close="() => { toggle('personalize') }" />
     </div>
 </template>
 
 <script>
-    import About from "./components/dialogs/about.vue";
-    import Navigation from "./components/navigation.vue";
-    import Notifications from "./components/notifications.vue";
-    import ApplicationMenu from "./components/menus/application.vue";
-    import Personalize from "./components/dialogs/personalize.vue";
-    import Settings from "./components/dialogs/settings.vue";
+    import About from "../components/dialogs/about.vue";
+    import Navigation from "../components/navigation.vue";
+    import Notifications from "../components/notifications.vue";
+    import ApplicationMenu from "../components/menus/application.vue";
+    import Personalize from "../components/dialogs/personalize.vue";
+    import Settings from "../components/dialogs/settings.vue";
 
     export default {
+        name: "authenticated",
+
         components: {
             "about": About,
             "settings": Settings,

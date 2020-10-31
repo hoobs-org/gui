@@ -19,7 +19,7 @@
 <template>
     <div v-on:click.stop id="dialog">
         <div class="window modal" :style="`width: ${width}; height: ${height};`">
-            <div v-if="title" class="title">{{ title }}</div>
+            <div v-if="title" class="subject">{{ title }}</div>
             <slot />
         </div>
     </div>
@@ -57,7 +57,7 @@
         justify-content: space-around;
         padding: 20px 20px 10em 20px;
 
-        .title {
+        .subject {
             color: var(--modal-highlight);
             font-weight: bold;
             font-size: 17px;

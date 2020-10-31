@@ -17,7 +17,11 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <layout>
-        <div id="config"></div>
-    </layout>
+    <div id="config"></div>
 </template>
+
+<script>
+    export default {
+        name: "config",
+    };
+</script>

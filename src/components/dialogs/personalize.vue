@@ -17,119 +17,121 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="personalize">
-        <div v-if="!loading" class="content">
-            <div class="form">
-                <div class="row title desktop-only">
-                    {{ $t("backdrop") }}
-                </div>
-                <div class="row desktop-only">
-                    <div class="backdrop" :style="`background-image: ${working.backdrop};`">
-                        <div class="display dark" :style="`background: ${working.application.background}; box-shadow: ${working.elevation.default};`">
-                            <div class="title" :style="`color: ${working.application.highlight};`">{{ $t("title") }}</div>
-                            <div class="accent" :style="`color: ${working.application.accent};`">{{ $t("accent") }}</div>
-                            <div class="text" :style="`color: ${working.application.text.default};`">{{ $t("text") }}</div>
-                        </div>
-                        <div class="display light" :style="`background: ${working.modal.background}; backdrop-filter: ${working.transparency}; box-shadow: ${working.elevation.default};`">
-                            <div class="title" :style="`color: ${working.modal.highlight};`">{{ $t("title") }}</div>
-                            <div class="text" :style="`color: ${working.modal.text.default};`">{{ $t("text") }}</div>
-                        </div>
-                        <div class="display navigation" :style="`background: ${working.navigation.background};`">
-                            <span class="icon" :style="`color: ${working.navigation.highlight};`">dashboard</span>
-                            <span class="icon" :style="`color: ${working.navigation.text.default};`">highlight</span>
-                            <span class="icon" :style="`color: ${working.navigation.text.default};`">subject</span>
-                            <span class="icon" :style="`color: ${working.navigation.text.default};`">layers</span>
-                            <span class="icon" :style="`color: ${working.navigation.text.default};`">extension</span>
-                        </div>
+    <modal :title="$t('personalize')" width="760px" height="670px">
+        <div id="personalize">
+            <div v-if="!loading" class="content">
+                <div class="form">
+                    <div class="row title desktop-only">
+                        {{ $t("backdrop") }}
                     </div>
-                    <div class="backdrops">
-                        <div class="row">
-                            <backdrop image="default.jpg" v-model="working.backdrop" />
-                            <backdrop image="amber.jpg" v-model="working.backdrop" />
+                    <div class="row desktop-only">
+                        <div class="backdrop" :style="`background-image: ${working.backdrop};`">
+                            <div class="display dark" :style="`background: ${working.application.background}; box-shadow: ${working.elevation.default};`">
+                                <div class="title" :style="`color: ${working.application.highlight};`">{{ $t("title") }}</div>
+                                <div class="accent" :style="`color: ${working.application.accent};`">{{ $t("accent") }}</div>
+                                <div class="text" :style="`color: ${working.application.text.default};`">{{ $t("text") }}</div>
+                            </div>
+                            <div class="display light" :style="`background: ${working.modal.background}; backdrop-filter: ${working.transparency}; box-shadow: ${working.elevation.default};`">
+                                <div class="title" :style="`color: ${working.modal.highlight};`">{{ $t("title") }}</div>
+                                <div class="text" :style="`color: ${working.modal.text.default};`">{{ $t("text") }}</div>
+                            </div>
+                            <div class="display navigation" :style="`background: ${working.navigation.background};`">
+                                <span class="icon" :style="`color: ${working.navigation.highlight};`">dashboard</span>
+                                <span class="icon" :style="`color: ${working.navigation.text.default};`">highlight</span>
+                                <span class="icon" :style="`color: ${working.navigation.text.default};`">subject</span>
+                                <span class="icon" :style="`color: ${working.navigation.text.default};`">layers</span>
+                                <span class="icon" :style="`color: ${working.navigation.text.default};`">extension</span>
+                            </div>
                         </div>
-                        <div class="row">
-                            <backdrop image="purple.jpg" v-model="working.backdrop" />
-                            <backdrop image="pink.jpg" v-model="working.backdrop" />
-                        </div>
-                        <div class="row">
-                            <backdrop image="teal.jpg" v-model="working.backdrop" />
-                            <backdrop image="green.jpg" v-model="working.backdrop" />
-                        </div>
-                        <div class="row">
-                            <backdrop image="red.jpg" v-model="working.backdrop" />
-                            <div v-on:click="$refs.backdrop.click();" class="add">
-                                <input type="file" ref="backdrop" v-on:change="upload()" accept="image/*" hidden />
-                                <span class="icon">add</span>
+                        <div class="backdrops">
+                            <div class="row">
+                                <backdrop image="default.jpg" v-model="working.backdrop" />
+                                <backdrop image="amber.jpg" v-model="working.backdrop" />
+                            </div>
+                            <div class="row">
+                                <backdrop image="purple.jpg" v-model="working.backdrop" />
+                                <backdrop image="pink.jpg" v-model="working.backdrop" />
+                            </div>
+                            <div class="row">
+                                <backdrop image="teal.jpg" v-model="working.backdrop" />
+                                <backdrop image="green.jpg" v-model="working.backdrop" />
+                            </div>
+                            <div class="row">
+                                <backdrop image="red.jpg" v-model="working.backdrop" />
+                                <div v-on:click="$refs.backdrop.click();" class="add">
+                                    <input type="file" ref="backdrop" v-on:change="upload()" accept="image/*" hidden />
+                                    <span class="icon">add</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row title">
-                    {{ $t("mode") }}
-                </div>
-                <div class="row">
-                    <radio id="light" name="mode" v-model="mode" value="light">
-                        <label for="light">{{ $t("light") }}</label>
-                    </radio>
-                </div>
-                <div class="row">
-                    <radio id="dark" name="mode" v-model="mode" value="dark">
-                        <label for="dark">{{ $t("dark") }}</label>
-                    </radio>
-                </div>
-                <div class="row title">
-                    {{ $t("color") }}
-                </div>
-                <div class="row colors">
-                    <div class="row">
-                        <color v-model="highlight" name="yellow" color="#feb400" />
-                        <color v-model="highlight" name="gold" color="#ff8c00" />
-                        <color v-model="highlight" name="orange" color="#f7630c" />
-                        <color v-model="highlight" name="orange-dark" color="#ca5010" />
-                        <color v-model="highlight" name="rust" color="#da3b01" />
-                        <color v-model="highlight" name="rust-light" color="#ef6950" />
-                        <color v-model="highlight" name="brick" color="#d13438" />
-                        <color v-model="highlight" name="brick-light" color="#ff4343" />
-                        <color v-model="highlight" name="red-light" color="#e74856" />
-                        <color v-model="highlight" name="red" color="#e81123" />
-                        <color v-model="highlight" name="rose-light" color="#ea005e" />
-                        <color v-model="highlight" name="rose" color="#c30052" />
-                        <color v-model="highlight" name="plum-light" color="#e3008c" />
-                        <color v-model="highlight" name="plum" color="#bf0077" />
-                        <color v-model="highlight" name="orchid-light" color="#c239b3" />
-                        <color v-model="highlight" name="orchid" color="#9a0089" />
-                        <color v-model="highlight" name="violet" color="#881798" />
+                    <div class="row title">
+                        {{ $t("mode") }}
                     </div>
                     <div class="row">
-                        <color v-model="highlight" name="olive" color="#498205" />
-                        <color v-model="highlight" name="green-dark" color="#107c10" />
-                        <color v-model="highlight" name="green" color="#10893e" />
-                        <color v-model="highlight" name="green-light" color="#00cc6a" />
-                        <color v-model="highlight" name="mint-dark" color="#018574" />
-                        <color v-model="highlight" name="mint" color="#00b294" />
-                        <color v-model="highlight" name="teal" color="#038387" />
-                        <color v-model="highlight" name="seafoam" color="#00b7c3" />
-                        <color v-model="highlight" name="cool-dark" color="#2d7d9a" />
-                        <color v-model="highlight" name="cool" color="#0099bc" />
-                        <color v-model="highlight" name="blue" color="#0078d7" />
-                        <color v-model="highlight" name="navy" color="#0063b1" />
-                        <color v-model="highlight" name="purple-light" color="#8e8cd8" />
-                        <color v-model="highlight" name="purple" color="#6b69d6" />
-                        <color v-model="highlight" name="iris-light" color="#8764b8" />
-                        <color v-model="highlight" name="iris" color="#744da9" />
-                        <color v-model="highlight" name="violet-light" color="#b146c2" />
+                        <radio id="light" name="mode" v-model="mode" value="light">
+                            <label for="light">{{ $t("light") }}</label>
+                        </radio>
+                    </div>
+                    <div class="row">
+                        <radio id="dark" name="mode" v-model="mode" value="dark">
+                            <label for="dark">{{ $t("dark") }}</label>
+                        </radio>
+                    </div>
+                    <div class="row title">
+                        {{ $t("color") }}
+                    </div>
+                    <div class="row colors">
+                        <div class="row">
+                            <color v-model="highlight" name="yellow" color="#feb400" />
+                            <color v-model="highlight" name="gold" color="#ff8c00" />
+                            <color v-model="highlight" name="orange" color="#f7630c" />
+                            <color v-model="highlight" name="orange-dark" color="#ca5010" />
+                            <color v-model="highlight" name="rust" color="#da3b01" />
+                            <color v-model="highlight" name="rust-light" color="#ef6950" />
+                            <color v-model="highlight" name="brick" color="#d13438" />
+                            <color v-model="highlight" name="brick-light" color="#ff4343" />
+                            <color v-model="highlight" name="red-light" color="#e74856" />
+                            <color v-model="highlight" name="red" color="#e81123" />
+                            <color v-model="highlight" name="rose-light" color="#ea005e" />
+                            <color v-model="highlight" name="rose" color="#c30052" />
+                            <color v-model="highlight" name="plum-light" color="#e3008c" />
+                            <color v-model="highlight" name="plum" color="#bf0077" />
+                            <color v-model="highlight" name="orchid-light" color="#c239b3" />
+                            <color v-model="highlight" name="orchid" color="#9a0089" />
+                            <color v-model="highlight" name="violet" color="#881798" />
+                        </div>
+                        <div class="row">
+                            <color v-model="highlight" name="olive" color="#498205" />
+                            <color v-model="highlight" name="green-dark" color="#107c10" />
+                            <color v-model="highlight" name="green" color="#10893e" />
+                            <color v-model="highlight" name="green-light" color="#00cc6a" />
+                            <color v-model="highlight" name="mint-dark" color="#018574" />
+                            <color v-model="highlight" name="mint" color="#00b294" />
+                            <color v-model="highlight" name="teal" color="#038387" />
+                            <color v-model="highlight" name="seafoam" color="#00b7c3" />
+                            <color v-model="highlight" name="cool-dark" color="#2d7d9a" />
+                            <color v-model="highlight" name="cool" color="#0099bc" />
+                            <color v-model="highlight" name="blue" color="#0078d7" />
+                            <color v-model="highlight" name="navy" color="#0063b1" />
+                            <color v-model="highlight" name="purple-light" color="#8e8cd8" />
+                            <color v-model="highlight" name="purple" color="#6b69d6" />
+                            <color v-model="highlight" name="iris-light" color="#8764b8" />
+                            <color v-model="highlight" name="iris" color="#744da9" />
+                            <color v-model="highlight" name="violet-light" color="#b146c2" />
+                        </div>
                     </div>
                 </div>
             </div>
+            <div v-else class="loading">
+                <spinner />
+            </div>
+            <div class="actions modal">
+                <div class="button light" v-on:click="close()">{{ $t("cancel") }}</div>
+                <div v-if="!loading" class="button primary" v-on:click="save()">{{ $t("apply") }}</div>
+            </div>
         </div>
-        <div v-else class="loading">
-            <spinner />
-        </div>
-        <div class="actions modal">
-            <div class="button light" v-on:click="close()">{{ $t("cancel") }}</div>
-            <div v-if="!loading" class="button primary" v-on:click="save()">{{ $t("apply") }}</div>
-        </div>
-    </div>
+    </modal>
 </template>
 
 <script>

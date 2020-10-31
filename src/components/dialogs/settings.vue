@@ -17,44 +17,46 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="settings">
-        <div v-if="!loading" class="content">
-            <div class="form">
-                <div class="row title">
-                    {{ $t("weather") }}
-                </div>
-                <div class="seperator"></div>
-                <div class="row title">
-                    {{ $t("temperature_units") }}
-                </div>
-                <div class="row">
-                    <radio id="celsius" name="units" v-model="units" value="celsius">
-                        <label for="celsius">{{ $t("celsius") }}</label>
-                    </radio>
-                </div>
-                <div class="row">
-                    <radio id="fahrenheit" name="units" v-model="units" value="fahrenheit">
-                        <label for="fahrenheit">{{ $t("fahrenheit") }}</label>
-                    </radio>
-                </div>
-                <div class="row title"></div>
-                <div class="row">
-                    <text-field
-                        :name="$t('postal_code')"
-                        :description="$t('postal_code_description')"
-                        v-model="postalcode"
-                    />
+    <modal :title="$t('settings')" width="760px" height="392px">
+        <div id="settings">
+            <div v-if="!loading" class="content">
+                <div class="form">
+                    <div class="row title">
+                        {{ $t("weather") }}
+                    </div>
+                    <div class="seperator"></div>
+                    <div class="row title">
+                        {{ $t("temperature_units") }}
+                    </div>
+                    <div class="row">
+                        <radio id="celsius" name="units" v-model="units" value="celsius">
+                            <label for="celsius">{{ $t("celsius") }}</label>
+                        </radio>
+                    </div>
+                    <div class="row">
+                        <radio id="fahrenheit" name="units" v-model="units" value="fahrenheit">
+                            <label for="fahrenheit">{{ $t("fahrenheit") }}</label>
+                        </radio>
+                    </div>
+                    <div class="row title"></div>
+                    <div class="row">
+                        <text-field
+                            :name="$t('postal_code')"
+                            :description="$t('postal_code_description')"
+                            v-model="postalcode"
+                        />
+                    </div>
                 </div>
             </div>
+            <div v-else class="loading">
+                <spinner />
+            </div>
+            <div class="actions modal">
+                <div class="button light" v-on:click="close()">{{ $t("cancel") }}</div>
+                <div v-if="!loading" class="button primary" v-on:click="save()">{{ $t("apply") }}</div>
+            </div>
         </div>
-        <div v-else class="loading">
-            <spinner />
-        </div>
-        <div class="actions modal">
-            <div class="button light" v-on:click="close()">{{ $t("cancel") }}</div>
-            <div v-if="!loading" class="button primary" v-on:click="save()">{{ $t("apply") }}</div>
-        </div>
-    </div>
+    </modal>
 </template>
 
 <script>

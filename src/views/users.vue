@@ -17,7 +17,11 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <layout>
-        <div id="users"></div>
-    </layout>
+    <div id="users"></div>
 </template>
+
+<script>
+    export default {
+        name: "users",
+    };
+</script>

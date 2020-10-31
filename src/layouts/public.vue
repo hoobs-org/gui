@@ -17,11 +17,24 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="plugins"></div>
+    <div id="layout">
+        <slot />
+    </div>
 </template>
 
 <script>
     export default {
-        name: "plugins",
+        name: "public",
     };
 </script>
+
+<style lang="scss">
+    #layout {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        font-family: "Montserrat", sans-serif;
+        color: var(--application-text);
+        background: var(--application-background);
+    }
+</style>

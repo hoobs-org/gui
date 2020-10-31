@@ -24,47 +24,74 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
     {
         path: "/",
-        name: "Dashboard",
+        name: "dashboard",
+        meta: {
+            layout: "authenticated",
+        },
         component: () => import(/* webpackChunkName: "dashboard" */ "../views/dashboard.vue"),
     },
     {
         path: "/setup",
-        name: "Setup",
+        name: "setup",
+        meta: {
+            layout: "public",
+        },
         component: () => import(/* webpackChunkName: "setup" */ "../views/setup.vue"),
     },
     {
         path: "/login",
-        name: "Login",
+        name: "login",
+        meta: {
+            layout: "public",
+        },
         component: () => import(/* webpackChunkName: "login" */ "../views/login.vue"),
     },
     {
         path: "/accessories",
-        name: "Accessories",
+        name: "accessories",
+        meta: {
+            layout: "authenticated",
+        },
         component: () => import(/* webpackChunkName: "accessories" */ "../views/accessories.vue"),
     },
     {
         path: "/log",
-        name: "Log",
+        name: "log",
+        meta: {
+            layout: "authenticated",
+        },
         component: () => import(/* webpackChunkName: "log" */ "../views/log.vue"),
     },
     {
         path: "/users",
-        name: "Users",
+        name: "users",
+        meta: {
+            layout: "authenticated",
+        },
         component: () => import(/* webpackChunkName: "users" */ "../views/users.vue"),
     },
     {
         path: "/instances",
-        name: "Instances",
+        name: "instances",
+        meta: {
+            layout: "authenticated",
+        },
         component: () => import(/* webpackChunkName: "instances" */ "../views/instances.vue"),
     },
     {
         path: "/plugins",
-        name: "Plugins",
+        name: "plugins",
+        meta: {
+            layout: "authenticated",
+        },
         component: () => import(/* webpackChunkName: "plugins" */ "../views/plugins.vue"),
     },
     {
         path: "/config",
-        name: "Config",
+        name: "config",
+        meta: {
+            layout: "authenticated",
+        },
         component: () => import(/* webpackChunkName: "config" */ "../views/config.vue"),
     },
 ];

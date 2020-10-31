@@ -72,7 +72,15 @@
 </template>
 
 <script>
+    import Welcome from "../components/elements/welcome.vue";
+
     export default {
+        name: "login",
+
+        components: {
+            "welcome": Welcome,
+        },
+
         data() {
             return {
                 url: "/",
