@@ -30,6 +30,7 @@
                 action="/login"
                 v-on:submit.prevent="login()"
             >
+                <input type="submit" class="hidden-submit" value="submit" />
                 <div class="group">
                     <div class="upper">
                         <label for="username" class="label">{{ $t("username") }}</label>

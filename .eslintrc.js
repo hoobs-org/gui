@@ -77,6 +77,15 @@ module.exports = {
         },
         {
             files: [
+                "src/services/maps.ts"
+            ],
+            rules: {
+                "padded-blocks": "off",
+                "@typescript-eslint/ban-ts-ignore": "off"
+            }
+        },
+        {
+            files: [
                 "bin/build",
             ],
             rules: {

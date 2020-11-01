@@ -31,10 +31,10 @@ import Radio from "./components/fields/radio.vue";
 import Checkbox from "./components/fields/checkbox.vue";
 import TextField from "./components/fields/text.vue";
 import PasswordField from "./components/fields/password.vue";
+import SearchField from "./components/fields/search.vue";
 import PortField from "./components/fields/port.vue";
 import Spinner from "./components/elements/spinner.vue";
 
-console.log(process.env);
 const open = [
     "/login",
     "/setup",
@@ -82,6 +82,7 @@ Vue.component("radio", Radio);
 Vue.component("checkbox", Checkbox);
 Vue.component("text-field", TextField);
 Vue.component("password-field", PasswordField);
+Vue.component("search-field", SearchField);
 Vue.component("port-field", PortField);
 Vue.component("spinner", Spinner);
 

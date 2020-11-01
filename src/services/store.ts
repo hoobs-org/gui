@@ -51,7 +51,7 @@ export default new Vuex.Store({
         },
         temp: null,
         units: "celsius",
-        postalcode: null,
+        location: null,
         session: "",
         user: {},
         auth: false,
@@ -203,8 +203,8 @@ export default new Vuex.Store({
             }
         },
 
-        "POSTALCODE:SET": (state: { [key: string ]: any }, value: string) => {
-            state.postalcode = value;
+        "LOCATION:SET": (state: { [key: string ]: any }, value: { [key: string]: string | number }) => {
+            state.location = value;
         },
     },
 
@@ -216,7 +216,7 @@ export default new Vuex.Store({
             memory: state.memory,
             temp: state.temp,
             units: state.units,
-            postalcode: state.postalcode,
+            location: state.location,
             session: state.session,
             user: state.user,
             notifications: state.notifications,

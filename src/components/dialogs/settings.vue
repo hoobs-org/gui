@@ -17,17 +17,13 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="$t('settings')" width="760px" height="392px">
+    <modal :title="$t('settings')" width="760px" height="670px">
         <div id="settings">
             <div v-if="!loading" class="content">
                 <div class="form">
-                    <div class="row title">
-                        {{ $t("weather") }}
-                    </div>
+                    <div class="row title">{{ $t("weather") }}</div>
                     <div class="seperator"></div>
-                    <div class="row title">
-                        {{ $t("temperature_units") }}
-                    </div>
+                    <div class="row title">{{ $t("temperature_units") }}</div>
                     <div class="row">
                         <radio id="celsius" name="units" v-model="units" value="celsius">
                             <label for="celsius">{{ $t("celsius") }}</label>
@@ -38,14 +34,52 @@
                             <label for="fahrenheit">{{ $t("fahrenheit") }}</label>
                         </radio>
                     </div>
-                    <div class="row title"></div>
+                    <div class="row title">{{ $t("location") }}</div>
                     <div class="row">
-                        <text-field
-                            :name="$t('postal_code')"
-                            :description="$t('postal_code_description')"
-                            v-model="postalcode"
-                        />
+                        <input type="submit" class="hidden-submit" value="submit" />
+                        <div class="location">
+                            <div
+                                v-if="location"
+                                class="details"
+                            >
+                                <div>{{ $t("location_current_description") }}</div>
+                                <div>{{ $t("location_city") }} <span class="value">{{ location.name }}</span></div>
+                                <div>{{ $t("location_country") }} <span class="value">{{ location.country }}</span></div>
+                            </div>
+                            <div v-else class="details">
+                                {{ $t("location_search_required") }}
+                            </div>
+                        </div>
                     </div>
+                    <div class="row title"></div>
+                    <form
+                        class="row"
+                        autocomplete="false"
+                        method="post"
+                        action="/login"
+                        v-on:submit.prevent="search()"
+                    >
+                        <input type="submit" class="hidden-submit" value="submit" />
+                        <div class="search">
+                            <search-field
+                                :name="$t('location_search')"
+                                :description="$t('location_description')"
+                                v-model="query"
+                                :search="search"
+                            />
+                            <div class="results">
+                                <div
+                                    v-for="(location, index) in locations"
+                                    :key="index"
+                                    class="item"
+                                    v-on:click="select(index)"
+                                >
+                                    <span class="icon">my_location</span>
+                                    <span class="title">{{ location.name }}, {{ location.country }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div v-else class="loading">
@@ -60,6 +94,10 @@
 </template>
 
 <script>
+    import Maps from "../../services/maps";
+    import Weather from "../../services/weather";
+    import Countries from "../../lang/country-codes.json";
+
     export default {
         name: "personalize",
 
@@ -73,23 +111,59 @@
         data() {
             return {
                 loading: true,
-                postalcode: "",
+                query: "",
+                position: {},
+                location: {},
+                locations: [],
                 units: "celsius",
             };
         },
 
         async mounted() {
             this.units = this.$store.state.units;
-            this.postalcode = this.$store.state.postalcode;
+            this.location = this.$store.state.location;
+
+            if (!this.location) {
+                this.geolocation();
+            }
+
             this.loading = false;
         },
 
         methods: {
             save() {
+                this.loading = true;
+
                 this.$store.commit("UNITS:SET", this.units.toLowerCase() === "celsius" ? "celsius" : "fahrenheit");
-                this.$store.commit("POSTALCODE:SET", this.postalcode && this.postalcode !== "" ? this.postalcode : null);
+                this.$store.commit("LOCATION:SET", this.location && this.location.id !== "" ? this.location : null);
 
                 this.close();
+            },
+
+            select(index) {
+                this.location = this.locations[index];
+            },
+
+            async geolocation() {
+                this.position = await Maps.geolocation();
+                this.locations = (await Weather.search(this.position));
+                this.location = (this.locations)[0] || null;
+            },
+
+            async search() {
+                if (!this.query || this.query === "") {
+                    this.locations = [];
+
+                    return;
+                }
+
+                this.position = await Maps.geocode(this.query);
+
+                this.locations = (await Weather.search(this.position)).map((item) => ({
+                    id: item.id,
+                    name: item.name,
+                    country: (Countries.find((country) => country.value === item.country) || {}).text || item.country,
+                }));
             },
         },
     };
@@ -102,5 +176,68 @@
         overflow: hidden;
         flex-direction: column;
         margin: 0 0 0 10px;
+
+        .search {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .results {
+            display: flex;
+            flex-direction: column;
+
+            .item {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                padding: 7px 20px;
+                border-bottom: var(--modal-border) 1px solid;
+                color: var(--modal-text);
+                user-select: none;
+                cursor: pointer;
+
+                &:last-child {
+                    border-bottom: 0 none;
+                }
+
+                .title {
+                    opacity: 0.7;
+                }
+
+                .icon {
+                    margin: 0 7px 0 0;
+                    font-size: 20px;
+                    color: var(--modal-highlight);
+                    opacity: 0.7;
+                }
+
+                &:hover {
+                    .title {
+                        opacity: 1;
+                    }
+
+                    .icon {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+
+        .location {
+            display: flex;
+            flex-direction: column;
+
+            .details {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                font-size: 12px;
+
+                .value {
+                    font-weight: bold;
+                }
+            }
+        }
     }
 </style>

@@ -24,7 +24,7 @@
         </div>
         <div v-if="notifications.length === 0" class="empty">{{ $t("notifications_empty") }}</div>
         <div v-else class="list">
-            <notification  v-for="(notification, index) in notifications" :key="index" :message="notification" />
+            <notification v-for="(notification, index) in notifications" :key="index" :message="notification" />
         </div>
     </div>
 </template>
