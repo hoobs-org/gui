@@ -27,6 +27,7 @@ export default new Vuex.Store({
     state: {
         log: [],
         instances: {},
+        config: {},
         cpu: {
             used: null,
             history: [
@@ -50,8 +51,6 @@ export default new Vuex.Store({
             ],
         },
         temp: null,
-        units: "celsius",
-        location: null,
         session: "",
         user: {},
         auth: false,
@@ -130,6 +129,10 @@ export default new Vuex.Store({
             state.accessory = payload.data;
         },
 
+        "IO:CONFIG:CHANGE": (state: { [key: string ]: any }, payload: any) => {
+            state.config = payload.data;
+        },
+
         "SESSION:SET": (state: { [key: string ]: any }, token: string) => {
             state.session = token;
 
@@ -187,24 +190,12 @@ export default new Vuex.Store({
             }
         },
 
+        "CONFIG:SET": async (state: { [key: string ]: any }, hoobs: any) => {
+            state.config = await hoobs.config.get();
+        },
+
         "THEME:SET": (state: { [key: string ]: any }, theme: number) => {
             state.theme = theme;
-        },
-
-        "UNITS:SET": (state: { [key: string ]: any }, value: string) => {
-            switch (value.toLowerCase()) {
-                case "fahrenheit":
-                    state.units = "fahrenheit";
-                    break;
-
-                default:
-                    state.units = "celsius";
-                    break;
-            }
-        },
-
-        "LOCATION:SET": (state: { [key: string ]: any }, value: { [key: string]: string | number }) => {
-            state.location = value;
         },
     },
 
@@ -215,8 +206,6 @@ export default new Vuex.Store({
             cpu: state.cpu,
             memory: state.memory,
             temp: state.temp,
-            units: state.units,
-            location: state.location,
             session: state.session,
             user: state.user,
             notifications: state.notifications,

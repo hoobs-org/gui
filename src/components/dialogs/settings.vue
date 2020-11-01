@@ -38,7 +38,10 @@
                                 v-model="query"
                                 :search="search"
                             />
-                            <div class="results">
+                            <div v-if="show.searching" class="results loading">
+                                <spinner />
+                            </div>
+                            <div v-else class="results">
                                 <div
                                     v-for="(location, index) in locations"
                                     :key="index"
@@ -46,7 +49,7 @@
                                     v-on:click="select(index)"
                                 >
                                     <span class="icon">my_location</span>
-                                    <span class="title">{{ location.name }}, {{ location.country }}</span>
+                                    <span class="title">{{ location.name }}, {{ (countries.find((country) => country.value === location.country) || {}).text || location.country }}</span>
                                 </div>
                             </div>
                         </div>
@@ -78,7 +81,7 @@
                                 </div>
                                 <div>
                                     {{ $t("location_country") }}
-                                    <span class="value">{{ location.country }}</span>
+                                    <span class="value">{{ (countries.find((country) => country.value === location.country) || {}).text || location.country }}</span>
                                 </div>
                             </div>
                         </div>
@@ -100,8 +103,6 @@
 </template>
 
 <script>
-    import Maps from "../../services/maps";
-    import Weather from "../../services/weather";
     import Countries from "../../lang/country-codes.json";
 
     export default {
@@ -114,23 +115,30 @@
             },
         },
 
+        computed: {
+            config() {
+                return this.$store.state.config;
+            },
+        },
+
         data() {
             return {
                 loading: true,
                 show: {
                     location: false,
+                    searching: false,
                 },
                 query: "",
-                position: {},
                 location: {},
                 locations: [],
                 units: "celsius",
+                countries: Countries,
             };
         },
 
         async mounted() {
-            this.units = this.$store.state.units;
-            this.location = this.$store.state.location;
+            this.units = this.config.weather.units;
+            this.location = this.config.weather.location;
             this.loading = false;
         },
 
@@ -141,11 +149,18 @@
                 this.show.location = true;
             },
 
-            save() {
+            async save() {
                 this.loading = true;
 
-                this.$store.commit("UNITS:SET", this.units.toLowerCase() === "celsius" ? "celsius" : "fahrenheit");
-                this.$store.commit("LOCATION:SET", this.location && this.location.id !== "" ? this.location : null);
+                const config = await this.hoobs.config.get();
+                const weather = {};
+
+                if (this.location && this.location.id && this.location.id > 0) weather.location = this.location;
+
+                weather.units = this.units.toLowerCase() === "celsius" ? "celsius" : "fahrenheit";
+                config.weather = weather;
+
+                await this.hoobs.config.update(config);
 
                 this.close();
             },
@@ -159,12 +174,6 @@
                 this.show.location = false;
             },
 
-            async geolocation() {
-                this.position = await Maps.geolocation();
-                this.locations = (await Weather.search(this.position));
-                this.location = (this.locations)[0] || null;
-            },
-
             async search() {
                 if (!this.query || this.query === "") {
                     this.locations = [];
@@ -172,13 +181,15 @@
                     return;
                 }
 
-                this.position = await Maps.geocode(this.query);
+                this.show.searching = true;
 
-                this.locations = (await Weather.search(this.position)).map((item) => ({
+                this.locations = (await this.hoobs.location(this.query)).map((item) => ({
                     id: item.id,
                     name: item.name,
-                    country: (Countries.find((country) => country.value === item.country) || {}).text || item.country,
+                    country: item.country,
                 }));
+
+                this.show.searching = false;
             },
         },
     };
@@ -204,6 +215,11 @@
             .results {
                 display: flex;
                 flex-direction: column;
+
+                &.loading {
+                    flex-direction: row;
+                    justify-content: flex-start;
+                }
 
                 .item {
                     display: flex;

@@ -44,10 +44,13 @@ const hoobs = sdk(() => store.state.session, (token) => {
     store.commit("SESSION:SET", token);
 });
 
+store.commit("CONFIG:SET", hoobs);
+
 socket.on("log", (data) => store.commit("IO:LOG", data));
 socket.on("monitor", (data) => store.commit("IO:MONITOR", data));
 socket.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
 socket.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
+socket.on("config_change", (data) => store.commit("IO:CONFIG:CHANGE", data));
 
 hoobs.log().then((messages) => {
     store.commit("LOG:HISTORY", messages);
@@ -66,14 +69,7 @@ router.beforeEach(async (to, _from, next) => {
 Vue.config.productionTip = false;
 
 Vue.mixin({ data: () => ({ hoobs }) });
-
-Vue.mixin({
-    methods: {
-        $theme(name: string) {
-            themes.set(name, store);
-        },
-    },
-});
+Vue.mixin({ methods: themes.mixin(store) });
 
 themes.set(store.state.theme, store);
 

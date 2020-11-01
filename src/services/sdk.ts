@@ -826,6 +826,38 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             },
         },
 
+        async location(query: string): Promise<{ [key: string]: number | string }> {
+            await wait();
+
+            return (await Request.get(`${API_URL}/weather/location?query=${encodeURIComponent(query)}`, {
+                headers: {
+                    authorization: get(),
+                },
+            })).data;
+        },
+
+        weather: {
+            async current(): Promise<{ [key: string]: any }> {
+                await wait();
+
+                return (await Request.get(`${API_URL}/weather/current`, {
+                    headers: {
+                        authorization: get(),
+                    },
+                })).data;
+            },
+
+            async forecast(): Promise<{ [key: string]: any }[]> {
+                await wait();
+
+                return (await Request.get(`${API_URL}/weather/forecast`, {
+                    headers: {
+                        authorization: get(),
+                    },
+                })).data;
+            },
+        },
+
         remote: {
             async status(): Promise<{ [key: string]: any }> {
                 await wait();

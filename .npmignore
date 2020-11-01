@@ -1,11 +1,14 @@
 .vscode
 bin/
-lib/gui.tgz
+lib/*.tgz
+public/
 node_modules/
 var/
 src/
 .browserslistrc
 .editorconfig
+.env.development
+.env.production
 .eslintrc.js
 .gitignore
 .npmignore
@@ -13,3 +16,4 @@ babel.config.js
 CHANGELOG.md
 tsconfig.json
 vue.config.js
+yarn-error.log

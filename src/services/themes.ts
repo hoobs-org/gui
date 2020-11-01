@@ -39,4 +39,12 @@ export default class Themes {
                 return `${THEMES_URL}/${theme}/theme.css`;
         }
     }
+
+    static mixin(store?: Store<any>) {
+        return {
+            $theme(name: string) {
+                Themes.set(name, store);
+            },
+        };
+    }
 }
