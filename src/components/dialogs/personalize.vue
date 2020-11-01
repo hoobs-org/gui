@@ -17,15 +17,15 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="$t('personalize')" width="760px" height="670px">
+    <modal :title="$t('personalize')" width="760px" height="687px">
         <div id="personalize">
             <div v-if="!loading" class="content">
                 <div class="form">
-                    <div class="row title desktop-only">
+                    <div class="row title">
                         {{ $t("backdrop") }}
                     </div>
-                    <div class="row desktop-only">
-                        <div class="backdrop" :style="`background-color: ${working.application.background}; background-image: ${working.backdrop};`">
+                    <div class="row">
+                        <div class="backdrop" :style="`background-color: ${working.application.background}; background-image: ${backdrop};`">
                             <div class="display dark" :style="`background: ${working.application.background}; box-shadow: ${working.elevation.default};`">
                                 <div class="title" :style="`color: ${working.application.highlight};`">{{ $t("title") }}</div>
                                 <div class="accent" :style="`color: ${working.application.accent};`">{{ $t("accent") }}</div>
@@ -45,19 +45,19 @@
                         </div>
                         <div class="backdrops">
                             <div class="row">
-                                <backdrop image="default.jpg" v-model="working.backdrop" />
-                                <backdrop image="amber.jpg" v-model="working.backdrop" />
+                                <backdrop image="default.jpg" v-model="backdrop" />
+                                <backdrop image="amber.jpg" v-model="backdrop" />
                             </div>
                             <div class="row">
-                                <backdrop image="purple.jpg" v-model="working.backdrop" />
-                                <backdrop image="pink.jpg" v-model="working.backdrop" />
+                                <backdrop image="purple.jpg" v-model="backdrop" />
+                                <backdrop image="pink.jpg" v-model="backdrop" />
                             </div>
                             <div class="row">
-                                <backdrop image="teal.jpg" v-model="working.backdrop" />
-                                <backdrop image="green.jpg" v-model="working.backdrop" />
+                                <backdrop image="teal.jpg" v-model="backdrop" />
+                                <backdrop image="green.jpg" v-model="backdrop" />
                             </div>
                             <div class="row">
-                                <backdrop image="red.jpg" v-model="working.backdrop" />
+                                <backdrop image="red.jpg" v-model="backdrop" />
                                 <div v-on:click="$refs.backdrop.click();" class="add">
                                     <input type="file" ref="backdrop" v-on:change="upload()" accept="image/*" hidden />
                                     <span class="icon">add</span>
@@ -81,44 +81,49 @@
                     <div class="row title">
                         {{ $t("color") }}
                     </div>
-                    <div class="row colors">
+                    <div class="row auto">
+                        <checkbox id="auto" v-model="auto">
+                            <label for="auto">{{ $t("automatically_set") }}</label>
+                        </checkbox>
+                    </div>
+                    <div v-on:click="() => { auto = false; }" class="row colors">
                         <div class="row">
-                            <color v-model="highlight" name="yellow" color="#feb400" />
-                            <color v-model="highlight" name="gold" color="#ff8c00" />
-                            <color v-model="highlight" name="orange" color="#f7630c" />
-                            <color v-model="highlight" name="orange-dark" color="#ca5010" />
-                            <color v-model="highlight" name="rust" color="#da3b01" />
-                            <color v-model="highlight" name="rust-light" color="#ef6950" />
-                            <color v-model="highlight" name="brick" color="#d13438" />
-                            <color v-model="highlight" name="brick-light" color="#ff4343" />
-                            <color v-model="highlight" name="red-light" color="#e74856" />
-                            <color v-model="highlight" name="red" color="#e81123" />
-                            <color v-model="highlight" name="rose-light" color="#ea005e" />
-                            <color v-model="highlight" name="rose" color="#c30052" />
-                            <color v-model="highlight" name="plum-light" color="#e3008c" />
-                            <color v-model="highlight" name="plum" color="#bf0077" />
-                            <color v-model="highlight" name="orchid-light" color="#c239b3" />
-                            <color v-model="highlight" name="orchid" color="#9a0089" />
-                            <color v-model="highlight" name="violet" color="#881798" />
+                            <color v-model="highlight" color="#feb400" />
+                            <color v-model="highlight" color="#ff8c00" />
+                            <color v-model="highlight" color="#f7630c" />
+                            <color v-model="highlight" color="#ca5010" />
+                            <color v-model="highlight" color="#da3b01" />
+                            <color v-model="highlight" color="#ef6950" />
+                            <color v-model="highlight" color="#d13438" />
+                            <color v-model="highlight" color="#ff4343" />
+                            <color v-model="highlight" color="#e74856" />
+                            <color v-model="highlight" color="#e81123" />
+                            <color v-model="highlight" color="#ea005e" />
+                            <color v-model="highlight" color="#c30052" />
+                            <color v-model="highlight" color="#e3008c" />
+                            <color v-model="highlight" color="#bf0077" />
+                            <color v-model="highlight" color="#c239b3" />
+                            <color v-model="highlight" color="#9a0089" />
+                            <color v-model="highlight" color="#881798" />
                         </div>
                         <div class="row">
-                            <color v-model="highlight" name="olive" color="#498205" />
-                            <color v-model="highlight" name="green-dark" color="#107c10" />
-                            <color v-model="highlight" name="green" color="#10893e" />
-                            <color v-model="highlight" name="green-light" color="#00cc6a" />
-                            <color v-model="highlight" name="mint-dark" color="#018574" />
-                            <color v-model="highlight" name="mint" color="#00b294" />
-                            <color v-model="highlight" name="teal" color="#038387" />
-                            <color v-model="highlight" name="seafoam" color="#00b7c3" />
-                            <color v-model="highlight" name="cool-dark" color="#2d7d9a" />
-                            <color v-model="highlight" name="cool" color="#0099bc" />
-                            <color v-model="highlight" name="blue" color="#0078d7" />
-                            <color v-model="highlight" name="navy" color="#0063b1" />
-                            <color v-model="highlight" name="purple-light" color="#8e8cd8" />
-                            <color v-model="highlight" name="purple" color="#6b69d6" />
-                            <color v-model="highlight" name="iris-light" color="#8764b8" />
-                            <color v-model="highlight" name="iris" color="#744da9" />
-                            <color v-model="highlight" name="violet-light" color="#b146c2" />
+                            <color v-model="highlight" color="#498205" />
+                            <color v-model="highlight" color="#107c10" />
+                            <color v-model="highlight" color="#10893e" />
+                            <color v-model="highlight" color="#00cc6a" />
+                            <color v-model="highlight" color="#018574" />
+                            <color v-model="highlight" color="#00b294" />
+                            <color v-model="highlight" color="#038387" />
+                            <color v-model="highlight" color="#00b7c3" />
+                            <color v-model="highlight" color="#2d7d9a" />
+                            <color v-model="highlight" color="#0099bc" />
+                            <color v-model="highlight" color="#0078d7" />
+                            <color v-model="highlight" color="#0063b1" />
+                            <color v-model="highlight" color="#8e8cd8" />
+                            <color v-model="highlight" color="#6b69d6" />
+                            <color v-model="highlight" color="#8764b8" />
+                            <color v-model="highlight" color="#744da9" />
+                            <color v-model="highlight" color="#b146c2" />
                         </div>
                     </div>
                 </div>
@@ -135,6 +140,8 @@
 </template>
 
 <script>
+    import Colors from "color-scheme";
+    import Extractor from "colorthief/dist/color-thief";
     import Color from "../elements/color.vue";
     import Backdrop from "../elements/backdrop.vue";
 
@@ -158,6 +165,8 @@
         data() {
             return {
                 loading: true,
+                auto: false,
+                backdrop: "",
                 highlight: "",
                 original: {},
                 working: {},
@@ -168,25 +177,30 @@
         async mounted() {
             this.original = await this.hoobs.theme.get(this.$store.state.theme);
             this.working = JSON.parse(JSON.stringify(this.original));
-            this.highlight = this.working.color;
+
+            this.backdrop = this.working.backdrop;
+            this.highlight = this.working.application.highlight;
+
+            this.auto = this.working.auto;
             this.mode = this.working.mode;
+
             this.loading = false;
         },
 
         watch: {
             highlight() {
-                if (!this.loading) {
-                    this.colors(this.highlight);
-                }
+                if (!this.loading) this.colors(this.highlight);
             },
 
             async mode() {
                 if (!this.loading) {
                     const { backdrop } = this.working;
+                    const { auto } = this.working;
 
                     this.original = await this.hoobs.theme.get(this.mode);
                     this.working = JSON.parse(JSON.stringify(this.original));
                     this.working.backdrop = backdrop;
+                    this.working.auto = auto;
 
                     this.colors(this.highlight);
                     this.dirty();
@@ -194,9 +208,14 @@
             },
 
             backdrop() {
-                if (!this.loading) {
-                    this.dirty();
-                }
+                this.working.backdrop = this.backdrop;
+
+                if (!this.loading && this.auto) this.extract();
+                if (!this.loading) this.dirty();
+            },
+
+            auto() {
+                if (!this.loading) this.extract();
             },
         },
 
@@ -223,259 +242,68 @@
                 return false;
             },
 
+            accent(value) {
+                const scheme = new Colors();
+
+                scheme.from_hex(value.replace("#", "").toUpperCase());
+                scheme.scheme("contrast");
+                scheme.variation("hard");
+
+                return `#${scheme.colors()[0]}`;
+            },
+
             colors(value) {
-                let highlight = "#feb400";
-                let accent = "#e3954b";
-
-                switch (value) {
-                    case "gold":
-                        this.working.color = value;
-
-                        highlight = "#ff8c00";
-                        accent = "#e3724b";
-                        break;
-
-                    case "orange":
-                        this.working.color = value;
-
-                        highlight = "#f7630c";
-                        accent = "#e3564b";
-                        break;
-
-                    case "orange-dark":
-                        this.working.color = value;
-
-                        highlight = "#ca5010";
-                        accent = "#e3544b";
-                        break;
-
-                    case "rust":
-                        this.working.color = value;
-
-                        highlight = "#da3b01";
-                        accent = "#e34b58";
-                        break;
-
-                    case "rust-light":
-                        this.working.color = value;
-
-                        highlight = "#ef6950";
-                        accent = "#e34b95";
-                        break;
-
-                    case "brick":
-                        this.working.color = value;
-
-                        highlight = "#d13438";
-                        accent = "#bf5024";
-                        break;
-
-                    case "brick-light":
-                        this.working.color = value;
-
-                        highlight = "#ff4343";
-                        accent = "#d134d1";
-                        break;
-
-                    case "red-light":
-                        this.working.color = value;
-
-                        highlight = "#e74856";
-                        accent = "#ff895e";
-                        break;
-
-                    case "red":
-                        this.working.color = value;
-
-                        highlight = "#e81123";
-                        accent = "#e87348";
-                        break;
-
-                    case "rose-light":
-                        this.working.color = value;
-
-                        highlight = "#ea005e";
-                        accent = "#b910e8";
-                        break;
-
-                    case "rose":
-                        this.working.color = value;
-
-                        highlight = "#c30052";
-                        accent = "#";
-                        break;
-
-                    case "plum-light":
-                        this.working.color = value;
-
-                        highlight = "#e3008c";
-                        accent = "#9c240b";
-                        break;
-
-                    case "plum":
-                        this.working.color = value;
-
-                        highlight = "#bf0077";
-                        accent = "#8100c2";
-                        break;
-
-                    case "orchid-light":
-                        this.working.color = value;
-
-                        highlight = "#c239b3";
-                        accent = "#8038c2";
-                        break;
-
-                    case "orchid":
-                        this.working.color = value;
-
-                        highlight = "#9a0089";
-                        accent = "#8038c2";
-                        break;
-
-                    case "violet":
-                        this.working.color = value;
-
-                        highlight = "#881798";
-                        accent = "#6738c2";
-                        break;
-
-                    case "violet-light":
-                        this.working.color = value;
-
-                        highlight = "#b146c2";
-                        accent = "#c2536e";
-                        break;
-
-                    case "iris":
-                        this.working.color = value;
-
-                        highlight = "#744da9";
-                        accent = "#8c508f";
-                        break;
-
-                    case "iris-light":
-                        this.working.color = value;
-
-                        highlight = "#8764b8";
-                        accent = "#9c659e";
-                        break;
-
-                    case "purple":
-                        this.working.color = value;
-
-                        highlight = "#6b69d6";
-                        accent = "#638eb8";
-                        break;
-
-                    case "purple-light":
-                        this.working.color = value;
-
-                        highlight = "#8e8cd8";
-                        accent = "#4e1d73";
-                        break;
-
-                    case "navy":
-                        this.working.color = value;
-
-                        highlight = "#0063b1";
-                        accent = "#8dd9d1";
-                        break;
-
-                    case "blue":
-                        this.working.color = value;
-
-                        highlight = "#0078d7";
-                        accent = "#00d6c5";
-                        break;
-
-                    case "cool":
-                        this.working.color = value;
-
-                        highlight = "#0099bc";
-                        accent = "#00d687";
-                        break;
-
-                    case "cool-dark":
-                        this.working.color = value;
-
-                        highlight = "#2d7d9a";
-                        accent = "#b0c0ff";
-                        break;
-
-                    case "seafoam":
-                        this.working.color = value;
-
-                        highlight = "#00b7c3";
-                        accent = "#b0faff";
-                        break;
-
-                    case "teal":
-                        this.working.color = value;
-
-                        highlight = "#038387";
-                        accent = "#05719e";
-                        break;
-
-                    case "mint":
-                        this.working.color = value;
-
-                        highlight = "#00b294";
-                        accent = "#0abf3a";
-                        break;
-
-                    case "mint-dark":
-                        this.working.color = value;
-
-                        highlight = "#018574";
-                        accent = "#069c5d";
-                        break;
-
-                    case "green-light":
-                        this.working.color = value;
-
-                        highlight = "#00cc6a";
-                        accent = "#71e30b";
-                        break;
-
-                    case "green":
-                        this.working.color = value;
-
-                        highlight = "#10893e";
-                        accent = "#61ede6";
-                        break;
-
-                    case "green-dark":
-                        this.working.color = value;
-
-                        highlight = "#107c10";
-                        accent = "#7df07d";
-                        break;
-
-                    case "olive":
-                        this.working.color = value;
-
-                        highlight = "#498205";
-                        accent = "#bcf07d";
-                        break;
-
-                    default:
-                        this.working.color = "yellow";
-
-                        highlight = "#feb400";
-                        accent = "#e3954b";
-                        break;
-                }
-
-                this.working.application.highlight = highlight;
-                this.working.application.accent = accent;
-                this.working.button.primary.background = highlight;
-                this.working.button.primary.border = highlight;
-                this.working.modal.highlight = highlight;
-                this.working.navigation.text.active = highlight;
-                this.working.navigation.highlight = highlight;
+                const color = value.toLowerCase();
+
+                this.working.application.highlight = color;
+                this.working.application.accent = this.accent(color);
+                this.working.button.primary.background = color;
+                this.working.button.primary.border = color;
+                this.working.modal.highlight = color;
+                this.working.navigation.text.active = color;
+                this.working.navigation.highlight = color;
 
                 this.dirty();
+            },
+
+            extract() {
+                if (this.auto) {
+                    const extractor = new Extractor();
+                    const element = document.createElement("img");
+
+                    element.src = this.backdrop.replace("url('", "").replace("')", "");
+                    element.crossOrigin = "Anonymous";
+                    element.style.display = "none";
+
+                    element.addEventListener("load", () => {
+                        const color = (extractor.getColor(element).map((item) => {
+                            const hex = item.toString(16);
+
+                            return hex.length === 1 ? `0${hex}` : hex;
+                        }).join("").toUpperCase());
+
+                        const scheme = new Colors();
+
+                        scheme.from_hex(color.replace("#", "").toUpperCase());
+                        scheme.scheme("triade");
+                        scheme.variation("soft");
+
+                        element.remove();
+
+                        this.working.auto = true;
+                        this.highlight = `#${scheme.colors()[0]}`;
+                    });
+
+                    element.addEventListener("error", () => {
+                        element.remove();
+
+                        this.auto = false;
+                    });
+
+                    document.body.appendChild(element);
+                } else {
+                    this.working.auto = false;
+                }
             },
 
             async upload() {
@@ -485,9 +313,7 @@
 
                 const filename = await this.hoobs.theme.backdrop(data);
 
-                this.working.backdrop = `url('${THEMES_URL}/${filename}')`;
-
-                this.dirty();
+                this.backdrop = `url('${THEMES_URL}/${filename}')`;
             },
         },
     };
@@ -500,6 +326,10 @@
         overflow: hidden;
         flex-direction: column;
         margin: 0 0 0 10px;
+
+        .auto {
+            margin: 0 0 7px 0;
+        }
 
         .backdrop {
             width: 470px;

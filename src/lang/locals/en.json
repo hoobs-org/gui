@@ -2,8 +2,9 @@
     "en": {
         "about": "About",
         "accent": "Accent",
-        "apply": "Apply",
         "accessories": "Accessories",
+        "apply": "Apply",
+        "automatically_set": "Automatically Set",
         "backdrop": "Backdrop",
         "cancel": "Cancel",
         "celsius": "Celsius",

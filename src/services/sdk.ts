@@ -134,8 +134,8 @@ export interface ElevationTheme {
 export interface Theme {
     name: string;
     display: string;
+    auto?: boolean;
     mode: string;
-    color: string;
     transparency: string;
     application: ApplicationTheme;
     button: ButtonTheme;

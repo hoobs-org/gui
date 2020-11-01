@@ -20,7 +20,7 @@
     <div
         id="color"
         v-on:click="select()"
-        :class="value === name ? 'active' : ''"
+        :class="value.toLowerCase() === color.toLowerCase() ? 'active' : ''"
         :style="`background-color: ${color};`"
     >
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -35,13 +35,12 @@
 
         props: {
             value: String,
-            name: String,
             color: String,
         },
 
         methods: {
             select() {
-                this.$emit("input", this.name);
+                this.$emit("input", this.color.toLowerCase());
             },
         },
     };

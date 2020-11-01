@@ -89,10 +89,6 @@
             overflow: hidden;
             margin: 0 10px 0 0;
 
-            &:hover {
-                overflow: overlay;
-            }
-
             .form {
                 flex: 1;
                 display: flex;
@@ -102,6 +98,11 @@
                 padding: 20px;
                 margin: 10px 0 0 0;
                 border-radius: 4px;
+                overflow: hidden;
+
+                &:hover {
+                    overflow: overlay;
+                }
 
                 .seperator {
                     height: 1px;
@@ -164,6 +165,17 @@
                 border-radius: unset;
                 overflow: auto;
                 box-shadow: unset;
+            }
+
+            .content {
+                overflow: auto;
+
+                .form {
+                    border: unset;
+                    background: unset;
+                    padding: 0;
+                    border-radius: unset;
+                }
             }
 
             .actions {
