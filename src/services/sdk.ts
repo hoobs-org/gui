@@ -815,8 +815,12 @@ export default function sdk(get: () => string, set: (token: string) => void) {
                 }));
             },
 
-            async backdrop(form: FormData): Promise<string> {
+            async backdrop(image: Blob): Promise<string> {
                 await wait();
+
+                const form = new FormData();
+
+                form.append("file", image);
 
                 return (await Request.post(`${API_URL}/themes/backdrop`, form, {
                     headers: {

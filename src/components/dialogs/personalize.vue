@@ -234,9 +234,7 @@
             async save() {
                 this.loading = true;
 
-                if (this.working.name !== "light" && this.working.name !== "dark") {
-                    await this.hoobs.theme.save(this.working.display, this.working);
-                }
+                if (this.working.name !== "light" && this.working.name !== "dark") await this.hoobs.theme.save(this.working.display, this.working);
 
                 this.theme(this.working.name);
                 this.close();
@@ -334,13 +332,7 @@
             },
 
             async upload() {
-                const data = new FormData();
-
-                data.append("file", this.$refs.backdrop.files[0]);
-
-                const filename = await this.hoobs.theme.backdrop(data);
-
-                this.backdrop = `url('${THEMES_URL}/${filename}')`;
+                this.backdrop = `url('${THEMES_URL}/${(await this.hoobs.theme.backdrop(this.$refs.backdrop.files[0]))}')`;
             },
         },
     };
