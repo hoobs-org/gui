@@ -42,7 +42,7 @@ export default class Themes {
 
     static mixin(store?: Store<any>) {
         return {
-            $theme(name: string) {
+            theme(name: string) {
                 Themes.set(name, store);
             },
         };

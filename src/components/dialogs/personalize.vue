@@ -27,20 +27,20 @@
                     <div class="row">
                         <div class="backdrop" :style="`background-color: ${working.application.background}; background-image: ${backdrop};`">
                             <div class="display dark" :style="`background: ${working.application.background}; box-shadow: ${working.elevation.default};`">
-                                <div class="title" :style="`color: ${working.application.highlight};`">{{ $t("title") }}</div>
-                                <div class="accent" :style="`color: ${working.application.accent};`">{{ $t("accent") }}</div>
-                                <div class="text" :style="`color: ${working.application.text.default};`">{{ $t("text") }}</div>
+                                <div v-if="!updating" class="title" :style="`color: ${working.application.highlight};`">{{ $t("title") }}</div>
+                                <div v-if="!updating" class="accent" :style="`color: ${working.application.accent};`">{{ $t("accent") }}</div>
+                                <div v-if="!updating" class="text" :style="`color: ${working.application.text.default};`">{{ $t("text") }}</div>
                             </div>
                             <div class="display light" :style="`background: ${working.modal.background}; backdrop-filter: ${working.transparency}; box-shadow: ${working.elevation.default};`">
-                                <div class="title" :style="`color: ${working.modal.highlight};`">{{ $t("title") }}</div>
-                                <div class="text" :style="`color: ${working.modal.text.default};`">{{ $t("text") }}</div>
+                                <div v-if="!updating" class="title" :style="`color: ${working.modal.highlight};`">{{ $t("title") }}</div>
+                                <div v-if="!updating" class="text" :style="`color: ${working.modal.text.default};`">{{ $t("text") }}</div>
                             </div>
                             <div class="display navigation" :style="`background: ${working.navigation.background};`">
-                                <span class="icon" :style="`color: ${working.navigation.highlight};`">dashboard</span>
-                                <span class="icon" :style="`color: ${working.navigation.text.default};`">highlight</span>
-                                <span class="icon" :style="`color: ${working.navigation.text.default};`">subject</span>
-                                <span class="icon" :style="`color: ${working.navigation.text.default};`">layers</span>
-                                <span class="icon" :style="`color: ${working.navigation.text.default};`">extension</span>
+                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.highlight};`">dashboard</span>
+                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.text.default};`">highlight</span>
+                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.text.default};`">subject</span>
+                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.text.default};`">layers</span>
+                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.text.default};`">extension</span>
                             </div>
                         </div>
                         <div class="backdrops">
@@ -165,6 +165,7 @@
         data() {
             return {
                 loading: true,
+                updating: false,
                 auto: false,
                 backdrop: "",
                 highlight: "",
@@ -178,44 +179,54 @@
             this.original = await this.hoobs.theme.get(this.$store.state.theme);
             this.working = JSON.parse(JSON.stringify(this.original));
 
-            this.backdrop = this.working.backdrop;
-            this.highlight = this.working.application.highlight;
-
             this.auto = this.working.auto;
             this.mode = this.working.mode;
+
+            this.backdrop = this.working.backdrop;
+            this.highlight = this.working.auto ? "auto" : this.working.application.highlight;
+
+            if (this.auto) await this.extract();
 
             this.loading = false;
         },
 
         watch: {
             highlight() {
-                if (!this.loading) this.colors(this.highlight);
+                if (!this.loading && this.highlight !== "auto") this.colors(this.highlight);
             },
 
             async mode() {
-                if (!this.loading) {
+                if (!this.loading && !this.updating) {
+                    this.updating = true;
+
                     const { backdrop } = this.working;
                     const { auto } = this.working;
 
                     this.original = await this.hoobs.theme.get(this.mode);
                     this.working = JSON.parse(JSON.stringify(this.original));
+
                     this.working.backdrop = backdrop;
                     this.working.auto = auto;
 
-                    this.colors(this.highlight);
+                    this.highlight = this.working.auto ? "auto" : this.working.application.highlight;
+
+                    if (this.auto) await this.extract();
+                    if (!this.auto) this.colors(this.highlight);
+
+                    this.updating = false;
                     this.dirty();
                 }
             },
 
-            backdrop() {
+            async backdrop() {
                 this.working.backdrop = this.backdrop;
 
-                if (!this.loading && this.auto) this.extract();
+                if (!this.loading && this.auto) await this.extract();
                 if (!this.loading) this.dirty();
             },
 
-            auto() {
-                if (!this.loading) this.extract();
+            async auto() {
+                if (!this.loading) await this.extract();
             },
         },
 
@@ -227,7 +238,7 @@
                     await this.hoobs.theme.save(this.working.display, this.working);
                 }
 
-                this.$theme(this.working.name);
+                this.theme(this.working.name);
                 this.close();
             },
 
@@ -267,43 +278,59 @@
             },
 
             extract() {
-                if (this.auto) {
-                    const extractor = new Extractor();
-                    const element = document.createElement("img");
+                return new Promise((resolve) => {
+                    if (this.auto) {
+                        const extractor = new Extractor();
+                        const element = document.createElement("img");
 
-                    element.src = this.backdrop.replace("url('", "").replace("')", "");
-                    element.crossOrigin = "Anonymous";
-                    element.style.display = "none";
+                        element.src = this.backdrop.replace("url('", "").replace("')", "");
+                        element.crossOrigin = "Anonymous";
+                        element.style.display = "none";
 
-                    element.addEventListener("load", () => {
-                        const color = (extractor.getColor(element).map((item) => {
-                            const hex = item.toString(16);
+                        element.addEventListener("load", () => {
+                            const color = extractor.getColor(element).map((item) => item.toString(16)).map((item) => (item.length === 1 ? `0${item}` : item)).join("");
+                            const scheme = new Colors();
 
-                            return hex.length === 1 ? `0${hex}` : hex;
-                        }).join("").toUpperCase());
+                            scheme.from_hex(color.replace("#", "").toUpperCase());
+                            scheme.scheme("triade");
+                            scheme.variation("soft");
 
-                        const scheme = new Colors();
+                            element.remove();
 
-                        scheme.from_hex(color.replace("#", "").toUpperCase());
-                        scheme.scheme("triade");
-                        scheme.variation("soft");
+                            const accent = `#${scheme.colors()[0]}`;
+                            const highlight = this.accent(`#${scheme.colors()[0]}`);
 
-                        element.remove();
+                            this.working.auto = true;
+                            this.highlight = "auto";
 
-                        this.working.auto = true;
-                        this.highlight = `#${scheme.colors()[0]}`;
-                    });
+                            this.working.application.highlight = highlight;
+                            this.working.application.accent = accent;
+                            this.working.button.primary.background = highlight;
+                            this.working.button.primary.border = highlight;
+                            this.working.modal.highlight = highlight;
+                            this.working.navigation.text.active = highlight;
+                            this.working.navigation.highlight = highlight;
 
-                    element.addEventListener("error", () => {
-                        element.remove();
+                            this.dirty();
 
-                        this.auto = false;
-                    });
+                            resolve();
+                        });
 
-                    document.body.appendChild(element);
-                } else {
-                    this.working.auto = false;
-                }
+                        element.addEventListener("error", () => {
+                            element.remove();
+
+                            this.auto = false;
+
+                            resolve();
+                        });
+
+                        document.body.appendChild(element);
+                    } else {
+                        this.working.auto = false;
+
+                        resolve();
+                    }
+                });
             },
 
             async upload() {
