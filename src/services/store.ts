@@ -129,10 +129,6 @@ export default new Vuex.Store({
             state.accessory = payload.data;
         },
 
-        "IO:CONFIG:CHANGE": (state: { [key: string ]: any }, payload: any) => {
-            state.config = payload.data;
-        },
-
         "SESSION:SET": (state: { [key: string ]: any }, token: string) => {
             state.session = token;
 
@@ -188,10 +184,6 @@ export default new Vuex.Store({
             } else {
                 state.auth = false;
             }
-        },
-
-        "CONFIG:SET": async (state: { [key: string ]: any }, hoobs: any) => {
-            state.config = await hoobs.config.get();
         },
 
         "THEME:SET": (state: { [key: string ]: any }, theme: number) => {
