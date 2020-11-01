@@ -108,10 +108,13 @@
         }
 
         .button {
+            height: 40px;
+            box-sizing: border-box;
             background: var(--button);
             color: var(--button-text) !important;
             text-decoration: none !important;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
             border: 1px var(--button-border) solid;
             border-radius: 4px;
             padding: 10px;

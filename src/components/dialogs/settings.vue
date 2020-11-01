@@ -17,43 +17,14 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="$t('settings')" width="760px" height="670px">
+    <modal :title="$t('settings')" width="760px" height="470px">
         <div id="settings">
             <div v-if="!loading" class="content">
-                <div class="form">
+                <div v-if="show.location" class="form">
                     <div class="row title">{{ $t("weather") }}</div>
                     <div class="seperator"></div>
-                    <div class="row title">{{ $t("temperature_units") }}</div>
-                    <div class="row">
-                        <radio id="celsius" name="units" v-model="units" value="celsius">
-                            <label for="celsius">{{ $t("celsius") }}</label>
-                        </radio>
-                    </div>
-                    <div class="row">
-                        <radio id="fahrenheit" name="units" v-model="units" value="fahrenheit">
-                            <label for="fahrenheit">{{ $t("fahrenheit") }}</label>
-                        </radio>
-                    </div>
-                    <div class="row title">{{ $t("location") }}</div>
-                    <div class="row">
-                        <input type="submit" class="hidden-submit" value="submit" />
-                        <div class="location">
-                            <div
-                                v-if="location"
-                                class="details"
-                            >
-                                <div>{{ $t("location_current_description") }}</div>
-                                <div>{{ $t("location_city") }} <span class="value">{{ location.name }}</span></div>
-                                <div>{{ $t("location_country") }} <span class="value">{{ location.country }}</span></div>
-                            </div>
-                            <div v-else class="details">
-                                {{ $t("location_search_required") }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row title"></div>
                     <form
-                        class="row"
+                        class="row locations"
                         autocomplete="false"
                         method="post"
                         action="/login"
@@ -81,13 +52,48 @@
                         </div>
                     </form>
                 </div>
+                <div v-else class="form">
+                    <div class="row title">{{ $t("weather") }}</div>
+                    <div class="seperator"></div>
+                    <div class="row title">{{ $t("temperature_units") }}</div>
+                    <div class="row">
+                        <radio id="celsius" name="units" v-model="units" value="celsius">
+                            <label for="celsius">{{ $t("celsius") }}</label>
+                        </radio>
+                    </div>
+                    <div class="row">
+                        <radio id="fahrenheit" name="units" v-model="units" value="fahrenheit">
+                            <label for="fahrenheit">{{ $t("fahrenheit") }}</label>
+                        </radio>
+                    </div>
+                    <div class="row title">{{ $t("location") }}</div>
+                    <div class="row">
+                        <input type="submit" class="hidden-submit" value="submit" />
+                        <div v-on:click="change()" class="button light">{{ $t("change") }}</div>
+                        <div class="location">
+                            <div v-if="location" class="details">
+                                <div>
+                                    {{ $t("location_city") }}
+                                    <span class="value">{{ location.name }}</span>
+                                </div>
+                                <div>
+                                    {{ $t("location_country") }}
+                                    <span class="value">{{ location.country }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div v-else class="loading">
                 <spinner />
             </div>
-            <div v-if="!loading" class="actions modal">
+            <div v-if="!loading && !show.location" class="actions modal">
                 <div class="button light" v-on:click="close()">{{ $t("cancel") }}</div>
                 <div class="button primary" v-on:click="save()">{{ $t("apply") }}</div>
+            </div>
+            <div v-if="!loading && show.location" class="actions modal">
+                <div class="button light" v-on:click="back()">{{ $t("cancel") }}</div>
             </div>
         </div>
     </modal>
@@ -111,6 +117,9 @@
         data() {
             return {
                 loading: true,
+                show: {
+                    location: false,
+                },
                 query: "",
                 position: {},
                 location: {},
@@ -122,15 +131,16 @@
         async mounted() {
             this.units = this.$store.state.units;
             this.location = this.$store.state.location;
-
-            if (!this.location) {
-                this.geolocation();
-            }
-
             this.loading = false;
         },
 
         methods: {
+            change() {
+                this.query = "";
+                this.locations = [];
+                this.show.location = true;
+            },
+
             save() {
                 this.loading = true;
 
@@ -140,8 +150,13 @@
                 this.close();
             },
 
+            back() {
+                this.show.location = false;
+            },
+
             select(index) {
                 this.location = this.locations[index];
+                this.show.location = false;
             },
 
             async geolocation() {
@@ -177,48 +192,52 @@
         flex-direction: column;
         margin: 0 0 0 10px;
 
-        .search {
-            width: 60%;
-            display: flex;
-            flex-direction: column;
-        }
+        .locations {
+            margin: 20px 0 0 0;
 
-        .results {
-            display: flex;
-            flex-direction: column;
-
-            .item {
+            .search {
+                width: 60%;
                 display: flex;
-                flex-direction: row;
-                align-items: center;
-                padding: 7px 20px;
-                border-bottom: var(--modal-border) 1px solid;
-                color: var(--modal-text);
-                user-select: none;
-                cursor: pointer;
+                flex-direction: column;
+            }
 
-                &:last-child {
-                    border-bottom: 0 none;
-                }
+            .results {
+                display: flex;
+                flex-direction: column;
 
-                .title {
-                    opacity: 0.7;
-                }
+                .item {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    padding: 7px 20px;
+                    border-bottom: var(--modal-border) 1px solid;
+                    color: var(--modal-text);
+                    user-select: none;
+                    cursor: pointer;
 
-                .icon {
-                    margin: 0 7px 0 0;
-                    font-size: 20px;
-                    color: var(--modal-highlight);
-                    opacity: 0.7;
-                }
+                    &:last-child {
+                        border-bottom: 0 none;
+                    }
 
-                &:hover {
                     .title {
-                        opacity: 1;
+                        opacity: 0.7;
                     }
 
                     .icon {
-                        opacity: 1;
+                        margin: 0 7px 0 0;
+                        font-size: 20px;
+                        color: var(--modal-highlight);
+                        opacity: 0.7;
+                    }
+
+                    &:hover {
+                        .title {
+                            opacity: 1;
+                        }
+
+                        .icon {
+                            opacity: 1;
+                        }
                     }
                 }
             }
@@ -232,7 +251,8 @@
                 flex: 1;
                 display: flex;
                 flex-direction: column;
-                font-size: 12px;
+                margin: 4px 0 0 7px;
+                font-size: 13px;
 
                 .value {
                     font-weight: bold;

@@ -25,7 +25,7 @@
                         {{ $t("backdrop") }}
                     </div>
                     <div class="row desktop-only">
-                        <div class="backdrop" :style="`background-image: ${working.backdrop};`">
+                        <div class="backdrop" :style="`background-color: ${working.application.background}; background-image: ${working.backdrop};`">
                             <div class="display dark" :style="`background: ${working.application.background}; box-shadow: ${working.elevation.default};`">
                                 <div class="title" :style="`color: ${working.application.highlight};`">{{ $t("title") }}</div>
                                 <div class="accent" :style="`color: ${working.application.accent};`">{{ $t("accent") }}</div>
