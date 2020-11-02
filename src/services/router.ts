@@ -94,6 +94,14 @@ const routes: Array<RouteConfig> = [
         },
         component: () => import(/* webpackChunkName: "config" */ "../views/config.vue"),
     },
+    {
+        path: "/terminal",
+        name: "terminal",
+        meta: {
+            layout: "authenticated",
+        },
+        component: () => import(/* webpackChunkName: "terminal" */ "../views/terminal.vue"),
+    },
 ];
 
 const router = new VueRouter({

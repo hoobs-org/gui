@@ -17,73 +17,34 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="field">
-        <span class="title">{{ name }}</span>
-        <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <input
-            type="password"
-            ref="field"
-            autocomplete="false"
-            :value="value"
-            v-on:input="update()"
-            v-on:change="change"
-            v-bind:required="required"
-        />
-    </div>
+    <modal :title="title || $t('confirm')" width="490px" height="240px">
+        <div class="content message">
+            {{ message }}
+        </div>
+        <div class="actions modal">
+            <div class="button light" v-on:click="close()">{{ cancel || $t("cancel") }}</div>
+            <div class="button primary" v-on:click="confirm()">{{ ok || $t("ok") }}</div>
+        </div>
+    </modal>
 </template>
 
 <script>
     export default {
-        name: "password-field",
+        name: "confirm",
+
         props: {
-            name: String,
-            description: String,
-            value: String,
-            required: {
-                type: Boolean,
-                default: false,
+            title: String,
+            message: String,
+            ok: String,
+            cancel: String,
+            confirm: {
+                type: Function,
+                default: () => { /* null */ },
             },
-        },
-
-        methods: {
-            update() {
-                this.$emit("input", this.$refs.field.value);
-            },
-
-            change() {
-                this.$emit("change", this.$refs.field.value);
+            close: {
+                type: Function,
+                default: () => { /* null */ },
             },
         },
     };
 </script>
-
-<style lang="scss" scoped>
-    #field {
-        display: flex;
-        flex-direction: column;
-        padding: 0 0 20px 0;
-
-        .title {
-            font-size: 14px;
-            margin: 0 0 7px 0;
-            user-select: none;
-        }
-
-        .description {
-            font-size: 12px;
-            margin: -7px 0 7px 0;
-            user-select: none;
-        }
-
-        input {
-            flex: 1;
-            padding: 7px;
-            font-size: 14px;
-            border-radius: 4px;
-
-            &:focus {
-                outline: 0 none;
-            }
-        }
-    }
-</style>

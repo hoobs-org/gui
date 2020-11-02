@@ -89,6 +89,15 @@
             overflow: hidden;
             margin: 0 10px 0 0;
 
+            &.message {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                text-align: center;
+                padding: 20px 10px;
+                user-select: none;
+            }
+
             .form {
                 flex: 1;
                 display: flex;
@@ -104,22 +113,28 @@
                     overflow: overlay;
                 }
 
-                .seperator {
-                    height: 1px;
-                    background: var(--modal-border);
-                    margin: 7px 0 0 0;
+                .spacer {
+                    margin: 7px 0 14px 0;
                 }
 
                 .row {
                     display: flex;
                     flex-direction: row;
 
-                    &.title {
-                        padding: 20px 0 7px 0;
+                    &.section {
+                        padding: 20px 0 10px 0;
+                        border-bottom: var(--modal-border) 1px solid;
+                        margin: 0 0 20px 0;
+                        user-select: none;
 
                         &:first-child {
-                            padding: 0 0 7px 0;
+                            padding: 0 0 10px 0;
                         }
+                    }
+
+                    &.title {
+                        padding: 0 0 7px 0;
+                        user-select: none;
                     }
                 }
             }

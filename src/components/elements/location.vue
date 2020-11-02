@@ -18,8 +18,7 @@
 
 <template>
     <div id="location" class="form">
-        <div class="row title">{{ $t("weather") }}</div>
-        <div class="seperator"></div>
+        <div class="row section">{{ $t("weather") }}</div>
         <form
             class="row locations"
             autocomplete="false"
@@ -90,7 +89,7 @@
 
                 this.show.searching = true;
 
-                this.locations = (await this.hoobs.location(this.query)).map((item) => ({
+                this.locations = (await this.hoobs.location(this.query, 9)).map((item) => ({
                     id: item.id,
                     name: item.name,
                     country: item.country,
@@ -105,7 +104,7 @@
 <style lang="scss" scoped>
     #location {
         .locations {
-            margin: 20px 0 0 0;
+            margin: 0;
 
             .search {
                 width: 60%;

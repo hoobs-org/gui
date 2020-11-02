@@ -68,11 +68,13 @@
         .title {
             font-size: 14px;
             margin: 0 0 7px 0;
+            user-select: none;
         }
 
         .description {
             font-size: 12px;
             margin: -7px 0 7px 0;
+            user-select: none;
         }
 
         input {

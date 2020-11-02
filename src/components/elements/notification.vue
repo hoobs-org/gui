@@ -50,6 +50,7 @@
         margin: 0 20px 14px 20px;
         display: flex;
         background: var(--application-dark);
+        user-select: none;
         border-radius: 4px;
 
         .type {

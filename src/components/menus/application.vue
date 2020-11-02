@@ -31,6 +31,7 @@
         <div v-if="auth" class="seperator desktop-only"></div>
         <div v-on:click="settings()" class="item">{{ $t("settings") }}</div>
         <div v-on:click="personalize()" class="item">{{ $t("personalize") }}</div>
+        <div v-on:click="terminal()" class="item desktop-only">{{ $t("terminal") }}</div>
         <div v-if="auth" class="seperator desktop-only"></div>
         <div v-if="auth" v-on:click="logout()" class="item">{{ $t("logout") }}</div>
         <div v-on:click="close()" class="icon close mobile-only">close</div>
@@ -55,6 +56,10 @@
                 default: () => { /* null */ },
             },
             personalize: {
+                type: Function,
+                default: () => { /* null */ },
+            },
+            terminal: {
                 type: Function,
                 default: () => { /* null */ },
             },

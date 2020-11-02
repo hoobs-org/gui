@@ -28,8 +28,8 @@
             step="1"
             max="65535"
             :value="value"
-            @input="update()"
-            @change="change"
+            v-on:input="update()"
+            v-on:change="change"
             v-bind:required="required"
         />
     </div>
@@ -69,11 +69,13 @@
         .title {
             font-size: 14px;
             margin: 0 0 7px 0;
+            user-select: none;
         }
 
         .description {
             font-size: 12px;
             margin: -7px 0 7px 0;
+            user-select: none;
         }
 
         input {

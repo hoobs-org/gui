@@ -469,11 +469,11 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.reset = async (): Promise<void> => {
                 await wait();
 
-                (await Request.put(`${API_URL}/system/reset`, null, {
+                Request.put(`${API_URL}/system/reset`, null, {
                     headers: {
                         authorization: get(),
                     },
-                }));
+                });
             };
 
             return results;
@@ -728,7 +728,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             results.purge = async (): Promise<void> => {
                 await wait();
 
-                (await Request.get(`${API_URL}/bridge/${id}/purge`, {
+                (await Request.post(`${API_URL}/bridge/${id}/purge`, null, {
                     headers: {
                         authorization: get(),
                     },
@@ -830,10 +830,10 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             },
         },
 
-        async location(query: string): Promise<{ [key: string]: number | string }> {
+        async location(query: string, count?: number): Promise<{ [key: string]: number | string }> {
             await wait();
 
-            return (await Request.get(`${API_URL}/weather/location?query=${encodeURIComponent(query)}`, {
+            return (await Request.get(`${API_URL}/weather/location?query=${encodeURIComponent(query)}&count=${count || 5}`, {
                 headers: {
                     authorization: get(),
                 },

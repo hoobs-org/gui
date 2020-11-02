@@ -74,6 +74,7 @@
         .title {
             font-size: 14px;
             margin: 0 0 7px 0;
+            user-select: none;
         }
 
         .icon {
@@ -82,6 +83,7 @@
             right: 2px;
             color: var(--modal-text);
             opacity: 0.5;
+            user-select: none;
             cursor: pointer;
 
             &:hover {
@@ -92,6 +94,7 @@
         .description {
             font-size: 12px;
             margin: -7px 0 7px 0;
+            user-select: none;
         }
 
         input {

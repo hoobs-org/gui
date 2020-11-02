@@ -97,12 +97,14 @@
             justify-content: space-between;
             color: var(--application-highlight);
             border-bottom: var(--application-border) 1px solid;
+            user-select: none;
             margin: 14px;
             padding: 0 0 7px 0;
 
             .icon {
                 font-size: 17px;
                 color: var(--application-text);
+                user-select: none;
                 cursor: pointer;
             }
         }
@@ -123,6 +125,7 @@
             justify-content: space-around;
             align-items: center;
             padding: 0 0 20% 0;
+            user-select: none;
             font-size: 14px;
         }
     }

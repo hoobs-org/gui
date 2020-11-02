@@ -17,13 +17,12 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="$t('settings')" width="760px" height="470px">
+    <modal :title="$t('settings')" width="760px" height="620px">
         <div id="settings">
             <div v-if="!loading" class="content">
                 <location v-if="show.location" :select="select" />
                 <div v-else class="form">
-                    <div class="row title">{{ $t("weather") }}</div>
-                    <div class="seperator"></div>
+                    <div class="row section">{{ $t("weather") }}</div>
                     <div class="row title">{{ $t("temperature_units") }}</div>
                     <div class="row">
                         <radio id="celsius" name="units" v-model="units" value="celsius">
@@ -35,7 +34,7 @@
                             <label for="fahrenheit">{{ $t("fahrenheit") }}</label>
                         </radio>
                     </div>
-                    <div class="row title">{{ $t("location") }}</div>
+                    <div class="row title spaced">{{ $t("location") }}</div>
                     <div class="row">
                         <input type="submit" class="hidden-submit" value="submit" />
                         <div v-on:click="change()" class="button light">{{ $t("change") }}</div>
@@ -51,6 +50,22 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row section">{{ $t("monitor") }}</div>
+                    <div class="row">
+                        <number-field
+                            :name="$t('update_interval')"
+                            :description="$t('update_interval_description')"
+                            :min="1"
+                            :max="300"
+                            v-model="interval"
+                        />
+                    </div>
+                    <div class="row section">{{ $t("system") }}</div>
+                    <div class="row">
+                        <div v-on:click="reboot()" class="button light">{{ $t("reboot_device") }}</div>
+                        <div v-on:click="purge()" class="button light">{{ $t("purge_cache") }}</div>
+                        <div v-on:click="reset()" class="button light">{{ $t("factory_reset") }}</div>
                     </div>
                 </div>
             </div>
@@ -71,6 +86,7 @@
 <script>
     import Location from "../elements/location.vue";
     import Countries from "../../lang/country-codes.json";
+    import { wait } from "../../services/sdk";
 
     export default {
         name: "personalize",
@@ -94,6 +110,7 @@
                 },
                 location: {},
                 units: "celsius",
+                interval: 5,
                 countries: Countries,
             };
         },
@@ -106,9 +123,71 @@
             this.loading = false;
         },
 
+        watch: {
+            interval() {
+                if (this.interval < 1) {
+                    this.interval = 1;
+                }
+
+                if (this.interval > 300) {
+                    this.interval = 300;
+                }
+            },
+        },
+
         methods: {
             change() {
                 this.show.location = true;
+            },
+
+            reboot() {
+                this.$parent.confirm(this.$t("reboot_device"), this.$t("reboot_warning"), this.$t("reboot"), async () => {
+                    const system = await this.hoobs.system();
+
+                    await system.reboot();
+
+                    this.$parent.show.confirmation = false;
+                    this.loading = true;
+
+                    setTimeout(() => {
+                        window.location.href = "/";
+                    }, 5 * 1000);
+                });
+            },
+
+            purge() {
+                this.$parent.confirm(this.$t("purge_cache"), this.$t("purge_warning"), this.$t("purge"), async () => {
+                    const instances = await this.hoobs.instances.list();
+
+                    for (let i = 0; i < instances.length; i += 1) {
+                        this.clear(instances[i].id);
+                    }
+
+                    this.$parent.show.confirmation = false;
+                });
+            },
+
+            async clear(id) {
+                const instance = await this.hoobs.instance(id);
+
+                await instance.purge();
+            },
+
+            reset() {
+                this.$parent.confirm(this.$t("factory_reset"), this.$t("reset_warning"), this.$t("reset"), async () => {
+                    const system = await this.hoobs.system();
+
+                    await system.reset();
+
+                    this.$parent.show.confirmation = false;
+                    this.loading = true;
+
+                    setTimeout(async () => {
+                        await wait();
+
+                        window.location.href = "/";
+                    }, 5 * 1000);
+                });
             },
 
             async save() {
@@ -118,9 +197,11 @@
                 const weather = {};
 
                 if (this.location && this.location.id && this.location.id > 0) weather.location = this.location;
+                if (!config.api) config.api = {};
 
                 weather.units = this.units.toLowerCase() === "celsius" ? "celsius" : "fahrenheit";
                 config.weather = weather;
+                config.api.polling_seconds = this.interval < 2 ? 2 : this.interval;
 
                 await this.hoobs.config.update(config);
 
@@ -147,6 +228,10 @@
         flex-direction: column;
         margin: 0 0 0 10px;
 
+        .spaced {
+            margin: 20px 0 0 0;
+        }
+
         .location {
             display: flex;
             flex-direction: column;
@@ -157,6 +242,7 @@
                 flex-direction: column;
                 margin: 4px 0 0 7px;
                 font-size: 13px;
+                user-select: none;
 
                 .value {
                     font-weight: bold;

@@ -21,9 +21,11 @@
         <span class="title">{{ name }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
         <input
-            type="password"
+            type="number"
             ref="field"
             autocomplete="false"
+            :min="min !== undefined ? min : ''"
+            :max="max !== undefined ? max : ''"
             :value="value"
             v-on:input="update()"
             v-on:change="change"
@@ -34,11 +36,13 @@
 
 <script>
     export default {
-        name: "password-field",
+        name: "number-field",
         props: {
             name: String,
             description: String,
-            value: String,
+            value: Number,
+            min: Number,
+            max: Number,
             required: {
                 type: Boolean,
                 default: false,
@@ -47,11 +51,11 @@
 
         methods: {
             update() {
-                this.$emit("input", this.$refs.field.value);
+                this.$emit("input", parseInt(this.$refs.field.value, 10));
             },
 
             change() {
-                this.$emit("change", this.$refs.field.value);
+                this.$emit("change", parseInt(this.$refs.field.value, 10));
             },
         },
     };

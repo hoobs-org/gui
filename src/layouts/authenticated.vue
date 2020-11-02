@@ -36,17 +36,27 @@
             :help="() => navigate('https://support.hoobs.org/docs')"
             :settings="() => { toggle('settings') }"
             :personalize="() => { toggle('personalize') }"
+            :terminal="terminal"
             :close="() => { toggle('application') }"
             :logout="logout"
         />
         <about v-if="show.about" :close="() => { toggle('about') }" />
         <settings v-if="show.settings" :close="() => { toggle('settings') }" />
         <personalize v-if="show.personalize" :close="() => { toggle('personalize') }" />
+        <confirm
+            v-if="show.confirmation"
+            :title="confirmation.title"
+            :message="confirmation.message"
+            :ok="confirmation.ok"
+            :confirm="confirmation.action"
+            :close="() => { show.confirmation = false; }"
+        />
     </div>
 </template>
 
 <script>
     import About from "../components/dialogs/about.vue";
+    import Confirm from "../components/dialogs/confirm.vue";
     import Navigation from "../components/navigation.vue";
     import Notifications from "../components/notifications.vue";
     import ApplicationMenu from "../components/menus/application.vue";
@@ -58,6 +68,7 @@
 
         components: {
             "about": About,
+            "confirm": Confirm,
             "settings": Settings,
             "navigation": Navigation,
             "personalize": Personalize,
@@ -79,6 +90,13 @@
                     about: false,
                     settings: false,
                     personalize: false,
+                    confirmation: false,
+                },
+                confirmation: {
+                    action: () => { /* null */ },
+                    message: "",
+                    title: "",
+                    ok: "",
                 },
             };
         },
@@ -98,6 +116,15 @@
                 this.$router.push({ path: "/login", query: { url: "/" } });
             },
 
+            confirm(title, message, ok, action) {
+                this.confirmation.title = title;
+                this.confirmation.message = message;
+                this.confirmation.ok = ok;
+                this.confirmation.action = action;
+
+                this.show.confirmation = true;
+            },
+
             reset(ignore) {
                 const keys = Object.keys(this.show);
 
@@ -106,6 +133,12 @@
                         this.show[keys[i]] = false;
                     }
                 }
+            },
+
+            terminal() {
+                this.show.application = false;
+
+                if (this.$route.name !== "terminal") this.$router.push({ path: "/terminal" });
             },
 
             help() {

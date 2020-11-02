@@ -77,6 +77,17 @@ module.exports = {
         },
         {
             files: [
+                "src/components/dialogs/settings.vue",
+            ],
+            rules: {
+                indent: "off",
+                "quote-props": "off",
+                "@typescript-eslint/indent": "off",
+                "@typescript-eslint/camelcase": "off",
+            },
+        },
+        {
+            files: [
                 "src/services/maps.ts",
             ],
             rules: {

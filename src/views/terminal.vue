@@ -17,73 +17,11 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="field">
-        <span class="title">{{ name }}</span>
-        <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <input
-            type="password"
-            ref="field"
-            autocomplete="false"
-            :value="value"
-            v-on:input="update()"
-            v-on:change="change"
-            v-bind:required="required"
-        />
-    </div>
+    <div id="terminal"></div>
 </template>
 
 <script>
     export default {
-        name: "password-field",
-        props: {
-            name: String,
-            description: String,
-            value: String,
-            required: {
-                type: Boolean,
-                default: false,
-            },
-        },
-
-        methods: {
-            update() {
-                this.$emit("input", this.$refs.field.value);
-            },
-
-            change() {
-                this.$emit("change", this.$refs.field.value);
-            },
-        },
+        name: "terminal",
     };
 </script>
-
-<style lang="scss" scoped>
-    #field {
-        display: flex;
-        flex-direction: column;
-        padding: 0 0 20px 0;
-
-        .title {
-            font-size: 14px;
-            margin: 0 0 7px 0;
-            user-select: none;
-        }
-
-        .description {
-            font-size: 12px;
-            margin: -7px 0 7px 0;
-            user-select: none;
-        }
-
-        input {
-            flex: 1;
-            padding: 7px;
-            font-size: 14px;
-            border-radius: 4px;
-
-            &:focus {
-                outline: 0 none;
-            }
-        }
-    }
-</style>
