@@ -96,7 +96,7 @@
         min-width: 197px;
         position: absolute;
         top: 48px;
-        right: 14px;
+        right: 21px;
         display: flex;
         flex-direction: column;
         color: var(--menu-text);
