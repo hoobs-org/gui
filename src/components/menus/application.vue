@@ -95,7 +95,7 @@
     #menu {
         min-width: 197px;
         position: absolute;
-        top: 41px;
+        top: 48px;
         right: 14px;
         display: flex;
         flex-direction: column;
@@ -103,7 +103,7 @@
         background: var(--menu-background);
         backdrop-filter: var(--transparency);
         border-radius: 4px;
-        z-index: 300;
+        z-index: 3000;
         box-shadow: var(--elevation);
 
         .seperator {

@@ -41,14 +41,16 @@ const open = [
     "/setup",
 ];
 
+const io = socket();
+
 const hoobs = sdk(() => store.state.session, (token) => {
     store.commit("SESSION:SET", token);
 });
 
-socket.on("log", (data) => store.commit("IO:LOG", data));
-socket.on("monitor", (data) => store.commit("IO:MONITOR", data));
-socket.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
-socket.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
+io.on("log", (data) => store.commit("IO:LOG", data));
+io.on("monitor", (data) => store.commit("IO:MONITOR", data));
+io.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
+io.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
 
 hoobs.log().then((messages) => {
     store.commit("LOG:HISTORY", messages);

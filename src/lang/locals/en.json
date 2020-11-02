@@ -51,6 +51,7 @@
         "logout": "Log Out",
         "mode": "Mode",
         "monitor": "Monitor",
+        "motd": "This terminal is here to help manage this device. If you need to install a plugn please use the interface.",
         "name": "Name",
         "name_description": "Enter your full name.",
         "notifications": "Notifications",

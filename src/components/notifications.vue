@@ -91,6 +91,7 @@
         background: var(--application-drawer);
         backdrop-filter: var(--transparency);
         box-shadow: var(--elevation);
+        z-index: 1200;
 
         .title {
             display: flex;

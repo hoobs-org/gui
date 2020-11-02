@@ -174,8 +174,16 @@
         }
 
         .header {
+            height: 48px;
+            position: absolute;
+            top: 7px;
+            right: 7px;
             display: flex;
+            padding: 0 0 0 7px;
             justify-content: flex-end;
+            background: var(--application-background);
+            border-radius: 24px;
+            z-index: 1100;
 
             .icon {
                 width: 34px;

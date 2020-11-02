@@ -56,6 +56,7 @@
         background: var(--modal-mask);
         justify-content: space-around;
         padding: 20px 20px 10em 20px;
+        z-index: 2000;
 
         .subject {
             color: var(--modal-highlight);
