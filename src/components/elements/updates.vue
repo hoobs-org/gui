@@ -79,7 +79,7 @@
 
         async mounted() {
             this.version = await this.hoobs.version();
-            this.latest = "5.0.1"; // await this.hoobs.latest();
+            this.latest = await this.hoobs.latest();
             this.plugins = (await this.hoobs.plugins()).filter((item) => !Semver.compare(item.version, item.latest, ">="));
 
             this.stack = !Semver.compare(this.version, this.latest, ">=");
