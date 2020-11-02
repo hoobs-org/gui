@@ -256,11 +256,6 @@
 
 <style lang="scss" scoped>
     #setup {
-        background-image: var(--backdrop);
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: cover;
-
         .loading {
             flex: 1;
             display: flex;

@@ -19,7 +19,7 @@
 <template>
     <div id="navigation">
         <div class="links">
-            <div class="logo">
+            <div class="logo desktop-only">
                 <svg
                     viewBox="0 0 80 80.92"
                     xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +74,7 @@
                 <span class="icon">extension</span>
                 <span v-if="expanded" class="title desktop-only">{{ $t("plugins") }}</span>
             </router-link>
-            <div class="fill"></div>
+            <div class="fill desktop-only"></div>
             <router-link class="route" to="/config">
                 <span class="icon">settings</span>
             </router-link>
@@ -167,6 +167,20 @@
 
             .fill {
                 flex: 1;
+            }
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #navigation {
+            display: flex;
+            flex-direction: column;
+            padding: 14px 20px 0 20px;
+            order: 1;
+
+            .links {
+                flex-direction: row;
+                justify-content: space-between;
             }
         }
     }

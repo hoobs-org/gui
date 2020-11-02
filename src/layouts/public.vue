@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="layout">
+    <div id="public">
         <slot />
     </div>
 </template>
@@ -29,12 +29,21 @@
 </script>
 
 <style lang="scss">
-    #layout {
+    #public {
         width: 100%;
         height: 100%;
         display: flex;
         font-family: "Montserrat", sans-serif;
         color: var(--application-text);
-        background: var(--application-background);
+        background-image: var(--backdrop);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #public {
+            background-image: unset;
+        }
     }
 </style>

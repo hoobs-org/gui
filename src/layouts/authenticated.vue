@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-on:click="reset()" id="layout">
+    <div v-on:click="reset()" id="authenticated">
         <navigation />
         <div class="screen">
             <div class="header">
@@ -126,7 +126,7 @@
 </script>
 
 <style lang="scss">
-    #layout {
+    #authenticated {
         width: 100%;
         height: 100%;
         display: flex;
@@ -171,6 +171,12 @@
                     color: var(--application-highlight-text);
                 }
             }
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #authenticated {
+            flex-direction: column;
         }
     }
 </style>

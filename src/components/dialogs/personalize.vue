@@ -21,10 +21,10 @@
         <div id="personalize">
             <div v-if="!loading" class="content">
                 <div class="form">
-                    <div class="row title">
-                        {{ $t("backdrop") }}
+                    <div v-if="auth" class="row title desktop-only">
+                        {{ $t("login_image") }}
                     </div>
-                    <div class="row">
+                    <div v-if="auth" class="row desktop-only">
                         <div class="backdrop" :style="`background-color: ${working.application.background}; background-image: ${backdrop};`">
                             <div class="display dark" :style="`background: ${working.application.background}; box-shadow: ${working.elevation.default};`">
                                 <div v-if="!updating" class="title" :style="`color: ${working.application.highlight};`">{{ $t("title") }}</div>
@@ -81,50 +81,46 @@
                     <div class="row title">
                         {{ $t("color") }}
                     </div>
-                    <div class="row auto">
+                    <div v-if="auth" class="row auto desktop-only">
                         <checkbox id="auto" v-model="auto">
                             <label for="auto">{{ $t("automatically_set") }}</label>
                         </checkbox>
                     </div>
                     <div v-on:click="() => { auto = false; }" class="row colors">
-                        <div class="row">
-                            <color v-model="highlight" color="#feb400" />
-                            <color v-model="highlight" color="#ff8c00" />
-                            <color v-model="highlight" color="#f7630c" />
-                            <color v-model="highlight" color="#ca5010" />
-                            <color v-model="highlight" color="#da3b01" />
-                            <color v-model="highlight" color="#ef6950" />
-                            <color v-model="highlight" color="#d13438" />
-                            <color v-model="highlight" color="#ff4343" />
-                            <color v-model="highlight" color="#e74856" />
-                            <color v-model="highlight" color="#e81123" />
-                            <color v-model="highlight" color="#ea005e" />
-                            <color v-model="highlight" color="#c30052" />
-                            <color v-model="highlight" color="#e3008c" />
-                            <color v-model="highlight" color="#bf0077" />
-                            <color v-model="highlight" color="#c239b3" />
-                            <color v-model="highlight" color="#9a0089" />
-                            <color v-model="highlight" color="#881798" />
-                        </div>
-                        <div class="row">
-                            <color v-model="highlight" color="#498205" />
-                            <color v-model="highlight" color="#107c10" />
-                            <color v-model="highlight" color="#10893e" />
-                            <color v-model="highlight" color="#00cc6a" />
-                            <color v-model="highlight" color="#018574" />
-                            <color v-model="highlight" color="#00b294" />
-                            <color v-model="highlight" color="#038387" />
-                            <color v-model="highlight" color="#00b7c3" />
-                            <color v-model="highlight" color="#2d7d9a" />
-                            <color v-model="highlight" color="#0099bc" />
-                            <color v-model="highlight" color="#0078d7" />
-                            <color v-model="highlight" color="#0063b1" />
-                            <color v-model="highlight" color="#8e8cd8" />
-                            <color v-model="highlight" color="#6b69d6" />
-                            <color v-model="highlight" color="#8764b8" />
-                            <color v-model="highlight" color="#744da9" />
-                            <color v-model="highlight" color="#b146c2" />
-                        </div>
+                        <color v-model="highlight" color="#feb400" />
+                        <color v-model="highlight" color="#ff8c00" />
+                        <color v-model="highlight" color="#f7630c" />
+                        <color v-model="highlight" color="#ca5010" />
+                        <color v-model="highlight" color="#da3b01" />
+                        <color v-model="highlight" color="#ef6950" />
+                        <color v-model="highlight" color="#d13438" />
+                        <color v-model="highlight" color="#ff4343" />
+                        <color v-model="highlight" color="#e74856" />
+                        <color v-model="highlight" color="#e81123" />
+                        <color v-model="highlight" color="#ea005e" />
+                        <color v-model="highlight" color="#c30052" />
+                        <color v-model="highlight" color="#e3008c" />
+                        <color v-model="highlight" color="#bf0077" />
+                        <color v-model="highlight" color="#c239b3" />
+                        <color v-model="highlight" color="#9a0089" />
+                        <color v-model="highlight" color="#881798" />
+                        <color v-model="highlight" color="#b146c2" />
+                        <color v-model="highlight" color="#744da9" />
+                        <color v-model="highlight" color="#8764b8" />
+                        <color v-model="highlight" color="#6b69d6" />
+                        <color v-model="highlight" color="#8e8cd8" />
+                        <color v-model="highlight" color="#0063b1" />
+                        <color v-model="highlight" color="#0078d7" />
+                        <color v-model="highlight" color="#0099bc" />
+                        <color v-model="highlight" color="#2d7d9a" />
+                        <color v-model="highlight" color="#00b7c3" />
+                        <color v-model="highlight" color="#038387" />
+                        <color v-model="highlight" color="#00b294" />
+                        <color v-model="highlight" color="#018574" />
+                        <color v-model="highlight" color="#00cc6a" />
+                        <color v-model="highlight" color="#10893e" />
+                        <color v-model="highlight" color="#107c10" />
+                        <color v-model="highlight" color="#498205" />
                     </div>
                 </div>
             </div>
@@ -166,6 +162,7 @@
             return {
                 loading: true,
                 updating: false,
+                auth: false,
                 auto: false,
                 backdrop: "",
                 highlight: "",
@@ -176,6 +173,7 @@
         },
 
         async mounted() {
+            this.auth = await this.hoobs.auth.status() === "enabled";
             this.original = await this.hoobs.theme.get(this.$store.state.theme);
             this.working = JSON.parse(JSON.stringify(this.original));
 
@@ -448,8 +446,8 @@
         }
 
         .colors {
-            display: flex !important;
-            flex-direction: column !important;
+            display: flex;
+            flex-wrap: wrap;
 
             .row {
                 height: 34px;

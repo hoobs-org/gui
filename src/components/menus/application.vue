@@ -30,7 +30,7 @@
         <div v-on:click="help()" class="item">{{ $t("help") }}</div>
         <div v-if="auth" class="seperator desktop-only"></div>
         <div v-on:click="settings()" class="item">{{ $t("settings") }}</div>
-        <div v-on:click="personalize()" class="item desktop-only">{{ $t("personalize") }}</div>
+        <div v-on:click="personalize()" class="item">{{ $t("personalize") }}</div>
         <div v-if="auth" class="seperator desktop-only"></div>
         <div v-if="auth" v-on:click="logout()" class="item">{{ $t("logout") }}</div>
         <div v-on:click="close()" class="icon close mobile-only">close</div>

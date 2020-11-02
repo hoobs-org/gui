@@ -123,11 +123,6 @@
 
 <style lang="scss" scoped>
     #login {
-        background-image: var(--backdrop);
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: cover;
-
         .errors {
             margin: 0 10px 10px 10px;
             display: flex;

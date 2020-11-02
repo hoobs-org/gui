@@ -43,7 +43,7 @@
     };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     #dialog {
         position: absolute;
         top: 0;

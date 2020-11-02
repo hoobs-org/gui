@@ -48,12 +48,12 @@
 
 <style lang="scss" scoped>
     #color {
-        width: 41px;
-        height: 34px;
+        width: 34px;
+        height: 33px;
         display: flex;
         align-items: center;
         justify-content: space-around;
-        margin: 0 7px 0 0;
+        margin: 0 7px 7px 0;
         box-sizing: border-box;
         cursor: pointer;
 

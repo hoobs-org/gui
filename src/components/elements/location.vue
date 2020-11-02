@@ -159,22 +159,5 @@
                 }
             }
         }
-
-        .location {
-            display: flex;
-            flex-direction: column;
-
-            .details {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                margin: 4px 0 0 7px;
-                font-size: 13px;
-
-                .value {
-                    font-weight: bold;
-                }
-            }
-        }
     }
 </style>
