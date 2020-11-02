@@ -380,10 +380,12 @@
 
                 .title {
                     font-size: 14px;
+                    text-shadow: 1px 1px 1px #00000033;
                 }
 
                 .accent {
                     font-size: 12px;
+                    text-shadow: 1px 1px 1px #00000033;
                 }
 
                 .text {

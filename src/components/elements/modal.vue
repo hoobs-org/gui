@@ -60,6 +60,7 @@
 
         .subject {
             color: var(--modal-highlight);
+            text-shadow: 1px 1px 1px #00000033;
             font-weight: bold;
             font-size: 17px;
             padding: 10px 10px 0 10px;
