@@ -60,9 +60,7 @@
             toggle(value) {
                 this.active = value;
 
-                if (this.timeout) {
-                    clearTimeout(this.timeout);
-                }
+                if (this.timeout) clearTimeout(this.timeout);
 
                 this.timeout = setTimeout(() => {
                     this.close();
@@ -70,9 +68,7 @@
             },
 
             close(now) {
-                if (now || !this.active) {
-                    this.$emit("input", !this.value);
-                }
+                if (now || !this.active) this.$emit("input", !this.value);
             },
         },
     };

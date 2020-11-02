@@ -96,7 +96,7 @@
                 justify-content: space-around;
                 align-items: center;
                 text-align: center;
-                padding: 20px 10px;
+                padding: 27px 10px 0 10px;
                 user-select: none;
             }
 

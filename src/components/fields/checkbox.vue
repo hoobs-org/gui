@@ -125,9 +125,7 @@
                 this.uuid = this.id;
             }
 
-            if (this.checked && !this.state) {
-                this.toggle();
-            }
+            if (this.checked && !this.state) this.toggle();
         },
     };
 </script>

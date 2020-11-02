@@ -140,13 +140,8 @@
             async wait(callback, compare, saftey) {
                 const results = await callback();
 
-                if (compare(results)) {
-                    return results;
-                }
-
-                if ((saftey || 0) >= 300) {
-                    return results;
-                }
+                if (compare(results)) return results;
+                if ((saftey || 0) >= 300) return results;
 
                 await sleep(1000);
 
@@ -154,26 +149,16 @@
             },
 
             async progress() {
-                if (this.step > 0) {
-                    this.step = 0;
-                }
+                if (this.step > 0) this.step = 0;
 
                 const status = await this.hoobs.auth.status();
                 const instances = await this.hoobs.instances.count();
 
                 this.message = "";
 
-                if (status === "uninitialized") {
-                    return 1;
-                }
-
-                if (instances === 0 && !(await this.hoobs.auth.validate())) {
-                    this.$router.push({ path: "/login", query: { url: "/setup" } });
-                }
-
-                if (instances === 0) {
-                    return 2;
-                }
+                if (status === "uninitialized") return 1;
+                if (instances === 0 && !(await this.hoobs.auth.validate())) this.$router.push({ path: "/login", query: { url: "/setup" } });
+                if (instances === 0) return 2;
 
                 this.$router.push({ path: "/" });
 
@@ -183,17 +168,9 @@
             async account() {
                 this.errors = [];
 
-                if (this.username.length < 3) {
-                    this.errors.push(this.$t("username_required"));
-                }
-
-                if (this.password.length < 5) {
-                    this.errors.push(this.$t("password_weak"));
-                }
-
-                if (this.password !== this.challenge) {
-                    this.errors.push(this.$t("password_mismatch"));
-                }
+                if (this.username.length < 3) this.errors.push(this.$t("username_required"));
+                if (this.password.length < 5) this.errors.push(this.$t("password_weak"));
+                if (this.password !== this.challenge) this.errors.push(this.$t("password_mismatch"));
 
                 if (this.errors.length === 0) {
                     this.step = 0;
@@ -202,9 +179,7 @@
                     await this.hoobs.users.add(this.username.toLowerCase(), this.password, this.name, true);
 
                     if (await this.hoobs.auth.login(this.username.toLowerCase(), this.password)) {
-                        this.$router.push({
-                            path: this.url,
-                        });
+                        this.$router.push({ path: this.url });
                     } else {
                         this.errors.push(this.$t("user_add_failed"));
                     }
@@ -216,19 +191,12 @@
             async setup() {
                 this.errors = [];
 
-                if (this.instance.length < 3) {
-                    this.errors.push(this.$t("instance_name_required"));
-                }
-
-                if (Number.isNaN(parseInt(this.port, 10)) || parseInt(this.port, 10) < 1 || parseInt(this.port, 10) > 65535) {
-                    this.errors.push(this.$t("instance_port_required"));
-                }
+                if (this.instance.length < 3) this.errors.push(this.$t("instance_name_required"));
+                if (Number.isNaN(parseInt(this.port, 10)) || parseInt(this.port, 10) < 1 || parseInt(this.port, 10) > 65535) this.errors.push(this.$t("instance_port_required"));
 
                 const instances = await this.hoobs.instances.list();
 
-                if (instances.findIndex((item) => item.port === parseInt(this.port, 10)) >= 0) {
-                    this.errors.push(this.$t("instance_port_taken"));
-                }
+                if (instances.findIndex((item) => item.port === parseInt(this.port, 10)) >= 0) this.errors.push(this.$t("instance_port_taken"));
 
                 if (this.errors.length === 0) {
                     this.step = 0;

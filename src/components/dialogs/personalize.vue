@@ -87,40 +87,7 @@
                         </checkbox>
                     </div>
                     <div v-on:click="() => { auto = false; }" class="row colors">
-                        <color v-model="highlight" color="#feb400" />
-                        <color v-model="highlight" color="#ff8c00" />
-                        <color v-model="highlight" color="#f7630c" />
-                        <color v-model="highlight" color="#ca5010" />
-                        <color v-model="highlight" color="#da3b01" />
-                        <color v-model="highlight" color="#ef6950" />
-                        <color v-model="highlight" color="#d13438" />
-                        <color v-model="highlight" color="#ff4343" />
-                        <color v-model="highlight" color="#e74856" />
-                        <color v-model="highlight" color="#e81123" />
-                        <color v-model="highlight" color="#ea005e" />
-                        <color v-model="highlight" color="#c30052" />
-                        <color v-model="highlight" color="#e3008c" />
-                        <color v-model="highlight" color="#bf0077" />
-                        <color v-model="highlight" color="#c239b3" />
-                        <color v-model="highlight" color="#9a0089" />
-                        <color v-model="highlight" color="#881798" />
-                        <color v-model="highlight" color="#b146c2" />
-                        <color v-model="highlight" color="#744da9" />
-                        <color v-model="highlight" color="#8764b8" />
-                        <color v-model="highlight" color="#6b69d6" />
-                        <color v-model="highlight" color="#8e8cd8" />
-                        <color v-model="highlight" color="#0063b1" />
-                        <color v-model="highlight" color="#0078d7" />
-                        <color v-model="highlight" color="#0099bc" />
-                        <color v-model="highlight" color="#2d7d9a" />
-                        <color v-model="highlight" color="#00b7c3" />
-                        <color v-model="highlight" color="#038387" />
-                        <color v-model="highlight" color="#00b294" />
-                        <color v-model="highlight" color="#018574" />
-                        <color v-model="highlight" color="#00cc6a" />
-                        <color v-model="highlight" color="#10893e" />
-                        <color v-model="highlight" color="#107c10" />
-                        <color v-model="highlight" color="#498205" />
+                        <color v-for="(color, index) in colors" :key="index" v-model="highlight" :color="color" />
                     </div>
                 </div>
             </div>
@@ -136,9 +103,10 @@
 </template>
 
 <script>
-    import Colors from "color-scheme";
-    import Extractor from "colorthief/dist/color-thief";
+    import ColorScheme from "color-scheme";
+    import ColorExtractor from "colorthief/dist/color-thief";
     import Color from "../elements/color.vue";
+    import Colors from "../../services/colors";
     import Backdrop from "../elements/backdrop.vue";
 
     const THEMES_URL = process.env.VUE_APP_THEMES || "/themes";
@@ -164,6 +132,7 @@
                 updating: false,
                 auth: false,
                 auto: false,
+                colors: Colors,
                 backdrop: "",
                 highlight: "",
                 original: {},
@@ -190,7 +159,7 @@
 
         watch: {
             highlight() {
-                if (!this.loading && this.highlight !== "auto") this.colors(this.highlight);
+                if (!this.loading && this.highlight !== "auto") this.adjust(this.highlight);
             },
 
             async mode() {
@@ -209,7 +178,7 @@
                     this.highlight = this.working.auto ? "auto" : this.working.application.highlight;
 
                     if (this.auto) await this.extract();
-                    if (!this.auto) this.colors(this.highlight);
+                    if (!this.auto) this.adjust(this.highlight);
 
                     this.updating = false;
                     this.dirty();
@@ -249,8 +218,8 @@
                 return false;
             },
 
-            accent(value) {
-                const scheme = new Colors();
+            contrast(value) {
+                const scheme = new ColorScheme();
 
                 scheme.from_hex(value.replace("#", "").toUpperCase());
                 scheme.scheme("contrast");
@@ -259,11 +228,11 @@
                 return `#${scheme.colors()[0]}`;
             },
 
-            colors(value) {
+            adjust(value) {
                 const color = value.toLowerCase();
 
                 this.working.application.highlight = color;
-                this.working.application.accent = this.accent(color);
+                this.working.application.accent = this.contrast(color);
                 this.working.button.primary.background = color;
                 this.working.button.primary.border = color;
                 this.working.modal.highlight = color;
@@ -276,7 +245,7 @@
             extract() {
                 return new Promise((resolve) => {
                     if (this.auto) {
-                        const extractor = new Extractor();
+                        const extractor = new ColorExtractor();
                         const element = document.createElement("img");
 
                         element.src = this.backdrop.replace("url('", "").replace("')", "");
@@ -285,7 +254,7 @@
 
                         element.addEventListener("load", () => {
                             const color = extractor.getColor(element).map((item) => item.toString(16)).map((item) => (item.length === 1 ? `0${item}` : item)).join("");
-                            const scheme = new Colors();
+                            const scheme = new ColorScheme();
 
                             scheme.from_hex(color.replace("#", "").toUpperCase());
                             scheme.scheme("triade");
@@ -294,7 +263,7 @@
                             element.remove();
 
                             const accent = `#${scheme.colors()[0]}`;
-                            const highlight = this.accent(`#${scheme.colors()[0]}`);
+                            const highlight = this.contrast(`#${scheme.colors()[0]}`);
 
                             this.working.auto = true;
                             this.highlight = "auto";

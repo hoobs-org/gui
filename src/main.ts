@@ -42,19 +42,14 @@ const open = [
 ];
 
 const io = socket();
-
-const hoobs = sdk(() => store.state.session, (token) => {
-    store.commit("SESSION:SET", token);
-});
+const hoobs = sdk(() => store.state.session, (token) => { store.commit("SESSION:SET", token); });
 
 io.on("log", (data) => store.commit("IO:LOG", data));
 io.on("monitor", (data) => store.commit("IO:MONITOR", data));
 io.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
 io.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
 
-hoobs.log().then((messages) => {
-    store.commit("LOG:HISTORY", messages);
-});
+hoobs.log().then((messages) => { store.commit("LOG:HISTORY", messages); });
 
 router.beforeEach(async (to, _from, next) => {
     if (open.indexOf(to.path) === -1 && ((await hoobs.auth.status()) === "uninitialized" || (await hoobs.instances.count()) === 0)) {

@@ -16,55 +16,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-import Vue from "vue";
-import VueI18n from "vue-i18n";
-import Languages from "./languages";
+const colors: string[] = [
+    "#feb400",
+    "#ff8c00",
+    "#f7630c",
+    "#ca5010",
+    "#da3b01",
+    "#ef6950",
+    "#d13438",
+    "#ff4343",
+    "#e74856",
+    "#e81123",
+    "#ea005e",
+    "#c30052",
+    "#e3008c",
+    "#bf0077",
+    "#c239b3",
+    "#9a0089",
+    "#881798",
+    "#b146c2",
+    "#744da9",
+    "#8764b8",
+    "#6b69d6",
+    "#8e8cd8",
+    "#0063b1",
+    "#0078d7",
+    "#0099bc",
+    "#2d7d9a",
+    "#00b7c3",
+    "#038387",
+    "#00b294",
+    "#018574",
+    "#00cc6a",
+    "#10893e",
+    "#107c10",
+    "#498205",
+];
 
-function supported(locale: string) {
-    switch (locale) {
-        case "ar":
-        case "bg":
-        case "cs":
-        case "de":
-        case "el":
-        case "es":
-        case "fr":
-        case "he":
-        case "it":
-        case "ja":
-        case "ko":
-        case "nl":
-        case "no":
-        case "pl":
-        case "pt":
-        case "ro":
-        case "ru":
-        case "sv":
-        case "vi":
-        case "zh":
-            return locale;
-
-        default:
-            return "en";
-    }
-}
-
-function current(locale?: string) {
-    if ((!locale || locale === "") && window.navigator && window.navigator.language) return supported(Languages[window.navigator.language]);
-    if (!locale || locale === "") return supported("en");
-
-    return supported(Languages[locale]);
-}
-
-function load(locale: string) {
-    return require(`./locals/${current(locale)}.json`);
-}
-
-Vue.use(VueI18n);
-
-const locale = current();
-
-export default new VueI18n({
-    locale,
-    messages: load(locale),
-});
+export default colors;

@@ -125,13 +125,8 @@
 
         watch: {
             interval() {
-                if (this.interval < 1) {
-                    this.interval = 1;
-                }
-
-                if (this.interval > 300) {
-                    this.interval = 300;
-                }
+                if (this.interval < 1) this.interval = 1;
+                if (this.interval > 300) this.interval = 300;
             },
         },
 
@@ -141,7 +136,7 @@
             },
 
             reboot() {
-                this.$parent.confirm(this.$t("reboot_device"), this.$t("reboot_warning"), this.$t("reboot"), async () => {
+                this.$parent.confirm(this.$t("reboot_warning"), this.$t("reboot"), async () => {
                     const system = await this.hoobs.system();
 
                     await system.reboot();
@@ -156,12 +151,10 @@
             },
 
             purge() {
-                this.$parent.confirm(this.$t("purge_cache"), this.$t("purge_warning"), this.$t("purge"), async () => {
+                this.$parent.confirm(this.$t("purge_warning"), this.$t("purge"), async () => {
                     const instances = await this.hoobs.instances.list();
 
-                    for (let i = 0; i < instances.length; i += 1) {
-                        this.clear(instances[i].id);
-                    }
+                    for (let i = 0; i < instances.length; i += 1) this.clear(instances[i].id);
 
                     this.$parent.show.confirmation = false;
                 });
@@ -174,7 +167,7 @@
             },
 
             reset() {
-                this.$parent.confirm(this.$t("factory_reset"), this.$t("reset_warning"), this.$t("reset"), async () => {
+                this.$parent.confirm(this.$t("reset_warning"), this.$t("reset"), async () => {
                     const system = await this.hoobs.system();
 
                     await system.reset();

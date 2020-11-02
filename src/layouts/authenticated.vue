@@ -45,7 +45,6 @@
         <personalize v-if="show.personalize" :close="() => { toggle('personalize') }" />
         <confirm
             v-if="show.confirmation"
-            :title="confirmation.title"
             :message="confirmation.message"
             :ok="confirmation.ok"
             :confirm="confirmation.action"
@@ -95,7 +94,6 @@
                 confirmation: {
                     action: () => { /* null */ },
                     message: "",
-                    title: "",
                     ok: "",
                 },
             };
@@ -116,8 +114,7 @@
                 this.$router.push({ path: "/login", query: { url: "/" } });
             },
 
-            confirm(title, message, ok, action) {
-                this.confirmation.title = title;
+            confirm(message, ok, action) {
                 this.confirmation.message = message;
                 this.confirmation.ok = ok;
                 this.confirmation.action = action;
@@ -129,9 +126,7 @@
                 const keys = Object.keys(this.show);
 
                 for (let i = 0; i < keys.length; i += 1) {
-                    if (keys[i] !== (ignore || "")) {
-                        this.show[keys[i]] = false;
-                    }
+                    if (keys[i] !== (ignore || "")) this.show[keys[i]] = false;
                 }
             },
 

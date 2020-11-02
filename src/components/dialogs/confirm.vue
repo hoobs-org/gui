@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="title || $t('confirm')" width="490px" height="240px">
+    <modal width="490px" height="220px">
         <div class="content message">
             {{ message }}
         </div>
@@ -33,7 +33,6 @@
         name: "confirm",
 
         props: {
-            title: String,
             message: String,
             ok: String,
             cancel: String,

@@ -102,9 +102,7 @@
             async login() {
                 this.errors = [];
 
-                if (this.username === "" || this.username.length < 3) {
-                    this.errors.push(this.$t("invalid_username_password"));
-                }
+                if (this.username === "" || this.username.length < 3) this.errors.push(this.$t("invalid_username_password"));
 
                 if (this.errors.length === 0) {
                     if (await this.hoobs.auth.login(this.username.toLowerCase(), this.password, this.remember)) {

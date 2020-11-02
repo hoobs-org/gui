@@ -34,6 +34,7 @@
     import { FitAddon } from "xterm-addon-fit";
     import { WebLinksAddon } from "xterm-addon-web-links";
     import socket from "../services/socket";
+    import { chunk } from "../services/sdk";
 
     export default {
         name: "terminal",
@@ -83,7 +84,8 @@
             const theme = await this.hoobs.theme.get(this.$store.state.theme);
 
             this.term = new Terminal({
-                cursorBlink: false,
+                cursorStyle: "bar",
+                cursorBlink: true,
                 fontSize: 14,
                 theme: {
                     background: theme.application.background,
@@ -106,13 +108,8 @@
                 this.io = socket();
                 this.io.emit("shell_connect");
 
-                this.term.onData((data) => {
-                    this.io.emit("shell_input", data);
-                });
-
-                this.io.on("shell_output", (data) => {
-                    this.term.write(data);
-                });
+                this.term.onData((data) => { this.io.emit("shell_input", data); });
+                this.io.on("shell_output", (data) => { this.term.write(data); });
 
                 if (this.opening) {
                     this.motd();
@@ -139,7 +136,7 @@
                         this.term.write("\r\n");
                         this.term.write(`HOOBS ${this.version}\r\n`);
                         this.term.write("\r\n");
-                        this.term.write(`${this.chunk(this.$t("motd"), 40).join("\r\n")}\r\n`);
+                        this.term.write(`${chunk(this.$t("motd"), 40).join("\r\n")}\r\n`);
                         this.term.write("\r\n");
 
                         if (this.io) this.io.emit("shell_input", "");
@@ -151,37 +148,14 @@
                 this.initilize = false;
             },
 
-            chunk(value, length) {
-                let current = length;
-                let previous = 0;
-
-                const results = [];
-
-                while (value[current]) {
-                    current += 1;
-
-                    if (value[current] === " ") {
-                        results.push(value.substring(previous, current));
-
-                        previous = current;
-                        current += length;
-                    }
-                }
-
-                results.push(value.substr(previous));
-
-                return results.map((item) => item.trim());
-            },
-
             resize() {
-                this.$refs.container.style.display = "none";
+                if (this.$refs.container) this.$refs.container.style.display = "none";
 
                 const cols = Math.floor((this.$refs.flow.clientWidth + 1) / this.text.width) - 1;
                 const rows = Math.floor((this.$refs.flow.clientHeight + 1) / this.text.height) + 3;
 
                 setTimeout(() => {
-                    this.$refs.container.style.display = "block";
-
+                    if (this.$refs.container) this.$refs.container.style.display = "block";
                     if (this.screen) this.screen.fit();
                     if (this.term) this.term.resize(cols, rows);
                     if (this.io) this.io.emit("shell_resize", `${cols}:${rows}`);
