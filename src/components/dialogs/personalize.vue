@@ -158,12 +158,12 @@
         },
 
         watch: {
-            highlight() {
-                if (!this.loading && this.highlight !== "auto") this.adjust(this.highlight);
+            highlight(updated, current) {
+                if (current && current !== "" && !this.loading && this.highlight !== "auto") this.adjust(this.highlight);
             },
 
-            async mode() {
-                if (!this.loading && !this.updating) {
+            async mode(updated, current) {
+                if (current && current !== "" && !this.loading && !this.updating) {
                     this.updating = true;
 
                     const { backdrop } = this.working;
@@ -185,11 +185,13 @@
                 }
             },
 
-            async backdrop() {
-                this.working.backdrop = this.backdrop;
+            async backdrop(updated, current) {
+                if (current && current !== "") {
+                    this.working.backdrop = this.backdrop;
 
-                if (!this.loading && this.auto) await this.extract();
-                if (!this.loading) this.dirty();
+                    if (!this.loading && this.auto) await this.extract();
+                    if (!this.loading) this.dirty();
+                }
             },
 
             async auto() {
