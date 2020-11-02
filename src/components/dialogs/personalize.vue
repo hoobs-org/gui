@@ -65,7 +65,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row title">
+                    <div class="row title" style="margin-top: 20px;">
                         {{ $t("mode") }}
                     </div>
                     <div class="row">
@@ -78,7 +78,7 @@
                             <label for="dark">{{ $t("dark") }}</label>
                         </radio>
                     </div>
-                    <div class="row title">
+                    <div class="row title" style="margin-top: 20px;">
                         {{ $t("color") }}
                     </div>
                     <div v-if="auth" class="row auto desktop-only">
