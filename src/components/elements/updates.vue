@@ -20,11 +20,29 @@
     <div id="updates" class="content">
         <div v-if="!updating" class="form">
             <div class="row section">{{ $t("software") }}</div>
-            <div v-if="!loading && stack" class="row">{{ $t("version") }}: {{ latest }} <span class="value">{{ $t("available") }}</span></div>
-            <div v-if="!loading && plugins.length > 0" class="row">{{ $t("plugins") }}: {{ plugins.length }} {{ $t("plugin_updates") }} <span class="value">{{ $t("available") }}</span></div>
+            <div v-if="!loading && stack" class="row">
+                {{ $t("version") }}: {{ latest }}
+                <span class="value">{{ $t("available") }}</span>
+            </div>
+            <div v-if="!loading && plugins.length > 0" class="row">
+                {{ $t("plugins") }}: {{ plugins.length }} {{ $t("plugin_updates") }}
+                <span
+                    class="value"
+                >{{ $t("available") }}</span>
+            </div>
             <div v-if="!loading && !updated" class="row" style="margin-top: 7px;">
+                <a
+                    v-if="stack"
+                    class="button light"
+                    href="https://github.com/hoobs-org/HOOBS/releases/latest"
+                    target="_blank"
+                >{{ $t("changelog") }}</a>
                 <div v-if="stack" v-on:click="upgrade()" class="button light">{{ $t("update_now") }}</div>
-                <div v-if="plugins.length > 0" v-on:click="update()" class="button light">{{ $t("update_plugins") }}</div>
+                <div
+                    v-if="plugins.length > 0"
+                    v-on:click="update()"
+                    class="button light"
+                >{{ $t("update_plugins") }}</div>
             </div>
             <div v-if="!loading && updated" class="row updated">
                 <span class="icon">update</span>
@@ -61,7 +79,7 @@
 
         async mounted() {
             this.version = await this.hoobs.version();
-            this.latest = await this.hoobs.latest();
+            this.latest = "5.0.1"; // await this.hoobs.latest();
             this.plugins = (await this.hoobs.plugins()).filter((item) => !Semver.compare(item.version, item.latest, ">="));
 
             this.stack = !Semver.compare(this.version, this.latest, ">=");
@@ -102,11 +120,11 @@
     #updates {
         .value {
             font-weight: bold;
-            margin-left: 4px;
+            margin: 0 4px;
         }
 
         .loading {
-            margin-top: 7px;
+            margin: 7px 0 0 0;
         }
 
         .updated {

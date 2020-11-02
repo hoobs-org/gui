@@ -137,6 +137,7 @@
 
             &:hover {
                 box-shadow: var(--elevation-button);
+                text-decoration: none !important;
             }
         }
 
