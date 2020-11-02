@@ -18,8 +18,7 @@
 
 <template>
     <div id="login">
-        <modal width="420px">
-            <welcome :message="$t('login')" />
+        <modal :welcome="$t('login')" width="420px">
             <div v-if="errors.length > 0" class="errors">
                 <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
             </div>
@@ -73,14 +72,8 @@
 </template>
 
 <script>
-    import Welcome from "../components/elements/welcome.vue";
-
     export default {
         name: "login",
-
-        components: {
-            "welcome": Welcome,
-        },
 
         data() {
             return {

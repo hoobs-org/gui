@@ -203,6 +203,10 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             return (await Request.get(`${API_URL}`)).data.version;
         },
 
+        async latest(): Promise<string> {
+            return (((await Request.get("https://api.github.com/repos/hoobs-org/HOOBS/releases/latest")).data || {}).tag_name || "").replace(/v/gi, "");
+        },
+
         auth: {
             async status(): Promise<string> {
                 await wait();

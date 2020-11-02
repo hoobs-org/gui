@@ -88,6 +88,17 @@ module.exports = {
         },
         {
             files: [
+                "src/components/elements/updates.vue",
+            ],
+            rules: {
+                indent: "off",
+                "quote-props": "off",
+                "@typescript-eslint/indent": "off",
+                "no-await-in-loop": "off",
+            },
+        },
+        {
+            files: [
                 "src/services/maps.ts",
             ],
             rules: {

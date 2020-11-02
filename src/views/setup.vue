@@ -17,14 +17,12 @@
  -------------------------------------------------------------------------------------------------->
 <template>
     <div v-if="step >= 0" id="setup">
-        <modal v-if="step === 0" width="760px" height="670px">
-            <welcome :message="$t('welcome')" />
+        <modal v-if="step === 0" :welcome="$t('welcome')" width="760px" height="670px">
             <div class="loading">
                 <spinner v-model="message" />
             </div>
         </modal>
-        <modal v-else-if="step === 1" width="760px" height="670px">
-            <welcome :message="$t('welcome')" />
+        <modal v-else-if="step === 1" :welcome="$t('welcome')" width="760px" height="670px">
             <p>{{ $t("user_add_admin_account") }}</p>
             <form
                 class="modal"
@@ -69,8 +67,7 @@
                 <div class="button primary" v-on:click="account()">{{ $t("create_account") }}</div>
             </div>
         </modal>
-        <modal v-else-if="step === 2" width="760px" height="670px">
-            <welcome :message="$t('welcome')" />
+        <modal v-else-if="step === 2" :welcome="$t('welcome')" width="760px" height="670px">
             <p>{{ $t("instance_create_default") }}</p>
             <form
                 class="modal"
@@ -108,15 +105,10 @@
 </template>
 
 <script>
-    import Welcome from "../components/elements/welcome.vue";
     import { sleep } from "../services/sdk";
 
     export default {
         name: "setup",
-
-        components: {
-            "welcome": Welcome,
-        },
 
         data() {
             return {

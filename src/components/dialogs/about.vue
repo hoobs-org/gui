@@ -17,45 +17,49 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal width="720px" height="420px">
-        <welcome message="HOOBS™" />
+    <modal :title="$t('about')" width="720px" height="520px">
         <div id="about">
-            <div class="content">
-                <p>
-                    {{ $t("version") }}: {{ version }}
-                </p>
-                <p>
-                    {{ $t("license_title") }}
-                </p>
-                <p>
-                    {{ $t("license_summary") }}
-                </p>
-                <p>
-                    <a href="https://support.hoobs.org/docs/5e7649bee87d1e02b6c19d48" target="_blank">{{ $t("terms_conditions") }}</a><br>
-                    <a href="https://support.hoobs.org/docs/5e8f6c790ab68b0344e872d8" target="_blank">{{ $t("privacy_policy") }}</a><br>
-                    <a href="https://support.hoobs.org/docs/5e763ca9e87d1e02b6c19d2f" target="_blank">{{ $t("open_source") }}</a><br>
-                </p>
-            </div>
-            <div class="actions modal">
-                <div class="copyright">
-                    HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
-                    <br />Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
+            <updates v-if="show.updates" />
+            <div v-else class="content">
+                <div class="form">
+                    <div class="row section">{{ $t("software") }}</div>
+                    <div class="row" style="margin-bottom: 7px;">{{ $t("version") }}: {{ version }}</div>
+                    <div class="row">
+                        <div v-on:click="updates()" class="button light">{{ $t("check_updates") }}</div>
+                    </div>
+                    <div class="row section">{{ $t("license") }}</div>
+                    <div class="row">{{ $t("license_title") }}</div>
+                    <p>
+                        {{ $t("license_summary") }}
+                    </p>
+                    <div class="row">
+                        <div>
+                            <a href="https://support.hoobs.org/docs/5e7649bee87d1e02b6c19d48" target="_blank">{{ $t("terms_conditions") }}</a><br>
+                            <a href="https://support.hoobs.org/docs/5e8f6c790ab68b0344e872d8" target="_blank">{{ $t("privacy_policy") }}</a><br>
+                            <a href="https://support.hoobs.org/docs/5e763ca9e87d1e02b6c19d2f" target="_blank">{{ $t("open_source") }}</a><br>
+                        </div>
+                    </div>
                 </div>
-                <div class="button light" v-on:click="donate()">{{ $t("donate") }}</div>
-                <div class="button primary" v-on:click="close()">{{ $t("ok") }}</div>
+            </div>
+            <div v-if="show.updates" class="actions modal">
+                <div v-on:click="back()" class="button light">{{ $t("cancel") }}</div>
+            </div>
+            <div v-else class="actions modal">
+                <div v-on:click="donate()" class="button light">{{ $t("donate") }}</div>
+                <div v-on:click="close()" class="button primary">{{ $t("ok") }}</div>
             </div>
         </div>
     </modal>
 </template>
 
 <script>
-    import Welcome from "../elements/welcome.vue";
+    import Updates from "../elements/updates.vue";
 
     export default {
         name: "about",
 
         components: {
-            "welcome": Welcome,
+            "updates": Updates,
         },
 
         props: {
@@ -68,6 +72,9 @@
         data() {
             return {
                 version: "",
+                show: {
+                    updates: false,
+                },
             };
         },
 
@@ -79,6 +86,14 @@
             donate() {
                 window.open("https://paypal.me/hoobsorg");
             },
+
+            updates() {
+                this.show.updates = true;
+            },
+
+            back() {
+                this.show.updates = false;
+            },
         },
     };
 </script>
@@ -87,6 +102,7 @@
     #about {
         flex: 1;
         display: flex;
+        overflow: hidden;
         flex-direction: column;
         margin: 0 0 0 10px;
     }

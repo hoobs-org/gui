@@ -73,8 +73,8 @@
                 <spinner />
             </div>
             <div v-if="!loading && !show.location" class="actions modal">
-                <div class="button light" v-on:click="close()">{{ $t("cancel") }}</div>
-                <div class="button primary" v-on:click="save()">{{ $t("apply") }}</div>
+                <div v-on:click="close()" class="button light">{{ $t("cancel") }}</div>
+                <div v-on:click="save()" class="button primary">{{ $t("apply") }}</div>
             </div>
             <div v-if="!loading && show.location" class="actions modal">
                 <div class="button light" v-on:click="back()">{{ $t("cancel") }}</div>

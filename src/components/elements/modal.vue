@@ -19,18 +19,26 @@
 <template>
     <div v-on:click.stop id="dialog">
         <div class="window modal" :style="`width: ${width}; height: ${height};`">
-            <div v-if="title" class="subject">{{ title }}</div>
+            <welcome v-if="welcome" :message="welcome" />
+            <div v-else-if="title" class="subject">{{ title }}</div>
             <slot />
         </div>
     </div>
 </template>
 
 <script>
+    import Welcome from "./welcome.vue";
+
     export default {
         name: "modal",
 
+        components: {
+            "welcome": Welcome,
+        },
+
         props: {
             title: String,
+            welcome: String,
             width: {
                 type: String,
                 default: "auto",

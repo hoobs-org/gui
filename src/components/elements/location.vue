@@ -34,7 +34,7 @@
                     v-model="query"
                     :search="search"
                 />
-                <div v-if="show.searching" class="results loading">
+                <div v-if="show.searching" class="loading">
                     <spinner />
                 </div>
                 <div v-else class="results">
@@ -107,7 +107,7 @@
             margin: 0;
 
             .search {
-                width: 60%;
+                width: 100%;
                 display: flex;
                 flex-direction: column;
             }
