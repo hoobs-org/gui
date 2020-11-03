@@ -99,6 +99,12 @@
         methods: {
             toggle() {
                 this.$store.commit("NAVIGATION:STATE", !this.$store.state.navigation);
+
+                const event = document.createEvent("HTMLEvents");
+
+                event.initEvent("resize", true, true);
+
+                window.dispatchEvent(event);
             },
         },
     };

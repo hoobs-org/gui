@@ -151,15 +151,17 @@
             resize() {
                 if (this.$refs.container) this.$refs.container.style.display = "none";
 
-                const cols = Math.floor((this.$refs.flow.clientWidth + 1) / this.text.width) - 1;
-                const rows = Math.floor((this.$refs.flow.clientHeight + 1) / this.text.height) + 3;
-
                 setTimeout(() => {
-                    if (this.$refs.container) this.$refs.container.style.display = "block";
-                    if (this.screen) this.screen.fit();
-                    if (this.term) this.term.resize(cols, rows);
-                    if (this.io) this.io.emit("shell_resize", `${cols}:${rows}`);
-                    if (this.term) this.term.focus();
+                    if (this.$refs.flow) {
+                        const cols = Math.floor((this.$refs.flow.clientWidth + 1) / this.text.width) - 1;
+                        const rows = Math.floor((this.$refs.flow.clientHeight + 1) / this.text.height) + 3;
+
+                        if (this.$refs.container) this.$refs.container.style.display = "block";
+                        if (this.screen) this.screen.fit();
+                        if (this.term) this.term.resize(cols, rows);
+                        if (this.io) this.io.emit("shell_resize", `${cols}:${rows}`);
+                        if (this.term) this.term.focus();
+                    }
                 }, 10);
             },
         },
