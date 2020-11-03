@@ -24,6 +24,7 @@
             type="password"
             ref="field"
             autocomplete="false"
+            data-lpignore="true"
             :value="value"
             v-on:input="update()"
             v-on:change="change"

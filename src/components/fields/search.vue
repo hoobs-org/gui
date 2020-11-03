@@ -26,6 +26,7 @@
             autocomplete="false"
             autocorrect="off"
             autocapitalize="none"
+            data-lpignore="true"
             :value="value"
             v-on:input="update()"
             v-on:change="change"
@@ -79,9 +80,10 @@
 
         .icon {
             position: absolute;
-            bottom: 24px;
-            right: 2px;
+            bottom: 26px;
+            right: 7px;
             color: var(--modal-text);
+            font-size: 18px;
             opacity: 0.5;
             user-select: none;
             cursor: pointer;
@@ -99,7 +101,7 @@
 
         input {
             flex: 1;
-            padding: 7px 27px 7px 7px;
+            padding: 7px 30px 7px 7px;
             font-size: 14px;
 
             &:focus {

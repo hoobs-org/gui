@@ -24,6 +24,7 @@
             type="number"
             ref="field"
             autocomplete="false"
+            data-lpignore="true"
             :min="min !== undefined ? min : ''"
             :max="max !== undefined ? max : ''"
             :value="value"

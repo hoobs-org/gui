@@ -24,6 +24,7 @@
             type="number"
             ref="field"
             autocomplete="false"
+            data-lpignore="true"
             min="1"
             step="1"
             max="65535"
