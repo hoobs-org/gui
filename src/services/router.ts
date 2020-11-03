@@ -25,81 +25,61 @@ const routes: Array<RouteConfig> = [
     {
         path: "/",
         name: "dashboard",
-        meta: {
-            layout: "authenticated",
-        },
+        meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "dashboard" */ "../views/dashboard.vue"),
     },
     {
         path: "/setup",
         name: "setup",
-        meta: {
-            layout: "public",
-        },
+        meta: { layout: "public" },
         component: () => import(/* webpackChunkName: "setup" */ "../views/setup.vue"),
     },
     {
         path: "/login",
         name: "login",
-        meta: {
-            layout: "public",
-        },
+        meta: { layout: "public" },
         component: () => import(/* webpackChunkName: "login" */ "../views/login.vue"),
     },
     {
         path: "/accessories",
         name: "accessories",
-        meta: {
-            layout: "authenticated",
-        },
+        meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "accessories" */ "../views/accessories.vue"),
     },
     {
         path: "/log",
         name: "log",
-        meta: {
-            layout: "authenticated",
-        },
+        meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "log" */ "../views/log.vue"),
     },
     {
         path: "/users",
         name: "users",
-        meta: {
-            layout: "authenticated",
-        },
+        meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "users" */ "../views/users.vue"),
     },
     {
         path: "/instances",
         name: "instances",
-        meta: {
-            layout: "authenticated",
-        },
+        meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "instances" */ "../views/instances.vue"),
     },
     {
         path: "/plugins",
         name: "plugins",
-        meta: {
-            layout: "authenticated",
-        },
+        meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "plugins" */ "../views/plugins.vue"),
     },
     {
         path: "/config",
         name: "config",
-        meta: {
-            layout: "authenticated",
-        },
+        meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "config" */ "../views/config.vue"),
     },
     {
         path: "/terminal",
         name: "terminal",
-        meta: {
-            layout: "authenticated",
-        },
+        meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "terminal" */ "../views/terminal.vue"),
     },
 ];
