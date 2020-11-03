@@ -36,6 +36,7 @@
                         <input
                             type="text"
                             id="username"
+                            ref="username"
                             autocomplete="false"
                             data-lpignore="true"
                             v-model="username"
@@ -48,6 +49,7 @@
                         <input
                             type="password"
                             id="password"
+                            ref="password"
                             autocomplete="false"
                             data-lpignore="true"
                             v-model="password"
@@ -91,6 +93,8 @@
             this.url = this.$route.query.url || "/";
 
             if (this.url.startsWith("/login")) this.url = "/";
+
+            this.$refs.username.focus();
         },
 
         methods: {
