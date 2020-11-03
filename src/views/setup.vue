@@ -241,7 +241,7 @@
         form {
             flex: 1;
             border: var(--modal-border) 1px solid;
-            background: var(--modal-background);
+            background: var(--modal-form);
             padding: 20px;
             margin: 0 10px;
             border-radius: 4px;
