@@ -33,15 +33,15 @@
             <div v-if="!loading && !updated" class="row" style="margin-top: 7px;">
                 <a
                     v-if="stack"
-                    class="button light"
+                    class="button"
                     href="https://github.com/hoobs-org/HOOBS/releases/latest"
                     target="_blank"
                 >{{ $t("changelog") }}</a>
-                <div v-if="stack" v-on:click="upgrade()" class="button light">{{ $t("update_now") }}</div>
+                <div v-if="stack" v-on:click="upgrade()" class="button">{{ $t("update_now") }}</div>
                 <div
                     v-if="plugins.length > 0"
                     v-on:click="update()"
-                    class="button light"
+                    class="button"
                 >{{ $t("update_plugins") }}</div>
             </div>
             <div v-if="!loading && updated" class="row updated">
@@ -132,7 +132,6 @@
 
             .icon {
                 color: var(--modal-highlight);
-                text-shadow: 1px 1px 1px #52525250;
                 font-size: 37px;
             }
 

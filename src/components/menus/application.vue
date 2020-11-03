@@ -102,7 +102,6 @@
         color: var(--menu-text);
         background: var(--menu-background);
         backdrop-filter: var(--transparency);
-        border-radius: 4px;
         z-index: 3000;
         box-shadow: var(--elevation);
 
@@ -128,14 +127,6 @@
             text-decoration: none !important;
             cursor: pointer;
             user-select: none;
-
-            &:first-child {
-                border-radius: 4px 4px 0 0;
-            }
-
-            &:last-child {
-                border-radius: 0 0 4px 4px;
-            }
 
             &:hover {
                 background: var(--menu-highlight);
@@ -192,7 +183,6 @@
             min-width: unset;
             background: var(--modal-form);
             color: var(--modal-text);
-            border-radius: unset;
             top: 0;
             right: unset;
             left: 0;
@@ -204,11 +194,6 @@
 
                 &:first-child {
                     border-top: 0 none;
-                    border-radius: unset;
-                }
-
-                &:last-child {
-                    border-radius: unset;
                 }
 
                 &:hover {

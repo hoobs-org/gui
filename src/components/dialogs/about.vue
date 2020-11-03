@@ -25,7 +25,7 @@
                     <div class="row section">{{ $t("software") }}</div>
                     <div class="row" style="margin-bottom: 7px;">{{ $t("version") }}: {{ version }}</div>
                     <div class="row">
-                        <div v-on:click="updates()" class="button light">{{ $t("check_updates") }}</div>
+                        <div v-on:click="updates()" class="button">{{ $t("check_updates") }}</div>
                     </div>
                     <div class="row section">{{ $t("license") }}</div>
                     <div class="row">{{ $t("license_title") }}</div>
@@ -42,10 +42,10 @@
                 </div>
             </div>
             <div v-if="show.updates" class="actions modal">
-                <div v-on:click="back()" class="button light">{{ $t("cancel") }}</div>
+                <div v-on:click="back()" class="button">{{ $t("cancel") }}</div>
             </div>
             <div v-else class="actions modal">
-                <div v-on:click="donate()" class="button light">{{ $t("donate") }}</div>
+                <div v-on:click="donate()" class="button">{{ $t("donate") }}</div>
                 <div v-on:click="close()" class="button primary">{{ $t("ok") }}</div>
             </div>
         </div>

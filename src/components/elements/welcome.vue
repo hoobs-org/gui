@@ -64,7 +64,6 @@
         line-height: normal;
         font-size: 22px;
         color: var(--modal-highlight);
-        text-shadow: 1px 1px 1px #52525250;
         display: flex;
         align-content: center;
         align-items: center;

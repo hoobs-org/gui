@@ -137,7 +137,6 @@
 
             .title {
                 color: var(--modal-highlight);
-                text-shadow: 1px 1px 1px #52525250;
                 border-bottom: var(--modal-border) 1px solid;
 
                 .icon {

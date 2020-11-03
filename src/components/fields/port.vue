@@ -82,7 +82,6 @@
             flex: 1;
             padding: 7px;
             font-size: 14px;
-            border-radius: 4px;
 
             &:focus {
                 outline: 0 none;

@@ -95,7 +95,7 @@
                 <spinner />
             </div>
             <div v-if="!loading" class="actions modal">
-                <div class="button light" v-on:click="close()">{{ $t("cancel") }}</div>
+                <div class="button" v-on:click="close()">{{ $t("cancel") }}</div>
                 <div class="button primary" v-on:click="save()">{{ $t("apply") }}</div>
             </div>
         </div>
@@ -339,24 +339,20 @@
                     top: 14px;
                     right: 14px;
                     padding: 10px;
-                    border-radius: 3px;
                 }
 
                 &.dark {
                     top: 47px;
                     right: 114px;
                     padding: 10px;
-                    border-radius: 3px;
                 }
 
                 .title {
                     font-size: 14px;
-                    text-shadow: 1px 1px 1px #52525250;
                 }
 
                 .accent {
                     font-size: 12px;
-                    text-shadow: 1px 1px 1px #52525250;
                 }
 
                 .text {

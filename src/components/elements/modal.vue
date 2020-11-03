@@ -77,7 +77,6 @@
 
         .subject {
             color: var(--modal-highlight);
-            text-shadow: 1px 1px 1px #52525250;
             font-weight: bold;
             font-size: 17px;
             padding: 10px 10px 0 10px;
@@ -92,7 +91,6 @@
             color: var(--modal-text);
             background: var(--modal-background);
             backdrop-filter: var(--transparency);
-            border-radius: 4px;
             box-shadow: var(--elevation);
 
             &:hover {
@@ -121,11 +119,9 @@
                 flex: 1;
                 display: flex;
                 flex-direction: column;
-                border: var(--modal-border) 1px solid;
                 background: var(--modal-form);
                 padding: 20px;
                 margin: 10px 0 0 0;
-                border-radius: 4px;
                 overflow: hidden;
 
                 &:hover {
@@ -196,7 +192,6 @@
                 box-sizing: border-box;
                 min-height: unset;
                 max-height: unset;
-                border-radius: unset;
                 overflow: auto;
                 box-shadow: unset;
             }
@@ -205,10 +200,8 @@
                 overflow: auto;
 
                 .form {
-                    border: unset;
                     background: unset;
                     padding: 0;
-                    border-radius: unset;
                 }
             }
 

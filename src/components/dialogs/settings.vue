@@ -37,7 +37,7 @@
                     <div class="row title spaced">{{ $t("location") }}</div>
                     <div class="row">
                         <input type="submit" class="hidden-submit" value="submit" />
-                        <div v-on:click="change()" class="button light">{{ $t("change") }}</div>
+                        <div v-on:click="change()" class="button">{{ $t("change") }}</div>
                         <div class="location">
                             <div v-if="location" class="details">
                                 <div>
@@ -63,9 +63,9 @@
                     </div>
                     <div class="row section">{{ $t("system") }}</div>
                     <div class="row">
-                        <div v-on:click="reboot()" class="button light">{{ $t("reboot_device") }}</div>
-                        <div v-on:click="purge()" class="button light">{{ $t("purge_cache") }}</div>
-                        <div v-on:click="reset()" class="button light">{{ $t("factory_reset") }}</div>
+                        <div v-on:click="reboot()" class="button">{{ $t("reboot_device") }}</div>
+                        <div v-on:click="purge()" class="button">{{ $t("purge_cache") }}</div>
+                        <div v-on:click="reset()" class="button">{{ $t("factory_reset") }}</div>
                     </div>
                 </div>
             </div>
@@ -73,11 +73,11 @@
                 <spinner />
             </div>
             <div v-if="!loading && !show.location" class="actions modal">
-                <div v-on:click="close()" class="button light">{{ $t("cancel") }}</div>
+                <div v-on:click="close()" class="button">{{ $t("cancel") }}</div>
                 <div v-on:click="save()" class="button primary">{{ $t("apply") }}</div>
             </div>
             <div v-if="!loading && show.location" class="actions modal">
-                <div class="button light" v-on:click="back()">{{ $t("cancel") }}</div>
+                <div class="button" v-on:click="back()">{{ $t("cancel") }}</div>
             </div>
         </div>
     </modal>

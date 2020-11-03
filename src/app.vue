@@ -116,7 +116,6 @@
             display: inline-flex;
             align-items: center;
             border: 1px var(--button-border) solid;
-            border-radius: 4px;
             padding: 10.5px 10px 9.5px 10px;
             user-select: none;
             margin: 0 10px 0 0;

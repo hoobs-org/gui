@@ -22,7 +22,7 @@
             {{ message }}
         </div>
         <div class="actions modal">
-            <div class="button light" v-on:click="close()">{{ cancel || $t("cancel") }}</div>
+            <div class="button" v-on:click="close()">{{ cancel || $t("cancel") }}</div>
             <div class="button primary" v-on:click="confirm()">{{ ok || $t("ok") }}</div>
         </div>
     </modal>

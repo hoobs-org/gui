@@ -24,23 +24,23 @@
     --button-light-text: #777;
     --button-light-border: #e5e5e5;
 
-    --modal-text: #515151;
-    --modal-input-text: #000;
-    --modal-error-text: #a11;
-    --modal-background: #ffffffc2;
-    --modal-dark: #f1f1f1;
-    --modal-form: #ffffff;
+    --modal-text: #999;
+    --modal-input-text: #fff;
+    --modal-error-text: #e30505;
+    --modal-background: #111111ad;
+    --modal-dark: #000;
+    --modal-form: #111;
     --modal-mask: #14141400;
     --modal-highlight: #feb400;
-    --modal-input: #ffffff9f;
-    --modal-input-accent: #fcfcfc;
-    --modal-border: #e5e5e5;
+    --modal-input: #262626;
+    --modal-input-accent: #303030c4;
+    --modal-border: #1d1d1d;
 
     --menu-text: #b4b4b4;
     --menu-highlight-text: #fff;
-    --menu-background: #2727279d;
-    --menu-highlight: #4949499d;
-    --menu-border: #303030;
+    --menu-background: #1111119d;
+    --menu-highlight: #0000009d;
+    --menu-border: #1d1d1d;
 
     --navigation-text: #999;
     --navigation-highlight-text: #fff;
@@ -51,11 +51,11 @@
 
     --backdrop: url('/defaults/backdrops/default.jpg');
 
-    --elevation: 0 1px 1px 0 rgba(0, 0, 0, 0.24),
-                 0 2px 1px -1px rgba(0, 0, 0, 0.22),
-                 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+    --elevation: 0 1px 1px 1px rgba(0, 0, 0, 0.44),
+                 0 -3px 1px -1px rgba(0, 0, 0, 0.42),
+                 0 1px 3px 1px rgba(0, 0, 0, 0.5);
 
-    --elevation-button: 0 1px 1px 0 rgba(0, 0, 0, 0.24),
-                        0 2px 1px -1px rgba(0, 0, 0, 0.22),
-                        0 1px 3px 1px rgba(0, 0, 0, 0.3);
+    --elevation-button: 0 1px 1px 0 rgba(0, 0, 0, 0.44),
+                        0 2px 1px -1px rgba(0, 0, 0, 0.42),
+                        0 1px 3px 1px rgba(0, 0, 0, 0.5);
 }

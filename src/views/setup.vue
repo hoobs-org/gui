@@ -63,7 +63,7 @@
                     HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
                     <br />Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
-                <div class="button light" v-on:click="disable()">{{ $t("disable_login") }}</div>
+                <div class="button" v-on:click="disable()">{{ $t("disable_login") }}</div>
                 <div class="button primary" v-on:click="account()">{{ $t("create_account") }}</div>
             </div>
         </modal>
@@ -240,11 +240,9 @@
 
         form {
             flex: 1;
-            border: var(--modal-border) 1px solid;
             background: var(--modal-form);
             padding: 20px;
             margin: 0 10px;
-            border-radius: 4px;
         }
     }
 
@@ -261,7 +259,6 @@
             form {
                 border: unset;
                 padding: unset;
-                border-radius: unset;
             }
         }
     }

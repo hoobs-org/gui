@@ -51,12 +51,10 @@
         display: flex;
         background: var(--application-dark);
         user-select: none;
-        border-radius: 4px;
 
         .type {
             width: 7px;
             height: 100%;
-            border-radius: 4px 0 0 4px;
             background: var(--application-text);
 
             &.success {

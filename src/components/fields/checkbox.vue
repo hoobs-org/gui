@@ -153,7 +153,6 @@
         .group {
             box-sizing: border-box;
             position: relative;
-            border-radius: 2px;
             height: 20px;
             width: 20px;
             transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
