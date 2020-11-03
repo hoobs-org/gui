@@ -99,6 +99,15 @@ module.exports = {
         },
         {
             files: [
+                "src/plugins/drag-directive.ts",
+            ],
+            rules: {
+                "no-param-reassign": "off",
+                "max-len": "off",
+            },
+        },
+        {
+            files: [
                 "src/services/maps.ts",
             ],
             rules: {

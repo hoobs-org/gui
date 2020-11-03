@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="$t('personalize')" width="760px" height="687px">
+    <modal :title="$t('personalize')" :draggable="true" width="760px" height="687px">
         <div id="personalize">
             <div v-if="!loading" class="content">
                 <div class="form">
@@ -351,12 +351,12 @@
 
                 .title {
                     font-size: 14px;
-                    text-shadow: 1px 1px 1px #00000033;
+                    text-shadow: 1px 1px 1px #52525250;
                 }
 
                 .accent {
                     font-size: 12px;
-                    text-shadow: 1px 1px 1px #00000033;
+                    text-shadow: 1px 1px 1px #52525250;
                 }
 
                 .text {

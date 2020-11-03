@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="$t('settings')" width="760px" height="620px">
+    <modal :title="$t('settings')" :draggable="true" width="760px" height="620px">
         <div id="settings">
             <div v-if="!loading" class="content">
                 <location v-if="show.location" :select="select" />
@@ -56,7 +56,7 @@
                         <number-field
                             :name="$t('update_interval')"
                             :description="$t('update_interval_description')"
-                            :min="1"
+                            :min="2"
                             :max="300"
                             v-model="interval"
                         />
@@ -118,6 +118,7 @@
         async mounted() {
             const config = await this.hoobs.config.get();
 
+            this.interval = (config.api || {}).polling_seconds || 5;
             this.units = (config.weather || {}).units || "celsius";
             this.location = (config.weather || {}).location;
             this.loading = false;
@@ -125,7 +126,7 @@
 
         watch: {
             interval() {
-                if (this.interval < 1) this.interval = 1;
+                if (this.interval < 2) this.interval = 2;
                 if (this.interval > 300) this.interval = 300;
             },
         },

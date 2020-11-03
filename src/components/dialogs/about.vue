@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="$t('about')" width="720px" height="520px">
+    <modal :title="$t('about')" :draggable="true" width="720px" height="520px">
         <div id="about">
             <updates v-if="show.updates" />
             <div v-else class="content">

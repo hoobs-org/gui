@@ -18,9 +18,14 @@
 
 <template>
     <div v-on:click.stop id="dialog">
-        <div class="window modal" :style="`width: ${width}; height: ${height};`">
+        <div v-if="draggable" v-drag="{ handle: '.handle' }" class="window modal" :style="`width: ${width}; height: ${height};`">
             <welcome v-if="welcome" :message="welcome" />
-            <div v-else-if="title" class="subject">{{ title }}</div>
+            <div v-else-if="title" class="subject handle">{{ title }}</div>
+            <slot />
+        </div>
+        <div v-else class="window modal" :style="`width: ${width}; height: ${height};`">
+            <welcome v-if="welcome" :message="welcome" />
+            <div v-else-if="title" class="subject handle">{{ title }}</div>
             <slot />
         </div>
     </div>
@@ -47,6 +52,10 @@
                 type: String,
                 default: "auto",
             },
+            draggable: {
+                type: Boolean,
+                default: false,
+            },
         },
     };
 </script>
@@ -68,7 +77,7 @@
 
         .subject {
             color: var(--modal-highlight);
-            text-shadow: 1px 1px 1px #00000033;
+            text-shadow: 1px 1px 1px #52525250;
             font-weight: bold;
             font-size: 17px;
             padding: 10px 10px 0 10px;
@@ -113,7 +122,7 @@
                 display: flex;
                 flex-direction: column;
                 border: var(--modal-border) 1px solid;
-                background: var(--modal-background);
+                background: var(--modal-form);
                 padding: 20px;
                 margin: 10px 0 0 0;
                 border-radius: 4px;
@@ -177,7 +186,7 @@
 
     @media (min-width: 300px) and (max-width: 815px) {
         #dialog {
-            background: var(--modal-mobile);
+            background: var(--modal-form);
             padding: 0;
 
             .window {

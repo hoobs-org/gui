@@ -143,7 +143,7 @@
                         margin: 0 7px 0 0;
                         font-size: 20px;
                         color: var(--modal-highlight);
-                        text-shadow: 1px 1px 1px #00000033;
+                        text-shadow: 1px 1px 1px #52525250;
                         opacity: 0.7;
                     }
 

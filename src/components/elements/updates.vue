@@ -132,7 +132,7 @@
 
             .icon {
                 color: var(--modal-highlight);
-                text-shadow: 1px 1px 1px #00000033;
+                text-shadow: 1px 1px 1px #52525250;
                 font-size: 37px;
             }
 

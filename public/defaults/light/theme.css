@@ -27,14 +27,14 @@
     --modal-text: #515151;
     --modal-input-text: #000;
     --modal-error-text: #a11;
-    --modal-background: #ffffffa6;
+    --modal-background: #ffffffc2;
     --modal-dark: #f1f1f1;
-    --modal-mobile: #ffffff;
+    --modal-form: #ffffff;
     --modal-mask: #14141400;
     --modal-highlight: #feb400;
     --modal-input: #ffffff9f;
     --modal-input-accent: #fcfcfc;
-    --modal-border: #d4d4d4;
+    --modal-border: #e5e5e5;
 
     --menu-text: #515151;
     --menu-highlight-text: #000;

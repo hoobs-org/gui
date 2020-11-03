@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <h2 id="welcome">
+    <h2 id="welcome" class="handle">
         <svg
             class="logo"
             viewBox="0 0 80 80.92"
@@ -64,7 +64,7 @@
         line-height: normal;
         font-size: 22px;
         color: var(--modal-highlight);
-        text-shadow: 1px 1px 1px #00000033;
+        text-shadow: 1px 1px 1px #52525250;
         display: flex;
         align-content: center;
         align-items: center;

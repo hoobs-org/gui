@@ -17,6 +17,7 @@
  **************************************************************************************************/
 
 import Vue from "vue";
+
 import socket from "./services/socket";
 import sdk from "./services/sdk";
 import root from "./app.vue";
@@ -25,6 +26,7 @@ import store from "./services/store";
 import tasks from "./services/tasks";
 import lang from "./lang";
 import themes from "./services/themes";
+import drag from "./plugins/drag-directive";
 
 import Modal from "./components/elements/modal.vue";
 import Radio from "./components/fields/radio.vue";
@@ -67,6 +69,8 @@ Vue.mixin({ data: () => ({ hoobs }) });
 Vue.mixin({ methods: themes.mixin(store) });
 
 themes.set(store.state.theme, store);
+
+Vue.use(drag);
 
 Vue.component("modal", Modal);
 Vue.component("radio", Radio);

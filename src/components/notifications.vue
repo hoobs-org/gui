@@ -130,14 +130,14 @@
     @media (min-width: 300px) and (max-width: 815px) {
         #notifications {
             width: 100%;
-            background: var(--modal-mobile);
+            background: var(--modal-form);
             box-shadow: unset;
             backdrop-filter: unset;
             overflow: auto;
 
             .title {
                 color: var(--modal-highlight);
-                text-shadow: 1px 1px 1px #00000033;
+                text-shadow: 1px 1px 1px #52525250;
                 border-bottom: var(--modal-border) 1px solid;
 
                 .icon {

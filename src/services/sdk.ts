@@ -104,7 +104,7 @@ export interface ModalTheme {
     text: TextTheme;
     background: string;
     dark: string;
-    mobile: string;
+    form: string;
     mask: string;
     highlight: string;
     input: string;
