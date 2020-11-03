@@ -189,6 +189,7 @@
                 flex: 1;
                 width: 100% !important;
                 height: 100% !important;
+                background: var(--application-background);
                 box-sizing: border-box;
                 min-height: unset;
                 max-height: unset;

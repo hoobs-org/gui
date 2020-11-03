@@ -181,7 +181,7 @@
             height: 100%;
             box-sizing: border-box;
             min-width: unset;
-            background: var(--modal-form);
+            background: var(--application-background);
             color: var(--modal-text);
             top: 0;
             right: unset;

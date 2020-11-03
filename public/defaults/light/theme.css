@@ -1,5 +1,5 @@
 [theme="light"] {
-    --transparency: blur(4px);
+    --transparency: blur(6px);
 
     --application-text: #727272;
     --application-highlight-text: #000;
@@ -29,7 +29,7 @@
     --modal-error-text: #a11;
     --modal-background: #ffffffc2;
     --modal-dark: #f1f1f1;
-    --modal-form: #ffffff;
+    --modal-form: #ffffff00;
     --modal-mask: #14141400;
     --modal-highlight: #feb400;
     --modal-input: #ffffff9f;
