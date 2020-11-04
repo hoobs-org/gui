@@ -98,6 +98,10 @@
         color: var(--application-text);
         background: var(--application-background);
 
+        ::placeholder {
+            color: var(--application-text);
+        }
+
         a {
             color: var(--application-highlight) !important;
             text-decoration: none !important;
@@ -159,6 +163,11 @@
 
         .view {
             flex: 1;
+        }
+
+        .vue-grid-placeholder {
+            background: transparent !important;
+            border: var(--application-highlight) 2px dashed;
         }
 
         input {

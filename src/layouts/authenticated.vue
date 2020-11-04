@@ -20,7 +20,7 @@
     <div v-on:click="reset()" id="authenticated">
         <navigation />
         <div class="screen">
-            <div class="header">
+            <div v-if="!show.application" class="tray">
                 <div v-on:click.stop="toggle('notifications')" class="icon">
                     notifications_none
                     <div v-if="notifications.length > 0" class="active">&bull;</div>
@@ -168,15 +168,16 @@
             flex-direction: column;
         }
 
-        .header {
+        .tray {
             height: 48px;
             position: absolute;
-            top: 7px;
-            right: 7px;
+            top: 10px;
+            right: 10px;
             display: flex;
             padding: 0 0 0 7px;
             justify-content: flex-end;
             background: var(--application-background);
+            box-shadow: var(--elevation-button);
             border-radius: 24px;
             z-index: 1100;
 

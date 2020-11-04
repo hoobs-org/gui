@@ -28,6 +28,37 @@ export default new Vuex.Store({
         log: [],
         instances: {},
         config: {},
+        dashboard: {
+            items: [{
+                x: 0,
+                y: 0,
+                w: 12,
+                h: 8,
+                i: 1,
+                component: "activity",
+            }, {
+                x: 0,
+                y: 8,
+                w: 7,
+                h: 6,
+                i: 2,
+                component: "weather",
+            }, {
+                x: 0,
+                y: 14,
+                w: 7,
+                h: 8,
+                i: 3,
+                component: "favorites",
+            }, {
+                x: 7,
+                y: 8,
+                w: 5,
+                h: 14,
+                i: 4,
+                component: "system",
+            }],
+        },
         cpu: {
             used: null,
             history: [
@@ -186,12 +217,17 @@ export default new Vuex.Store({
         "THEME:SET": (state: { [key: string ]: any }, theme: number) => {
             state.theme = theme;
         },
+
+        "DASHBOARD:LAYOUT": (state: { [key: string ]: any }, data: { [key: string ]: string | number | boolean }) => {
+            state.dashboard.items = data;
+        },
     },
 
     plugins: [new Persistence({
         key: "hoobs:state",
         storage: window.localStorage,
         reducer: (state: { [key: string ]: any }) => ({
+            dashboard: state.dashboard,
             cpu: state.cpu,
             memory: state.memory,
             temp: state.temp,

@@ -95,15 +95,16 @@
     #menu {
         min-width: 197px;
         position: absolute;
-        top: 48px;
-        right: 21px;
+        top: 10px;
+        right: 10px;
         display: flex;
         flex-direction: column;
         color: var(--menu-text);
         background: var(--menu-background);
         backdrop-filter: var(--transparency);
-        z-index: 3000;
         box-shadow: var(--elevation);
+        border-radius: 0;
+        z-index: 3000;
 
         .seperator {
             height: 1px;
