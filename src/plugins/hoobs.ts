@@ -113,6 +113,13 @@ export interface ModalTheme {
     border: string;
 }
 
+export interface WidgetTheme {
+    text: TextTheme;
+    background: string;
+    highlight: string;
+    border: string;
+}
+
 export interface MenuTheme {
     text: TextTheme;
     background: string;
@@ -141,6 +148,7 @@ export interface Theme {
     application: ApplicationTheme;
     button: ButtonTheme;
     modal: ModalTheme;
+    widget: WidgetTheme;
     menu: MenuTheme;
     navigation: NavigationTheme;
     splash: string;

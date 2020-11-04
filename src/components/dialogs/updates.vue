@@ -60,7 +60,6 @@
 
 <script>
     import Semver from "compare-versions";
-    import { wait } from "../../plugins/hoobs";
 
     export default {
         name: "updates",
@@ -96,12 +95,6 @@
 
                 await system.update();
                 await system.reboot();
-
-                setTimeout(async () => {
-                    await wait();
-
-                    window.location.href = "/";
-                }, 5 * 1000);
             },
 
             async update() {

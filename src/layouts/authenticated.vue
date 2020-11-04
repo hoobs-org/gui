@@ -20,7 +20,8 @@
     <div v-on:click="reset()" id="authenticated">
         <navigation />
         <div class="screen">
-            <div v-if="!show.application" class="tray">
+            <div ref="tray" class="tray">
+                <div v-if="$route.name === 'dashboard'" v-on:click.stop="toggle('dashboard')" class="icon">settings</div>
                 <div v-on:click.stop="toggle('notifications')" class="icon">
                     notifications_none
                     <div v-if="notifications.length > 0" class="active">&bull;</div>
@@ -43,6 +44,12 @@
         <about v-if="show.about" :close="() => { toggle('about') }" />
         <settings v-if="show.settings" :close="() => { toggle('settings') }" />
         <personalize v-if="show.personalize" :close="() => { toggle('personalize') }" />
+        <dashboard v-if="show.dashboard" :close="() => { toggle('dashboard') }" />
+        <alert
+            v-if="show.notify"
+            :message="notify.message"
+            :close="() => { show.notify = false; }"
+        />
         <confirm
             v-if="show.confirmation"
             :message="confirmation.message"
@@ -55,11 +62,13 @@
 
 <script>
     import About from "../components/dialogs/about.vue";
+    import Alert from "../components/dialogs/alert.vue";
     import Confirm from "../components/dialogs/confirm.vue";
     import Navigation from "../components/navigation.vue";
     import Notifications from "../components/notifications.vue";
     import ApplicationMenu from "../components/menus/application.vue";
     import Personalize from "../components/dialogs/personalize.vue";
+    import Dashboard from "../components/dialogs/dashboard.vue";
     import Settings from "../components/dialogs/settings.vue";
 
     export default {
@@ -67,8 +76,10 @@
 
         components: {
             "about": About,
+            "alert": Alert,
             "confirm": Confirm,
             "settings": Settings,
+            "dashboard": Dashboard,
             "navigation": Navigation,
             "personalize": Personalize,
             "notifications": Notifications,
@@ -89,7 +100,12 @@
                     about: false,
                     settings: false,
                     personalize: false,
+                    dashboard: false,
                     confirmation: false,
+                    notify: false,
+                },
+                notify: {
+                    message: "",
                 },
                 confirmation: {
                     action: () => { /* null */ },
@@ -112,6 +128,12 @@
                 await this.hoobs.auth.logout();
 
                 this.$router.push({ path: "/login", query: { url: "/" } });
+            },
+
+            alert(message) {
+                this.notify.message = message;
+
+                this.show.notify = true;
             },
 
             confirm(message, ok, action) {
@@ -169,27 +191,24 @@
         }
 
         .tray {
-            height: 48px;
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 2px;
+            right: 0;
             display: flex;
-            padding: 0 0 0 7px;
+            padding: 0 0 0 10px;
             justify-content: flex-end;
-            background: var(--application-background);
-            box-shadow: var(--elevation-button);
-            border-radius: 24px;
             z-index: 1100;
 
             .icon {
-                width: 34px;
-                height: 34px;
+                width: 28px;
+                height: 28px;
                 display: flex;
                 justify-content: space-around;
                 align-items: center;
                 position: relative;
                 border-radius: 100%;
-                margin: 7px 0;
+                font-size: 20px;
+                margin: 5px 0;
                 cursor: pointer;
 
                 .active {
@@ -200,11 +219,10 @@
                 }
 
                 &:last-child {
-                    margin: 7px 7px 7px 0;
+                    margin: 5px 10px 5px 0;
                 }
 
                 &:hover {
-                    background: var(--application-input-accent);
                     color: var(--application-highlight-text);
                 }
             }

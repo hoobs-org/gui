@@ -127,6 +127,7 @@
         },
 
         async mounted() {
+            this.theme("dark");
             this.step = await this.progress();
         },
 

@@ -34,6 +34,7 @@
     import { FitAddon } from "xterm-addon-fit";
     import { WebLinksAddon } from "xterm-addon-web-links";
     import { chunk } from "../plugins/hoobs";
+    import Socket from "../plugins/socket";
 
     export default {
         name: "terminal",
@@ -45,6 +46,7 @@
         data() {
             return {
                 term: null,
+                socket: null,
                 version: null,
                 screen: null,
                 initilize: true,
@@ -73,6 +75,7 @@
 
             this.opening = true;
             this.version = await this.hoobs.version();
+            this.socket = Socket();
 
             this.text = {
                 width: Math.floor((this.$refs.measure.clientWidth + 1) / 52),
@@ -103,10 +106,10 @@
 
         methods: {
             connect() {
-                this.io.emit("shell_connect");
+                this.socket.emit("shell_connect");
 
-                this.term.onData((data) => { this.io.emit("shell_input", data); });
-                this.io.on("shell_output", (data) => { this.term.write(data); });
+                this.term.onData((data) => { this.socket.emit("shell_input", data); });
+                this.socket.on("shell_output", (data) => { this.term.write(data); });
 
                 if (this.opening) {
                     this.motd();
@@ -117,7 +120,7 @@
             },
 
             disconnect() {
-                this.io.emit("shell_disconnect");
+                this.socket.emit("shell_disconnect");
             },
 
             motd() {
@@ -136,9 +139,9 @@
                         this.term.write(`${chunk(this.$t("motd"), 40).join("\r\n")}\r\n`);
                         this.term.write("\r\n");
 
-                        this.io.emit("shell_input", "");
+                        this.socket.emit("shell_input", "");
                     } else {
-                        this.io.emit("shell_clear");
+                        this.socket.emit("shell_clear");
                     }
                 }
 
@@ -150,14 +153,15 @@
 
                 setTimeout(() => {
                     if (this.term && this.$refs.flow) {
-                        const cols = Math.floor((this.$refs.flow.clientWidth + 1) / this.text.width) - 1;
+                        const tray = this.$parent.$refs.tray ? this.$parent.$refs.tray.clientWidth : 0;
+                        const cols = Math.floor(((this.$refs.flow.clientWidth + 1) - tray) / this.text.width);
                         const rows = Math.floor((this.$refs.flow.clientHeight + 1) / this.text.height) + 3;
 
                         if (this.$refs.container) this.$refs.container.style.display = "block";
                         if (this.screen) this.screen.fit();
 
                         this.term.resize(cols, rows);
-                        this.io.emit("shell_resize", `${cols}:${rows}`);
+                        this.socket.emit("shell_resize", `${cols}:${rows}`);
                         this.term.focus();
                     }
                 }, 10);

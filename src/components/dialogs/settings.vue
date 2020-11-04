@@ -76,7 +76,7 @@
                 </div>
             </div>
             <div v-else class="loading">
-                <spinner />
+                <spinner :value="message" />
             </div>
             <div v-if="!loading && (show.restore || show.location)" class="actions modal">
                 <div class="button" v-on:click="back()">{{ $t("cancel") }}</div>
@@ -93,7 +93,6 @@
     import Restore from "./restore.vue";
     import Location from "./location.vue";
     import Countries from "../../lang/country-codes.json";
-    import { wait } from "../../plugins/hoobs";
 
     export default {
         name: "personalize",
@@ -122,6 +121,7 @@
                 units: "celsius",
                 interval: 5,
                 countries: Countries,
+                message: "",
             };
         },
 
@@ -175,10 +175,6 @@
 
                     this.$parent.show.confirmation = false;
                     this.loading = true;
-
-                    setTimeout(() => {
-                        window.location.href = "/";
-                    }, 5 * 1000);
                 });
             },
 
@@ -202,23 +198,18 @@
                 this.$parent.confirm(this.$t("reset_warning"), this.$t("reset"), async () => {
                     const system = await this.hoobs.system();
 
-                    await system.reset();
-
                     this.$parent.show.confirmation = false;
                     this.loading = true;
 
-                    setTimeout(async () => {
-                        await wait();
-
-                        this.theme("dark");
-
-                        window.location.href = "/";
-                    }, 5 * 1000);
+                    await system.reset();
                 });
             },
 
             async save() {
                 this.loading = true;
+                this.message = `${this.$t("saving_changes")}...`;
+
+                this.$store.commit("SETTINGS:UPDATING");
 
                 const config = await this.hoobs.config.get();
                 const weather = {};
@@ -231,6 +222,8 @@
                 config.api.polling_seconds = this.interval < 2 ? 2 : this.interval;
 
                 await this.hoobs.config.update(config);
+
+                this.message = `${this.$t("applying_changes")}...`;
 
                 this.close();
             },

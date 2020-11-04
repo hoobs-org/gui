@@ -71,10 +71,6 @@
                     this.loading = true;
 
                     await this.hoobs.restore.file(this.filename);
-
-                    setTimeout(() => {
-                        window.location.href = "/";
-                    }, 5 * 1000);
                 }
             },
 
@@ -83,10 +79,6 @@
                     this.loading = true;
 
                     await this.hoobs.restore.upload(this.$refs.backup.files[0]);
-
-                    setTimeout(() => {
-                        window.location.href = "/";
-                    }, 5 * 1000);
                 }
             },
         },

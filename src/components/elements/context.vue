@@ -17,13 +17,20 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="config">
-        <context />
+    <div id="context">
+        <slot />
     </div>
 </template>
 
 <script>
     export default {
-        name: "config",
+        name: "context",
     };
 </script>
+
+<style lang="scss" scoped>
+    #context {
+        height: 38px;
+        background: var(--application-background);
+    }
+</style>

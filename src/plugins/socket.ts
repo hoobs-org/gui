@@ -31,7 +31,9 @@ class Socket {
 
     constructor() {
         this.events = {};
+
         this.io = SocketIO(SOCKET_URL);
+
         this.terminal = false;
     }
 

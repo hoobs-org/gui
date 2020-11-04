@@ -17,7 +17,9 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="accessories"></div>
+    <div id="accessories">
+        <context />
+    </div>
 </template>
 
 <script>

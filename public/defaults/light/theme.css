@@ -5,16 +5,16 @@
     --application-highlight-text: #000;
     --application-input-text: #000;
     --application-error-text: #a11;
-    --application-background: #fcfcfc;
+    --application-background: #f8f8f8;
     --application-highlight: #feb400;
     --application-accent: #ffd400;
     --application-dark: #e7e7e7;
-    --application-drawer: #fcfcfc9d;
-    --application-input: #fcfcfc;
+    --application-drawer: #f8f8f89d;
+    --application-input: #f8f8f8;
     --application-input-accent: #f1f1f1;
     --application-border: #dfdfdf;
 
-    --button: #fcfcfc;
+    --button: #f8f8f8;
     --button-text: #1a1a1a;
     --button-border: #dfdfdf;
     --button-primary: #feb400;
@@ -33,8 +33,13 @@
     --modal-mask: #14141400;
     --modal-highlight: #feb400;
     --modal-input: #ffffff9f;
-    --modal-input-accent: #fcfcfc;
+    --modal-input-accent: #f8f8f8;
     --modal-border: #e5e5e5;
+
+    --widget-text: #515151;
+    --widget-background: #ffffffc2;
+    --widget-highlight: #feb400;
+    --widget-border: #e5e5e5;
 
     --menu-text: #515151;
     --menu-highlight-text: #000;

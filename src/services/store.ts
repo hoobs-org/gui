@@ -34,28 +34,28 @@ export default new Vuex.Store({
                 y: 0,
                 w: 12,
                 h: 8,
-                i: 1,
+                i: "1",
                 component: "activity",
             }, {
                 x: 0,
                 y: 8,
                 w: 7,
                 h: 6,
-                i: 2,
+                i: "2",
                 component: "weather",
             }, {
                 x: 0,
                 y: 14,
                 w: 7,
                 h: 8,
-                i: 3,
+                i: "3",
                 component: "favorites",
             }, {
                 x: 7,
                 y: 8,
                 w: 5,
                 h: 14,
-                i: 4,
+                i: "4",
                 component: "system",
             }],
         },
@@ -86,6 +86,8 @@ export default new Vuex.Store({
         user: {},
         auth: false,
         notifications: [],
+        reconnecting: false,
+        updating: false,
         navigation: false,
         accessory: null,
         theme: "dark",
@@ -138,6 +140,14 @@ export default new Vuex.Store({
             state.memory.history[state.memory.history.length - 1] = [state.memory.history.length - 1, state.memory.load];
         },
 
+        "IO:RECONNECTING": (state: { [key: string ]: any }) => {
+            state.reconnecting = true;
+        },
+
+        "IO:RECONNECTED": (state: { [key: string ]: any }) => {
+            state.reconnecting = false;
+        },
+
         "IO:NOTIFICATION": (state: { [key: string ]: any }, payload: any) => {
             const now = (new Date()).getTime();
 
@@ -156,6 +166,14 @@ export default new Vuex.Store({
 
         "IO:ACCESSORY:CHANGE": (state: { [key: string ]: any }, payload: any) => {
             state.accessory = payload.data;
+        },
+
+        "SETTINGS:UPDATING": (state: { [key: string ]: any }) => {
+            state.updating = true;
+        },
+
+        "SETTINGS:UPDATED": (state: { [key: string ]: any }) => {
+            state.updating = false;
         },
 
         "SESSION:SET": (state: { [key: string ]: any }, token: string) => {
@@ -220,6 +238,14 @@ export default new Vuex.Store({
 
         "DASHBOARD:LAYOUT": (state: { [key: string ]: any }, data: { [key: string ]: string | number | boolean }) => {
             state.dashboard.items = data;
+        },
+
+        "DASHBOARD:ITEMS": (state: { [key: string ]: any }, data: { [key: string ]: string | number | boolean }) => {
+            state.dashboard.items = data;
+        },
+
+        "DASHBOARD:BACKDROP": (state: { [key: string ]: any }, value: boolean) => {
+            state.dashboard.backdrop = value;
         },
     },
 

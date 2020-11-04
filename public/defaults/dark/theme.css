@@ -36,6 +36,11 @@
     --modal-input-accent: #303030;
     --modal-border: #1d1d1d;
 
+    --widget-text: #999;
+    --widget-background: #181818d2;
+    --widget-highlight: #feb400;
+    --widget-border: #1d1d1d;
+
     --menu-text: #b4b4b4;
     --menu-highlight-text: #fff;
     --menu-background: #1111119d;

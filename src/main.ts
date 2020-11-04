@@ -32,6 +32,7 @@ import lang from "./lang";
 
 import Modal from "./components/elements/modal.vue";
 import Radio from "./components/fields/radio.vue";
+import Context from "./components/elements/context.vue";
 import Checkbox from "./components/fields/checkbox.vue";
 import TextField from "./components/fields/text.vue";
 import PasswordField from "./components/fields/password.vue";
@@ -53,6 +54,20 @@ io.on("log", (data) => store.commit("IO:LOG", data));
 io.on("monitor", (data) => store.commit("IO:MONITOR", data));
 io.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
 io.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
+io.on("reconnecting", () => { store.commit("IO:RECONNECTING"); });
+
+io.on("reconnect", async () => {
+    store.commit("SETTINGS:UPDATED");
+    store.commit("IO:RECONNECTED");
+
+    if ((await hoobs.auth.status()) === "uninitialized" || (await hoobs.instances.count()) === 0) {
+        window.location.href = "/";
+    } else if (!(await hoobs.auth.validate())) {
+        await hoobs.auth.logout();
+
+        window.location.href = "/";
+    }
+});
 
 hoobs.log().then((messages) => { store.commit("LOG:HISTORY", messages); });
 
@@ -74,6 +89,7 @@ Vue.mixin(themes.mixin(store));
 
 Vue.use(drag);
 
+Vue.component("context", Context);
 Vue.component("modal", Modal);
 Vue.component("radio", Radio);
 Vue.component("checkbox", Checkbox);

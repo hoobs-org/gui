@@ -95,7 +95,7 @@
     #menu {
         min-width: 197px;
         position: absolute;
-        top: 10px;
+        top: 34px;
         right: 10px;
         display: flex;
         flex-direction: column;

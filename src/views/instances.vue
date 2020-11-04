@@ -17,7 +17,9 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="instances"></div>
+    <div id="instances">
+        <context />
+    </div>
 </template>
 
 <script>

@@ -17,7 +17,8 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="dashboard">
+    <div id="dashboard" :class="backdrop ? 'backdrop' : ''">
+        <context />
         <div class="content">
             <grid-layout
                 :layout="items"
@@ -70,14 +71,30 @@
         data() {
             return {
                 loading: true,
+                backdrop: false,
                 items: [],
             };
+        },
+
+        created() {
+            this.$store.subscribe((mutation) => {
+                if (mutation.type === "DASHBOARD:ITEMS" || mutation.type === "DASHBOARD:BACKDROP") {
+                    this.loading = true;
+
+                    const { dashboard } = this.$store.state;
+
+                    this.items = dashboard.items;
+                    this.backdrop = dashboard.backdrop || false;
+                    this.loading = false;
+                }
+            });
         },
 
         mounted() {
             const { dashboard } = this.$store.state;
 
             this.items = dashboard.items;
+            this.backdrop = dashboard.backdrop || false;
             this.loading = false;
         },
 
@@ -106,24 +123,30 @@
 <style lang="scss" scoped>
     #dashboard {
         flex: 1;
-        padding: 7px;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         overflow: hidden;
+
+        &.backdrop {
+            background-image: var(--backdrop);
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+        }
 
         .content {
             flex: 1;
             overflow: hidden;
+            background: linear-gradient(to bottom, var(--application-background) 0%, #00000000 30%);
 
             &:hover {
-                overflow: overflow;
+                overflow: overlay;
             }
 
             .widget {
-                color: var(--application-text);
-                background: var(--application-drawer);
+                color: var(--widget-text);
+                background: var(--widget-background);
                 backdrop-filter: var(--transparency);
-                box-shadow: var(--elevation-button);
                 border-radius: 0;
                 box-sizing: border-box;
                 overflow: hidden;
