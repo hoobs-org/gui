@@ -152,10 +152,14 @@
                 this.loading = true;
 
                 const url = await this.hoobs.backup.execute();
+                const link = document.createElement("a");
 
                 this.loading = false;
 
-                window.location.href = url;
+                link.href = url;
+                link.target = "_blank";
+                link.download = "hoobs.backup";
+                link.click();
             },
 
             restore() {

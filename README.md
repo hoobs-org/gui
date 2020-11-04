@@ -253,9 +253,9 @@ This will accept an uploaded file and restore it to the system.
 > This will reboot the device
 
 Parameters
-| Name | Required | Type | Description                                                   |
-| ---- | -------- | ---- | ------------------------------------------------------------- |
-| file | Yes      | Blob | This can be any hbak file stream including an HTTPFile object |
+| Name | Required | Type | Description                                                     |
+| ---- | -------- | ---- | --------------------------------------------------------------- |
+| file | Yes      | Blob | This can be any backup file stream including an HTTPFile object |
 
 #### **hoobs.system()**
 Returns a system information object.

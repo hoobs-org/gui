@@ -18,19 +18,19 @@
 
 <template>
     <div v-if="!loading" id="restore" class="form">
-        <div class="row section">{{ $t("restore") }}</div>
-        <div class="row title">{{ $t("available_backups") }}</div>
+        <div v-if="files.length > 0" class="row section">{{ $t("restore") }}</div>
+        <div v-if="files.length > 0" class="row title">{{ $t("available_backups") }}</div>
         <div v-for="(file, index) in files" :key="index" class="row">
             <radio :id="`file_${index}`" name="filename" v-model="filename" :value="file.filename">
                 <label :for="`file_${index}`">{{ format(file.date) }}</label>
             </radio>
         </div>
-        <div class="row" style="margin-top: 7px;">
+        <div v-if="files.length > 0" class="row" style="margin-top: 7px;">
             <div v-on:click="restore()" class="button">{{ $t("restore") }}</div>
         </div>
         <div class="row section" style="margin-bottom: 7px;">{{ $t("backup_file") }}</div>
         <div class="row">
-            <input type="file" ref="backup" v-on:change="upload()" accept=".hbak" hidden />
+            <input type="file" ref="backup" v-on:change="upload()" accept=".backup" hidden />
             <div v-on:click="$refs.backup.click();" class="button">{{ $t("upload_file") }}</div>
         </div>
     </div>
@@ -52,7 +52,11 @@
         },
 
         async mounted() {
+            this.loading = true;
+
             this.files = await this.hoobs.backup.catalog(5);
+
+            this.loading = false;
         },
 
         methods: {
