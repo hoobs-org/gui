@@ -86,8 +86,6 @@ export default new Vuex.Store({
         user: {},
         auth: false,
         notifications: [],
-        reconnecting: false,
-        updating: false,
         navigation: false,
         accessory: null,
         theme: "dark",
@@ -140,14 +138,6 @@ export default new Vuex.Store({
             state.memory.history[state.memory.history.length - 1] = [state.memory.history.length - 1, state.memory.load];
         },
 
-        "IO:RECONNECTING": (state: { [key: string ]: any }) => {
-            state.reconnecting = true;
-        },
-
-        "IO:RECONNECTED": (state: { [key: string ]: any }) => {
-            state.reconnecting = false;
-        },
-
         "IO:NOTIFICATION": (state: { [key: string ]: any }, payload: any) => {
             const now = (new Date()).getTime();
 
@@ -166,14 +156,6 @@ export default new Vuex.Store({
 
         "IO:ACCESSORY:CHANGE": (state: { [key: string ]: any }, payload: any) => {
             state.accessory = payload.data;
-        },
-
-        "SETTINGS:UPDATING": (state: { [key: string ]: any }) => {
-            state.updating = true;
-        },
-
-        "SETTINGS:UPDATED": (state: { [key: string ]: any }) => {
-            state.updating = false;
         },
 
         "SESSION:SET": (state: { [key: string ]: any }, token: string) => {

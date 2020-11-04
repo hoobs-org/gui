@@ -209,8 +209,6 @@
                 this.loading = true;
                 this.message = `${this.$t("saving_changes")}...`;
 
-                this.$store.commit("SETTINGS:UPDATING");
-
                 const config = await this.hoobs.config.get();
                 const weather = {};
 

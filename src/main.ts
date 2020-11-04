@@ -54,12 +54,8 @@ io.on("log", (data) => store.commit("IO:LOG", data));
 io.on("monitor", (data) => store.commit("IO:MONITOR", data));
 io.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
 io.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
-io.on("reconnecting", () => { store.commit("IO:RECONNECTING"); });
 
 io.on("reconnect", async () => {
-    store.commit("SETTINGS:UPDATED");
-    store.commit("IO:RECONNECTED");
-
     if ((await hoobs.auth.status()) === "uninitialized" || (await hoobs.instances.count()) === 0) {
         window.location.href = "/";
     } else if (!(await hoobs.auth.validate())) {

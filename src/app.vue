@@ -21,9 +21,6 @@
         <component :is="$route.meta.layout">
             <router-view class="view" />
         </component>
-        <div v-if="reconnecting && !updating && $route.name !== 'setup'" class="reconnecting">
-            <spinner :value="`${$t('connecting')}...`" />
-        </div>
     </div>
 </template>
 
@@ -42,14 +39,6 @@
         computed: {
             current() {
                 return this.$store.state.theme;
-            },
-
-            updating() {
-                return this.$store.state.updating;
-            },
-
-            reconnecting() {
-                return this.$store.state.reconnecting;
             },
         },
     };
@@ -269,20 +258,6 @@
                     }
                 }
             }
-        }
-
-        .reconnecting {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background: var(--application-drawer);
-            backdrop-filter: var(--transparency);
-            z-index: 3000;
         }
 
         .hidden-submit {
