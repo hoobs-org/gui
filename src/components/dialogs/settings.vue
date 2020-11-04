@@ -90,8 +90,8 @@
 </template>
 
 <script>
-    import Restore from "../elements/restore.vue";
-    import Location from "../elements/location.vue";
+    import Restore from "./restore.vue";
+    import Location from "./location.vue";
     import Countries from "../../lang/country-codes.json";
     import { wait } from "../../plugins/hoobs";
 
@@ -157,7 +157,6 @@
                 this.loading = false;
 
                 link.href = url;
-                link.target = "_blank";
                 link.download = "hoobs.backup";
                 link.click();
             },

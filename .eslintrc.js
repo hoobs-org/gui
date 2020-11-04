@@ -88,7 +88,7 @@ module.exports = {
         },
         {
             files: [
-                "src/components/elements/updates.vue",
+                "src/components/dialogs/updates.vue",
             ],
             rules: {
                 indent: "off",

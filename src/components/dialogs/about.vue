@@ -53,7 +53,7 @@
 </template>
 
 <script>
-    import Updates from "../elements/updates.vue";
+    import Updates from "./updates.vue";
 
     export default {
         name: "about",
