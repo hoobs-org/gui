@@ -141,7 +141,6 @@
         position: relative;
         margin: 0;
         line-height: 20px;
-        cursor: pointer;
 
         .label {
             position: relative;
@@ -156,6 +155,7 @@
             height: 20px;
             width: 20px;
             transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
 
             input[type="checkbox"] {
                 position: absolute;
