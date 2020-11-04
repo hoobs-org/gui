@@ -187,7 +187,7 @@
                 justify-content: space-around;
                 align-items: center;
                 position: relative;
-                border-radius: 17px;
+                border-radius: 100%;
                 margin: 7px 0;
                 cursor: pointer;
 

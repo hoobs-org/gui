@@ -144,7 +144,6 @@
                 border-right: 1px var(--modal-border) solid;
                 border-bottom: 1px var(--modal-border) solid;
                 border-left: 1px var(--modal-border) solid;
-                border-radius: 3px 3px 0 0;
 
                 &:focus-within {
                     background: var(--modal-input-accent);
@@ -173,7 +172,6 @@
                 border-right: 1px var(--modal-border) solid;
                 border-bottom: 1px var(--modal-border) solid;
                 border-left: 1px var(--modal-border) solid;
-                border-radius: 0 0 3px 3px;
 
                 &:focus-within {
                     background: var(--modal-input-accent);

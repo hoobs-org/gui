@@ -21,12 +21,14 @@
         <span class="title">{{ name }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
         <input
+            :id="id || uuid"
+            :ref="uuid"
             type="number"
-            ref="field"
             autocomplete="false"
             data-lpignore="true"
             :min="min !== undefined ? min : ''"
             :max="max !== undefined ? max : ''"
+            :step="step"
             :value="value"
             v-on:input="update()"
             v-on:change="change"
@@ -38,26 +40,59 @@
 <script>
     export default {
         name: "number-field",
+
         props: {
+            id: {
+                type: String,
+                default: undefined,
+            },
             name: String,
             description: String,
             value: Number,
             min: Number,
             max: Number,
+            step: {
+                type: Number,
+                default: 0.1,
+            },
             required: {
+                type: Boolean,
+                default: false,
+            },
+            autofocus: {
                 type: Boolean,
                 default: false,
             },
         },
 
+        data() {
+            return {
+                uuid: "",
+            };
+        },
+
         methods: {
             update() {
-                this.$emit("input", parseInt(this.$refs.field.value, 10));
+                this.$emit("input", parseFloat(this.$refs[this.uuid].value));
             },
 
             change() {
-                this.$emit("change", parseInt(this.$refs.field.value, 10));
+                this.$emit("change", parseFloat(this.$refs[this.uuid].value));
             },
+        },
+
+        mounted() {
+            if (this.id === undefined || typeof String) {
+                this.uuid = `number_field_${Math.random().toString(36).substring(2, 10)}`;
+            } else {
+                this.uuid = this.id;
+            }
+
+            if (this.autofocus) {
+                setTimeout(() => {
+                    if (this.$refs[this.uuid]) this.$refs[this.uuid].focus();
+                }, 10);
+            }
         },
     };
 </script>

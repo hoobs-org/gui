@@ -21,13 +21,14 @@
         <span class="title">{{ name }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
         <input
+            :id="id || uuid"
+            :ref="uuid"
             type="number"
-            ref="field"
             autocomplete="false"
             data-lpignore="true"
             min="1"
-            step="1"
             max="65535"
+            step="1"
             :value="value"
             v-on:input="update()"
             v-on:change="change"
@@ -39,7 +40,12 @@
 <script>
     export default {
         name: "port-field",
+
         props: {
+            id: {
+                type: String,
+                default: undefined,
+            },
             name: String,
             description: String,
             value: Number,
@@ -47,16 +53,40 @@
                 type: Boolean,
                 default: false,
             },
+            autofocus: {
+                type: Boolean,
+                default: false,
+            },
+        },
+
+        data() {
+            return {
+                uuid: "",
+            };
         },
 
         methods: {
             update() {
-                this.$emit("input", parseInt(this.$refs.field.value, 10));
+                this.$emit("input", parseInt(this.$refs[this.uuid].value, 10));
             },
 
             change() {
-                this.$emit("change", this.$refs.field.value);
+                this.$emit("change", parseInt(this.$refs[this.uuid].value, 10));
             },
+        },
+
+        mounted() {
+            if (this.id === undefined || typeof String) {
+                this.uuid = `port_field_${Math.random().toString(36).substring(2, 10)}`;
+            } else {
+                this.uuid = this.id;
+            }
+
+            if (this.autofocus) {
+                setTimeout(() => {
+                    if (this.$refs[this.uuid]) this.$refs[this.uuid].focus();
+                }, 10);
+            }
         },
     };
 </script>

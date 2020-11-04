@@ -72,7 +72,7 @@
         box-sizing: border-box;
         background: var(--modal-mask);
         justify-content: space-around;
-        padding: 20px 20px 10em 20px;
+        padding: 0 0 4% 0;
         z-index: 2000;
 
         .subject {

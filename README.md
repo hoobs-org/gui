@@ -5,10 +5,13 @@ This is the official HOOBS User Interface.
 ## SDK
 The SDK in this project defines the HOOBS API and added into Vue using a Mixin. Below, defines the properties and methods available in this SDK.
 
-#### **this.hoobs.version()**
-This returns the current HOOBS version instanned.
+#### **hoobs.version()**
+This returns the current HOOBS version installed.
 
-#### **this.hoobs.auth.status()**
+#### **hoobs.latest()**
+This returns the latest releasesd HOOBS version.
+
+#### **hoobs.auth.status()**
 This fetches the status of the authentication system. It will return one of these values.
 
 | Status        | Description                                                                |
@@ -19,19 +22,19 @@ This fetches the status of the authentication system. It will return one of thes
 
 > The disabled status can only be achieved when the auth system is uninitilized.
 
-#### **this.hoobs.auth.validate()**
+#### **hoobs.auth.validate()**
 This validates the token stored in the Vuex store. If the auth system is disabled, this will always return true.
 
 > Tokens are stored on in the API and have a TTL based in teh `inactive_logoff` setting on the API.
 
-#### **this.hoobs.auth.disable()**
+#### **hoobs.auth.disable()**
 This will disable the auth system.
 
 The auth system can only be disabled if there are no users. If you would like to disable the auth system after users have been created, you must first remove the `access` file from the storage path.
 
 This will return the auth system status.
 
-#### **this.hoobs.auth.login([username], [password])**
+#### **hoobs.auth.login([username], [password])**
 This will attempt to login to the API. If the login is successful the token will be added to the Vuex store and stored locally.
 
 If the login fails this function will return `false`.
@@ -42,10 +45,10 @@ Parameters
 | username | Yes      | string | The username defined on the user record |
 | password | Yes      | string | The password defined on the user record |
 
-#### **this.hoobs.auth.logout()**
+#### **hoobs.auth.logout()**
 This takes the session token from the store and logs out the current user.
 
-#### **this.hoobs.users.list()**
+#### **hoobs.users.list()**
 This will fetch a list of user records.
 
 > Password hashes and salts are ommited for security purposes.
@@ -61,7 +64,7 @@ This will return an array of user records.
 }]
 ```
 
-#### **this.hoobs.users.add([username], [password], \<name\>, \<admin\>)**
+#### **hoobs.users.add([username], [password], \<name\>, \<admin\>)**
 This will add a new user to the system.
 
 Parameters
@@ -72,7 +75,7 @@ Parameters
 | name     | No       | string | The new user's full name, if not set username is used |
 | admin    | No       | string | If the new user an admin, false if not set            |
 
-#### **this.hoobs.user([id])**
+#### **hoobs.user([id])**
 Fetches a user object by id.
 
 ```js
@@ -89,7 +92,7 @@ Parameters
 | ---- | -------- | ------ | ------------------------- |
 | id   | Yes      | number | The id of the user record |
 
-> The user id can be obtained from the `this.hoobs.users.list()` command.
+> The user id can be obtained from the `hoobs.users.list()` command.
 
 #### **user.update([username], [password], \<name\>, \<admin\>)**
 This updates the current user record.
@@ -102,14 +105,14 @@ Parameters
 | name     | No       | string | The new user's full name, if not set username is used |
 | admin    | No       | string | If the new user an admin, false if not set            |
 
-> This method is attached to the user object obtained from the `this.hoobs.user([id])` command.
+> This method is attached to the user object obtained from the `hoobs.user([id])` command.
 
 #### **user.remove()**
 This removes the current user record.
 
-> This method is attached to the user object obtained from the `this.hoobs.user([id])` command.
+> This method is attached to the user object obtained from the `hoobs.user([id])` command.
 
-#### **this.hoobs.config.get()**
+#### **hoobs.config.get()**
 This fetches the current API configuration.
 
 ```js
@@ -125,7 +128,7 @@ This fetches the current API configuration.
 
 > Config files are encrypted on the hard drive. The API and CLI are the only ways to edit these files.
 
-#### **this.hoobs.config.update([data])**
+#### **hoobs.config.update([data])**
 This saves the config.
 
 Parameters
@@ -135,7 +138,7 @@ Parameters
 
 > Config files are encrypted on the hard drive. The API and CLI are the only ways to edit these files.
 
-#### **this.hoobs.log(<tail>)**
+#### **hoobs.log(<tail>)**
 This fetches the historical log. This returns an array of message objects.
 
 ```js
@@ -155,7 +158,7 @@ Parameters
 | ---- | -------- | ------ | ---------------------------------------- |
 | tail | No       | number | Defines the number of messages to return |
 
-#### **this.hoobs.status()**
+#### **hoobs.status()**
 Fetches the current device status.
 
 ```js
@@ -221,18 +224,40 @@ Fetches the current device status.
 
 > The instance key is the instance id
 
-#### **this.hoobs.backup()**
+#### **hoobs.backup.execute()**
 This will generate a backup file and will return a URL to that backup file. If the backup fails an error object is returned.
 
-#### **this.hoobs.restore([form])**
-This will accept a file and restore it to the system.
+#### **hoobs.backup.catalog()**
+Returns an list of backups available.
+
+```js
+[{
+    date: number,
+    filename: string,
+}]
+```
+
+#### **hoobs.restore.file([filename])**
+This will accept a file name from the backup catalog and will restore it.
+
+> This will reboot the device
 
 Parameters
-| Name | Required | Type     | Description                                               |
-| ---- | -------- | -------- | --------------------------------------------------------- |
-| form | Yes      | FormData | Multipart form containing the backup file as a byte array |
+| Name     | Required | Type   | Description                                            |
+| -------- | -------- | ------ | ------------------------------------------------------ |
+| filename | Yes      | string | The file name without the path from the backup catalog |
 
-#### **this.hoobs.system()**
+#### **hoobs.restore.upload([file])**
+This will accept an uploaded file and restore it to the system.
+
+> This will reboot the device
+
+Parameters
+| Name | Required | Type | Description                                                   |
+| ---- | -------- | ---- | ------------------------------------------------------------- |
+| file | Yes      | Blob | This can be any hbak file stream including an HTTPFile object |
+
+#### **hoobs.system()**
 Returns a system information object.
 
 ```js
@@ -338,7 +363,7 @@ Returns the current CPU load.
 }
 ```
 
-> This method is attached to the system object you must access this from the `this.hoobs.system()` command.
+> This method is attached to the system object you must access this from the `hoobs.system()` command.
 
 #### **system.memory()**
 Fetches the current memory load
@@ -360,7 +385,7 @@ Fetches the current memory load
 }
 ```
 
-> This method is attached to the system object you must access this from the `this.hoobs.system()` command.
+> This method is attached to the system object you must access this from the `hoobs.system()` command.
 
 #### **system.network()**
 Returns the current network interfaces.
@@ -375,7 +400,7 @@ Returns the current network interfaces.
 }]
 ```
 
-> This method is attached to the system object you must access this from the `this.hoobs.system()` command.
+> This method is attached to the system object you must access this from the `hoobs.system()` command.
 
 #### **system.filesystem()**
 Fetch an array of the available file systems and the usage information.
@@ -391,7 +416,7 @@ Fetch an array of the available file systems and the usage information.
 }]
 ```
 
-> This method is attached to the system object you must access this from the `this.hoobs.system()` command.
+> This method is attached to the system object you must access this from the `hoobs.system()` command.
 
 #### **system.activity()**
 Fetch system load data.
@@ -428,7 +453,7 @@ Fetch system load data.
 }
 ```
 
-> This method is attached to the system object you must access this from the `this.hoobs.system()` command.
+> This method is attached to the system object you must access this from the `hoobs.system()` command.
 
 #### **system.temp()**
 Fetch the current CPU temperature.
@@ -441,24 +466,24 @@ Fetch the current CPU temperature.
 }
 ```
 
-> This method is attached to the system object you must access this from the `this.hoobs.system()` command.
+> This method is attached to the system object you must access this from the `hoobs.system()` command.
 
 #### **system.upgrade()**
 This will update HOOBSD to the latest version.
 
-> This method is attached to the system object you must access this from the `this.hoobs.system()` command.
+> This method is attached to the system object you must access this from the `hoobs.system()` command.
 
 #### **system.reboot()**
 This will reboot the device.
 
-> This method is attached to the system object you must access this from the `this.hoobs.system()` command.
+> This method is attached to the system object you must access this from the `hoobs.system()` command.
 
 #### **system.reset()**
 This will factory reset the device. It will remove all instances, plugins and configurations.
 
-> This method is attached to the system object you must access this from the `this.hoobs.system()` command.
+> This method is attached to the system object you must access this from the `hoobs.system()` command.
 
-#### **this.hoobs.extentions()**
+#### **hoobs.extentions()**
 This will fetch a list of available extentions and if the extention is enabled.
 
 ```js
@@ -469,7 +494,7 @@ This will fetch a list of available extentions and if the extention is enabled.
 }]
 ```
 
-#### **this.hoobs.extention.add([name])**
+#### **hoobs.extention.add([name])**
 This will enable an extention on the system.
 
 Parameters
@@ -477,7 +502,7 @@ Parameters
 | ---- | -------- | ------ | ----------------------------------- |
 | name | Yes      | string | The name of the extention to enable |
 
-#### **this.hoobs.extention.remove([name])**
+#### **hoobs.extention.remove([name])**
 This will disable an extention on the system.
 
 Parameters
@@ -485,30 +510,29 @@ Parameters
 | ---- | -------- | ------ | ------------------------------------ |
 | name | Yes      | string | The name of the extention to disable |
 
-#### **this.hoobs.plugins()**
+#### **hoobs.plugins()**
 This will list all plugins installed across all instances.
 
 ```js
 [{
     instance: string,
-    plugins: [{
-        identifier: string,
-        scope: string,
-        name: string,
-        alias: : string,
-        version: : string,
-        keywords: [string],
-        details: string,
-        schema: JSONSchema,
-        description: string
-    }]
+    identifier: string,
+    scope: string,
+    name: string,
+    alias: string,
+    version: string,
+    latest: string,
+    keywords: [string],
+    details: string,
+    schema: JSONSchema,
+    description: string
 }]
 ```
 
-#### **this.hoobs.instances.count()**
+#### **hoobs.instances.count()**
 Returns the count of instances.
 
-#### **this.hoobs.instances.list()**
+#### **hoobs.instances.list()**
 Returns a list of instances on the device.
 
 ```js
@@ -523,7 +547,7 @@ Returns a list of instances on the device.
 }]
 ```
 
-#### **this.hoobs.instances.add([name], [port])**
+#### **hoobs.instances.add([name], [port])**
 Adds an instance to the device. This will automatically create a system service and start it.
 
 Parameters
@@ -536,7 +560,7 @@ The name is automatically sanitized and used as an id for the instance.
 
 > If your operating system doesn't have systemd or launchd the service creation is skipped.
 
-#### **this.hoobs.instance([name])**
+#### **hoobs.instance([name])**
 Fetches an instance object. Will return `undefined` is the instance doesn't exist.
 
 ```js
@@ -578,7 +602,7 @@ Fetch the current status of the bridge.
 }
 ```
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.config.get()**
 Returns this instance's configuration data.
@@ -608,7 +632,7 @@ Returns this instance's configuration data.
 
 Config files are encrypted on the hard drive. The API and CLI are the only ways to edit these files.
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.config.update([data])**
 This saves the config.
@@ -620,7 +644,7 @@ Parameters
 
 Config files are encrypted on the hard drive. The API and CLI are the only ways to edit these files.
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.plugins()**
 Fetch a list of installed plugins on this instance.
@@ -632,6 +656,7 @@ Fetch a list of installed plugins on this instance.
     name: string,
     alias: string,
     version: string,
+    latest: string,
     keywords: [string],
     details: string,
     schema: JSONSchema,
@@ -639,7 +664,7 @@ Fetch a list of installed plugins on this instance.
 }]
 ```
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.plugin.install([query])**
 Installs a plugin on the current instance.
@@ -651,7 +676,7 @@ Parameters
 
 Plugin queries are the same as NPM or Yarn queries. Use this format `@scope/name@version`.
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.plugin.upgrade([query])**
 Upgrades a plugin on the current instance.
@@ -663,7 +688,7 @@ Parameters
 
 Plugin queries are the same as NPM or Yarn queries. Use this format `@scope/name@version`.
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.plugin.uninstall([query])**
 Uninstalls a plugin on the current instance.
@@ -675,7 +700,7 @@ Parameters
 
 Plugin queries are the same as NPM or Yarn queries. Use this format `@scope/name`.
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.rename([name])**
 This allows you to rename an instance.
@@ -687,7 +712,7 @@ Parameters
 
 The name is updated but the id will remain unchanged. We do this so you don't have to change any system services.
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.accessories()**
 Fetch a list of accessories for this instance.
@@ -715,27 +740,27 @@ Fetch a list of accessories for this instance.
 }]
 ```
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.start()**
 Starts the bridge on this instance.
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.stop()**
 Stops the bridge on this instance.
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.restart()**
 Restarts the bridge on this instance.
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.purge()**
 Purges the accessory and persisted cache on this instance.
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.cache()**
 Fetches the accessory and persisted connections cache on this instance.
@@ -757,14 +782,14 @@ Fetches the accessory and persisted connections cache on this instance.
 }
 ```
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
 #### **instance.remove()**
 This will remove this instance including all plugins and configurations.
 
-> This method is attached to the instance object you must access this from the `this.hoobs.instance([name])` command.
+> This method is attached to the instance object you must access this from the `hoobs.instance([name])` command.
 
-#### **this.hoobs.accessories()**
+#### **hoobs.accessories()**
 Returns a list of accessories from all instances.
 
 ```js
@@ -790,7 +815,7 @@ Returns a list of accessories from all instances.
 }]
 ```
 
-#### **this.hoobs.accessory([instance], [id])**
+#### **hoobs.accessory([instance], [id])**
 This fetches a single accessory object.
 
 ```js
@@ -825,9 +850,178 @@ Parameters
 | service | Yes      | string | The service id on the current accessory         |
 | data    | Yes      | JSON   | This is contextual data for the accessory state |
 
-> This method is attached to the accessory object you must access this from the `this.hoobs.accessory([instance], [id])` command.
+> This method is attached to the accessory object you must access this from the `hoobs.accessory([instance], [id])` command.
 
-#### **this.hoobs.remote.status()**
+#### **hoobs.theme.get([name])**
+This fetches the theme colors for the defined name.
+
+```js
+{
+    name: string,
+    display: string,
+    auto: boolean,
+    mode: string,
+    transparency: string,
+    application: {
+        text: {
+            default: string,
+            highlight: string,
+            input: string,
+            error: string
+        },
+        background: string,
+        highlight: string,
+        accent: string,
+        dark: string,
+        drawer: string,
+        input: {
+            background: string,
+            accent: string
+        },
+        border: string
+    },
+    button: {
+        background: string,
+        text: string,
+        border: string,
+        primary: {
+            background: string,
+            text: string,
+            border: string
+        },
+        light: {
+            background: string,
+            text: string,
+            border: string
+        }
+    },
+    modal: {
+        text: {
+            default: string,
+            input: string,
+            error: string
+        },
+        background: string,
+        dark: string,
+        form: string,
+        mask: string,
+        highlight: string,
+        input: string,
+        accent: string,
+        border: string
+    },
+    menu: {
+        text: {
+            default: string,
+            highlight: string
+        },
+        background: string,
+        highlight: string,
+        border: string
+    },
+    navigation: {
+        text: {
+            default: string,
+            highlight: string,
+            active: string
+        },
+        background: string,
+        highlight: string,
+        border: string
+    },
+    backdrop: string,
+    elevation: {
+        default: string,
+        button: string
+    }
+}
+```
+
+Parameters
+| Name | Required | Type   | Description           |
+| ---- | -------- | ------ | --------------------- |
+| name | Yes      | string | The name of the theme |
+
+#### **hoobs.theme.set([name], [theme])**
+This will save a theme to the backend.
+
+Parameters
+| Name  | Required | Type   | Description           |
+| ----- | -------- | ------ | --------------------- |
+| name  | Yes      | string | The name of the theme |
+| theme | Yes      | Theme  | The theme JSON object |
+
+#### **hoobs.theme.backdrop([image])**
+This will upload an image to the backend for use as a backdrop.
+
+Parameters
+| Name  | Required | Type | Description                                               |
+| ----- | -------- | ---- | --------------------------------------------------------- |
+| image | Yes      | Blob | This can be any image stream including an HTTPFile object |
+
+#### **hoobs.location([query])**
+This will search for a location by open text search. This is used to set the location for weather forecasts.
+
+```js
+{
+    lat: number,
+    lng: number
+}
+```
+
+Parameters
+| Name  | Required | Type   | Description                       |
+| ----- | -------- | ------ | --------------------------------- |
+| query | Yes      | string | This the desired open text search |
+
+#### **hoobs.weather.current()**
+Fetches the current weather from the configured location in the API config.
+
+```js
+{
+    units: string,
+    weather: string,
+    description: string,
+    icon: string,
+    temp: number,
+    min: number,
+    max: number,
+    windchill: number,
+    pressure: number,
+    humidity: number,
+    visibility: number,
+    wind: {
+        speed: number,
+        direction: number,
+    }
+}
+```
+
+#### **hoobs.weather.forecast()**
+Fetches the weather forecast from the configured location in the API config.
+
+```js
+[{
+    units: string,
+    date: number,
+    weather: string,
+    description: string,
+    icon: string,
+    temp: number,
+    min: number,
+    max: number,
+    windchill: number,
+    pressure: number,
+    humidity: number,
+    visibility: number,
+    wind: {
+        speed: number,
+        direction: number,
+    }
+}]
+```
+
+#### **hoobs.remote.status()**
 Returns the status of a remote session.
 
 ```js
@@ -838,7 +1032,7 @@ Returns the status of a remote session.
 
 > Only one remote session is allowed per API.
 
-#### **this.hoobs.remote.connect()**
+#### **hoobs.remote.connect()**
 Connects to the HOOBS support server. This will allow HOOBS support to diagnose and run commands on your device.
 
 This will return a registration code or an error object if it can't connect.
@@ -849,7 +1043,7 @@ This will return a registration code or an error object if it can't connect.
 }
 ```
 
-#### **this.hoobs.remote.disconnect()**
+#### **hoobs.remote.disconnect()**
 This will disconnect a current active session.
 
 > When HOOBS support disconnects this will automatically be called.

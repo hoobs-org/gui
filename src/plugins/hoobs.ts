@@ -20,6 +20,7 @@ import Request from "axios";
 import Sanitize from "sanitize-filename";
 
 const API_URL = process.env.VUE_APP_API || "/api";
+const BACKUPS_URL = process.env.VUE_APP_BACKUPS || "/backups";
 
 export declare const enum LogLevel {
     INFO = "info",
@@ -321,16 +322,41 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             return (await Request.get(`${API_URL}/status`, { headers: { authorization: get() } })).data;
         },
 
-        async backup(): Promise<{ [key: string]: any }> {
-            await wait();
+        backup: {
+            async execute(): Promise<string> {
+                await wait();
 
-            return (await Request.get(`${API_URL}/system/backup`, { headers: { authorization: get() } })).data;
+                const { filename } = (await Request.get(`${API_URL}/system/backup`, { headers: { authorization: get() } })).data;
+
+                return `${BACKUPS_URL}/${filename}`;
+            },
+
+            async catalog(count?: number): Promise<{ [key: string]: any }> {
+                await wait();
+
+                const list = ((await Request.get(`${API_URL}/system/backup/catalog`, { headers: { authorization: get() } })).data || []).reverse();
+
+                if ((count || 5) <= 0) return list;
+
+                return list.slice(0, (count || 5));
+            },
         },
 
-        async restore(form: FormData): Promise<void> {
-            await wait();
+        restore: {
+            async file(file: string): Promise<void> {
+                await wait();
+                await Request.get(`${API_URL}/system/restore?filename=${encodeURIComponent(file)}`, { headers: { authorization: get() } });
+            },
 
-            (await Request.post(`${API_URL}/system/restore`, form, { headers: { authorization: get() } }));
+            async upload(file: Blob): Promise<void> {
+                await wait();
+
+                const form = new FormData();
+
+                form.append("file", file);
+
+                (await Request.post(`${API_URL}/system/restore`, form, { headers: { authorization: get() } }));
+            },
         },
 
         async system(): Promise<{ [key: string]: any }> {
@@ -380,20 +406,17 @@ export default function sdk(get: () => string, set: (token: string) => void) {
 
             results.upgrade = async (): Promise<void> => {
                 await wait();
-
-                (await Request.post(`${API_URL}/system/upgrade`, null, { headers: { authorization: get() } }));
+                await Request.post(`${API_URL}/system/upgrade`, null, { headers: { authorization: get() } });
             };
 
             results.reboot = async (): Promise<void> => {
                 await wait();
-
-                (await Request.put(`${API_URL}/system/reboot`, null, { headers: { authorization: get() } }));
+                await Request.put(`${API_URL}/system/reboot`, null, { headers: { authorization: get() } });
             };
 
             results.reset = async (): Promise<void> => {
                 await wait();
-
-                Request.put(`${API_URL}/system/reset`, null, { headers: { authorization: get() } });
+                await Request.put(`${API_URL}/system/reset`, null, { headers: { authorization: get() } });
             };
 
             return results;
@@ -658,6 +681,10 @@ export default function sdk(get: () => string, set: (token: string) => void) {
 
                 (await Request.get(`${API_URL}/remote/disconnect`, { headers: { authorization: get() } }));
             },
+        },
+
+        mixin() {
+            return { data: () => ({ hoobs: this }) };
         },
     };
 }

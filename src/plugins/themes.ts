@@ -17,7 +17,7 @@
  **************************************************************************************************/
 
 import { Store } from "vuex";
-import { sanitize } from "./sdk";
+import { sanitize } from "./hoobs";
 
 const THEMES_URL = process.env.VUE_APP_THEMES || "/themes";
 
@@ -41,9 +41,13 @@ export default class Themes {
     }
 
     static mixin(store?: Store<any>) {
+        this.set(store?.state.theme, store);
+
         return {
-            theme(name: string) {
-                Themes.set(name, store);
+            methods: {
+                theme(name: string) {
+                    Themes.set(name, store);
+                },
             },
         };
     }

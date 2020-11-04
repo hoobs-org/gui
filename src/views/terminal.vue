@@ -33,8 +33,7 @@
     import { Terminal } from "xterm";
     import { FitAddon } from "xterm-addon-fit";
     import { WebLinksAddon } from "xterm-addon-web-links";
-    import socket from "../services/socket";
-    import { chunk } from "../services/sdk";
+    import { chunk } from "../plugins/hoobs";
 
     export default {
         name: "terminal",
@@ -45,7 +44,6 @@
 
         data() {
             return {
-                io: null,
                 term: null,
                 version: null,
                 screen: null,
@@ -105,7 +103,6 @@
 
         methods: {
             connect() {
-                this.io = socket();
                 this.io.emit("shell_connect");
 
                 this.term.onData((data) => { this.io.emit("shell_input", data); });
@@ -120,7 +117,7 @@
             },
 
             disconnect() {
-                if (this.io) this.io.emit("shell_disconnect");
+                this.io.emit("shell_disconnect");
             },
 
             motd() {
@@ -139,8 +136,8 @@
                         this.term.write(`${chunk(this.$t("motd"), 40).join("\r\n")}\r\n`);
                         this.term.write("\r\n");
 
-                        if (this.io) this.io.emit("shell_input", "");
-                    } else if (this.io) {
+                        this.io.emit("shell_input", "");
+                    } else {
                         this.io.emit("shell_clear");
                     }
                 }
@@ -152,15 +149,16 @@
                 if (this.$refs.container) this.$refs.container.style.display = "none";
 
                 setTimeout(() => {
-                    if (this.$refs.flow) {
+                    if (this.term && this.$refs.flow) {
                         const cols = Math.floor((this.$refs.flow.clientWidth + 1) / this.text.width) - 1;
                         const rows = Math.floor((this.$refs.flow.clientHeight + 1) / this.text.height) + 3;
 
                         if (this.$refs.container) this.$refs.container.style.display = "block";
                         if (this.screen) this.screen.fit();
-                        if (this.term) this.term.resize(cols, rows);
-                        if (this.io) this.io.emit("shell_resize", `${cols}:${rows}`);
-                        if (this.term) this.term.focus();
+
+                        this.term.resize(cols, rows);
+                        this.io.emit("shell_resize", `${cols}:${rows}`);
+                        this.term.focus();
                     }
                 }, 10);
             },

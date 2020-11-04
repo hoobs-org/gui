@@ -21,8 +21,9 @@
         <span class="title">{{ name }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
         <input
+            :id="id || uuid"
+            :ref="uuid"
             type="password"
-            ref="field"
             autocomplete="false"
             data-lpignore="true"
             :value="value"
@@ -36,7 +37,12 @@
 <script>
     export default {
         name: "password-field",
+
         props: {
+            id: {
+                type: String,
+                default: undefined,
+            },
             name: String,
             description: String,
             value: String,
@@ -44,16 +50,40 @@
                 type: Boolean,
                 default: false,
             },
+            autofocus: {
+                type: Boolean,
+                default: false,
+            },
+        },
+
+        data() {
+            return {
+                uuid: "",
+            };
         },
 
         methods: {
             update() {
-                this.$emit("input", this.$refs.field.value);
+                this.$emit("input", this.$refs[this.uuid].value);
             },
 
             change() {
-                this.$emit("change", this.$refs.field.value);
+                this.$emit("change", this.$refs[this.uuid].value);
             },
+        },
+
+        mounted() {
+            if (this.id === undefined || typeof String) {
+                this.uuid = `password_field_${Math.random().toString(36).substring(2, 10)}`;
+            } else {
+                this.uuid = this.id;
+            }
+
+            if (this.autofocus) {
+                setTimeout(() => {
+                    if (this.$refs[this.uuid]) this.$refs[this.uuid].focus();
+                }, 10);
+            }
         },
     };
 </script>

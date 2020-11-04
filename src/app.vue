@@ -165,9 +165,11 @@
             background: var(--application-input);
             color: var(--application-input-text);
             border: 1px var(--application-border) solid;
+            border-radius: 0;
 
             &:focus {
                 border-color: var(--application-highlight);
+                border-radius: 0;
             }
         }
 

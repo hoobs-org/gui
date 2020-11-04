@@ -27,9 +27,12 @@ class Socket {
 
     declare private events: { [key: string]: ((args: any) => any) };
 
+    declare private terminal: boolean;
+
     constructor() {
         this.events = {};
         this.io = SocketIO(SOCKET_URL);
+        this.terminal = false;
     }
 
     on(event: string, callback: (args: any) => any) {
@@ -45,7 +48,23 @@ class Socket {
     }
 
     emit(event: string, ...args: any) {
+        if (event === "shell_connect") {
+            if (this.terminal) this.emit("shell_disconnect");
+
+            this.terminal = true;
+        }
+
+        if (event === "shell_disconnect") {
+            if (this.terminal) this.off("shell_output");
+
+            this.terminal = false;
+        }
+
         this.io.emit(event, args);
+    }
+
+    mixin() {
+        return { data: () => ({ io: this }) };
     }
 }
 

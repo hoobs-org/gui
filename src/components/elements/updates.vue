@@ -60,7 +60,7 @@
 
 <script>
     import Semver from "compare-versions";
-    import { wait } from "../../services/sdk";
+    import { wait } from "../../plugins/hoobs";
 
     export default {
         name: "updates",

@@ -21,8 +21,9 @@
         <span class="title">{{ name }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
         <input
+            :id="id || uuid"
+            :ref="uuid"
             type="text"
-            ref="field"
             autocomplete="false"
             autocorrect="off"
             autocapitalize="none"
@@ -39,7 +40,12 @@
 <script>
     export default {
         name: "search-field",
+
         props: {
+            id: {
+                type: String,
+                default: undefined,
+            },
             name: String,
             description: String,
             value: String,
@@ -51,16 +57,40 @@
                 type: Function,
                 default: () => { /* null */ },
             },
+            autofocus: {
+                type: Boolean,
+                default: false,
+            },
+        },
+
+        data() {
+            return {
+                uuid: "",
+            };
         },
 
         methods: {
             update() {
-                this.$emit("input", this.$refs.field.value);
+                this.$emit("input", this.$refs[this.uuid].value);
             },
 
             change() {
-                this.$emit("change", this.$refs.field.value);
+                this.$emit("change", this.$refs[this.uuid].value);
             },
+        },
+
+        mounted() {
+            if (this.id === undefined || typeof String) {
+                this.uuid = `search_field_${Math.random().toString(36).substring(2, 10)}`;
+            } else {
+                this.uuid = this.id;
+            }
+
+            if (this.autofocus) {
+                setTimeout(() => {
+                    if (this.$refs[this.uuid]) this.$refs[this.uuid].focus();
+                }, 10);
+            }
         },
     };
 </script>

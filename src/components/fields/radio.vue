@@ -114,7 +114,7 @@
 
         mounted() {
             if (this.id === undefined || typeof String) {
-                this.uuid = `checkbox_${Math.random().toString(36).substring(2, 10)}`;
+                this.uuid = `radio_${Math.random().toString(36).substring(2, 10)}`;
             } else {
                 this.uuid = this.id;
             }
@@ -135,7 +135,7 @@
         position: relative;
         margin: 0;
         line-height: 20px;
-        border-radius: 14px;
+        border-radius: 100%;
         cursor: pointer;
 
         .label {
@@ -153,7 +153,7 @@
             justify-content: space-around;
             box-sizing: border-box;
             position: relative;
-            border-radius: 10px;
+            border-radius: 100%;
             transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 
             input[type="radio"] {
@@ -166,7 +166,7 @@
             .marker {
                 width: 12px;
                 height: 12px;
-                border-radius: 6px;
+                border-radius: 100%;
             }
         }
 

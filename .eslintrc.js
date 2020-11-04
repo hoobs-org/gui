@@ -99,7 +99,7 @@ module.exports = {
         },
         {
             files: [
-                "src/plugins/drag-directive.ts",
+                "src/plugins/drag.ts",
             ],
             rules: {
                 "no-param-reassign": "off",

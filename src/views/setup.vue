@@ -40,6 +40,7 @@
                     :description="$t('name_description')"
                     v-model="name"
                     :required="true"
+                    :autofocus="true"
                 />
                 <text-field
                     :name="$t('username')"
@@ -85,6 +86,7 @@
                     :description="$t('instance_name_description')"
                     v-model="instance"
                     :required="true"
+                    :autofocus="true"
                 />
                 <port-field
                     :name="$t('instance_port')"
@@ -105,7 +107,7 @@
 </template>
 
 <script>
-    import { sleep } from "../services/sdk";
+    import { sleep } from "../plugins/hoobs";
 
     export default {
         name: "setup",

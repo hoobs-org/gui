@@ -17,11 +17,17 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="$t('settings')" :draggable="true" width="760px" height="620px">
+    <modal :title="$t('settings')" :draggable="true" width="760px" height="700px">
         <div id="settings">
             <div v-if="!loading" class="content">
+                <restore v-if="show.restore" />
                 <location v-if="show.location" :select="select" />
-                <div v-else class="form">
+                <div v-if="show.settings" class="form">
+                    <div class="row section" style="margin-bottom: 7px;">{{ $t("backup_restore") }}</div>
+                    <div class="row">
+                        <div v-on:click="backup()" class="button">{{ $t("backup") }}</div>
+                        <div v-on:click="restore()" class="button">{{ $t("restore") }}</div>
+                    </div>
                     <div class="row section">{{ $t("weather") }}</div>
                     <div class="row title">{{ $t("temperature_units") }}</div>
                     <div class="row">
@@ -53,7 +59,7 @@
                     </div>
                     <div class="row section">{{ $t("monitor") }}</div>
                     <div class="row">
-                        <number-field
+                        <integer-field
                             :name="$t('update_interval')"
                             :description="$t('update_interval_description')"
                             :min="2"
@@ -61,7 +67,7 @@
                             v-model="interval"
                         />
                     </div>
-                    <div class="row section">{{ $t("system") }}</div>
+                    <div class="row section" style="margin-bottom: 7px;">{{ $t("system") }}</div>
                     <div class="row">
                         <div v-on:click="reboot()" class="button">{{ $t("reboot_device") }}</div>
                         <div v-on:click="purge()" class="button">{{ $t("purge_cache") }}</div>
@@ -72,26 +78,28 @@
             <div v-else class="loading">
                 <spinner />
             </div>
-            <div v-if="!loading && !show.location" class="actions modal">
+            <div v-if="!loading && (show.restore || show.location)" class="actions modal">
+                <div class="button" v-on:click="back()">{{ $t("cancel") }}</div>
+            </div>
+            <div v-if="!loading && show.settings" class="actions modal">
                 <div v-on:click="close()" class="button">{{ $t("cancel") }}</div>
                 <div v-on:click="save()" class="button primary">{{ $t("apply") }}</div>
-            </div>
-            <div v-if="!loading && show.location" class="actions modal">
-                <div class="button" v-on:click="back()">{{ $t("cancel") }}</div>
             </div>
         </div>
     </modal>
 </template>
 
 <script>
+    import Restore from "../elements/restore.vue";
     import Location from "../elements/location.vue";
     import Countries from "../../lang/country-codes.json";
-    import { wait } from "../../services/sdk";
+    import { wait } from "../../plugins/hoobs";
 
     export default {
         name: "personalize",
 
         components: {
+            "restore": Restore,
             "location": Location,
         },
 
@@ -106,6 +114,8 @@
             return {
                 loading: true,
                 show: {
+                    settings: true,
+                    restore: false,
                     location: false,
                 },
                 location: {},
@@ -133,7 +143,25 @@
 
         methods: {
             change() {
+                this.show.settings = false;
+                this.show.restore = false;
                 this.show.location = true;
+            },
+
+            async backup() {
+                this.loading = true;
+
+                const url = await this.hoobs.backup.execute();
+
+                this.loading = false;
+
+                window.location.href = url;
+            },
+
+            restore() {
+                this.show.settings = false;
+                this.show.location = false;
+                this.show.restore = true;
             },
 
             reboot() {
@@ -205,12 +233,15 @@
             },
 
             back() {
+                this.show.settings = true;
+                this.show.restore = false;
                 this.show.location = false;
             },
 
             select(location) {
                 this.location = location;
-                this.show.location = false;
+
+                this.back();
             },
         },
     };

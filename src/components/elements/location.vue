@@ -18,7 +18,7 @@
 
 <template>
     <div id="location" class="form">
-        <div class="row section">{{ $t("weather") }}</div>
+        <div class="row section">{{ $t("location") }}</div>
         <form
             class="row locations"
             autocomplete="false"
@@ -29,10 +29,13 @@
             <input type="submit" class="hidden-submit" value="submit" />
             <div class="search">
                 <search-field
+                    id="query"
+                    ref="query"
                     :name="$t('location_search')"
                     :description="$t('location_description')"
                     v-model="query"
                     :search="search"
+                    :autofocus="true"
                 />
                 <div v-if="show.searching" class="loading">
                     <spinner />
@@ -89,7 +92,7 @@
 
                 this.show.searching = true;
 
-                this.locations = (await this.hoobs.location(this.query, 9)).map((item) => ({
+                this.locations = (await this.hoobs.location(this.query, 10)).map((item) => ({
                     id: item.id,
                     name: item.name,
                     country: item.country,

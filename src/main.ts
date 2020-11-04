@@ -18,15 +18,17 @@
 
 import Vue from "vue";
 
-import socket from "./services/socket";
-import sdk from "./services/sdk";
 import root from "./app.vue";
+
+import socket from "./plugins/socket";
+import sdk from "./plugins/hoobs";
+import themes from "./plugins/themes";
+import drag from "./plugins/drag";
+
 import router from "./services/router";
 import store from "./services/store";
 import tasks from "./services/tasks";
 import lang from "./lang";
-import themes from "./services/themes";
-import drag from "./plugins/drag-directive";
 
 import Modal from "./components/elements/modal.vue";
 import Radio from "./components/fields/radio.vue";
@@ -34,6 +36,7 @@ import Checkbox from "./components/fields/checkbox.vue";
 import TextField from "./components/fields/text.vue";
 import PasswordField from "./components/fields/password.vue";
 import NumberField from "./components/fields/number.vue";
+import IntegerField from "./components/fields/integer.vue";
 import SearchField from "./components/fields/search.vue";
 import PortField from "./components/fields/port.vue";
 import Spinner from "./components/elements/spinner.vue";
@@ -65,10 +68,9 @@ router.beforeEach(async (to, _from, next) => {
 
 Vue.config.productionTip = false;
 
-Vue.mixin({ data: () => ({ hoobs }) });
-Vue.mixin({ methods: themes.mixin(store) });
-
-themes.set(store.state.theme, store);
+Vue.mixin(io.mixin());
+Vue.mixin(hoobs.mixin());
+Vue.mixin(themes.mixin(store));
 
 Vue.use(drag);
 
@@ -78,6 +80,7 @@ Vue.component("checkbox", Checkbox);
 Vue.component("text-field", TextField);
 Vue.component("password-field", PasswordField);
 Vue.component("number-field", NumberField);
+Vue.component("integer-field", IntegerField);
 Vue.component("search-field", SearchField);
 Vue.component("port-field", PortField);
 Vue.component("spinner", Spinner);

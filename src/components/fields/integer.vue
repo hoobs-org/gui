@@ -23,11 +23,12 @@
         <input
             :id="id || uuid"
             :ref="uuid"
-            type="text"
+            type="number"
             autocomplete="false"
-            autocorrect="off"
-            autocapitalize="none"
             data-lpignore="true"
+            :min="min !== undefined ? min : ''"
+            :max="max !== undefined ? max : ''"
+            step="1"
             :value="value"
             v-on:input="update()"
             v-on:change="change"
@@ -38,7 +39,7 @@
 
 <script>
     export default {
-        name: "text-field",
+        name: "integer-field",
 
         props: {
             id: {
@@ -47,7 +48,9 @@
             },
             name: String,
             description: String,
-            value: String,
+            value: Number,
+            min: Number,
+            max: Number,
             required: {
                 type: Boolean,
                 default: false,
@@ -66,17 +69,17 @@
 
         methods: {
             update() {
-                this.$emit("input", this.$refs[this.uuid].value);
+                this.$emit("input", parseInt(this.$refs[this.uuid].value, 10));
             },
 
             change() {
-                this.$emit("change", this.$refs[this.uuid].value);
+                this.$emit("change", parseInt(this.$refs[this.uuid].value, 10));
             },
         },
 
         mounted() {
             if (this.id === undefined || typeof String) {
-                this.uuid = `text_field_${Math.random().toString(36).substring(2, 10)}`;
+                this.uuid = `number_field_${Math.random().toString(36).substring(2, 10)}`;
             } else {
                 this.uuid = this.id;
             }
