@@ -20,70 +20,38 @@
     <div v-on:click="reset()" id="authenticated">
         <navigation />
         <div class="screen">
-            <div ref="tray" class="tray">
-                <div v-if="$route.name === 'dashboard'" v-on:click.stop="toggle('dashboard')" class="icon">settings</div>
-                <div v-on:click.stop="toggle('notifications')" class="icon">
-                    notifications_none
-                    <div v-if="notifications.length > 0" class="active">&bull;</div>
-                </div>
-                <div v-on:click.stop="toggle('application')" class="icon">more_vert</div>
-            </div>
             <slot />
         </div>
         <notifications v-if="show.notifications" v-model="show.notifications" />
-        <application-menu
-            v-if="show.application"
-            :about="() => { toggle('about') }"
-            :help="() => navigate('https://support.hoobs.org/docs')"
-            :settings="() => { toggle('settings') }"
-            :personalize="() => { toggle('personalize') }"
-            :terminal="terminal"
-            :close="() => { toggle('application') }"
-            :logout="logout"
-        />
-        <about v-if="show.about" :close="() => { toggle('about') }" />
-        <settings v-if="show.settings" :close="() => { toggle('settings') }" />
-        <personalize v-if="show.personalize" :close="() => { toggle('personalize') }" />
-        <dashboard v-if="show.dashboard" :close="() => { toggle('dashboard') }" />
         <alert
-            v-if="show.notify"
-            :message="notify.message"
-            :close="() => { show.notify = false; }"
+            v-if="show.alert"
+            :message="alert.message"
+            :close="() => { show.alert = false; }"
         />
         <confirm
-            v-if="show.confirmation"
-            :message="confirmation.message"
-            :ok="confirmation.ok"
-            :confirm="confirmation.action"
-            :close="() => { show.confirmation = false; }"
+            v-if="show.confirm"
+            :callback="confirm.callback"
+            :message="confirm.message"
+            :action="confirm.action"
+            :close="() => { show.confirm = false; }"
         />
     </div>
 </template>
 
 <script>
-    import About from "../components/dialogs/about.vue";
     import Alert from "../components/dialogs/alert.vue";
     import Confirm from "../components/dialogs/confirm.vue";
     import Navigation from "../components/navigation.vue";
     import Notifications from "../components/notifications.vue";
-    import ApplicationMenu from "../components/menus/application.vue";
-    import Personalize from "../components/dialogs/personalize.vue";
-    import Dashboard from "../components/dialogs/dashboard.vue";
-    import Settings from "../components/dialogs/settings.vue";
 
     export default {
         name: "authenticated",
 
         components: {
-            "about": About,
             "alert": Alert,
             "confirm": Confirm,
-            "settings": Settings,
-            "dashboard": Dashboard,
             "navigation": Navigation,
-            "personalize": Personalize,
             "notifications": Notifications,
-            "application-menu": ApplicationMenu,
         },
 
         computed: {
@@ -101,71 +69,46 @@
                     settings: false,
                     personalize: false,
                     dashboard: false,
-                    confirmation: false,
-                    notify: false,
+                    confirm: false,
+                    alert: false,
                 },
-                notify: {
+                alert: {
                     message: "",
                 },
-                confirmation: {
-                    action: () => { /* null */ },
+                confirm: {
+                    callback: () => { /* null */ },
                     message: "",
-                    ok: "",
+                    action: "",
                 },
             };
         },
 
         async created() {
-            const status = await this.hoobs.auth.status();
-
             this.$store.subscribe((mutation, state) => {
-                if (mutation.type === "DIALOG:SHOW") {
-                    this.toggle(state.dialog);
+                if (mutation.type === "ALERT:SHOW") {
+                    this.alert.message = state.alert.message;
+                    this.show.alert = true;
+                }
+
+                if (mutation.type === "CONFIRM:SHOW") {
+                    this.confirm.message = state.confirm.message;
+                    this.confirm.action = state.confirm.action;
+                    this.confirm.callback = state.confirm.callback;
+
+                    this.show.confirm = true;
                 }
             });
 
-            this.$store.commit("AUTH:STATE", status);
+            this.$store.commit("AUTH:STATE", (await this.$hoobs.auth.status()));
         },
 
         methods: {
-            async logout() {
-                this.reset();
-
-                await this.hoobs.auth.logout();
-
-                this.$router.push({ path: "/login", query: { url: "/" } });
-            },
-
-            alert(message) {
-                this.notify.message = message;
-
-                this.show.notify = true;
-            },
-
-            confirm(message, ok, action) {
-                this.confirmation.message = message;
-                this.confirmation.ok = ok;
-                this.confirmation.action = action;
-
-                this.show.confirmation = true;
-            },
-
             reset(ignore) {
                 const keys = Object.keys(this.show);
 
                 for (let i = 0; i < keys.length; i += 1) {
                     if (keys[i] !== (ignore || "")) this.show[keys[i]] = false;
                 }
-            },
-
-            terminal() {
-                this.show.application = false;
-
-                if (this.$route.name !== "terminal") this.$router.push({ path: "/terminal" });
-            },
-
-            help() {
-                this.reset();
             },
 
             toggle(field) {

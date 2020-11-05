@@ -17,6 +17,8 @@
  **************************************************************************************************/
 
 import Vue from "vue";
+import Graphing from "vue-chartkick";
+import Charts from "chart.js";
 
 import root from "./app.vue";
 
@@ -81,9 +83,26 @@ Vue.config.productionTip = false;
 
 Vue.mixin(io.mixin());
 Vue.mixin(hoobs.mixin());
-Vue.mixin(themes.mixin(store));
+Vue.mixin(themes.mixin(hoobs, store));
+
+Vue.mixin({
+    methods: {
+        $alert(message) {
+            store.commit("ALERT:SHOW", message);
+        },
+
+        $confirm(action, message, callback) {
+            store.commit("CONFIRM:SHOW", {
+                action,
+                message,
+                callback,
+            });
+        },
+    },
+});
 
 Vue.use(drag);
+Vue.use(Graphing.use(Charts));
 
 Vue.component("context", Context);
 Vue.component("modal", Modal);

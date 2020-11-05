@@ -54,7 +54,7 @@
         async mounted() {
             this.loading = true;
 
-            this.files = await this.hoobs.backup.catalog(5);
+            this.files = await this.$hoobs.backup.catalog(5);
 
             this.loading = false;
         },
@@ -70,7 +70,7 @@
                 if (this.filename !== "") {
                     this.loading = true;
 
-                    await this.hoobs.restore.file(this.filename);
+                    await this.$hoobs.restore.file(this.filename);
                 }
             },
 
@@ -78,7 +78,7 @@
                 if (this.$refs.backup && this.$refs.backup.files[0]) {
                     this.loading = true;
 
-                    await this.hoobs.restore.upload(this.$refs.backup.files[0]);
+                    await this.$hoobs.restore.upload(this.$refs.backup.files[0]);
                 }
             },
         },

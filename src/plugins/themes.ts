@@ -40,13 +40,23 @@ export default class Themes {
         }
     }
 
-    static mixin(store?: Store<any>) {
+    static mixin(hoobs: any, store?: Store<any>) {
         this.set(store?.state.theme, store);
 
         return {
-            methods: {
-                theme(name: string) {
-                    Themes.set(name, store);
+            computed: {
+                $theme() {
+                    return {
+                        set(name: string) {
+                            Themes.set(name, store);
+                        },
+
+                        async get() {
+                            const theme = await hoobs.theme.get(store?.state.theme);
+
+                            return theme;
+                        },
+                    };
                 },
             },
         };

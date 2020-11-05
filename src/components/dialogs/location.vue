@@ -92,7 +92,7 @@
 
                 this.show.searching = true;
 
-                this.locations = (await this.hoobs.location(this.query, 10)).map((item) => ({
+                this.locations = (await this.$hoobs.location(this.query, 10)).map((item) => ({
                     id: item.id,
                     name: item.name,
                     country: item.country,

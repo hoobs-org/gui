@@ -23,7 +23,7 @@
         </div>
         <div class="actions modal">
             <div class="button" v-on:click="close()">{{ cancel || $t("cancel") }}</div>
-            <div class="button primary" v-on:click="confirm()">{{ ok || $t("ok") }}</div>
+            <div class="button primary" v-on:click="execute()">{{ action || $t("ok") }}</div>
         </div>
     </modal>
 </template>
@@ -34,15 +34,22 @@
 
         props: {
             message: String,
-            ok: String,
+            action: String,
             cancel: String,
-            confirm: {
+            callback: {
                 type: Function,
                 default: () => { /* null */ },
             },
             close: {
                 type: Function,
                 default: () => { /* null */ },
+            },
+        },
+
+        methods: {
+            execute() {
+                this.close();
+                this.callback();
             },
         },
     };

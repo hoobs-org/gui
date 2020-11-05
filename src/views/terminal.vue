@@ -18,10 +18,13 @@
 
 <template>
     <div id="terminal">
+        <context>
+            <div v-on:click="refresh()" class="icon">refresh</div>
+        </context>
         <div class="measure" ref="measure">
             abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
         </div>
-        <div class="flow" ref="flow">
+        <div v-if="!loading" class="flow" ref="flow">
             <div class="container" ref="container" style="display: block;">
                 <div ref="terminal" class="shell"></div>
             </div>
@@ -45,6 +48,7 @@
 
         data() {
             return {
+                loading: false,
                 term: null,
                 socket: null,
                 version: null,
@@ -59,6 +63,15 @@
         },
 
         created() {
+            this.$store.subscribe((mutation) => {
+                if (mutation.type === "THEME:SET") {
+                    this.loading = true;
+                    this.disconnect();
+
+                    window.location.reload();
+                }
+            });
+
             window.addEventListener("resize", this.resize, true);
         },
 
@@ -74,7 +87,7 @@
             window.addEventListener("resize", this.resize, true);
 
             this.opening = true;
-            this.version = await this.hoobs.version();
+            this.version = await this.$hoobs.version();
             this.socket = Socket();
 
             this.text = {
@@ -82,7 +95,7 @@
                 height: Math.floor(this.$refs.measure.clientHeight + 1),
             };
 
-            const theme = await this.hoobs.theme.get(this.$store.state.theme);
+            const theme = await this.$theme.get();
 
             this.term = new Terminal({
                 cursorStyle: "bar",
@@ -91,6 +104,7 @@
                 theme: {
                     background: theme.application.background,
                     foreground: theme.application.text.default,
+                    cursor: theme.application.text.default,
                 },
             });
 
@@ -105,6 +119,11 @@
         },
 
         methods: {
+            refresh() {
+                this.term.clear();
+                this.term.focus();
+            },
+
             connect() {
                 this.socket.emit("shell_connect");
 
@@ -153,8 +172,7 @@
 
                 setTimeout(() => {
                     if (this.term && this.$refs.flow) {
-                        const tray = this.$parent.$refs.tray ? this.$parent.$refs.tray.clientWidth : 0;
-                        const cols = Math.floor(((this.$refs.flow.clientWidth + 1) - tray) / this.text.width);
+                        const cols = Math.floor((this.$refs.flow.clientWidth + 1) / this.text.width) - 1;
                         const rows = Math.floor((this.$refs.flow.clientHeight + 1) / this.text.height) + 3;
 
                         if (this.$refs.container) this.$refs.container.style.display = "block";
@@ -176,7 +194,6 @@
         display: flex;
         background: var(--application-background);
         flex-direction: column;
-        padding: 20px;
         position: relative;
 
         .measure {
@@ -196,7 +213,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            margin: 0 -5px 0 0;
+            margin: 0 -5px 20px 20px;
 
             .container {
                 width: 100%;

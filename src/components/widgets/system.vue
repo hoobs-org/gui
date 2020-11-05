@@ -91,13 +91,13 @@
         },
 
         async mounted() {
-            const status = await this.hoobs.status();
+            const status = await this.$hoobs.status();
 
             this.version = status.version;
             this.node = status.node_version;
 
-            this.updated = Semver.compare(this.version, (await this.hoobs.latest()), ">=");
-            this.system = (await this.hoobs.system()).system;
+            this.updated = Semver.compare(this.version, (await this.$hoobs.latest()), ">=");
+            this.system = (await this.$hoobs.system()).system;
 
             this.loading = false;
         },
@@ -124,6 +124,7 @@
             display: flex;
             flex-direction: row;
             padding: 10px 10px 20px 10px;
+            user-select: none;
 
             .running {
                 display: flex;
@@ -170,6 +171,10 @@
                     text-align: left;
                     font-size: 13px;
                     border-top: 1px var(--widget-border) solid;
+
+                    &:first-child {
+                        user-select: none;
+                    }
 
                     &:last-child {
                         width: 70%;

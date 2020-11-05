@@ -237,6 +237,16 @@ export default new Vuex.Store({
         "DIALOG:SHOW": (state: { [key: string ]: any }, value: string) => {
             state.dialog = value;
         },
+
+        "ALERT:SHOW": (state: { [key: string ]: any }, message: string) => {
+            state.alert = {
+                message,
+            };
+        },
+
+        "CONFIRM:SHOW": (state: { [key: string ]: any }, data: { [key: string]: any }) => {
+            state.confirm = data;
+        },
     },
 
     plugins: [new Persistence({

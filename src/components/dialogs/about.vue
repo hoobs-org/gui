@@ -79,7 +79,7 @@
         },
 
         async mounted() {
-            this.version = await this.hoobs.version();
+            this.version = await this.$hoobs.version();
         },
 
         methods: {

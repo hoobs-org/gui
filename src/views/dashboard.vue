@@ -18,14 +18,18 @@
 
 <template>
     <div id="dashboard" :class="backdrop ? 'backdrop' : ''">
-        <context />
+        <context>
+            <div v-if="show.locked" v-on:click.stop="toggle('locked')" class="icon">lock_open</div>
+            <div v-else v-on:click.stop="toggle('locked')" class="icon">lock</div>
+            <div v-on:click.stop="toggle('settings')" class="icon">settings</div>
+        </context>
         <div class="content">
             <grid-layout
                 :layout="items"
                 :col-num="12"
                 :row-height="30"
-                :is-draggable="true"
-                :is-resizable="true"
+                :is-draggable="!show.locked"
+                :is-resizable="!show.locked"
                 :is-mirrored="false"
                 :vertical-compact="true"
                 :margin="[10, 10]"
@@ -50,11 +54,13 @@
                 </grid-item>
             </grid-layout>
         </div>
+        <settings v-if="show.settings" :close="() => { toggle('settings') }" />
     </div>
 </template>
 
 <script>
     import GridLayout from "vue-grid-layout";
+    import Dashboard from "../components/dialogs/dashboard.vue";
     import Activity from "../components/widgets/activity.vue";
     import Favorites from "../components/widgets/favorites.vue";
     import System from "../components/widgets/system.vue";
@@ -66,6 +72,7 @@
         components: {
             "grid-layout": GridLayout.GridLayout,
             "grid-item": GridLayout.GridItem,
+            "settings": Dashboard,
             "activity": Activity,
             "favorites": Favorites,
             "system": System,
@@ -77,6 +84,10 @@
                 loading: true,
                 backdrop: false,
                 items: [],
+                show: {
+                    settings: false,
+                    locked: true,
+                },
             };
         },
 
@@ -103,6 +114,10 @@
         },
 
         methods: {
+            toggle(field) {
+                this.show[field] = !this.show[field];
+            },
+
             save() {
                 if (!this.loading) {
                     const items = JSON.parse(JSON.stringify(this.items));

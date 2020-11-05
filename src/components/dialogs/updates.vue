@@ -77,9 +77,9 @@
         },
 
         async mounted() {
-            this.version = await this.hoobs.version();
-            this.latest = await this.hoobs.latest();
-            this.plugins = (await this.hoobs.plugins()).filter((item) => !Semver.compare(item.version, item.latest, ">="));
+            this.version = await this.$hoobs.version();
+            this.latest = await this.$hoobs.latest();
+            this.plugins = (await this.$hoobs.plugins()).filter((item) => !Semver.compare(item.version, item.latest, ">="));
 
             this.stack = !Semver.compare(this.version, this.latest, ">=");
             this.updated = !(this.stack || this.plugins.length > 0);
@@ -91,7 +91,7 @@
             async upgrade() {
                 this.updating = true;
 
-                const system = await this.hoobs.system();
+                const system = await this.$hoobs.system();
 
                 await system.update();
                 await system.reboot();
@@ -100,7 +100,7 @@
             async update() {
                 for (let i = 0; i < this.plugins.length; i += 1) {
                     const { ...plugin } = this.plugins[i];
-                    const instance = await this.hoobs.instance(plugin.instance);
+                    const instance = await this.$hoobs.instance(plugin.instance);
 
                     await instance.plugin.upgrade(plugin.identifier);
                 }

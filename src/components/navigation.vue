@@ -116,7 +116,7 @@
         justify-content: space-around;
         background: var(--navigation-background);
         color: var(--navigation-text);
-        padding: 14px 10px 0 10px;
+        padding: 10px 10px 0 10px;
 
         .logo {
             margin: 0 0 14px 0;

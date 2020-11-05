@@ -142,8 +142,8 @@
         },
 
         async mounted() {
-            this.auth = await this.hoobs.auth.status() === "enabled";
-            this.original = await this.hoobs.theme.get(this.$store.state.theme);
+            this.auth = await this.$hoobs.auth.status() === "enabled";
+            this.original = await this.$hoobs.theme.get(this.$store.state.theme);
             this.working = JSON.parse(JSON.stringify(this.original));
 
             this.auto = this.working.auto;
@@ -169,7 +169,7 @@
                     const { backdrop } = this.working;
                     const { auto } = this.working;
 
-                    this.original = await this.hoobs.theme.get(this.mode);
+                    this.original = await this.$hoobs.theme.get(this.mode);
                     this.working = JSON.parse(JSON.stringify(this.original));
 
                     this.working.backdrop = backdrop;
@@ -203,9 +203,9 @@
             async save() {
                 this.loading = true;
 
-                if (this.working.name !== "light" && this.working.name !== "dark") await this.hoobs.theme.save(this.working.display, this.working);
+                if (this.working.name !== "light" && this.working.name !== "dark") await this.$hoobs.theme.save(this.working.display, this.working);
 
-                this.theme(this.working.name);
+                this.$theme.set(this.working.name);
                 this.close();
             },
 
@@ -301,7 +301,7 @@
             },
 
             async upload() {
-                this.backdrop = `url('${THEMES_URL}/${(await this.hoobs.theme.backdrop(this.$refs.backdrop.files[0]))}')`;
+                this.backdrop = `url('${THEMES_URL}/${(await this.$hoobs.theme.backdrop(this.$refs.backdrop.files[0]))}')`;
             },
         },
     };

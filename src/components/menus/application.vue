@@ -86,7 +86,7 @@
         },
 
         async mounted() {
-            this.auth = await this.hoobs.auth.status() === "enabled";
+            this.auth = await this.$hoobs.auth.status() === "enabled";
         },
     };
 </script>

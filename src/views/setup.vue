@@ -127,7 +127,7 @@
         },
 
         async mounted() {
-            this.theme("dark");
+            this.$theme.set("dark");
             this.step = await this.progress();
         },
 
@@ -146,13 +146,13 @@
             async progress() {
                 if (this.step > 0) this.step = 0;
 
-                const status = await this.hoobs.auth.status();
-                const instances = await this.hoobs.instances.count();
+                const status = await this.$hoobs.auth.status();
+                const instances = await this.$hoobs.instances.count();
 
                 this.message = "";
 
                 if (status === "uninitialized") return 1;
-                if (instances === 0 && !(await this.hoobs.auth.validate())) this.$router.push({ path: "/login", query: { url: "/setup" } });
+                if (instances === 0 && !(await this.$hoobs.auth.validate())) this.$router.push({ path: "/login", query: { url: "/setup" } });
                 if (instances === 0) return 2;
 
                 this.$router.push({ path: "/" });
@@ -171,9 +171,9 @@
                     this.step = 0;
                     this.message = `${this.$t("user_add_creating")} ...`;
 
-                    await this.hoobs.users.add(this.username.toLowerCase(), this.password, this.name, true);
+                    await this.$hoobs.users.add(this.username.toLowerCase(), this.password, this.name, true);
 
-                    if (await this.hoobs.auth.login(this.username.toLowerCase(), this.password)) {
+                    if (await this.$hoobs.auth.login(this.username.toLowerCase(), this.password)) {
                         this.$router.push({ path: this.url });
                     } else {
                         this.errors.push(this.$t("user_add_failed"));
@@ -189,7 +189,7 @@
                 if (this.instance.length < 3) this.errors.push(this.$t("instance_name_required"));
                 if (Number.isNaN(parseInt(this.port, 10)) || parseInt(this.port, 10) < 1 || parseInt(this.port, 10) > 65535) this.errors.push(this.$t("instance_port_required"));
 
-                const instances = await this.hoobs.instances.list();
+                const instances = await this.$hoobs.instances.list();
 
                 if (instances.findIndex((item) => item.port === parseInt(this.port, 10)) >= 0) this.errors.push(this.$t("instance_port_taken"));
 
@@ -197,8 +197,8 @@
                     this.step = 0;
                     this.message = `${this.$t("instance_create")} ...`;
 
-                    await this.hoobs.instances.add(this.instance, parseInt(this.port, 10));
-                    await this.wait(this.hoobs.instances.count, (value) => value > 0);
+                    await this.$hoobs.instances.add(this.instance, parseInt(this.port, 10));
+                    await this.wait(this.$hoobs.instances.count, (value) => value > 0);
 
                     this.step = await this.progress();
                 }
@@ -208,8 +208,8 @@
                 this.step = 0;
                 this.message = `${this.$t("disable_login_disabling")} ...`;
 
-                await this.hoobs.auth.disable();
-                await this.wait(this.hoobs.auth.status, (value) => value === "disabled");
+                await this.$hoobs.auth.disable();
+                await this.wait(this.$hoobs.auth.status, (value) => value === "disabled");
 
                 this.step = await this.progress();
             },

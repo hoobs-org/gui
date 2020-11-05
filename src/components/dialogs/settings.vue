@@ -126,7 +126,7 @@
         },
 
         async mounted() {
-            const config = await this.hoobs.config.get();
+            const config = await this.$hoobs.config.get();
 
             this.interval = (config.api || {}).polling_seconds || 5;
             this.units = (config.weather || {}).units || "celsius";
@@ -151,7 +151,7 @@
             async backup() {
                 this.loading = true;
 
-                const url = await this.hoobs.backup.execute();
+                const url = await this.$hoobs.backup.execute();
                 const link = document.createElement("a");
 
                 this.loading = false;
@@ -168,37 +168,33 @@
             },
 
             reboot() {
-                this.$parent.confirm(this.$t("reboot_warning"), this.$t("reboot"), async () => {
-                    const system = await this.hoobs.system();
+                this.$confirm(this.$t("reboot"), this.$t("reboot_warning"), async () => {
+                    const system = await this.$hoobs.system();
 
                     await system.reboot();
 
-                    this.$parent.show.confirmation = false;
                     this.loading = true;
                 });
             },
 
             purge() {
-                this.$parent.confirm(this.$t("purge_warning"), this.$t("purge"), async () => {
-                    const instances = await this.hoobs.instances.list();
+                this.$confirm(this.$t("purge"), this.$t("purge_warning"), async () => {
+                    const instances = await this.$hoobs.instances.list();
 
                     for (let i = 0; i < instances.length; i += 1) this.clear(instances[i].id);
-
-                    this.$parent.show.confirmation = false;
                 });
             },
 
             async clear(id) {
-                const instance = await this.hoobs.instance(id);
+                const instance = await this.$hoobs.instance(id);
 
                 await instance.purge();
             },
 
             reset() {
-                this.$parent.confirm(this.$t("reset_warning"), this.$t("reset"), async () => {
-                    const system = await this.hoobs.system();
+                this.$confirm(this.$t("reset"), this.$t("reset_warning"), async () => {
+                    const system = await this.$hoobs.system();
 
-                    this.$parent.show.confirmation = false;
                     this.loading = true;
 
                     await system.reset();
@@ -209,7 +205,7 @@
                 this.loading = true;
                 this.message = `${this.$t("saving_changes")}...`;
 
-                const config = await this.hoobs.config.get();
+                const config = await this.$hoobs.config.get();
                 const weather = {};
 
                 if (this.location && this.location.id && this.location.id > 0) weather.location = this.location;
@@ -219,7 +215,7 @@
                 config.weather = weather;
                 config.api.polling_seconds = this.interval < 2 ? 2 : this.interval;
 
-                await this.hoobs.config.update(config);
+                await this.$hoobs.config.update(config);
 
                 this.message = `${this.$t("applying_changes")}...`;
 

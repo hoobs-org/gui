@@ -692,7 +692,7 @@ export default function sdk(get: () => string, set: (token: string) => void) {
         },
 
         mixin() {
-            return { data: () => ({ hoobs: this }) };
+            return { computed: { $hoobs: () => this } };
         },
     };
 }
