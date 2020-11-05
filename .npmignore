@@ -5,7 +5,6 @@ public/
 node_modules/
 var/
 src/
-typings/
 .browserslistrc
 .editorconfig
 .env.development
