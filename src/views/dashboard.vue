@@ -19,8 +19,8 @@
 <template>
     <div id="dashboard" :class="backdrop ? 'backdrop' : ''">
         <context>
-            <div v-if="show.locked" v-on:click.stop="toggle('locked')" class="icon">lock_open</div>
-            <div v-else v-on:click.stop="toggle('locked')" class="icon">lock</div>
+            <div v-if="show.locked" v-on:click.stop="toggle('locked')" class="icon">lock</div>
+            <div v-else v-on:click.stop="toggle('locked')" class="icon">lock_open</div>
             <div v-on:click.stop="toggle('settings')" class="icon">settings</div>
         </context>
         <div class="content">
