@@ -152,7 +152,7 @@
                 overflow: hidden;
 
                 &:hover {
-                    overflow: overflow;
+                    overflow: overlay;
                 }
             }
         }

@@ -23,6 +23,29 @@
 <script>
     export default {
         name: "system",
+
+        data() {
+            return {
+                node: "",
+                instances: {},
+                version: "",
+                latest: "",
+                loading: true,
+                system: {},
+            };
+        },
+
+        async mounted() {
+            const status = await this.hoobs.status();
+
+            this.node = status.node_version;
+            this.instances = status.instances;
+            this.version = await this.hoobs.version();
+            this.latest = await this.hoobs.latest();
+            this.system = await this.hoobs.system();
+
+            this.loading = false;
+        },
     };
 </script>
 
@@ -30,7 +53,6 @@
     #widget {
         width: 100%;
         height: 100%;
-        overflow: auto;
         cursor: default;
     }
 </style>
