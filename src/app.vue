@@ -105,6 +105,7 @@
         a {
             color: var(--application-highlight) !important;
             text-decoration: none !important;
+            cursor: pointer;
 
             &:hover {
                 text-decoration: underline !important;

@@ -26,7 +26,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         log: [],
-        instances: {},
+        instances: [],
         config: {},
         dashboard: {
             items: [{
@@ -105,18 +105,22 @@ export default new Vuex.Store({
         },
 
         "IO:MONITOR": (state: { [key: string ]: any }, payload: any) => {
-            const instances = Object.keys(payload.data.instances);
+            const keys = Object.keys(payload.data.instances);
+            const instances = [];
 
-            for (let i = 0; i < instances.length; i += 1) {
-                const { ...instance } = payload.data.instances[instances[i]];
+            for (let i = 0; i < keys.length; i += 1) {
+                const { ...instance } = payload.data.instances[keys[i]];
 
-                state.instances[instances[i]] = {
+                instances.push({
+                    id: keys[i],
+                    display: instance.display,
                     version: instance.version,
                     running: instance.running,
                     uptime: timespan(instance.uptime),
-                };
+                });
             }
 
+            state.instances = instances;
             state.temp = payload.data.temp.main > -1 ? payload.data.temp.main : null;
 
             state.cpu.used = 100 - Math.round(payload.data.cpu.currentload_idle);
@@ -228,6 +232,10 @@ export default new Vuex.Store({
 
         "DASHBOARD:BACKDROP": (state: { [key: string ]: any }, value: boolean) => {
             state.dashboard.backdrop = value;
+        },
+
+        "DIALOG:SHOW": (state: { [key: string ]: any }, value: string) => {
+            state.dialog = value;
         },
     },
 

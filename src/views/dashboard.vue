@@ -42,7 +42,11 @@
                     :h="item.h"
                     :i="item.i"
                 >
-                    <component :is="item.component" :item="item" :index="index" :change="update" />
+                    <component
+                        :is="item.component"
+                        :item="item"
+                        :index="index"
+                    />
                 </grid-item>
             </grid-layout>
         </div>
@@ -99,12 +103,6 @@
         },
 
         methods: {
-            update(index, name, value) {
-                this.items[index][name] = value;
-
-                this.save();
-            },
-
             save() {
                 if (!this.loading) {
                     const items = JSON.parse(JSON.stringify(this.items));
@@ -137,7 +135,11 @@
         .content {
             flex: 1;
             overflow: hidden;
-            background: linear-gradient(to bottom, var(--application-background) 0%, #00000000 30%);
+            background: linear-gradient(
+                to bottom,
+                var(--application-background) 0%,
+                #00000000 30%
+            );
 
             &:hover {
                 overflow: overlay;

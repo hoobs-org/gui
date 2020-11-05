@@ -118,6 +118,12 @@
         async created() {
             const status = await this.hoobs.auth.status();
 
+            this.$store.subscribe((mutation, state) => {
+                if (mutation.type === "DIALOG:SHOW") {
+                    this.toggle(state.dialog);
+                }
+            });
+
             this.$store.commit("AUTH:STATE", status);
         },
 
@@ -162,10 +168,10 @@
                 this.reset();
             },
 
-            toggle(value) {
-                this.reset(value);
+            toggle(field) {
+                this.reset(field);
 
-                this.show[value] = !this.show[value];
+                this.show[field] = !this.show[field];
             },
 
             navigate(url) {
