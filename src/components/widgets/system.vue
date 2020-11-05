@@ -134,8 +134,8 @@
             }
 
             .up {
-                width: 27px;
-                height: 27px;
+                width: 24px;
+                height: 24px;
                 border-radius: 100%;
                 background: var(--widget-text);
                 margin: 0 14px 0 0;
