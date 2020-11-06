@@ -87,28 +87,37 @@
     #widget {
         display: flex;
         flex-direction: column;
-        padding: 20px;
+        padding: 20px 6px 20px 20px;
         position: relative;
         overflow: hidden;
         cursor: default;
 
         .location {
             font-size: 18px;
+            padding: 0 14px 0 0;
+            user-select: none;
         }
 
         .today {
             font-size: 15px;
+            padding: 0 14px 0 0;
+            user-select: none;
         }
 
         .weather {
             font-size: 15px;
+            padding: 0 14px 0 0;
+            user-select: none;
         }
 
         .current {
             display: flex;
             flex-direction: row;
             align-items: center;
-            margin: 20px 0;
+            border-bottom: 1px var(--widget-border) solid;
+            padding: 0 0 20px 0;
+            margin: 20px 14px 20px 0;
+            user-select: none;
 
             .display {
                 font-size: 40px;
@@ -126,24 +135,24 @@
             flex: 1;
             display: flex;
             flex-direction: row;
-            overflow: auto;
 
             .weather {
-                width: 90px;
-                height: 90px;
+                flex: 1;
+                height: 92px;
                 margin: 0 14px 0 0;
+                padding: 7px;
                 text-align: center;
                 display: flex;
                 flex-direction: column;
-                justify-content: space-around;
                 border: 1px var(--widget-border) solid;
                 align-content: center;
                 box-sizing: border-box;
+                user-select: none;
             }
 
             .display {
-                font-size: 30px;
-                line-height: 47px;
+                font-size: 28px;
+                line-height: 45px;
                 color: var(--widget-highlight);
             }
 

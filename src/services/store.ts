@@ -32,9 +32,9 @@ export default new Vuex.Store({
             items: [{
                 x: 0, y: 0, w: 12, h: 6, i: "1", component: "activity",
             }, {
-                x: 0, y: 6, w: 5, h: 8, i: "2", component: "weather",
+                x: 0, y: 6, w: 4, h: 8, i: "2", component: "weather",
             }, {
-                x: 5, y: 6, w: 3, h: 16, i: "3", component: "favorites",
+                x: 4, y: 6, w: 4, h: 16, i: "3", component: "favorites",
             }, {
                 x: 8, y: 6, w: 4, h: 16, i: "4", component: "system",
             }],

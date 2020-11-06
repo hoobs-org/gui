@@ -28,10 +28,12 @@
                         </checkbox>
                     </div>
                     <div class="row section">{{ $t("dashboard_items") }}</div>
-                    <div v-for="(item, index) in available" :key="index" class="row">
-                        <checkbox :id="`item_${index}`" v-model="item.selected">
-                            <label :for="`item_${index}`">{{ $t(item.name) }}</label>
-                        </checkbox>
+                    <div class="grid">
+                        <div v-for="(item, index) in available" :key="index">
+                            <checkbox :id="`item_${index}`" v-model="item.selected">
+                                <label :for="`item_${index}`">{{ $t(item.label) }}</label>
+                            </checkbox>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -64,18 +66,39 @@
                 backdrop: "",
                 available: [{
                     name: "activity",
+                    label: "activity",
+                    selected: false,
+                }, {
+                    name: "cpu",
+                    label: "cpu",
+                    selected: false,
+                }, {
+                    name: "memory",
+                    label: "memory",
+                    selected: false,
+                }, {
+                    name: "instances",
+                    label: "instances",
                     selected: false,
                 }, {
                     name: "favorites",
+                    label: "favorite_accessories",
                     selected: false,
                 }, {
                     name: "system",
+                    label: "system_info",
+                    selected: false,
+                }, {
+                    name: "current",
+                    label: "weather",
                     selected: false,
                 }, {
                     name: "weather",
+                    label: "weather_combined",
                     selected: false,
                 }, {
                     name: "forecast",
+                    label: "weather_forecast",
                     selected: false,
                 }],
             };
@@ -129,24 +152,44 @@
                             x: 0, y: 0, w: 12, h: 6, i: "1", component: "activity",
                         };
 
+                    case "cpu":
+                        return {
+                            x: 0, y: 0, w: 1, h: 3, i: "7", component: "cpu",
+                        };
+
+                    case "memory":
+                        return {
+                            x: 0, y: 0, w: 1, h: 3, i: "8", component: "memory",
+                        };
+
+                    case "instances":
+                        return {
+                            x: 0, y: 0, w: 1, h: 3, i: "9", component: "instances",
+                        };
+
                     case "favorites":
                         return {
-                            x: 5, y: 6, w: 3, h: 16, i: "3", component: "favorites",
+                            x: 0, y: 0, w: 3, h: 16, i: "3", component: "favorites",
                         };
 
                     case "system":
                         return {
-                            x: 8, y: 6, w: 4, h: 16, i: "4", component: "system",
+                            x: 0, y: 0, w: 4, h: 16, i: "4", component: "system",
                         };
 
                     case "weather":
                         return {
-                            x: 0, y: 6, w: 5, h: 8, i: "2", component: "weather",
+                            x: 0, y: 0, w: 5, h: 8, i: "2", component: "weather",
                         };
 
                     case "forecast":
                         return {
-                            x: 0, y: 14, w: 5, h: 4, i: "5", component: "forecast",
+                            x: 0, y: 0, w: 4, h: 4, i: "5", component: "forecast",
+                        };
+
+                    case "current":
+                        return {
+                            x: 0, y: 0, w: 2, h: 5, i: "6", component: "current",
                         };
 
                     default:
@@ -164,5 +207,10 @@
         overflow: hidden;
         flex-direction: column;
         margin: 0 0 0 10px;
+
+        .grid {
+            display: grid;
+            grid-template-columns: auto auto;
+        }
     }
 </style>

@@ -62,9 +62,13 @@
     import GridLayout from "vue-grid-layout";
     import Dashboard from "../components/dialogs/dashboard.vue";
     import Activity from "../components/widgets/activity.vue";
+    import CPU from "../components/widgets/cpu.vue";
+    import Memory from "../components/widgets/memory.vue";
+    import Instances from "../components/widgets/instances.vue";
     import Favorites from "../components/widgets/favorites.vue";
     import System from "../components/widgets/system.vue";
     import Weather from "../components/widgets/weather.vue";
+    import Current from "../components/widgets/current.vue";
     import Forecast from "../components/widgets/forecast.vue";
 
     export default {
@@ -75,9 +79,13 @@
             "grid-item": GridLayout.GridItem,
             "settings": Dashboard,
             "activity": Activity,
+            "cpu": CPU,
+            "memory": Memory,
+            "instances": Instances,
             "favorites": Favorites,
             "system": System,
             "weather": Weather,
+            "current": Current,
             "forecast": Forecast,
         },
 

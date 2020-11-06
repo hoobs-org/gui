@@ -21,14 +21,15 @@
         <div class="location">
             {{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text }}
         </div>
-        <div class="forecast">
-            <div v-for="(day, index) in forecast" :key="index" class="weather">
-                <span class="title">{{ $t(weekday(new Date(day.date))) }}</span>
-                <div class="display" :class="`wi wi-day-${icon[day.icon].icon}`"></div>
-                <div class="temp">
-                    <span class="max">{{ Math.round(day.max) }}°</span><span class="min">{{ Math.round(day.min) }}°</span>
-                </div>
-            </div>
+        <div class="today">
+            {{ $t(weekday(new Date())) }}
+        </div>
+        <div class="weather">
+            {{ $t(icon[current.icon].label) }}
+        </div>
+        <div class="current">
+            <div class="display" :class="`wi wi-day-${icon[current.icon].icon}`"></div>
+            <div class="temp">{{ Math.round(current.temp) }}°</div>
         </div>
     </div>
 </template>
@@ -41,13 +42,13 @@
     import dates from "../../services/dates";
 
     export default {
-        name: "forecast",
+        name: "weather",
 
         data() {
             return {
                 loading: true,
                 location: {},
-                forecast: [],
+                current: {},
                 icon: icons,
                 country: countries,
             };
@@ -57,13 +58,15 @@
             const config = await this.$hoobs.config.get();
 
             this.location = (config.weather || {}).location;
-            this.forecast = await this.$hoobs.weather.forecast();
+            this.current = await this.$hoobs.weather.current();
             this.loading = false;
         },
 
         methods: {
-            weekday(value) {
-                return `${dates.weekday(value)}_abbr`;
+            weekday(value, abbr) {
+                if (abbr) return `${dates.weekday(value)}_abbr`;
+
+                return dates.weekday(value);
             },
         },
     };
@@ -79,58 +82,40 @@
         cursor: default;
 
         .location {
-            font-size: 14px;
-            margin: 0 0 7px 0;
+            font-size: 18px;
+            padding: 0 14px 0 0;
             user-select: none;
         }
 
-        .forecast {
-            flex: 1;
+        .today {
+            font-size: 15px;
+            padding: 0 14px 0 0;
+            user-select: none;
+        }
+
+        .weather {
+            font-size: 15px;
+            padding: 0 14px 0 0;
+            user-select: none;
+        }
+
+        .current {
             display: flex;
             flex-direction: row;
-            overflow: auto;
-
-            .weather {
-                flex: 1;
-                height: 92px;
-                margin: 0 14px 0 0;
-                padding: 7px;
-                text-align: center;
-                display: flex;
-                flex-direction: column;
-                border: 1px var(--widget-border) solid;
-                align-content: center;
-                box-sizing: border-box;
-                user-select: none;
-            }
+            align-items: center;
+            padding: 0 0 20px 0;
+            margin: 20px 14px 20px 0;
+            user-select: none;
 
             .display {
-                font-size: 28px;
-                line-height: 45px;
+                font-size: 40px;
+                line-height: 67px;
                 color: var(--widget-highlight);
             }
 
-            .title {
-                font-weight: bold;
-                font-size: 14px;
-            }
-
-            .description {
-                font-weight: bold;
-                font-size: 12px;
-            }
-
             .temp {
-                font-weight: bold;
-                font-size: 14px;
-
-                .max {
-                    margin: 0 7px 0 0;
-                }
-
-                .min {
-                    opacity: 0.7;
-                }
+                font-size: 57px;
+                margin: 0 0 0 20px;
             }
         }
     }
