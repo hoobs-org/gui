@@ -258,6 +258,7 @@
                 this.working.button.primary.background = color;
                 this.working.button.primary.border = color;
                 this.working.modal.highlight = color;
+                this.working.widget.highlight = color;
                 this.working.navigation.text.active = color;
                 this.working.navigation.highlight = color;
 
@@ -295,6 +296,7 @@
                             this.working.button.primary.background = highlight;
                             this.working.button.primary.border = highlight;
                             this.working.modal.highlight = highlight;
+                            this.working.widget.highlight = highlight;
                             this.working.navigation.text.active = highlight;
                             this.working.navigation.highlight = highlight;
 
