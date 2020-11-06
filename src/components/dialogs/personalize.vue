@@ -230,11 +230,31 @@
                 return `#${scheme.colors()[0]}`;
             },
 
+            analogic(value) {
+                const scheme = new ColorScheme();
+
+                scheme.from_hex(value.replace("#", "").toUpperCase());
+                scheme.scheme("analogic");
+                scheme.variation("hard");
+
+                return `#${scheme.colors()[7]}`;
+            },
+
+            tetrade(value) {
+                const scheme = new ColorScheme();
+
+                scheme.from_hex(value.replace("#", "").toUpperCase());
+                scheme.scheme("tetrade");
+                scheme.variation("hard");
+
+                return `#${scheme.colors()[5]}`;
+            },
+
             adjust(value) {
                 const color = value.toLowerCase();
 
                 this.working.application.highlight = color;
-                this.working.application.accent = this.contrast(color);
+                this.working.application.accent = this.mode === "light" ? this.tetrade(color) : this.analogic(color);
                 this.working.button.primary.background = color;
                 this.working.button.primary.border = color;
                 this.working.modal.highlight = color;
