@@ -74,6 +74,9 @@
                 }, {
                     name: "weather",
                     selected: false,
+                }, {
+                    name: "forecast",
+                    selected: false,
                 }],
             };
         },
@@ -103,7 +106,11 @@
                     const index = current.findIndex((item) => item.component === this.available[i].name);
 
                     if (this.available[i].selected && index === -1) {
-                        current.unshift(this.defaults(this.available[i].name));
+                        const widget = this.defaults(this.available[i].name);
+
+                        if (widget) {
+                            current.unshift(widget);
+                        }
                     } else if (!this.available[i].selected && index >= 0) {
                         current.splice(index, 1);
                     }
@@ -119,42 +126,27 @@
                 switch (item) {
                     case "activity":
                         return {
-                            "x": 3,
-                            "y": 0,
-                            "w": 9,
-                            "h": 7,
-                            "i": "1",
-                            component: "activity",
+                            x: 0, y: 0, w: 12, h: 6, i: "1", component: "activity",
                         };
 
                     case "favorites":
                         return {
-                            x: 0,
-                            y: 14,
-                            w: 7,
-                            h: 8,
-                            i: "3",
-                            component: "favorites",
+                            x: 5, y: 6, w: 3, h: 16, i: "3", component: "favorites",
                         };
 
                     case "system":
                         return {
-                            x: 7,
-                            y: 7,
-                            w: 5,
-                            h: 15,
-                            i: "4",
-                            component: "system",
+                            x: 8, y: 6, w: 4, h: 16, i: "4", component: "system",
                         };
 
                     case "weather":
                         return {
-                            x: 0,
-                            y: 7,
-                            w: 7,
-                            h: 7,
-                            i: "2",
-                            component: "weather",
+                            x: 0, y: 6, w: 5, h: 8, i: "2", component: "weather",
+                        };
+
+                    case "forecast":
+                        return {
+                            x: 0, y: 14, w: 5, h: 4, i: "5", component: "forecast",
                         };
 
                     default:

@@ -30,33 +30,13 @@ export default new Vuex.Store({
         config: {},
         dashboard: {
             items: [{
-                x: 0,
-                y: 0,
-                w: 12,
-                h: 6,
-                i: "1",
-                component: "activity",
+                x: 0, y: 0, w: 12, h: 6, i: "1", component: "activity",
             }, {
-                x: 0,
-                y: 6,
-                w: 7,
-                h: 6,
-                i: "2",
-                component: "weather",
+                x: 0, y: 6, w: 5, h: 8, i: "2", component: "weather",
             }, {
-                x: 0,
-                y: 12,
-                w: 7,
-                h: 10,
-                i: "3",
-                component: "favorites",
+                x: 5, y: 6, w: 3, h: 16, i: "3", component: "favorites",
             }, {
-                x: 7,
-                y: 6,
-                w: 5,
-                h: 16,
-                i: "4",
-                component: "system",
+                x: 8, y: 6, w: 4, h: 16, i: "4", component: "system",
             }],
         },
         cpu: {
@@ -98,13 +78,13 @@ export default new Vuex.Store({
     },
 
     mutations: {
-        "IO:LOG": (state: { [key: string ]: any }, payload: any) => {
+        "IO:LOG": (state: { [key: string]: any }, payload: any) => {
             state.log.push(payload);
 
             while (state.log.length > 500) state.log.shift();
         },
 
-        "IO:MONITOR": (state: { [key: string ]: any }, payload: any) => {
+        "IO:MONITOR": (state: { [key: string]: any }, payload: any) => {
             const keys = Object.keys(payload.data.instances);
             const instances = [];
 
@@ -142,7 +122,7 @@ export default new Vuex.Store({
             state.memory.history[state.memory.history.length - 1] = [state.memory.history.length - 1, state.memory.load];
         },
 
-        "IO:NOTIFICATION": (state: { [key: string ]: any }, payload: any) => {
+        "IO:NOTIFICATION": (state: { [key: string]: any }, payload: any) => {
             const now = (new Date()).getTime();
 
             state.notifications.unshift({
@@ -158,11 +138,11 @@ export default new Vuex.Store({
             });
         },
 
-        "IO:ACCESSORY:CHANGE": (state: { [key: string ]: any }, payload: any) => {
+        "IO:ACCESSORY:CHANGE": (state: { [key: string]: any }, payload: any) => {
             state.accessory = payload.data;
         },
 
-        "SESSION:SET": (state: { [key: string ]: any }, token: string) => {
+        "SESSION:SET": (state: { [key: string]: any }, token: string) => {
             state.session = token;
 
             if (token && token !== "") {
@@ -179,13 +159,13 @@ export default new Vuex.Store({
             }
         },
 
-        "LOG:HISTORY": (state: { [key: string ]: any }, messages: string) => {
+        "LOG:HISTORY": (state: { [key: string]: any }, messages: string) => {
             state.log.unshift(...messages);
 
             while (state.log.length > 500) state.log.shift();
         },
 
-        "NOTIFICATION:ADD": (state: { [key: string ]: any }, payload: any) => {
+        "NOTIFICATION:ADD": (state: { [key: string]: any }, payload: any) => {
             const now = (new Date()).getTime();
             const { ...notification } = payload;
 
@@ -196,21 +176,21 @@ export default new Vuex.Store({
             state.notifications.unshift(notification);
         },
 
-        "NOTIFICATION:DISMISS": (state: { [key: string ]: any }, id: string) => {
+        "NOTIFICATION:DISMISS": (state: { [key: string]: any }, id: string) => {
             state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.id || "") !== "" && (item.id || "") !== id);
         },
 
-        "NOTIFICATION:DISMISS:OLD": (state: { [key: string ]: any }) => {
+        "NOTIFICATION:DISMISS:OLD": (state: { [key: string]: any }) => {
             const now = (new Date()).getTime();
 
             state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.ttl || 0) > now);
         },
 
-        "NAVIGATION:STATE": (state: { [key: string ]: any }, value: boolean) => {
+        "NAVIGATION:STATE": (state: { [key: string]: any }, value: boolean) => {
             state.navigation = value;
         },
 
-        "AUTH:STATE": (state: { [key: string ]: any }, value: string) => {
+        "AUTH:STATE": (state: { [key: string]: any }, value: string) => {
             if (value === "enabled") {
                 state.auth = true;
             } else {
@@ -218,33 +198,33 @@ export default new Vuex.Store({
             }
         },
 
-        "THEME:SET": (state: { [key: string ]: any }, theme: number) => {
+        "THEME:SET": (state: { [key: string]: any }, theme: number) => {
             state.theme = theme;
         },
 
-        "DASHBOARD:LAYOUT": (state: { [key: string ]: any }, data: { [key: string ]: string | number | boolean }) => {
+        "DASHBOARD:LAYOUT": (state: { [key: string]: any }, data: { [key: string]: string | number | boolean }) => {
             state.dashboard.items = data;
         },
 
-        "DASHBOARD:ITEMS": (state: { [key: string ]: any }, data: { [key: string ]: string | number | boolean }) => {
+        "DASHBOARD:ITEMS": (state: { [key: string]: any }, data: { [key: string]: string | number | boolean }) => {
             state.dashboard.items = data;
         },
 
-        "DASHBOARD:BACKDROP": (state: { [key: string ]: any }, value: boolean) => {
+        "DASHBOARD:BACKDROP": (state: { [key: string]: any }, value: boolean) => {
             state.dashboard.backdrop = value;
         },
 
-        "DIALOG:SHOW": (state: { [key: string ]: any }, value: string) => {
+        "DIALOG:SHOW": (state: { [key: string]: any }, value: string) => {
             state.dialog = value;
         },
 
-        "ALERT:SHOW": (state: { [key: string ]: any }, message: string) => {
+        "ALERT:SHOW": (state: { [key: string]: any }, message: string) => {
             state.alert = {
                 message,
             };
         },
 
-        "CONFIRM:SHOW": (state: { [key: string ]: any }, data: { [key: string]: any }) => {
+        "CONFIRM:SHOW": (state: { [key: string]: any }, data: { [key: string]: any }) => {
             state.confirm = data;
         },
     },
@@ -252,7 +232,7 @@ export default new Vuex.Store({
     plugins: [new Persistence({
         key: "hoobs:state",
         storage: window.localStorage,
-        reducer: (state: { [key: string ]: any }) => ({
+        reducer: (state: { [key: string]: any }) => ({
             dashboard: state.dashboard,
             cpu: state.cpu,
             memory: state.memory,

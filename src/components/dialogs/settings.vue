@@ -52,7 +52,7 @@
                                 </div>
                                 <div>
                                     {{ $t("location_country") }}
-                                    <span class="value">{{ (countries.find((country) => country.value === location.country) || {}).text || location.country }}</span>
+                                    <span class="value">{{ (country.find((country) => country.value === location.country) || {}).text || location.country }}</span>
                                 </div>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
                 location: {},
                 units: "celsius",
                 interval: 5,
-                countries: Countries,
+                country: Countries,
                 message: "",
             };
         },

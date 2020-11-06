@@ -118,7 +118,12 @@
         flex-direction: column;
         box-sizing: border-box;
         padding: 20px;
+        overflow: hidden;
         cursor: default;
+
+        &:hover {
+            overflow: overlay;
+        }
 
         .status {
             display: flex;

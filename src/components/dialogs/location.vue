@@ -50,7 +50,7 @@
                         <span class="icon">my_location</span>
                         <span
                             class="title"
-                        >{{ location.name }}, {{ (countries.find((country) => country.value === location.country) || {}).text || location.country }}</span>
+                        >{{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text || location.country }}</span>
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-    import Countries from "../../lang/country-codes.json";
+    import countries from "../../lang/country-codes.json";
 
     export default {
         name: "location",
@@ -78,7 +78,7 @@
                 },
                 query: "",
                 locations: [],
-                countries: Countries,
+                country: countries,
             };
         },
 

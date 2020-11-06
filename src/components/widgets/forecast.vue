@@ -21,19 +21,9 @@
         <div class="location">
             {{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text }}
         </div>
-        <div class="today">
-            {{ $t(weekday(new Date())) }}
-        </div>
-        <div class="weather">
-            {{ $t(icon[current.icon].label) }}
-        </div>
-        <div class="current">
-            <div class="display" :class="`wi wi-day-${icon[current.icon].icon}`"></div>
-            <div class="temp">{{ Math.round(current.temp) }}°</div>
-        </div>
         <div class="forecast">
             <div v-for="(day, index) in forecast" :key="index" class="weather">
-                <span class="title">{{ $t(weekday(new Date(day.date), true)) }}</span>
+                <span class="title">{{ $t(weekday(new Date(day.date))) }}</span>
                 <div class="display" :class="`wi wi-day-${icon[day.icon].icon}`"></div>
                 <div class="temp">
                     <span class="max">{{ Math.round(day.max) }}°</span><span class="min">{{ Math.round(day.min) }}°</span>
@@ -51,13 +41,12 @@
     import dates from "../../services/dates";
 
     export default {
-        name: "weather",
+        name: "forecast",
 
         data() {
             return {
                 loading: true,
                 location: {},
-                current: {},
                 forecast: [],
                 icon: icons,
                 country: countries,
@@ -68,16 +57,13 @@
             const config = await this.$hoobs.config.get();
 
             this.location = (config.weather || {}).location;
-            this.current = await this.$hoobs.weather.current();
             this.forecast = await this.$hoobs.weather.forecast();
             this.loading = false;
         },
 
         methods: {
-            weekday(value, abbr) {
-                if (abbr) return `${dates.weekday(value)}_abbr`;
-
-                return dates.weekday(value);
+            weekday(value) {
+                return `${dates.weekday(value)}_abbr`;
             },
         },
     };
@@ -94,32 +80,7 @@
 
         .location {
             font-size: 18px;
-        }
-
-        .today {
-            font-size: 15px;
-        }
-
-        .weather {
-            font-size: 15px;
-        }
-
-        .current {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            margin: 20px 0;
-
-            .display {
-                font-size: 40px;
-                line-height: 67px;
-                color: var(--widget-highlight);
-            }
-
-            .temp {
-                font-size: 57px;
-                margin: 0 0 0 20px;
-            }
+            margin: 0 0 7px 0;
         }
 
         .forecast {

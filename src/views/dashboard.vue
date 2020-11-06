@@ -65,6 +65,7 @@
     import Favorites from "../components/widgets/favorites.vue";
     import System from "../components/widgets/system.vue";
     import Weather from "../components/widgets/weather.vue";
+    import Forecast from "../components/widgets/forecast.vue";
 
     export default {
         name: "dashboard",
@@ -77,6 +78,7 @@
             "favorites": Favorites,
             "system": System,
             "weather": Weather,
+            "forecast": Forecast,
         },
 
         data() {
@@ -166,11 +168,6 @@
                 backdrop-filter: var(--transparency);
                 border-radius: 0;
                 box-sizing: border-box;
-                overflow: hidden;
-
-                &:hover {
-                    overflow: overlay;
-                }
             }
         }
     }
