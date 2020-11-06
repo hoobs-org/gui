@@ -30,11 +30,15 @@ export default new Vuex.Store({
         config: {},
         dashboard: {
             items: [{
+                x: 0, y: 12, w: 1, h: 3, i: "9", component: "instances",
+            }, {
+                x: 0, y: 9, w: 1, h: 3, i: "8", component: "memory",
+            }, {
+                x: 0, y: 6, w: 1, h: 3, i: "7", component: "cpu",
+            }, {
                 x: 0, y: 0, w: 12, h: 6, i: "1", component: "activity",
             }, {
-                x: 0, y: 6, w: 4, h: 8, i: "2", component: "weather",
-            }, {
-                x: 4, y: 6, w: 4, h: 16, i: "3", component: "favorites",
+                x: 1, y: 6, w: 4, h: 9, i: "2", component: "weather",
             }, {
                 x: 8, y: 6, w: 4, h: 16, i: "4", component: "system",
             }],

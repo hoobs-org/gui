@@ -81,10 +81,6 @@
                     label: "instances",
                     selected: false,
                 }, {
-                    name: "favorites",
-                    label: "favorite_accessories",
-                    selected: false,
-                }, {
                     name: "system",
                     label: "system_info",
                     selected: false,
@@ -165,11 +161,6 @@
                     case "instances":
                         return {
                             x: 0, y: 0, w: 1, h: 3, i: "9", component: "instances",
-                        };
-
-                    case "favorites":
-                        return {
-                            x: 0, y: 0, w: 3, h: 16, i: "3", component: "favorites",
                         };
 
                     case "system":

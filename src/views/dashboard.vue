@@ -65,7 +65,6 @@
     import CPU from "../components/widgets/cpu.vue";
     import Memory from "../components/widgets/memory.vue";
     import Instances from "../components/widgets/instances.vue";
-    import Favorites from "../components/widgets/favorites.vue";
     import System from "../components/widgets/system.vue";
     import Weather from "../components/widgets/weather.vue";
     import Current from "../components/widgets/current.vue";
@@ -82,7 +81,6 @@
             "cpu": CPU,
             "memory": Memory,
             "instances": Instances,
-            "favorites": Favorites,
             "system": System,
             "weather": Weather,
             "current": Current,
