@@ -107,7 +107,7 @@
 </template>
 
 <script>
-    import { sleep } from "../plugins/hoobs";
+    import { sleep } from "@/plugins/hoobs";
 
     export default {
         name: "setup",

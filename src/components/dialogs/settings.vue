@@ -90,9 +90,9 @@
 </template>
 
 <script>
-    import Restore from "./restore.vue";
-    import Location from "./location.vue";
-    import Countries from "../../lang/country-codes.json";
+    import Restore from "@/components/dialogs/restore.vue";
+    import Location from "@/components/dialogs/location.vue";
+    import Countries from "@/lang/country-codes.json";
 
     export default {
         name: "personalize",

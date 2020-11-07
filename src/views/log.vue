@@ -43,9 +43,9 @@
 </template>
 
 <script>
-    import Message from "../components/elements/message.vue";
-    import PluginsMenu from "../components/menus/plugins.vue";
-    import InstancesMenu from "../components/menus/instances.vue";
+    import Message from "@/components/elements/message.vue";
+    import PluginsMenu from "@/components/menus/plugins.vue";
+    import InstancesMenu from "@/components/menus/instances.vue";
 
     export default {
         name: "log",

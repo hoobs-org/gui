@@ -35,11 +35,11 @@
 </template>
 
 <script>
-    import "../../assets/weathericons.css";
+    import "@/assets/weathericons.css";
 
-    import icons from "../../assets/weathericons.json";
-    import countries from "../../lang/country-codes.json";
-    import dates from "../../services/dates";
+    import icons from "@/assets/weathericons.json";
+    import countries from "@/lang/country-codes.json";
+    import dates from "@/services/dates";
 
     export default {
         name: "forecast",

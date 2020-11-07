@@ -25,8 +25,8 @@
 </template>
 
 <script>
-    import Public from "./layouts/public.vue";
-    import Authenticated from "./layouts/authenticated.vue";
+    import Public from "@/layouts/public.vue";
+    import Authenticated from "@/layouts/authenticated.vue";
 
     export default {
         name: "app",

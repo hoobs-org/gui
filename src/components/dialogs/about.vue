@@ -53,7 +53,7 @@
 </template>
 
 <script>
-    import Updates from "./updates.vue";
+    import Updates from "@/components/dialogs/updates.vue";
 
     export default {
         name: "about",

@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import Welcome from "./welcome.vue";
+    import Welcome from "@/components/elements/welcome.vue";
 
     export default {
         name: "modal",

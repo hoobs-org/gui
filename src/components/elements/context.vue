@@ -45,10 +45,10 @@
 </template>
 
 <script>
-    import About from "../dialogs/about.vue";
-    import Settings from "../dialogs/settings.vue";
-    import Personalize from "../dialogs/personalize.vue";
-    import ApplicationMenu from "../menus/application.vue";
+    import About from "@/components/dialogs/about.vue";
+    import Settings from "@/components/dialogs/settings.vue";
+    import Personalize from "@/components/dialogs/personalize.vue";
+    import ApplicationMenu from "@/components/menus/application.vue";
 
     export default {
         name: "context",

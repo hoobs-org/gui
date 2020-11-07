@@ -105,9 +105,9 @@
 <script>
     import ColorScheme from "color-scheme";
     import ColorExtractor from "colorthief/dist/color-thief";
-    import Color from "../elements/color.vue";
-    import Colors from "../../services/colors";
-    import Backdrop from "../elements/backdrop.vue";
+    import Color from "@/components/elements/color.vue";
+    import Backdrop from "@/components/elements/backdrop.vue";
+    import Colors from "@/services/colors";
 
     const THEMES_URL = process.env.VUE_APP_THEMES || "/themes";
 

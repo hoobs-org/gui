@@ -39,10 +39,10 @@
 </template>
 
 <script>
-    import Alert from "../components/dialogs/alert.vue";
-    import Confirm from "../components/dialogs/confirm.vue";
-    import Navigation from "../components/navigation.vue";
-    import Notifications from "../components/notifications.vue";
+    import Alert from "@/components/dialogs/alert.vue";
+    import Confirm from "@/components/dialogs/confirm.vue";
+    import Navigation from "@/components/navigation.vue";
+    import Notifications from "@/components/notifications.vue";
 
     export default {
         name: "authenticated",

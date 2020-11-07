@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import Notification from "./elements/notification.vue";
+    import Notification from "@/components/elements/notification.vue";
 
     export default {
         name: "notifications",

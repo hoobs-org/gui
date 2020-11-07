@@ -36,8 +36,8 @@
     import { Terminal } from "xterm";
     import { FitAddon } from "xterm-addon-fit";
     import { WebLinksAddon } from "xterm-addon-web-links";
-    import { chunk } from "../plugins/hoobs";
-    import Socket from "../plugins/socket";
+    import { chunk } from "@/plugins/hoobs";
+    import Socket from "@/plugins/socket";
 
     export default {
         name: "terminal",

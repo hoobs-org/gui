@@ -71,15 +71,15 @@
 
 <script>
     import GridLayout from "vue-grid-layout";
-    import Dashboard from "../components/dialogs/dashboard.vue";
-    import Activity from "../components/widgets/activity.vue";
-    import CPU from "../components/widgets/cpu.vue";
-    import Memory from "../components/widgets/memory.vue";
-    import Instances from "../components/widgets/instances.vue";
-    import System from "../components/widgets/system.vue";
-    import Weather from "../components/widgets/weather.vue";
-    import Current from "../components/widgets/current.vue";
-    import Forecast from "../components/widgets/forecast.vue";
+    import Dashboard from "@/components/dialogs/dashboard.vue";
+    import Activity from "@/components/widgets/activity.vue";
+    import CPU from "@/components/widgets/cpu.vue";
+    import Memory from "@/components/widgets/memory.vue";
+    import Instances from "@/components/widgets/instances.vue";
+    import System from "@/components/widgets/system.vue";
+    import Weather from "@/components/widgets/weather.vue";
+    import Current from "@/components/widgets/current.vue";
+    import Forecast from "@/components/widgets/forecast.vue";
 
     export default {
         name: "dashboard",
