@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-on:click.stop id="menu">
+    <div v-on:click.stop id="menu" :style="`left: ${left}px`">
         <div v-for="(instance, index) in selected" :key="index" class="item">
             <checkbox :id="`instance_${index}`" v-model="instance.selected">
                 <label :for="`instance_${index}`">{{ instance.text }}</label>
@@ -41,11 +41,13 @@
 
         data() {
             return {
+                left: 0,
                 selected: [],
             };
         },
 
         mounted() {
+            this.left = this.$parent.$refs.instances.offsetLeft;
             this.selected = this.value;
         },
 
@@ -62,7 +64,7 @@
         min-width: 120px;
         position: absolute;
         top: 34px;
-        left: 10px;
+        left: 0;
         display: flex;
         padding: 0 0 7px 0;
         flex-direction: column;

@@ -152,6 +152,7 @@
             align-items: center;
             position: relative;
             border-radius: 100%;
+            font-size: 18px;
             margin: 5px 0;
             cursor: pointer;
 
@@ -164,6 +165,29 @@
 
             &:hover {
                 color: var(--application-highlight-text);
+            }
+        }
+
+        .button {
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            align-content: center;
+            background: var(--application-background);
+            color: var(--application-text) !important;
+            border: 0 none;
+            font-size: 13px;
+            padding: 0;
+            margin: 5px 5px 5px 0;
+
+            .icon {
+                margin: 0 -3px 0 0;
+                font-size: 18px;
+            }
+
+            &:hover {
+                color: var(--application-highlight-text) !important;
+                box-shadow: none !important;
             }
         }
     }
