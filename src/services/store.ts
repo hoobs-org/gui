@@ -84,8 +84,7 @@ export default new Vuex.Store({
     mutations: {
         "IO:LOG": (state: { [key: string]: any }, payload: any) => {
             state.log.push(payload);
-
-            while (state.log.length > 1000) state.log.shift();
+            state.log = state.log.slice(1).slice(-5000);
         },
 
         "IO:MONITOR": (state: { [key: string]: any }, payload: any) => {
@@ -165,8 +164,7 @@ export default new Vuex.Store({
 
         "LOG:HISTORY": (state: { [key: string]: any }, messages: string) => {
             state.log.unshift(...messages);
-
-            while (state.log.length > 1000) state.log.shift();
+            state.log = state.log.slice(1).slice(-5000);
         },
 
         "NOTIFICATION:ADD": (state: { [key: string]: any }, payload: any) => {

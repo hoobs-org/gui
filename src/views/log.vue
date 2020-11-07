@@ -25,10 +25,10 @@
             <div v-else v-on:click="mode()" class="icon dim">bug_report</div>
         </context>
         <div ref="messages" class="messages">
-            <message v-for="(message, index) in messages.filter(filter)" :key="index" :value="message" />
+            <message v-for="(message, index) in messages" :key="index" :value="message" />
         </div>
-        <instances-menu v-if="!loading && parent.show.instances" v-model="instances" :close="() => { toggle('instances') }" />
-        <plugins-menu v-if="!loading && parent.show.plugins" v-model="plugins" :close="() => { toggle('plugins') }" />
+        <instances-menu v-if="parent.show.instances" v-model="instances" :close="() => { toggle('instances') }" />
+        <plugins-menu v-if="parent.show.plugins" v-model="plugins" :close="() => { toggle('plugins') }" />
     </div>
 </template>
 
@@ -52,7 +52,7 @@
             },
 
             messages() {
-                return this.$store.state.log;
+                return this.$store.state.log.filter(this.filter);
             },
         },
 
@@ -61,8 +61,6 @@
                 debug: false,
                 instances: [],
                 plugins: [],
-                before: null,
-                after: (new Date()).getTime() + (-24 * (60 * 60 * 1000)),
             };
         },
 
@@ -127,14 +125,6 @@
                 }
 
                 if (!((this.plugins.find((item) => item.value === (message.plugin || "null")) || {}).selected)) {
-                    return false;
-                }
-
-                if (this.before && message.timestamp > this.before) {
-                    return false;
-                }
-
-                if (this.after && message.timestamp < this.after) {
                     return false;
                 }
 
