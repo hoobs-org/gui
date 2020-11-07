@@ -83,7 +83,6 @@
         right: 0;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
         background: var(--application-drawer);
         backdrop-filter: var(--transparency);
         box-shadow: var(--elevation);
@@ -108,10 +107,12 @@
 
         .list {
             flex: 1;
-            overflow: hidden;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            overflow: auto;
 
-            &:hover {
-                overflow: overlay;
+            &::-webkit-scrollbar {
+                display: none;
             }
         }
 
@@ -133,7 +134,6 @@
             background: var(--modal-form);
             box-shadow: unset;
             backdrop-filter: unset;
-            overflow: auto;
 
             .title {
                 color: var(--modal-highlight);

@@ -212,19 +212,11 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
             margin: 0 -5px 20px 20px;
 
             .container {
                 width: 100%;
                 height: 100%;
-                overflow: auto;
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-
-                &::-webkit-scrollbar {
-                    display: none;
-                }
             }
         }
     }

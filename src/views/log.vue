@@ -23,8 +23,8 @@
             <div v-on:click.stop="toggle('plugins')" class="icon">extension</div>
             <div v-if="debug" v-on:click="mode()" class="icon">bug_report</div>
             <div v-else v-on:click="mode()" class="icon dim">bug_report</div>
-            <div class="seperator"></div>
-            <div v-on:click="download()" class="icon">cloud_download</div>
+            <div class="seperator desktop"></div>
+            <div v-on:click="download()" class="icon desktop">cloud_download</div>
         </context>
         <div ref="messages" class="messages">
             <message v-for="(message, index) in messages" :key="index" :value="message" />
@@ -212,16 +212,6 @@
 
             &::-webkit-scrollbar {
                 display: none;
-            }
-        }
-    }
-
-    @media (min-width: 300px) and (max-width: 815px) {
-        .messages {
-            overflow: auto;
-
-            &::-webkit-scrollbar {
-                display: unset;
             }
         }
     }

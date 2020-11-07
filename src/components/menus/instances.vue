@@ -23,7 +23,7 @@
                 <label :for="`instance_${index}`">{{ instance.text }}</label>
             </checkbox>
         </div>
-        <div v-on:click="close()" class="icon close mobile-only">close</div>
+        <div v-on:click="close()" class="icon close mobile">close</div>
     </div>
 </template>
 

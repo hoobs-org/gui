@@ -22,12 +22,12 @@
             <div
                 v-if="show.locked"
                 v-on:click.stop="toggle('locked')"
-                class="icon desktop-only"
+                class="icon desktop"
             >lock</div>
-            <div v-else v-on:click.stop="toggle('locked')" class="icon desktop-only">lock_open</div>
-            <div v-on:click.stop="toggle('settings')" class="icon desktop-only">settings</div>
+            <div v-else v-on:click.stop="toggle('locked')" class="icon desktop">lock_open</div>
+            <div v-on:click.stop="toggle('settings')" class="icon desktop">settings</div>
         </context>
-        <div class="content desktop-only">
+        <div class="content desktop">
             <grid-layout
                 :layout="items"
                 :col-num="12"
@@ -54,12 +54,15 @@
                 </grid-item>
             </grid-layout>
         </div>
-        <div class="content mobile-only">
+        <div class="content mobile">
             <div class="widget">
                 <weather />
             </div>
             <div class="widget">
                 <instances />
+            </div>
+            <div class="widget">
+                <system />
             </div>
         </div>
         <settings v-if="show.settings" :close="() => { toggle('settings') }" />
@@ -153,8 +156,8 @@
     #dashboard {
         flex: 1;
         display: flex;
-        flex-direction: column;
         overflow: hidden;
+        flex-direction: column;
 
         &.backdrop {
             background-image: var(--backdrop);
@@ -165,15 +168,17 @@
 
         .content {
             flex: 1;
-            overflow: hidden;
+            overflow: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
             background: linear-gradient(
                 to bottom,
                 var(--application-background) 0%,
                 #00000000 30%
             );
 
-            &:hover {
-                overflow: overlay;
+            &::-webkit-scrollbar {
+                display: none;
             }
 
             .widget {
@@ -182,13 +187,8 @@
                 backdrop-filter: var(--transparency);
                 border-radius: 0;
                 box-sizing: border-box;
+                overflow: hidden;
             }
-        }
-    }
-
-    @media (min-width: 300px) and (max-width: 815px) {
-        #dashboard {
-            overflow: auto;
         }
     }
 </style>

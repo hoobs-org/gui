@@ -86,7 +86,6 @@
         flex-direction: column;
         padding: 20px 6px 20px 20px;
         position: relative;
-        overflow: hidden;
         cursor: default;
 
         .location {

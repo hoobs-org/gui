@@ -25,16 +25,16 @@
                 <span class="identity">{{ user.name || user.username }}</span>
             </div>
         </div>
-        <div v-if="auth" class="seperator desktop-only"></div>
+        <div v-if="auth" class="seperator desktop"></div>
         <div v-on:click="about()" class="item">{{ $t("about") }}</div>
         <div v-on:click="help()" class="item">{{ $t("help") }}</div>
-        <div v-if="auth" class="seperator desktop-only"></div>
+        <div v-if="auth" class="seperator desktop"></div>
         <div v-on:click="settings()" class="item">{{ $t("settings") }}</div>
         <div v-on:click="personalize()" class="item">{{ $t("personalize") }}</div>
-        <div v-on:click="terminal()" class="item desktop-only">{{ $t("terminal") }}</div>
-        <div v-if="auth" class="seperator desktop-only"></div>
+        <div v-on:click="terminal()" class="item desktop">{{ $t("terminal") }}</div>
+        <div v-if="auth" class="seperator desktop"></div>
         <div v-if="auth" v-on:click="logout()" class="item">{{ $t("logout") }}</div>
-        <div v-on:click="close()" class="icon close mobile-only">close</div>
+        <div v-on:click="close()" class="icon close mobile">close</div>
     </div>
 </template>
 

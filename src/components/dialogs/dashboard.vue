@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="$t('settings')" :draggable="true" width="760px" height="700px">
+    <modal :title="$t('settings')" :draggable="true" width="760px" height="620px">
         <div id="settings">
             <div v-if="!loading" class="content">
                 <div class="form">
@@ -195,7 +195,6 @@
     #settings {
         flex: 1;
         display: flex;
-        overflow: hidden;
         flex-direction: column;
         margin: 0 0 0 10px;
 

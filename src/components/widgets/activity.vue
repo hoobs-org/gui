@@ -94,7 +94,6 @@
         width: 100%;
         height: 100%;
         padding: 30px 20px 15px 10px;
-        overflow: hidden;
         box-sizing: border-box;
         cursor: default;
     }

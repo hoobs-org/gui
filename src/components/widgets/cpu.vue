@@ -46,7 +46,6 @@
         align-content: center;
         padding: 14px;
         position: relative;
-        overflow: hidden;
         cursor: default;
 
         .title {

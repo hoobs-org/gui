@@ -76,7 +76,6 @@
         flex-direction: column;
         padding: 20px 6px 20px 20px;
         position: relative;
-        overflow: hidden;
         cursor: default;
 
         .location {
@@ -89,7 +88,6 @@
             flex: 1;
             display: flex;
             flex-direction: row;
-            overflow: auto;
 
             .weather {
                 flex: 1;

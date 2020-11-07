@@ -241,7 +241,6 @@
     #settings {
         flex: 1;
         display: flex;
-        overflow: hidden;
         flex-direction: column;
         margin: 0 0 0 10px;
 

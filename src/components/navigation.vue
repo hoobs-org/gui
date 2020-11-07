@@ -19,7 +19,7 @@
 <template>
     <div id="navigation">
         <div class="links">
-            <div class="logo desktop-only">
+            <div class="logo desktop">
                 <svg
                     viewBox="0 0 80 80.92"
                     xmlns="http://www.w3.org/2000/svg"
@@ -45,36 +45,36 @@
                     />
                 </svg>
             </div>
-            <div v-on:click="toggle()" class="route desktop-only">
+            <div v-on:click="toggle()" class="route desktop">
                 <span v-if="expanded" class="icon">chevron_left</span>
                 <span v-else class="icon">chevron_right</span>
             </div>
-            <div class="spacer desktop-only"></div>
+            <div class="spacer desktop"></div>
             <router-link class="route" to="/">
                 <span class="icon">dashboard</span>
-                <span v-if="expanded" class="title desktop-only">{{ $t("dashboard") }}</span>
+                <span v-if="expanded" class="title desktop">{{ $t("dashboard") }}</span>
             </router-link>
             <router-link class="route" to="/accessories">
                 <span class="icon">highlight</span>
-                <span v-if="expanded" class="title desktop-only">{{ $t("accessories") }}</span>
+                <span v-if="expanded" class="title desktop">{{ $t("accessories") }}</span>
             </router-link>
             <router-link class="route" to="/log">
                 <span class="icon">subject</span>
-                <span v-if="expanded" class="title desktop-only">{{ $t("log") }}</span>
+                <span v-if="expanded" class="title desktop">{{ $t("log") }}</span>
             </router-link>
             <router-link v-if="auth" class="route" to="/users">
                 <span class="icon">people</span>
-                <span v-if="expanded" class="title desktop-only">{{ $t("users") }}</span>
+                <span v-if="expanded" class="title desktop">{{ $t("users") }}</span>
             </router-link>
             <router-link class="route" to="/instances">
                 <span class="icon">layers</span>
-                <span v-if="expanded" class="title desktop-only">{{ $t("instances") }}</span>
+                <span v-if="expanded" class="title desktop">{{ $t("instances") }}</span>
             </router-link>
             <router-link class="route" to="/plugins">
                 <span class="icon">extension</span>
-                <span v-if="expanded" class="title desktop-only">{{ $t("plugins") }}</span>
+                <span v-if="expanded" class="title desktop">{{ $t("plugins") }}</span>
             </router-link>
-            <div class="fill desktop-only"></div>
+            <div class="fill desktop"></div>
             <router-link class="route" to="/config">
                 <span class="icon">settings</span>
             </router-link>

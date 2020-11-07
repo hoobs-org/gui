@@ -113,7 +113,6 @@
         display: flex;
         flex-direction: row;
         align-content: center;
-        z-index: 2000;
 
         .page {
             flex: 1;

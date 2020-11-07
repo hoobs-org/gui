@@ -84,7 +84,6 @@
         }
 
         .window {
-            overflow: hidden;
             display: flex;
             flex-direction: column;
             padding: 10px;
@@ -92,9 +91,12 @@
             background: var(--modal-background);
             backdrop-filter: var(--transparency);
             box-shadow: var(--elevation);
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            overflow: auto;
 
-            &:hover {
-                overflow: overlay;
+            &::-webkit-scrollbar {
+                display: none;
             }
         }
 
@@ -103,7 +105,6 @@
             display: flex;
             flex-direction: column;
             font-size: 14px;
-            overflow: hidden;
             margin: 0 10px 0 0;
 
             &.message {
@@ -122,11 +123,6 @@
                 background: var(--modal-form);
                 padding: 20px;
                 margin: 10px 0 0 0;
-                overflow: hidden;
-
-                &:hover {
-                    overflow: overlay;
-                }
 
                 .spacer {
                     margin: 7px 0 14px 0;
@@ -193,13 +189,10 @@
                 box-sizing: border-box;
                 min-height: unset;
                 max-height: unset;
-                overflow: auto;
                 box-shadow: unset;
             }
 
             .content {
-                overflow: auto;
-
                 .form {
                     background: unset;
                     padding: 0;

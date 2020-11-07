@@ -21,10 +21,10 @@
         <div id="personalize">
             <div v-if="!loading" class="content">
                 <div class="form">
-                    <div v-if="auth" class="row title desktop-only">
+                    <div v-if="auth" class="row title desktop">
                         {{ $t("login_image") }}
                     </div>
-                    <div v-if="auth" class="row desktop-only">
+                    <div v-if="auth" class="row desktop">
                         <div class="backdrop" :style="`background-color: ${working.application.background}; background-image: ${backdrop};`">
                             <div class="display dark" :style="`background: ${working.application.background}; box-shadow: ${working.elevation.default};`">
                                 <div v-if="!updating" class="title" :style="`color: ${working.application.highlight};`">{{ $t("title") }}</div>
@@ -81,7 +81,7 @@
                     <div class="row title" style="margin-top: 20px;">
                         {{ $t("color") }}
                     </div>
-                    <div v-if="auth" class="row auto desktop-only">
+                    <div v-if="auth" class="row auto desktop">
                         <checkbox id="auto" v-model="auto">
                             <label for="auto">{{ $t("automatically_set") }}</label>
                         </checkbox>
@@ -333,7 +333,6 @@
     #personalize {
         flex: 1;
         display: flex;
-        overflow: hidden;
         flex-direction: column;
         margin: 0 0 0 10px;
 
@@ -402,11 +401,9 @@
         .backdrops {
             flex: 1;
             margin: 0 0 0 10px;
-            overflow: hidden;
 
             .row {
                 height: 59px;
-                overflow: hidden;
                 margin: 0 0 9px 0;
 
                 &:last-child {
@@ -442,7 +439,6 @@
 
             .row {
                 height: 34px;
-                overflow: hidden;
                 margin: 0 0 7px 0;
 
                 &:last-child {

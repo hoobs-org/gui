@@ -87,7 +87,6 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        overflow: hidden;
     }
 
     #app {
@@ -331,18 +330,18 @@
             position: absolute;
         }
 
-        .mobile-only {
+        .mobile {
             display: none !important;
         }
     }
 
     @media (min-width: 300px) and (max-width: 815px) {
         #app {
-            .mobile-only {
+            .mobile {
                 display: block !important;
             }
 
-            .desktop-only {
+            .desktop {
                 display: none !important;
             }
         }
