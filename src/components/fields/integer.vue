@@ -30,7 +30,7 @@
             :max="max !== undefined ? max : ''"
             step="1"
             :value="value"
-            v-on:input="update()"
+            v-on:input="update"
             v-on:change="change"
             v-bind:required="required"
         />
@@ -67,16 +67,6 @@
             };
         },
 
-        methods: {
-            update() {
-                this.$emit("input", parseInt(this.$refs[this.uuid].value, 10));
-            },
-
-            change() {
-                this.$emit("change", parseInt(this.$refs[this.uuid].value, 10));
-            },
-        },
-
         mounted() {
             if (this.id === undefined || typeof String) {
                 this.uuid = `number_field_${Math.random().toString(36).substring(2, 10)}`;
@@ -89,6 +79,16 @@
                     if (this.$refs[this.uuid]) this.$refs[this.uuid].focus();
                 }, 10);
             }
+        },
+
+        methods: {
+            update() {
+                this.$emit("input", parseInt(this.$refs[this.uuid].value, 10));
+            },
+
+            change() {
+                this.$emit("change", parseInt(this.$refs[this.uuid].value, 10));
+            },
         },
     };
 </script>
@@ -103,12 +103,20 @@
             font-size: 14px;
             margin: 0 0 7px 0;
             user-select: none;
+
+            &:empty {
+                display: none;
+            }
         }
 
         .description {
             font-size: 12px;
             margin: -7px 0 7px 0;
             user-select: none;
+
+            &:empty {
+                display: none;
+            }
         }
 
         input {

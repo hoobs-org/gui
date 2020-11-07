@@ -41,6 +41,7 @@ import PasswordField from "./components/fields/password.vue";
 import NumberField from "./components/fields/number.vue";
 import IntegerField from "./components/fields/integer.vue";
 import SearchField from "./components/fields/search.vue";
+import SelectField from "./components/fields/select.vue";
 import PortField from "./components/fields/port.vue";
 import Spinner from "./components/elements/spinner.vue";
 
@@ -113,6 +114,7 @@ Vue.component("password-field", PasswordField);
 Vue.component("number-field", NumberField);
 Vue.component("integer-field", IntegerField);
 Vue.component("search-field", SearchField);
+Vue.component("select-field", SelectField);
 Vue.component("port-field", PortField);
 Vue.component("spinner", Spinner);
 

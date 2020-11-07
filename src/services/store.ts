@@ -85,7 +85,7 @@ export default new Vuex.Store({
         "IO:LOG": (state: { [key: string]: any }, payload: any) => {
             state.log.push(payload);
 
-            while (state.log.length > 500) state.log.shift();
+            while (state.log.length > 1000) state.log.shift();
         },
 
         "IO:MONITOR": (state: { [key: string]: any }, payload: any) => {
@@ -166,7 +166,7 @@ export default new Vuex.Store({
         "LOG:HISTORY": (state: { [key: string]: any }, messages: string) => {
             state.log.unshift(...messages);
 
-            while (state.log.length > 500) state.log.shift();
+            while (state.log.length > 1000) state.log.shift();
         },
 
         "NOTIFICATION:ADD": (state: { [key: string]: any }, payload: any) => {
@@ -237,6 +237,7 @@ export default new Vuex.Store({
         key: "hoobs:state",
         storage: window.localStorage,
         reducer: (state: { [key: string]: any }) => ({
+            instances: state.instances,
             dashboard: state.dashboard,
             cpu: state.cpu,
             memory: state.memory,

@@ -176,6 +176,39 @@
             color: var(--application-input-text);
             border: 1px var(--application-border) solid;
             border-radius: 0;
+            outline: 0 none !important;
+
+            &:focus {
+                border-color: var(--application-highlight);
+                border-radius: 0;
+            }
+        }
+
+        select {
+            background: var(--application-input);
+            color: var(--application-input-text);
+            border: 1px var(--application-border) solid;
+            border-radius: 0;
+            outline: 0 none !important;
+
+            &:focus {
+                border-color: var(--application-highlight);
+                border-radius: 0;
+            }
+
+            option {
+                border: 1px var(--application-input) solid;
+                background: var(--application-input);
+                outline: 0 none;
+            }
+        }
+
+        textarea {
+            background: var(--application-input);
+            color: var(--application-input-text);
+            border: 1px var(--application-border) solid;
+            border-radius: 0;
+            outline: 0 none !important;
 
             &:focus {
                 border-color: var(--application-highlight);
@@ -188,6 +221,35 @@
                 background: var(--modal-input);
                 color: var(--modal-input-text);
                 border: 1px var(--modal-border) solid;
+                outline: 0 none !important;
+
+                &:focus {
+                    border-color: var(--modal-highlight);
+                }
+            }
+
+            select {
+                background: var(--modal-input);
+                color: var(--modal-input-text);
+                border: 1px var(--modal-border) solid;
+                outline: 0 none !important;
+
+                &:focus {
+                    border-color: var(--modal-highlight);
+                }
+
+                option {
+                    border: 1px var(--application-input) solid;
+                    background: var(--application-input);
+                    outline: 0 none;
+                }
+            }
+
+            textarea {
+                background: var(--modal-input);
+                color: var(--modal-input-text);
+                border: 1px var(--modal-border) solid;
+                outline: 0 none !important;
 
                 &:focus {
                     border-color: var(--modal-highlight);

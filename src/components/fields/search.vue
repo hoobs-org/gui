@@ -106,6 +106,10 @@
             font-size: 14px;
             margin: 0 0 7px 0;
             user-select: none;
+
+            &:empty {
+                display: none;
+            }
         }
 
         .icon {
@@ -127,6 +131,10 @@
             font-size: 12px;
             margin: -7px 0 7px 0;
             user-select: none;
+
+            &:empty {
+                display: none;
+            }
         }
 
         input {

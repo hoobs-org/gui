@@ -99,6 +99,17 @@ module.exports = {
         },
         {
             files: [
+                "src/components/elements/message.vue",
+            ],
+            rules: {
+                indent: "off",
+                "quote-props": "off",
+                "@typescript-eslint/indent": "off",
+                "no-bitwise": "off",
+            },
+        },
+        {
+            files: [
                 "src/plugins/drag.ts",
             ],
             rules: {

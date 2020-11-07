@@ -18,15 +18,11 @@
 
 <template>
     <div v-if="!loading && location.id" id="widget">
-        <div class="location">
-            {{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text }}
-        </div>
-        <div class="today">
-            {{ $t(weekday(new Date())) }}
-        </div>
-        <div class="weather">
-            {{ $t(icon[current.icon].label) }}
-        </div>
+        <div
+            class="location"
+        >{{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text }}</div>
+        <div class="today">{{ $t(weekday(new Date())) }}</div>
+        <div class="weather">{{ $t(icon[current.icon].label) }}</div>
         <div class="current">
             <div class="display" :class="`wi wi-day-${icon[current.icon].icon}`"></div>
             <div class="temp">{{ Math.round(current.temp) }}°</div>
@@ -36,7 +32,8 @@
                 <span class="title">{{ $t(weekday(new Date(day.date), true)) }}</span>
                 <div class="display" :class="`wi wi-day-${icon[day.icon].icon}`"></div>
                 <div class="temp">
-                    <span class="max">{{ Math.round(day.max) }}°</span><span class="min">{{ Math.round(day.min) }}°</span>
+                    <span class="max">{{ Math.round(day.max) }}°</span>
+                    <span class="min">{{ Math.round(day.min) }}°</span>
                 </div>
             </div>
         </div>

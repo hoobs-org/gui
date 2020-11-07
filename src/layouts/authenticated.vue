@@ -65,11 +65,13 @@
                 show: {
                     notifications: false,
                     application: false,
-                    about: false,
-                    settings: false,
                     personalize: false,
                     dashboard: false,
+                    instances: false,
+                    settings: false,
+                    plugins: false,
                     confirm: false,
+                    about: false,
                     alert: false,
                 },
                 alert: {

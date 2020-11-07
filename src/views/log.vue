@@ -18,12 +18,155 @@
 
 <template>
     <div id="log">
-        <context />
+        <context>
+            <div v-on:click.stop="toggle('instances')" class="icon">layers</div>
+            <div v-on:click.stop="toggle('plugins')" class="icon">extension</div>
+            <div v-if="debug" v-on:click="mode()" class="icon">bug_report</div>
+            <div v-else v-on:click="mode()" class="icon dim">bug_report</div>
+        </context>
+        <div ref="messages" class="messages">
+            <message v-for="(message, index) in messages.filter(filter)" :key="index" :value="message" />
+        </div>
+        <instances-menu v-if="!loading && parent.show.instances" v-model="instances" :close="() => { toggle('instances') }" />
+        <plugins-menu v-if="!loading && parent.show.plugins" v-model="plugins" :close="() => { toggle('plugins') }" />
     </div>
 </template>
 
 <script>
+    import Message from "../components/elements/message.vue";
+    import PluginsMenu from "../components/menus/plugins.vue";
+    import InstancesMenu from "../components/menus/instances.vue";
+
     export default {
         name: "log",
+
+        components: {
+            "message": Message,
+            "plugins-menu": PluginsMenu,
+            "instances-menu": InstancesMenu,
+        },
+
+        computed: {
+            parent() {
+                return this.$parent;
+            },
+
+            messages() {
+                return this.$store.state.log;
+            },
+        },
+
+        data() {
+            return {
+                debug: false,
+                instances: [],
+                plugins: [],
+                before: null,
+                after: (new Date()).getTime() + (-24 * (60 * 60 * 1000)),
+            };
+        },
+
+        async mounted() {
+            const { instances } = this.$store.state;
+
+            this.instances.push({
+                value: "api",
+                text: "API",
+                selected: true,
+            });
+
+            for (let i = 0; i < instances.length; i += 1) {
+                this.instances.push({
+                    value: instances[i].id,
+                    text: instances[i].display,
+                    selected: true,
+                });
+            }
+
+            const plugins = await this.$hoobs.plugins();
+
+            this.plugins.push({
+                value: "null",
+                text: this.$t("non_plugin"),
+                selected: true,
+            });
+
+            for (let i = 0; i < plugins.length; i += 1) {
+                if (this.plugins.findIndex((item) => item.value === plugins[i].identifier) === -1) {
+                    this.plugins.push({
+                        value: plugins[i].identifier,
+                        text: plugins[i].alias || plugins[i].name || plugins[i].identifier,
+                        selected: true,
+                    });
+                }
+            }
+
+            this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
+        },
+
+        updated() {
+            this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
+        },
+
+        methods: {
+            mode() {
+                this.debug = !this.debug;
+            },
+
+            toggle(field) {
+                this.parent.toggle(field);
+            },
+
+            filter(message) {
+                if (!this.debug && message.level === "debug") {
+                    return false;
+                }
+
+                if (!((this.instances.find((item) => item.value === (message.instance || "api")) || {}).selected)) {
+                    return false;
+                }
+
+                if (!((this.plugins.find((item) => item.value === (message.plugin || "null")) || {}).selected)) {
+                    return false;
+                }
+
+                if (this.before && message.timestamp > this.before) {
+                    return false;
+                }
+
+                if (this.after && message.timestamp < this.after) {
+                    return false;
+                }
+
+                return true;
+            },
+        },
     };
 </script>
+
+<style lang="scss" scoped>
+    #log {
+        flex: 1;
+        display: flex;
+        background: var(--application-background);
+        position: relative;
+        overflow: hidden;
+        flex-direction: column;
+
+        .dim {
+            opacity: 0.3;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 10px 20px 20px 20px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            overflow: auto;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+    }
+</style>

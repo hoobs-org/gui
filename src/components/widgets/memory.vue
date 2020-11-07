@@ -19,7 +19,9 @@
 <template>
     <div id="widget">
         <div class="title">{{ $t("memory") }}</div>
-        <div class="value">{{ (((memory || {}).used || {}).value || 0).toFixed(1) }} {{ ((memory || {}).used || {}).units || "MB" }}</div>
+        <div
+            class="value"
+        >{{ (((memory || {}).used || {}).value || 0).toFixed(1) }} {{ ((memory || {}).used || {}).units || "MB" }}</div>
     </div>
 </template>
 

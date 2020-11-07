@@ -20,25 +20,26 @@
     <div id="field">
         <span class="title">{{ name }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <input
+        <select
             :id="id || uuid"
             :ref="uuid"
-            type="text"
-            autocomplete="false"
-            autocorrect="off"
-            autocapitalize="none"
-            data-lpignore="true"
             :value="value"
             v-on:input="update"
             v-on:change="change"
             v-bind:required="required"
-        />
+        >
+            <option
+                v-for="option in options"
+                v-bind:value="option.value"
+                :key="option.value"
+            >{{ option.text }}</option>
+        </select>
     </div>
 </template>
 
 <script>
     export default {
-        name: "text-field",
+        name: "select-field",
 
         props: {
             id: {
@@ -47,12 +48,10 @@
             },
             name: String,
             description: String,
-            value: String,
+            value: [String, Number, Boolean, Object, Date],
+            type: String,
+            options: Array,
             required: {
-                type: Boolean,
-                default: false,
-            },
-            autofocus: {
                 type: Boolean,
                 default: false,
             },
@@ -80,11 +79,81 @@
 
         methods: {
             update() {
-                this.$emit("input", this.$refs[this.uuid].value);
+                let value = null;
+
+                switch ((this.type || "string").toLowerCase()) {
+                    case "bool":
+                    case "boolean":
+                        this.$emit("input", (this.$refs.field.value || "").toLowerCase() === "true");
+                        break;
+
+                    case "float":
+                    case "double":
+                    case "decimal":
+                    case "number":
+                        value = parseFloat(this.$refs.field.value);
+
+                        if (Number.isNaN(value)) {
+                            value = null;
+                        }
+
+                        this.$emit("input", value);
+                        break;
+
+                    case "int":
+                    case "integer":
+                        value = parseInt(this.$refs.field.value, 10);
+
+                        if (Number.isNaN(value)) {
+                            value = null;
+                        }
+
+                        this.$emit("input", value);
+                        break;
+
+                    default:
+                        this.$emit("input", this.$refs.field.value);
+                        break;
+                }
             },
 
             change() {
-                this.$emit("change", this.$refs[this.uuid].value);
+                let value = null;
+
+                switch ((this.type || "string").toLowerCase()) {
+                    case "bool":
+                    case "boolean":
+                        this.$emit("change", (this.$refs.field.value || "").toLowerCase() === "true");
+                        break;
+
+                    case "float":
+                    case "double":
+                    case "decimal":
+                    case "number":
+                        value = parseFloat(this.$refs.field.value);
+
+                        if (Number.isNaN(value)) {
+                            value = null;
+                        }
+
+                        this.$emit("change", value);
+                        break;
+
+                    case "int":
+                    case "integer":
+                        value = parseInt(this.$refs.field.value, 10);
+
+                        if (Number.isNaN(value)) {
+                            value = null;
+                        }
+
+                        this.$emit("change", value);
+                        break;
+
+                    default:
+                        this.$emit("change", this.$refs.field.value);
+                        break;
+                }
             },
         },
     };
@@ -116,7 +185,7 @@
             }
         }
 
-        input {
+        select {
             flex: 1;
             padding: 7px;
             font-size: 14px;
