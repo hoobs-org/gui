@@ -19,11 +19,15 @@
 <template>
     <div id="dashboard" :class="backdrop ? 'backdrop' : ''">
         <context>
-            <div v-if="show.locked" v-on:click.stop="toggle('locked')" class="icon">lock</div>
-            <div v-else v-on:click.stop="toggle('locked')" class="icon">lock_open</div>
-            <div v-on:click.stop="toggle('settings')" class="icon">settings</div>
+            <div
+                v-if="show.locked"
+                v-on:click.stop="toggle('locked')"
+                class="icon desktop-only"
+            >lock</div>
+            <div v-else v-on:click.stop="toggle('locked')" class="icon desktop-only">lock_open</div>
+            <div v-on:click.stop="toggle('settings')" class="icon desktop-only">settings</div>
         </context>
-        <div class="content">
+        <div class="content desktop-only">
             <grid-layout
                 :layout="items"
                 :col-num="12"
@@ -46,13 +50,17 @@
                     :h="item.h"
                     :i="item.i"
                 >
-                    <component
-                        :is="item.component"
-                        :item="item"
-                        :index="index"
-                    />
+                    <component :is="item.component" :item="item" :index="index" />
                 </grid-item>
             </grid-layout>
+        </div>
+        <div class="mobile-content mobile-only">
+            <div class="mobile-widget">
+                <weather />
+            </div>
+            <div class="mobile-widget">
+                <instances />
+            </div>
         </div>
         <settings v-if="show.settings" :close="() => { toggle('settings') }" />
     </div>
@@ -175,6 +183,29 @@
                 border-radius: 0;
                 box-sizing: border-box;
             }
+        }
+
+        .mobile-content {
+            flex: 1;
+            background: linear-gradient(
+                to bottom,
+                var(--application-background) 0%,
+                #00000000 30%
+            );
+
+            .mobile-widget {
+                color: var(--widget-text);
+                background: var(--widget-background);
+                backdrop-filter: var(--transparency);
+                border-radius: 0;
+                box-sizing: border-box;
+            }
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #dashboard {
+            overflow: auto;
         }
     }
 </style>

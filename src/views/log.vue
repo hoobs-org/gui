@@ -207,4 +207,14 @@
             }
         }
     }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        .messages {
+            overflow: auto;
+
+            &::-webkit-scrollbar {
+                display: unset;
+            }
+        }
+    }
 </style>

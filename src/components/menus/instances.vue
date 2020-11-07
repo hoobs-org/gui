@@ -110,13 +110,13 @@
             min-width: unset;
             background: var(--application-background);
             color: var(--modal-text);
+            padding: 20px 0;
             top: 0;
             right: unset;
             left: 0;
 
             .item {
                 color: var(--modal-text) !important;
-                padding: 20px;
 
                 &:first-child {
                     border-top: 0 none;
