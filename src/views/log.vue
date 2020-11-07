@@ -23,6 +23,8 @@
             <div v-on:click.stop="toggle('plugins')" class="icon">extension</div>
             <div v-if="debug" v-on:click="mode()" class="icon">bug_report</div>
             <div v-else v-on:click="mode()" class="icon dim">bug_report</div>
+            <div class="seperator"></div>
+            <div v-on:click="download()" class="icon">cloud_download</div>
         </context>
         <div ref="messages" class="messages">
             <message v-for="(message, index) in messages" :key="index" :value="message" />
@@ -129,6 +131,52 @@
                 }
 
                 return true;
+            },
+
+            async download() {
+                const log = await this.$hoobs.log(5000);
+
+                let content = "";
+
+                for (let i = 0; i < log.length; i += 1) {
+                    content += `${new Date(log[i].timestamp).toLocaleString()} `;
+
+                    if (log[i].id !== "" && log[i].id !== "api") {
+                        content += `${log[i].display} `;
+                    }
+
+                    if (log[i].plugin && log[i].plugin !== "") {
+                        content += `${log[i].prefix} `;
+                    }
+
+                    switch (log[i].level) {
+                        case "debug":
+                            content += `[ DEBUG ] ${log[i].message}`;
+                            break;
+
+                        case "error":
+                            content += `[ ERROR ] ${log[i].message}`;
+                            break;
+
+                        case "warn":
+                            content += `[ WARNING ] ${log[i].message}`;
+                            break;
+
+                        default:
+                            content += log[i].message;
+                            break;
+                    }
+
+                    content += "\r\n";
+                }
+
+                const link = document.createElement("a");
+
+                this.loading = false;
+
+                link.href = `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`;
+                link.download = "log.txt";
+                link.click();
             },
         },
     };

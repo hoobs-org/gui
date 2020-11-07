@@ -137,6 +137,13 @@
             }
         }
 
+        .seperator {
+            width: 1px;
+            height: 18px;
+            background: var(--navigation-border);
+            margin: 10px 7px;
+        }
+
         .icon {
             width: 28px;
             height: 28px;
