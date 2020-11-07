@@ -154,7 +154,7 @@
             user-select: none;
 
             .icon {
-                color: var( --application-highlight);
+                color: var(--application-highlight);
                 margin: 0 14px 0 0;
                 font-size: 47px;
             }
@@ -164,7 +164,7 @@
             }
 
             .identity {
-                color: var( --application-highlight);
+                color: var(--application-highlight);
                 font-size: 17px;
             }
 

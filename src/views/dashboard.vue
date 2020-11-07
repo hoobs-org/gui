@@ -54,11 +54,11 @@
                 </grid-item>
             </grid-layout>
         </div>
-        <div class="mobile-content mobile-only">
-            <div class="mobile-widget">
+        <div class="content mobile-only">
+            <div class="widget">
                 <weather />
             </div>
-            <div class="mobile-widget">
+            <div class="widget">
                 <instances />
             </div>
         </div>
@@ -177,23 +177,6 @@
             }
 
             .widget {
-                color: var(--widget-text);
-                background: var(--widget-background);
-                backdrop-filter: var(--transparency);
-                border-radius: 0;
-                box-sizing: border-box;
-            }
-        }
-
-        .mobile-content {
-            flex: 1;
-            background: linear-gradient(
-                to bottom,
-                var(--application-background) 0%,
-                #00000000 30%
-            );
-
-            .mobile-widget {
                 color: var(--widget-text);
                 background: var(--widget-background);
                 backdrop-filter: var(--transparency);
