@@ -43,7 +43,11 @@
                     <td>{{ $t("version") }}</td>
                     <td v-if="!updated">
                         {{ version }}
-                        <a v-on:click.stop="update()" class="update">{{ $t("update_avaliable") }}</a>
+                        <a
+                            v-if="user.admin"
+                            v-on:click.stop="update()"
+                            class="update"
+                        >{{ $t("update_avaliable") }}</a>
                     </td>
                     <td v-else>{{ version }}</td>
                 </tr>
@@ -75,6 +79,10 @@
         name: "system",
 
         computed: {
+            user() {
+                return this.$store.state.user;
+            },
+
             instances() {
                 return this.$store.state.instances;
             },
