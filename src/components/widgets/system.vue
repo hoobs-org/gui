@@ -44,7 +44,7 @@
                     <td v-if="!updated">
                         {{ version }}
                         <a
-                            v-if="user.admin"
+                            v-if="user.permissions.reboot"
                             v-on:click.stop="update()"
                             class="update"
                         >{{ $t("update_avaliable") }}</a>

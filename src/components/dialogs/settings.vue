@@ -23,8 +23,8 @@
                 <restore v-if="show.restore" />
                 <location v-if="show.location" :select="select" />
                 <div v-if="show.settings" class="form">
-                    <div class="row section" style="margin-bottom: 7px;">{{ $t("backup_restore") }}</div>
-                    <div class="row">
+                    <div v-if="user.permissions.reboot" class="row section" style="margin-bottom: 7px;">{{ $t("backup_restore") }}</div>
+                    <div v-if="user.permissions.reboot" class="row">
                         <div v-on:click="backup()" class="button">{{ $t("backup") }}</div>
                         <div v-on:click="restore()" class="button">{{ $t("restore") }}</div>
                     </div>
@@ -67,8 +67,8 @@
                             v-model="interval"
                         />
                     </div>
-                    <div class="row section" style="margin-bottom: 7px;">{{ $t("system") }}</div>
-                    <div class="row">
+                    <div v-if="user.permissions.reboot" class="row section" style="margin-bottom: 7px;">{{ $t("system") }}</div>
+                    <div v-if="user.permissions.reboot" class="row">
                         <div v-on:click="reboot()" class="button">{{ $t("reboot_device") }}</div>
                         <div v-on:click="purge()" class="button">{{ $t("purge_cache") }}</div>
                         <div v-on:click="reset()" class="button">{{ $t("factory_reset") }}</div>
@@ -106,6 +106,12 @@
             close: {
                 type: Function,
                 default: () => { /* null */ },
+            },
+        },
+
+        computed: {
+            user() {
+                return this.$store.state.user;
             },
         },
 

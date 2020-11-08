@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="terminal">
+    <div v-if="user.permissions.terminal" id="terminal">
         <context>
             <div v-on:click="refresh()" class="icon">refresh</div>
         </context>

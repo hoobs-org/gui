@@ -63,9 +63,9 @@ export interface InstanceRecord {
 export interface UserRecord {
     id: number;
     name: string;
-    admin: boolean;
+    permissions: { [key: string]: boolean };
     username: string;
-    update?: (username: string, password: string, name?: string, admin?: boolean) => Promise<void>;
+    update?: (username: string, password: string, name?: string, permissions?: { [key: string]: boolean }) => Promise<void>;
     remove?: () => Promise<void>;
 }
 
@@ -265,14 +265,14 @@ export default function sdk(get: () => string, set: (token: string) => void) {
                 return (await Request.get(`${API_URL}/users`, { headers: { authorization: get() } })).data;
             },
 
-            async add(username: string, password: string, name?: string, admin?: boolean): Promise<UserRecord[]> {
+            async add(username: string, password: string, name?: string, permissions?: { [key: string]: boolean }): Promise<UserRecord[]> {
                 await wait();
 
                 return (await Request.put(`${API_URL}/users`, {
                     name: name || username,
                     username,
                     password,
-                    admin,
+                    permissions,
                 }, { headers: { authorization: get() } })).data;
             },
         },
@@ -282,14 +282,14 @@ export default function sdk(get: () => string, set: (token: string) => void) {
 
             const results: UserRecord = (await Request.get(`${API_URL}/users/${id}`, { headers: { authorization: get() } })).data;
 
-            results.update = async (username: string, password: string, name?: string, admin?: boolean): Promise<void> => {
+            results.update = async (username: string, password: string, name?: string, permissions?: { [key: string]: boolean }): Promise<void> => {
                 await wait();
 
                 (await Request.post(`${API_URL}/users/${id}`, {
                     name: name || username,
                     username,
                     password,
-                    admin,
+                    permissions,
                 }, { headers: { authorization: get() } }));
             };
 

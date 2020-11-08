@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="accessories">
+    <div v-if="user.permissions.accessories" id="accessories">
         <context />
     </div>
 </template>
@@ -25,5 +25,11 @@
 <script>
     export default {
         name: "accessories",
+
+        computed: {
+            user() {
+                return this.$store.state.user;
+            },
+        },
     };
 </script>

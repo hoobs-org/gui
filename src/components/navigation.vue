@@ -62,20 +62,20 @@
                 <span class="icon">subject</span>
                 <span v-if="expanded" class="title desktop">{{ $t("log") }}</span>
             </router-link>
-            <router-link v-if="auth && user.admin" class="route" to="/users">
+            <router-link v-if="auth && user.permissions.users" class="route" to="/users">
                 <span class="icon">people</span>
                 <span v-if="expanded" class="title desktop">{{ $t("users") }}</span>
             </router-link>
-            <router-link v-if="user.admin" class="route" to="/instances">
+            <router-link v-if="user.permissions.instances" class="route" to="/instances">
                 <span class="icon">layers</span>
                 <span v-if="expanded" class="title desktop">{{ $t("instances") }}</span>
             </router-link>
-            <router-link v-if="user.admin" class="route" to="/plugins">
+            <router-link v-if="user.permissions.plugins" class="route" to="/plugins">
                 <span class="icon">extension</span>
                 <span v-if="expanded" class="title desktop">{{ $t("plugins") }}</span>
             </router-link>
             <div class="fill desktop"></div>
-            <router-link v-if="user.admin" class="route" to="/config">
+            <router-link v-if="user.permissions.config" class="route" to="/config">
                 <span class="icon">settings</span>
             </router-link>
         </div>

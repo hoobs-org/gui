@@ -155,7 +155,7 @@ export default new Vuex.Store({
                     id: user.id,
                     name: user.name,
                     username: user.username,
-                    admin: user.admin,
+                    permissions: user.permissions,
                 };
             } else {
                 state.user = {};

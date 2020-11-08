@@ -60,20 +60,28 @@ This will return an array of user records.
     id: number,
     username: string,
     name: string,
-    admin: boolean
+    permissions: {
+        accessories: boolean,
+        controller: boolean,
+        instnace: boolean,
+        plugins: boolean,
+        users: boolean,
+        reboot: boolean,
+        config: boolean
+    }
 }]
 ```
 
-#### **hoobs.users.add([username], [password], \<name\>, \<admin\>)**
+#### **hoobs.users.add([username], [password], \<name\>, \<permissions\>)**
 This will add a new user to the system.
 
 Parameters
-| Name     | Required | Type   | Description                                           |
-| -------- | -------- | ------ | ----------------------------------------------------- |
-| username | Yes      | string | The desired username                                  |
-| password | Yes      | string | The new user's password                               |
-| name     | No       | string | The new user's full name, if not set username is used |
-| admin    | No       | string | If the new user an admin, false if not set            |
+| Name        | Required | Type   | Description                                           |
+| ----------- | -------- | ------ | ----------------------------------------------------- |
+| username    | Yes      | string | The desired username                                  |
+| password    | Yes      | string | The new user's password                               |
+| name        | No       | string | The new user's full name, if not set username is used |
+| permissions | No       | string | The new user's permissions settings                   |
 
 #### **hoobs.user([id])**
 Fetches a user object by id.
@@ -83,7 +91,15 @@ Fetches a user object by id.
     id: number,
     username: string,
     name: string,
-    admin: boolean
+    permissions: {
+        accessories: boolean,
+        controller: boolean,
+        instnace: boolean,
+        plugins: boolean,
+        users: boolean,
+        reboot: boolean,
+        config: boolean
+    }
 }
 ```
 
@@ -94,16 +110,16 @@ Parameters
 
 > The user id can be obtained from the `hoobs.users.list()` command.
 
-#### **user.update([username], [password], \<name\>, \<admin\>)**
+#### **user.update([username], [password], \<name\>, \<permissions\>)**
 This updates the current user record.
 
 Parameters
-| Name     | Required | Type   | Description                                           |
-| -------- | -------- | ------ | ----------------------------------------------------- |
-| username | Yes      | string | The desired username                                  |
-| password | Yes      | string | The new user's password                               |
-| name     | No       | string | The new user's full name, if not set username is used |
-| admin    | No       | string | If the new user an admin, false if not set            |
+| Name        | Required | Type   | Description                                           |
+| ----------- | -------- | ------ | ----------------------------------------------------- |
+| username    | Yes      | string | The desired username                                  |
+| password    | Yes      | string | The new user's password                               |
+| name        | No       | string | The new user's full name, if not set username is used |
+| permissions | No       | string | Define any updated permissions for the user           |
 
 > This method is attached to the user object obtained from the `hoobs.user([id])` command.
 

@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="config">
+    <div v-if="user.permissions.config" id="config">
         <context />
     </div>
 </template>
