@@ -25,5 +25,11 @@
 <script>
     export default {
         name: "instances",
+
+        computed: {
+            user() {
+                return this.$store.state.user;
+            },
+        },
     };
 </script>

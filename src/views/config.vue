@@ -25,5 +25,11 @@
 <script>
     export default {
         name: "config",
+
+        computed: {
+            user() {
+                return this.$store.state.user;
+            },
+        },
     };
 </script>

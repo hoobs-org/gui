@@ -46,6 +46,12 @@
             route: String,
         },
 
+        computed: {
+            user() {
+                return this.$store.state.user;
+            },
+        },
+
         data() {
             return {
                 loading: false,
