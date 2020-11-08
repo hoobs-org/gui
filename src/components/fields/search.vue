@@ -100,7 +100,7 @@
         display: flex;
         position: relative;
         flex-direction: column;
-        padding: 0 0 20px 0;
+        padding: 0 10px 20px 0;
 
         .title {
             font-size: 14px;
@@ -115,7 +115,7 @@
         .icon {
             position: absolute;
             bottom: 26px;
-            right: 7px;
+            right: 17px;
             color: var(--modal-text);
             font-size: 18px;
             opacity: 0.5;

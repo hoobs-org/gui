@@ -101,7 +101,7 @@
     #field {
         display: flex;
         flex-direction: column;
-        padding: 0 0 20px 0;
+        padding: 0 10px 20px 0;
 
         .title {
             font-size: 14px;

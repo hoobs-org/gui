@@ -67,7 +67,9 @@ export default new Vuex.Store({
         },
         temp: null,
         session: "",
-        user: {},
+        user: {
+            permissions: {},
+        },
         auth: false,
         notifications: [],
         navigation: false,
@@ -155,10 +157,12 @@ export default new Vuex.Store({
                     id: user.id,
                     name: user.name,
                     username: user.username,
-                    permissions: user.permissions,
+                    permissions: user.permissions || {},
                 };
             } else {
-                state.user = {};
+                state.user = {
+                    permissions: {},
+                };
             }
         },
 

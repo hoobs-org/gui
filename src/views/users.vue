@@ -19,17 +19,128 @@
 <template>
     <div v-if="user.permissions.users" id="users">
         <context />
+        <div v-if="!loading" class="content">
+            <div v-for="(user, index) in users" :key="index" v-on:click="edit(user.id)" class="card">
+                <div class="icon">account_circle</div>
+                <div class="details">
+                    <div class="name">{{ user.name }}</div>
+                    <div class="username">{{ user.username }}</div>
+                </div>
+            </div>
+            <div v-on:click="add()" class="card add">
+                <div class="icon">add</div>
+            </div>
+        </div>
+        <user v-if="show.user" :id="id" :create="create" :close="cancel" />
     </div>
 </template>
 
 <script>
+    import User from "@/components/dialogs/user.vue";
+
     export default {
         name: "users",
+
+        components: {
+            "user": User,
+        },
 
         computed: {
             user() {
                 return this.$store.state.user;
             },
         },
+
+        data() {
+            return {
+                loading: true,
+                users: [],
+                id: null,
+                create: false,
+                show: {
+                    user: false,
+                },
+            };
+        },
+
+        async mounted() {
+            this.users = await this.$hoobs.users.list();
+            this.loading = false;
+        },
+
+        methods: {
+            edit(id) {
+                this.id = id;
+                this.create = false;
+                this.show.user = true;
+            },
+
+            add() {
+                this.id = null;
+                this.create = true;
+                this.show.user = true;
+            },
+
+            cancel() {
+                this.show.user = false;
+            },
+        },
     };
 </script>
+
+<style lang="scss" scoped>
+    #users {
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0 10px 10px 20px;
+
+            .card {
+                width: 220px;
+                height: 87px;
+                padding: 20px;
+                margin: 0 10px 10px 0;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: row;
+                align-content: center;
+                align-items: center;
+                background: var(--widget-background);
+                border: 1px var(--application-border) solid;
+                user-select: none;
+                cursor: pointer;
+
+                &:hover {
+                    border: 1px var(--application-highlight) solid;
+                }
+
+                .icon {
+                    font-size: 47px;
+                    margin: 0 14px 0 0;
+                }
+
+                &.add {
+                    justify-content: space-around;
+
+                    .icon {
+                        font-size: 42px;
+                        color: var(--application-border);
+                    }
+                }
+
+                .details {
+                    flex: 1;
+
+                    .name {
+                        color: var(--application-highlight);
+                        font-size: 17px;
+                    }
+
+                    .username {
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+</style>

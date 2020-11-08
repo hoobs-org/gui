@@ -33,6 +33,7 @@
                     ref="query"
                     :name="$t('location_search')"
                     :description="$t('location_description')"
+                    style="padding-right: 0;"
                     v-model="query"
                     :search="search"
                     :autofocus="true"
