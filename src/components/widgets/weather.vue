@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="!loading && location.id" id="widget">
+    <div v-if="!loading && (location || {}).id" id="widget">
         <div
             class="location"
         >{{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text }}</div>
@@ -64,7 +64,7 @@
         async mounted() {
             const config = await this.$hoobs.config.get();
 
-            this.location = (config.weather || {}).location;
+            this.location = (config.weather || {}).location || {};
             this.current = await this.$hoobs.weather.current();
             this.forecast = await this.$hoobs.weather.forecast();
             this.loading = false;
