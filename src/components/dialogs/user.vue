@@ -157,17 +157,17 @@
 
                 if (this.create) {
                     if (valid && this.username.length < 3) {
-                        this.errors.push(this.$t("username_required"));
+                        this.$alert(this.$t("username_required"));
                         valid = false;
                     }
 
                     if (valid && this.password.length < 5) {
-                        this.errors.push(this.$t("password_weak"));
+                        this.$alert(this.$t("password_weak"));
                         valid = false;
                     }
 
                     if (valid && this.password !== this.challenge) {
-                        this.errors.push(this.$t("password_mismatch"));
+                        this.$alert(this.$t("password_mismatch"));
                         valid = false;
                     }
 
@@ -191,17 +191,17 @@
                     }
                 } else if (this.subject.id === 1) {
                     if (valid && this.username.length < 3) {
-                        this.errors.push(this.$t("username_required"));
+                        this.$alert(this.$t("username_required"));
                         valid = false;
                     }
 
                     if (valid && this.password && this.password !== "" && this.password.length < 5) {
-                        this.errors.push(this.$t("password_weak"));
+                        this.$alert(this.$t("password_weak"));
                         valid = false;
                     }
 
                     if (valid && this.password && this.password !== "" && this.password !== this.challenge) {
-                        this.errors.push(this.$t("password_mismatch"));
+                        this.$alert(this.$t("password_mismatch"));
                         valid = false;
                     }
 
@@ -210,17 +210,17 @@
                     }
                 } else {
                     if (valid && this.username.length < 3) {
-                        this.errors.push(this.$t("username_required"));
+                        this.$alert(this.$t("username_required"));
                         valid = false;
                     }
 
                     if (valid && this.password && this.password !== "" && this.password.length < 5) {
-                        this.errors.push(this.$t("password_weak"));
+                        this.$alert(this.$t("password_weak"));
                         valid = false;
                     }
 
                     if (valid && this.password && this.password !== "" && this.password !== this.challenge) {
-                        this.errors.push(this.$t("password_mismatch"));
+                        this.$alert(this.$t("password_mismatch"));
                         valid = false;
                     }
 
@@ -257,10 +257,14 @@
 
             async remove() {
                 if (this.subject.id > 1) {
-                    await this.subject.remove();
-                }
+                    this.$confirm(this.$t("remove"), this.$t("remove_user_warning"), async () => {
+                        await this.subject.remove();
 
-                this.close();
+                        this.close();
+                    });
+                } else {
+                    this.close();
+                }
             },
         },
     };

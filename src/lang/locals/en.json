@@ -116,6 +116,7 @@
         "connecting": "Connecting",
         "remember_me": "Remember Me",
         "remove": "Remove",
+        "remove_user_warning": "Are you sure you want to remove this user?",
         "reset": "Reset",
         "reset_warning": "Warning! Resetting this device will remove all plugins and configurations. This can't be reversed.",
         "restore": "Restore",

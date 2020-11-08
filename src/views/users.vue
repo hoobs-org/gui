@@ -81,7 +81,12 @@
                 this.show.user = true;
             },
 
-            cancel() {
+            async cancel() {
+                this.loading = true;
+
+                this.users = await this.$hoobs.users.list();
+
+                this.loading = false;
                 this.show.user = false;
             },
         },

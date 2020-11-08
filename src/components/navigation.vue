@@ -54,7 +54,7 @@
                 <span class="icon">dashboard</span>
                 <span v-if="expanded" class="title desktop">{{ $t("dashboard") }}</span>
             </router-link>
-            <router-link class="route" to="/accessories">
+            <router-link v-if="user.permissions.accessories" class="route" to="/accessories">
                 <span class="icon">highlight</span>
                 <span v-if="expanded" class="title desktop">{{ $t("accessories") }}</span>
             </router-link>
