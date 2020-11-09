@@ -72,12 +72,12 @@ Program.command("gui", { isDefault: true })
 
             writeFileSync(join(root, "package.json"), JSON.stringify(pack, null, 4));
 
-            execSync("npm pack", {
+            execSync("yarn pack", {
                 cwd: root,
                 stdio: "inherit",
             });
 
-            execSync(`mv ${join(root, `hoobs-gui-${pjson.version}.tgz`)} ${join(root, "lib", "package.tgz")}`, {
+            execSync(`mv ${join(root, `hoobs-gui-v${pjson.version}.tgz`)} ${join(root, "lib", "package.tgz")}`, {
                 cwd: root,
                 stdio: "inherit",
             });
@@ -126,7 +126,7 @@ Program.command("publish")
 
                 writeFileSync(join(root, "package.json"), JSON.stringify(pack, null, 4));
 
-                execSync("npm publish --access public", {
+                execSync("yarn publish --access public", {
                     cwd: root,
                     stdio: "inherit",
                 });
