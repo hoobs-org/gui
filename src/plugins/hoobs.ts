@@ -430,13 +430,13 @@ export default function sdk(get: () => string, set: (token: string) => void) {
             return results;
         },
 
-        async extentions(): Promise<{ [key: string]: any }[]> {
-            await wait();
+        extentions: {
+            async list(): Promise<{ [key: string]: any }[]> {
+                await wait();
 
-            return (await Request.get(`${API_URL}/extentions`, { headers: { authorization: get() } })).data;
-        },
+                return (await Request.get(`${API_URL}/extentions`, { headers: { authorization: get() } })).data;
+            },
 
-        extention: {
             async add(name: string): Promise<boolean> {
                 await wait();
 
@@ -526,13 +526,13 @@ export default function sdk(get: () => string, set: (token: string) => void) {
                 },
             };
 
-            results.plugins = async (): Promise<{ [key: string]: any }[]> => {
-                await wait();
+            results.plugins = {
+                list: async (): Promise<{ [key: string]: any }[]> => {
+                    await wait();
 
-                return (await Request.get(`${API_URL}/plugins/${id}`, { headers: { authorization: get() } })).data;
-            };
+                    return (await Request.get(`${API_URL}/plugins/${id}`, { headers: { authorization: get() } })).data;
+                },
 
-            results.plugin = {
                 install: async (identifier: string): Promise<void> => {
                     await wait();
 
