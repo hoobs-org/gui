@@ -66,7 +66,7 @@
                 <span class="icon">people</span>
                 <span v-if="expanded" class="title desktop">{{ $t("users") }}</span>
             </router-link>
-            <router-link v-if="user.permissions.instances" class="route" to="/instances">
+            <router-link v-if="user.permissions.instnace" class="route" to="/instances">
                 <span class="icon">layers</span>
                 <span v-if="expanded" class="title desktop">{{ $t("instances") }}</span>
             </router-link>
