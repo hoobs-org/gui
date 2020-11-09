@@ -29,13 +29,13 @@
         "gui": "vue-cli-service serve --mode development --port 54826"
     },
     "dependencies": {
+        "@hoobs/sdk": "^4.0.1",
         "axios": "^0.21.0",
         "chart.js": "^2.9.4",
         "color-scheme": "^1.0.1",
         "colorthief": "^2.3.2",
         "compare-versions": "^3.6.0",
         "core-js": "^3.6.5",
-        "sanitize-filename": "^1.6.3",
         "socket.io-client": "^2.3.1",
         "vue": "^2.6.12",
         "vue-chartkick": "^0.6.1",

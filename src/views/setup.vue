@@ -107,7 +107,7 @@
 </template>
 
 <script>
-    import { sleep } from "@/plugins/hoobs";
+    import { Sleep } from "@hoobs/sdk/lib/wait";
 
     export default {
         name: "setup",
@@ -138,7 +138,7 @@
                 if (compare(results)) return results;
                 if ((saftey || 0) >= 300) return results;
 
-                await sleep(1000);
+                await Sleep(1000);
 
                 return this.wait(callback, compare, (saftey || 0) + 1);
             },

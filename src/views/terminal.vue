@@ -36,7 +36,7 @@
     import { Terminal } from "xterm";
     import { FitAddon } from "xterm-addon-fit";
     import { WebLinksAddon } from "xterm-addon-web-links";
-    import { chunk } from "@/plugins/hoobs";
+    import Chunk from "@hoobs/sdk/lib/chunk";
     import Socket from "@/plugins/socket";
 
     export default {
@@ -161,7 +161,7 @@
                         this.term.write("\r\n");
                         this.term.write(`HOOBS ${this.version}\r\n`);
                         this.term.write("\r\n");
-                        this.term.write(`${chunk(this.$t("motd"), 40).join("\r\n")}\r\n`);
+                        this.term.write(`${Chunk(this.$t("motd"), 40).join("\r\n")}\r\n`);
                         this.term.write("\r\n");
 
                         this.socket.emit("shell_input", "");

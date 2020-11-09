@@ -17,7 +17,7 @@
  **************************************************************************************************/
 
 import { Store } from "vuex";
-import { sanitize } from "./hoobs";
+import Sanitize from "@hoobs/sdk/lib/sanitize";
 
 const THEMES_URL = process.env.VUE_APP_THEMES || "/themes";
 
@@ -25,8 +25,8 @@ export default class Themes {
     static set(name: string, store?: Store<any>) {
         const style = document.getElementById("theme");
 
-        if (style) style.setAttribute("href", Themes.path(sanitize(name)));
-        if (store) store.commit("THEME:SET", sanitize(name));
+        if (style) style.setAttribute("href", Themes.path(Sanitize(name)));
+        if (store) store.commit("THEME:SET", Sanitize(name));
     }
 
     static path(theme: string) {

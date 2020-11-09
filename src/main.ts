@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
+import SDK from "@hoobs/sdk";
+
 import Vue from "vue";
 import Graphing from "vue-chartkick";
 import Charts from "chart.js";
@@ -23,7 +25,6 @@ import Charts from "chart.js";
 import root from "./app.vue";
 
 import socket from "./plugins/socket";
-import sdk from "./plugins/hoobs";
 import themes from "./plugins/themes";
 import drag from "./plugins/drag";
 
@@ -51,7 +52,10 @@ const open = [
 ];
 
 const io = socket();
-const hoobs = sdk(() => store.state.session, (token) => { store.commit("SESSION:SET", token); });
+const hoobs = SDK();
+
+hoobs.config.token.get(() => store.state.session);
+hoobs.config.token.set((token) => { store.commit("SESSION:SET", token); });
 
 io.on("log", (data) => store.commit("IO:LOG", data));
 io.on("monitor", (data) => store.commit("IO:MONITOR", data));
