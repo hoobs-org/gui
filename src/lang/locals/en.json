@@ -78,7 +78,7 @@
         "monday": "Monday",
         "monday_abbr": "Mon",
         "monitor": "Monitor",
-        "motd": "This terminal is here to help manage this device. If you need to install a plugn please use the interface.",
+        "motd": "This terminal is here to help manage this device. If you need to install a plugin please use the interface.",
         "name": "Name",
         "name_description": "Enter your full name.",
         "non_plugin": "Non Plugin",
