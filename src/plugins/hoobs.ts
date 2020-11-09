@@ -19,8 +19,8 @@
 import Request from "axios";
 import Sanitize from "sanitize-filename";
 
-const API_URL = process.env.VUE_APP_API || "/api";
-const BACKUPS_URL = process.env.VUE_APP_BACKUPS || "/backups";
+const API_URL = process.env.API_URL || process.env.VUE_APP_API || "/api";
+const BACKUPS_URL = process.env.BACKUPS_URL || process.env.VUE_APP_BACKUPS || "/backups";
 
 export declare const enum LogLevel {
     INFO = "info",
