@@ -58,6 +58,7 @@
         "instance_name": "Bridge Name",
         "instance_name_description": "This is the name of the bridge. This can be changed later.",
         "instance_name_required": "Bridge name is required.",
+        "instance_name_taken": "This name is already taken, please select a different name",
         "instance_pin": "PIN",
         "instance_pin_invalid": "Invalid PIN.",
         "instance_port": "Bridge Port",

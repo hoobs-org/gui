@@ -98,6 +98,7 @@
 
 <script>
     import { Wait } from "@hoobs/sdk/lib/wait";
+    import Sanitize from "@hoobs/sdk/lib/sanitize";
 
     export default {
         name: "instance",
@@ -171,6 +172,11 @@
                         valid = false;
                     }
 
+                    if (valid && instances.findIndex((item) => item.id === Sanitize(this.display)) >= 0) {
+                        this.$alert(this.$t("instance_name_taken"));
+                        valid = false;
+                    }
+
                     if (valid && !this.port) {
                         this.$alert(this.$t("instance_port_required"));
                         valid = false;
@@ -190,7 +196,7 @@
                         this.loading = true;
 
                         if (this.file) {
-                            // ADD INSTANCE WITH DATA
+                            await this.$hoobs.instances.import(this.file, this.display, this.port, this.pin, this.username);
                         } else {
                             await this.$hoobs.instances.add(this.display, this.port, this.pin, this.username);
                         }
