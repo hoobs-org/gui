@@ -95,7 +95,7 @@
             },
 
             navagation(route, value) {
-                this.$router.push({ path: `/${route}/${value}` });
+                this.$router.push({ path: `/${route}?id=${encodeURIComponent(value)}` });
             },
         },
     };

@@ -63,12 +63,14 @@ const routes: Array<RouteConfig> = [
         name: "instances",
         meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "instances" */ "../views/instances.vue"),
+        props: true,
     },
     {
         path: "/plugins",
         name: "plugins",
         meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "plugins" */ "../views/plugins.vue"),
+        props: true,
     },
     {
         path: "/config",

@@ -66,6 +66,14 @@
         async mounted() {
             this.instances = await this.$hoobs.instances.list();
             this.loading = false;
+
+            if (this.$route.query.id) {
+                if (this.instances.findIndex((item) => item.id === decodeURIComponent(this.$route.query.id)) >= 0) {
+                    this.edit(decodeURIComponent(this.$route.query.id));
+                } else {
+                    this.$router.push({ path: "/instances" });
+                }
+            }
         },
 
         methods: {
@@ -83,6 +91,10 @@
 
             async cancel() {
                 this.loading = true;
+
+                if (this.$route.query.id) {
+                    this.$router.push({ path: "/instances" });
+                }
 
                 this.instances = await this.$hoobs.instances.list();
 
