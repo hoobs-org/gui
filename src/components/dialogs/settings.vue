@@ -90,6 +90,7 @@
 </template>
 
 <script>
+    import { Wait } from "@hoobs/sdk/lib/wait";
     import Restore from "@/components/dialogs/restore.vue";
     import Location from "@/components/dialogs/location.vue";
     import Countries from "@/lang/country-codes.json";
@@ -163,6 +164,7 @@
                 this.loading = false;
 
                 link.href = url;
+                link.id = `backup_${(new Date()).getTime()}`;
                 link.download = "hoobs.backup";
                 link.click();
             },
@@ -225,6 +227,9 @@
 
                 this.message = `${this.$t("applying_changes")}...`;
 
+                await Wait();
+
+                this.$store.commit("SETTINGS:UPDATE");
                 this.close();
             },
 

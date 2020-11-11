@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="dashboard" :class="backdrop ? 'backdrop' : ''">
+    <div :key="updated" id="dashboard" :class="backdrop ? 'backdrop' : ''">
         <context>
             <div
                 v-if="show.locked"
@@ -98,6 +98,12 @@
             "forecast": Forecast,
         },
 
+        computed: {
+            updated() {
+                return this.$store.state.updated;
+            },
+        },
+
         data() {
             return {
                 loading: true,
@@ -112,7 +118,7 @@
 
         created() {
             this.$store.subscribe((mutation) => {
-                if (mutation.type === "DASHBOARD:ITEMS" || mutation.type === "DASHBOARD:BACKDROP") {
+                if (mutation.type === "SETTINGS:UPDATE" || mutation.type === "DASHBOARD:ITEMS" || mutation.type === "DASHBOARD:BACKDROP") {
                     this.loading = true;
 
                     const { dashboard } = this.$store.state;

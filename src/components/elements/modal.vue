@@ -172,7 +172,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            padding: 0 0 20% 0;
+            padding: 0;
         }
     }
 

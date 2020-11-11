@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal v-if="title" :title="$t(title)" :draggable="true" width="760px" height="620px">
+    <modal v-if="title" :title="$t(title)" :draggable="true" width="760px" :height="`${height}px`">
         <div id="user">
             <div v-if="!loading" class="content">
                 <div class="form">
@@ -92,6 +92,7 @@
         data() {
             return {
                 loading: true,
+                height: 620,
                 title: null,
                 subject: {},
                 name: "",
@@ -107,8 +108,8 @@
                     label: "permission_controller",
                     selected: false,
                 }, {
-                    name: "instnace",
-                    label: "permission_instnace",
+                    name: "instances",
+                    label: "permission_instances",
                     selected: false,
                 }, {
                     name: "terminal",
@@ -143,6 +144,10 @@
                 this.name = this.subject.name;
                 this.username = this.subject.username;
 
+                if (this.subject.id <= 1) {
+                    this.height = 420;
+                }
+
                 for (let i = 0; i < this.permissions.length; i += 1) {
                     this.permissions[i].selected = this.subject.permissions[this.permissions[i].name];
                 }
@@ -172,10 +177,12 @@
                     }
 
                     if (valid) {
+                        this.loading = true;
+
                         const permissions = {
                             accessories: false,
                             controller: false,
-                            instnace: false,
+                            instances: false,
                             terminal: false,
                             plugins: false,
                             users: false,
@@ -206,6 +213,8 @@
                     }
 
                     if (valid) {
+                        this.loading = true;
+
                         await this.subject.update(this.username, !this.password || this.password === "" ? null : this.password, !this.name || this.name === "" ? this.username : this.name);
                     }
                 } else {
@@ -225,10 +234,12 @@
                     }
 
                     if (valid) {
+                        this.loading = true;
+
                         const permissions = {
                             accessories: false,
                             controller: false,
-                            instnace: false,
+                            instances: false,
                             terminal: false,
                             plugins: false,
                             users: false,

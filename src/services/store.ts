@@ -74,6 +74,7 @@ export default new Vuex.Store({
         notifications: [],
         navigation: false,
         accessory: null,
+        updated: (new Date()).getTime(),
         theme: "dark",
     },
 
@@ -206,6 +207,10 @@ export default new Vuex.Store({
 
         "THEME:SET": (state: { [key: string]: any }, theme: number) => {
             state.theme = theme;
+        },
+
+        "SETTINGS:UPDATE": (state: { [key: string]: any }) => {
+            state.updated = (new Date()).getTime();
         },
 
         "DASHBOARD:LAYOUT": (state: { [key: string]: any }, data: { [key: string]: string | number | boolean }) => {

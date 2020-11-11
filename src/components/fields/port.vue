@@ -81,11 +81,11 @@
 
         methods: {
             update() {
-                this.$emit("input", parseInt(this.$refs[this.uuid].value, 10));
+                this.$emit("input", parseInt(this.$refs[this.uuid].value, 10) || null);
             },
 
             change() {
-                this.$emit("change", parseInt(this.$refs[this.uuid].value, 10));
+                this.$emit("change", parseInt(this.$refs[this.uuid].value, 10) || null);
             },
         },
     };

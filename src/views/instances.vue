@@ -17,19 +17,135 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="user.permissions.instance" id="instances">
+    <div v-if="user.permissions.instances" id="instances">
         <context />
+        <div v-if="!loading" class="content">
+            <div v-for="(instance, index) in instances" :key="index" v-on:click="edit(instance.id)" class="card">
+                <div class="icon">layers</div>
+                <div class="details">
+                    <div class="name">{{ instance.display }}</div>
+                    <div class="pin">{{ instance.pin }}</div>
+                </div>
+            </div>
+            <div v-on:click="add()" class="card add">
+                <div class="icon">add</div>
+            </div>
+        </div>
+        <instance v-if="show.instance" :id="id" :create="create" :close="cancel" />
     </div>
 </template>
 
 <script>
+    import Instance from "@/components/dialogs/instance.vue";
+
     export default {
         name: "instances",
+
+        components: {
+            "instance": Instance,
+        },
 
         computed: {
             user() {
                 return this.$store.state.user;
             },
         },
+
+        data() {
+            return {
+                loading: true,
+                instances: [],
+                id: null,
+                create: false,
+                show: {
+                    instance: false,
+                },
+            };
+        },
+
+        async mounted() {
+            this.instances = await this.$hoobs.instances.list();
+            this.loading = false;
+        },
+
+        methods: {
+            edit(id) {
+                this.id = id;
+                this.create = false;
+                this.show.instance = true;
+            },
+
+            add() {
+                this.id = null;
+                this.create = true;
+                this.show.instance = true;
+            },
+
+            async cancel() {
+                this.loading = true;
+
+                this.instances = await this.$hoobs.instances.list();
+
+                this.loading = false;
+                this.show.instance = false;
+            },
+        },
     };
 </script>
+
+<style lang="scss" scoped>
+    #instances {
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0 10px 10px 20px;
+
+            .card {
+                width: 220px;
+                height: 87px;
+                padding: 20px;
+                margin: 0 10px 10px 0;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: row;
+                align-content: center;
+                align-items: center;
+                background: var(--widget-background);
+                border: 1px var(--application-border) solid;
+                user-select: none;
+                cursor: pointer;
+
+                &:hover {
+                    border: 1px var(--application-highlight) solid;
+                }
+
+                .icon {
+                    font-size: 47px;
+                    margin: 0 14px 0 0;
+                }
+
+                &.add {
+                    justify-content: space-around;
+
+                    .icon {
+                        font-size: 42px;
+                        color: var(--application-border);
+                    }
+                }
+
+                .details {
+                    flex: 1;
+
+                    .name {
+                        color: var(--application-highlight);
+                        font-size: 17px;
+                    }
+
+                    .pin {
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+</style>

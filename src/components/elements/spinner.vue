@@ -107,7 +107,6 @@
     }
 
     #spinner {
-        height: 50%;
         display: inline-flex;
         flex-direction: column;
         align-content: center;
