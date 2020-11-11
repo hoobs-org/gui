@@ -69,32 +69,36 @@
                     label: "activity",
                     selected: false,
                 }, {
+                    name: "current",
+                    label: "weather",
+                    selected: false,
+                }, {
                     name: "cpu",
                     label: "cpu",
+                    selected: false,
+                }, {
+                    name: "forecast",
+                    label: "weather_forecast",
                     selected: false,
                 }, {
                     name: "memory",
                     label: "memory",
                     selected: false,
                 }, {
-                    name: "instances",
-                    label: "instances",
-                    selected: false,
-                }, {
-                    name: "system",
-                    label: "system_info",
-                    selected: false,
-                }, {
-                    name: "current",
-                    label: "weather",
-                    selected: false,
-                }, {
                     name: "weather",
                     label: "weather_combined",
                     selected: false,
                 }, {
-                    name: "forecast",
-                    label: "weather_forecast",
+                    name: "instances",
+                    label: "instances",
+                    selected: false,
+                }, {
+                    name: "log",
+                    label: "log",
+                    selected: false,
+                }, {
+                    name: "system",
+                    label: "system_info",
                     selected: false,
                 }],
             };
@@ -161,6 +165,11 @@
                     case "instances":
                         return {
                             x: 0, y: 0, w: 1, h: 3, i: "9", component: "instances",
+                        };
+
+                    case "log":
+                        return {
+                            x: 0, y: 0, w: 5, h: 7, i: "10", component: "log",
                         };
 
                     case "system":

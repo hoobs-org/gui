@@ -77,6 +77,7 @@
     import Memory from "@/components/widgets/memory.vue";
     import Instances from "@/components/widgets/instances.vue";
     import System from "@/components/widgets/system.vue";
+    import Log from "@/components/widgets/log.vue";
     import Weather from "@/components/widgets/weather.vue";
     import Current from "@/components/widgets/current.vue";
     import Forecast from "@/components/widgets/forecast.vue";
@@ -93,6 +94,7 @@
             "memory": Memory,
             "instances": Instances,
             "system": System,
+            "log": Log,
             "weather": Weather,
             "current": Current,
             "forecast": Forecast,

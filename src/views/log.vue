@@ -115,7 +115,9 @@
                 }
             }
 
-            this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
+            setTimeout(() => {
+                this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
+            }, 10);
         },
 
         updated() {
