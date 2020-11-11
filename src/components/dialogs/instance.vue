@@ -77,8 +77,9 @@
                     </div>
                     <div v-if="this.create" class="row section">{{ $t("import") }}</div>
                     <div v-if="this.create" class="row">
-                        <input type="file" ref="import" v-on:change="upload()" accept=".instance" hidden />
-                        <div v-on:click="$refs.import.click();" class="button">{{ $t("upload_file") }}</div>
+                        <input type="file" ref="file" v-on:change="upload()" accept=".instance" hidden />
+                        <div v-on:click="$refs.file.click();" class="button">{{ $t("upload_file") }}</div>
+                        <div v-if="file" class="filename">{{ filename }}</div>
                     </div>
                 </div>
             </div>
@@ -116,14 +117,15 @@
                 height: 740,
                 title: null,
                 subject: {},
+                file: null,
+                filename: null,
                 display: "",
                 pin: "031-45-154",
                 username: "",
-                port: 50826,
+                port: 51826,
                 autostart: 0,
                 start: null,
                 end: null,
-                import: null,
             };
         },
 
@@ -187,7 +189,7 @@
                     if (valid) {
                         this.loading = true;
 
-                        if (this.import) {
+                        if (this.file) {
                             // ADD INSTANCE WITH DATA
                         } else {
                             await this.$hoobs.instances.add(this.display, this.port, this.pin, this.username);
@@ -220,7 +222,7 @@
                             valid = false;
                         }
 
-                        if (valid && this.end > this.start) {
+                        if (valid && this.end < this.start) {
                             this.$alert(this.$t("instance_port_pool_invalid"));
                             valid = false;
                         }
@@ -307,8 +309,9 @@
             },
 
             async upload() {
-                if (this.$refs.import && this.$refs.import.files[0]) {
-                    [this.import] = this.$refs.import.files;
+                if (this.$refs.file && this.$refs.file.files[0]) {
+                    [this.file] = this.$refs.file.files;
+                    this.filename = this.file.name;
                 }
             },
         },
@@ -324,6 +327,11 @@
 
         .fill {
             flex: 1;
+        }
+
+        .filename {
+            padding: 0 14px;
+            align-self: center;
         }
     }
 </style>
