@@ -26,7 +26,7 @@
     "scripts": {
         "build": "bin/build --lint --pack",
         "lint": "vue-cli-service lint",
-        "gui": "vue-cli-service serve --mode development --port 54826"
+        "serve": "vue-cli-service serve --mode development --port 54826"
     },
     "dependencies": {
         "@hoobs/sdk": "^4.0.6",
