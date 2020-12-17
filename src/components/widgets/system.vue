@@ -73,8 +73,6 @@
 </template>
 
 <script>
-    import Semver from "compare-versions";
-
     export default {
         name: "system",
 
@@ -112,7 +110,7 @@
             this.version = status.version;
             this.node = status.node_version;
 
-            this.updated = Semver.compare(this.version, (await this.$hoobs.latest()), ">=");
+            this.updated = status.upgraded && status.cli_upgraded && status.node_upgraded;
             this.system = (await this.$hoobs.system()).system;
 
             this.loading = false;

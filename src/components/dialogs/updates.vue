@@ -20,8 +20,16 @@
     <div id="updates" class="content">
         <div v-if="!updating" class="form">
             <div class="row section">{{ $t("software") }}</div>
-            <div v-if="!loading && stack" class="row">
-                {{ $t("version") }}: {{ latest }}
+            <div v-if="!loading && !status.upgraded" class="row">
+                {{ $t("version_server") }}: {{ status.release }}
+                <span class="value">{{ $t("available") }}</span>
+            </div>
+            <div v-if="!loading && !status.cli_upgraded" class="row">
+                {{ $t("version_cli") }}: {{ status.cli_release }}
+                <span class="value">{{ $t("available") }}</span>
+            </div>
+            <div v-if="!loading && !status.node_upgraded" class="row">
+                {{ $t("version_node") }}: {{ status.node_release }}
                 <span class="value">{{ $t("available") }}</span>
             </div>
             <div v-if="!loading && plugins.length > 0" class="row">
@@ -34,7 +42,7 @@
                 <a
                     v-if="stack"
                     class="button"
-                    href="https://github.com/hoobs-org/HOOBS/releases/latest"
+                    href="https://github.com/hoobs-org/hoobsd/releases/latest"
                     target="_blank"
                 >{{ $t("changelog") }}</a>
                 <div v-if="stack" v-on:click="upgrade()" class="button">{{ $t("update_now") }}</div>
@@ -67,8 +75,8 @@
         data() {
             return {
                 loading: true,
+                status: {},
                 version: "",
-                latest: "",
                 plugins: [],
                 stack: false,
                 updated: false,
@@ -77,11 +85,11 @@
         },
 
         async mounted() {
+            this.status = await this.$hoobs.status();
             this.version = await this.$hoobs.version();
-            this.latest = await this.$hoobs.latest();
             this.plugins = (await this.$hoobs.plugins()).filter((item) => !Semver.compare(item.version, item.latest, ">="));
 
-            this.stack = !Semver.compare(this.version, this.latest, ">=");
+            this.stack = !(this.status.upgraded && this.status.cli_upgraded && this.status.node_upgraded);
             this.updated = !(this.stack || this.plugins.length > 0);
 
             this.loading = false;
@@ -94,7 +102,6 @@
                 const system = await this.$hoobs.system();
 
                 await system.update();
-                await system.reboot();
             },
 
             async update() {
