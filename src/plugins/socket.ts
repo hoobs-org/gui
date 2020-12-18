@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-import SocketIO from "socket.io-client";
+import { io } from "socket.io-client";
 
 const SOCKET_URL = process.env.VUE_APP_SOCKET || "/";
 
 class Socket {
-    declare private io: SocketIOClient.Socket;
+    declare private io: any;
 
     declare private url: string;
 
@@ -32,7 +32,7 @@ class Socket {
     constructor() {
         this.events = {};
 
-        this.io = SocketIO(SOCKET_URL);
+        this.io = io(SOCKET_URL);
 
         this.terminal = false;
     }

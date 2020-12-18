@@ -60,6 +60,7 @@ module.exports = {
             4,
         ],
         "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
         "spaced-comment": "off",
         "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
         "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
@@ -74,6 +75,14 @@ module.exports = {
                 "quote-props": "off",
                 "@typescript-eslint/indent": "off",
             },
+        },
+        {
+            files: [
+                "*.ts",
+            ],
+            rules: {
+                "@typescript-eslint/explicit-module-boundary-types": ["error"]
+            }
         },
         {
             files: [
