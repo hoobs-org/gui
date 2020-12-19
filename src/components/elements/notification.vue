@@ -20,6 +20,7 @@
     <div id="notification">
         <div :class="`type ${message.type}`"></div>
         <div v-if="message.icon" class="icon display" v-html="message.icon"></div>
+        <div v-else class="text-only"></div>
         <div class="details">
             <div class="title">{{ message.title }}</div>
             <div class="description">{{ message.description }}</div>
@@ -78,6 +79,10 @@
             justify-content: space-around;
             align-items: center;
             opacity: 0.7;
+        }
+
+        .text-only {
+            width: 20px;
         }
 
         .close {
