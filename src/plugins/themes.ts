@@ -16,20 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 import { Store } from "vuex";
 import Sanitize from "@hoobs/sdk/lib/sanitize";
 
 const THEMES_URL = process.env.VUE_APP_THEMES || "/themes";
 
 export default class Themes {
-    static set(name: string, store?: Store<any>) {
+    static set(name: string, store?: Store<any>): void {
         const style = document.getElementById("theme");
 
         if (style) style.setAttribute("href", Themes.path(Sanitize(name)));
         if (store) store.commit("THEME:SET", Sanitize(name));
     }
 
-    static path(theme: string) {
+    static path(theme: string): string {
         switch (theme) {
             case "light":
             case "dark":
@@ -40,7 +42,7 @@ export default class Themes {
         }
     }
 
-    static mixin(hoobs: any, store?: Store<any>) {
+    static mixin(hoobs: any, store?: Store<any>): { [key: string]: any } {
         this.set(store?.state.theme, store);
 
         return {

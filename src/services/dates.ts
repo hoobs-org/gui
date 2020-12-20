@@ -17,7 +17,7 @@
  **************************************************************************************************/
 
 export default class Dates {
-    static weekday(value: Date) {
+    static weekday(value: Date): string {
         const day = value.getDay();
 
         if (!Number.isInteger(day)) {

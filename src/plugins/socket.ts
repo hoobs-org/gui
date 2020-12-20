@@ -70,6 +70,6 @@ class Socket {
     }
 }
 
-export default function socket() {
+export default function socket(): Socket {
     return new Socket();
 }

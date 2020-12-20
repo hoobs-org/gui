@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-export function units(value: number) {
+export function units(value: number): { [key: string]: number | string } {
     const results = {
         value: Math.round((value / 1073741824) * 100) / 100,
         units: "GB",
@@ -43,7 +43,7 @@ export function units(value: number) {
     return results;
 }
 
-export function timespan(value: number) {
+export function timespan(value: number): { [key: string]: number } {
     const results = {
         days: 0,
         hours: 0,

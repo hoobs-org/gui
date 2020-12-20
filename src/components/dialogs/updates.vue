@@ -21,15 +21,15 @@
         <div v-if="!updating" class="form">
             <div class="row section">{{ $t("software") }}</div>
             <div v-if="!loading && !status.upgraded" class="row">
-                {{ $t("version_server") }}: {{ status.release }}
+                {{ $t("version_server") }}: {{ status.current }}
                 <span class="value">{{ $t("available") }}</span>
             </div>
             <div v-if="!loading && !status.cli_upgraded" class="row">
-                {{ $t("version_cli") }}: {{ status.cli_release }}
+                {{ $t("version_cli") }}: {{ status.cli_current }}
                 <span class="value">{{ $t("available") }}</span>
             </div>
             <div v-if="!loading && !status.node_upgraded" class="row">
-                {{ $t("version_node") }}: {{ status.node_release }}
+                {{ $t("version_node") }}: {{ status.node_current }}
                 <span class="value">{{ $t("available") }}</span>
             </div>
             <div v-if="!loading && plugins.length > 0" class="row">
@@ -42,7 +42,7 @@
                 <a
                     v-if="stack"
                     class="button"
-                    href="https://github.com/hoobs-org/hoobsd/releases/latest"
+                    href="https://github.com/hoobs-org/HOOBS"
                     target="_blank"
                 >{{ $t("changelog") }}</a>
                 <div v-if="stack" v-on:click="upgrade()" class="button">{{ $t("update_now") }}</div>

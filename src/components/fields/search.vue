@@ -114,8 +114,8 @@
 
         .icon {
             position: absolute;
-            bottom: 26px;
-            right: 17px;
+            bottom: 27px;
+            right: 7px;
             color: var(--modal-text);
             font-size: 18px;
             opacity: 0.5;

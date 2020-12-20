@@ -1,3 +1,23 @@
+/**************************************************************************************************
+ * hoobs-gui                                                                                      *
+ * Copyright (C) 2020 HOOBS                                                                       *
+ *                                                                                                *
+ * This program is free software: you can redistribute it and/or modify                           *
+ * it under the terms of the GNU General Public License as published by                           *
+ * the Free Software Foundation, either version 3 of the License, or                              *
+ * (at your option) any later version.                                                            *
+ *                                                                                                *
+ * This program is distributed in the hope that it will be useful,                                *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of                                 *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                  *
+ * GNU General Public License for more details.                                                   *
+ *                                                                                                *
+ * You should have received a copy of the GNU General Public License                              *
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
+ **************************************************************************************************/
+
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 import { VueConstructor } from "vue";
 
 declare global {
@@ -6,7 +26,7 @@ declare global {
     }
 }
 
-export function transform(str: string, dir: any) {
+export function transform(str: string, dir: any): number {
     let pos = Number(window.getComputedStyle(window.data.move)[dir].replace("px", ""));
 
     if (str !== "none") pos += Number((str.match(/[0-9.-]+/g) || [])[8 - dir.length]);
@@ -14,12 +34,12 @@ export function transform(str: string, dir: any) {
     return pos;
 }
 
-export function mouse(event: MouseEvent) {
+export function mouse(event: MouseEvent): void {
     window.data.mouseX = event.pageX - window.data.initialX;
     window.data.mouseY = event.pageY - window.data.initialY;
 }
 
-export function repeat() {
+export function repeat(): void {
     window.data.relativeX = window.data.mouseX;
     window.data.relativeY = window.data.mouseY;
     window.data.move.style.transform = `matrix(${window.data.matrix || "1, 0, 0, 1,"} ${window.data.matrixX + window.data.relativeX}, ${window.data.matrixY + window.data.relativeY})`;
@@ -27,14 +47,14 @@ export function repeat() {
     window.data.posAnimation = requestAnimationFrame(repeat);
 }
 
-export function move() {
+export function move(): void {
     window.data.move.classList.add(window.data.class.move);
     window.data.posAnimation = requestAnimationFrame(repeat);
 
     document.removeEventListener("mousemove", move);
 }
 
-export function start(handle: HTMLElement, element: HTMLElement, event: MouseEvent) {
+export function start(handle: HTMLElement, element: HTMLElement, event: MouseEvent): void {
     window.data.grab = handle;
     window.data.move = element;
 
@@ -68,7 +88,7 @@ export function start(handle: HTMLElement, element: HTMLElement, event: MouseEve
     document.addEventListener("mousemove", move);
 }
 
-export function end() {
+export function end(): void {
     cancelAnimationFrame(window.data.posAnimation);
 
     document.removeEventListener("mousemove", move);
@@ -85,7 +105,7 @@ export function end() {
     document.removeEventListener("mousemove", mouse);
 }
 
-export function contain() {
+export function contain(): void {
     const event = document.createEvent("HTMLEvents");
 
     event.initEvent("mouseup", true, true);
@@ -93,7 +113,7 @@ export function contain() {
     document.dispatchEvent(event);
 }
 
-export function events(element: HTMLElement, binding: { [key: string]: any }) {
+export function events(element: HTMLElement, binding: { [key: string]: any }): void {
     const { value } = binding;
 
     const selector: string = value instanceof Object ? value.handle : value;
@@ -119,7 +139,7 @@ export function events(element: HTMLElement, binding: { [key: string]: any }) {
 }
 
 const drag = {
-    install(Vue: VueConstructor<Vue>, options: { [key: string]: any }) {
+    install(Vue: VueConstructor<Vue>, options: { [key: string]: any }): void {
         window.data = {};
 
         window.data.class = {

@@ -26,6 +26,6 @@ function notifications(store: Store<any>) {
     }, 5 * 1000);
 }
 
-export default function tasks(store: Store<any>) {
+export default function tasks(store: Store<any>): void {
     notifications(store);
 }

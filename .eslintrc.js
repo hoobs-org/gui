@@ -81,8 +81,8 @@ module.exports = {
                 "*.ts",
             ],
             rules: {
-                "@typescript-eslint/explicit-module-boundary-types": ["error"]
-            }
+                "@typescript-eslint/explicit-module-boundary-types": ["error"],
+            },
         },
         {
             files: [
