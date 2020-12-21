@@ -17,50 +17,66 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="$t('settings')" :draggable="true" width="760px" height="700px">
+    <modal :title="$t('settings')" :draggable="true" width="760px" height="760px">
         <div id="settings">
             <div v-if="!loading" class="content">
                 <restore v-if="show.restore" />
                 <location v-if="show.location" :select="select" />
                 <div v-if="show.settings" class="form">
+                    <div v-if="(product === 'box' || product === 'card') && mdns" class="row section">{{ $t("hostname") }}</div>
+                    <div v-if="(product === 'box' || product === 'card') && mdns" class="row input-field">
+                        <text-field
+                            :description="$t('hostname_description')"
+                            :min="2"
+                            :max="300"
+                            v-model="hostname"
+                        />
+                    </div>
+                    <div v-if="(product === 'box' || product === 'card') && mdns" class="row title label">{{ $t("access_url") }}</div>
+                    <div v-if="(product === 'box' || product === 'card') && mdns" class="row title url">{{ `http://${broadcast}.local` }}</div>
                     <div v-if="user.permissions.reboot" class="row section" style="margin-bottom: 7px;">{{ $t("backup_restore") }}</div>
                     <div v-if="user.permissions.reboot" class="row">
                         <div v-on:click="backup()" class="button">{{ $t("backup") }}</div>
                         <div v-on:click="restore()" class="button">{{ $t("restore") }}</div>
                     </div>
                     <div class="row section">{{ $t("weather") }}</div>
-                    <div class="row title">{{ $t("temperature_units") }}</div>
                     <div class="row">
-                        <radio id="celsius" name="units" v-model="units" value="celsius">
-                            <label for="celsius">{{ $t("celsius") }}</label>
-                        </radio>
-                    </div>
-                    <div class="row">
-                        <radio id="fahrenheit" name="units" v-model="units" value="fahrenheit">
-                            <label for="fahrenheit">{{ $t("fahrenheit") }}</label>
-                        </radio>
-                    </div>
-                    <div class="row title spaced">{{ $t("location") }}</div>
-                    <div class="row">
-                        <input type="submit" class="hidden-submit" value="submit" />
-                        <div v-on:click="change()" class="button">{{ $t("change") }}</div>
-                        <div class="location">
-                            <div v-if="location" class="details">
-                                <div>
-                                    {{ $t("location_city") }}
-                                    <span class="value">{{ location.name }}</span>
-                                </div>
-                                <div>
-                                    {{ $t("location_country") }}
-                                    <span class="value">{{ (country.find((country) => country.value === location.country) || {}).text || location.country }}</span>
+                        <div style="width: 180px;">
+                            <div class="row title">{{ $t("temperature_units") }}</div>
+                            <div class="row">
+                                <radio id="celsius" name="units" v-model="units" value="celsius">
+                                    <label for="celsius">{{ $t("celsius") }}</label>
+                                </radio>
+                            </div>
+                            <div class="row">
+                                <radio id="fahrenheit" name="units" v-model="units" value="fahrenheit">
+                                    <label for="fahrenheit">{{ $t("fahrenheit") }}</label>
+                                </radio>
+                            </div>
+                        </div>
+                        <div style="flex: 1;">
+                            <div class="row title">{{ $t("location") }}</div>
+                            <div class="row">
+                                <input type="submit" class="hidden-submit" value="submit" />
+                                <div v-on:click="change()" class="button">{{ $t("change") }}</div>
+                                <div class="location">
+                                    <div v-if="location" class="details">
+                                        <div>
+                                            {{ $t("location_city") }}
+                                            <span class="value">{{ location.name }}</span>
+                                        </div>
+                                        <div>
+                                            {{ $t("location_country") }}
+                                            <span class="value">{{ (country.find((country) => country.value === location.country) || {}).text || location.country }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row section">{{ $t("monitor") }}</div>
-                    <div class="row">
+                    <div class="row input-field">
                         <integer-field
-                            :name="$t('update_interval')"
                             :description="$t('update_interval_description')"
                             :min="2"
                             :max="300"
@@ -114,6 +130,23 @@
             user() {
                 return this.$store.state.user;
             },
+
+            hostname: {
+                get() {
+                    return this.broadcast || "";
+                },
+
+                set(value) {
+                    let formatted = value || "";
+
+                    formatted = formatted.replace("https://", "");
+                    formatted = formatted.replace("http://", "");
+                    formatted = formatted.replace(/ /g, "-");
+                    formatted = formatted.split(".")[0]; // eslint-disable-line prefer-destructuring
+
+                    this.broadcast = formatted;
+                },
+            },
         },
 
         data() {
@@ -124,6 +157,9 @@
                     restore: false,
                     location: false,
                 },
+                mdns: false,
+                product: "",
+                broadcast: "",
                 location: {},
                 units: "celsius",
                 interval: 5,
@@ -134,7 +170,11 @@
 
         async mounted() {
             const config = await this.$hoobs.config.get();
+            const status = await this.$hoobs.status();
 
+            this.mdns = status.mdns;
+            this.product = status.product;
+            this.broadcast = status.broadcast;
             this.interval = (config.api || {}).polling_seconds || 5;
             this.units = (config.weather || {}).units || "celsius";
             this.location = (config.weather || {}).location;
@@ -214,7 +254,12 @@
                 this.message = `${this.$t("saving_changes")}...`;
 
                 const config = await this.$hoobs.config.get();
+                const status = await this.$hoobs.status();
                 const weather = {};
+
+                if ((status.product === "box" || status.product === "card") && this.broadcast !== "" && this.broadcast !== status.broadcast) {
+                    await this.$hoobs.hostname.update(this.broadcast);
+                }
 
                 if (this.location && this.location.id && this.location.id > 0) weather.location = this.location;
                 if (!config.api) config.api = {};
@@ -257,6 +302,20 @@
 
         .spaced {
             margin: 20px 0 0 0;
+        }
+
+        .label {
+            margin: -10px 0 0 0 !important;
+            padding: 0 !important;
+        }
+
+        .url {
+            color: var(--modal-highlight);
+            user-select: all !important;
+        }
+
+        .input-field {
+            width: 250px;
         }
 
         .location {

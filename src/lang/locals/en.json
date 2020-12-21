@@ -2,6 +2,7 @@
     "en": {
         "about": "About",
         "accent": "Accent",
+        "access_url": "You can access the console at:",
         "accessories": "Accessories",
         "activity": "Activity",
         "apply": "Apply",
@@ -46,6 +47,8 @@
         "friday": "Friday",
         "friday_abbr": "Fri",
         "help": "Help",
+        "hostname": "Hostname",
+        "hostname_description": "Set the console URL.",
         "import": "Import",
         "information": "Information",
         "instance_add": "Add Bridge",
