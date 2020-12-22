@@ -25,37 +25,18 @@
             </router-link>
         </context>
         <div v-if="!loading" class="content">
-            <div :class="parseInt(id, 10) > 0 || id === 'add' ? 'list open' : 'list'">
-                <router-link
-                    v-for="(user, index) in users"
-                    :key="index"
-                    :class="user.id === parseInt(id, 10) ? 'item open' : 'item'"
-                    :to="`/users/${user.id}`"
-                >{{ user.name }}</router-link>
-            </div>
+            <list value="id" display="name" :values="users" :selected="id" controller="users" />
             <form v-if="parseInt(id, 10) > 0" class="screen form">
                 <div class="wrapper">
                     <div class="row section">{{ $t("profile") }}</div>
                     <div class="row">
-                        <text-field
-                            :name="$t('name')"
-                            v-model="name"
-                        />
-                        <text-field
-                            :name="$t('username')"
-                            v-model="username"
-                        />
+                        <text-field :name="$t('name')" v-model="name" />
+                        <text-field :name="$t('username')" v-model="username" />
                     </div>
                     <div class="row section">{{ $t("security") }}</div>
                     <div class="row">
-                        <password-field
-                            :name="$t('password')"
-                            v-model="password"
-                        />
-                        <password-field
-                            :name="$t('password_confirm')"
-                            v-model="challenge"
-                        />
+                        <password-field :name="$t('password')" v-model="password" />
+                        <password-field :name="$t('password_confirm')" v-model="challenge" />
                     </div>
                     <div v-if="subject.id > 1" class="row section">{{ $t("permissions") }}</div>
                     <div v-if="subject.id > 1" class="grid">
@@ -76,25 +57,13 @@
                 <div class="wrapper">
                     <div class="row section">{{ $t("profile") }}</div>
                     <div class="row">
-                        <text-field
-                            :name="$t('name')"
-                            v-model="name"
-                        />
-                        <text-field
-                            :name="$t('username')"
-                            v-model="username"
-                        />
+                        <text-field :name="$t('name')" v-model="name" />
+                        <text-field :name="$t('username')" v-model="username" />
                     </div>
                     <div class="row section">{{ $t("security") }}</div>
                     <div class="row">
-                        <password-field
-                            :name="$t('password')"
-                            v-model="password"
-                        />
-                        <password-field
-                            :name="$t('password_confirm')"
-                            v-model="challenge"
-                        />
+                        <password-field :name="$t('password')" v-model="password" />
+                        <password-field :name="$t('password_confirm')" v-model="challenge" />
                     </div>
                     <div class="row section">{{ $t("permissions") }}</div>
                     <div class="grid">
@@ -124,11 +93,17 @@
 </template>
 
 <script>
+    import List from "../components/elements/list.vue";
+
     export default {
         name: "users",
 
         props: {
             id: String,
+        },
+
+        components: {
+            "list": List,
         },
 
         computed: {
@@ -354,53 +329,6 @@
             display: flex;
             overflow: hidden;
 
-            .list {
-                min-width: 200px;
-                margin: 0 0 20px 10px;
-                padding: 10px 20px ;
-                color: var(--widget-text);
-                background: var(--widget-background);
-                backdrop-filter: var(--transparency);
-                -ms-overflow-style: none;
-                overflow: auto;
-
-                &::-webkit-scrollbar {
-                    display: none;
-                }
-
-                .item {
-                    color: var(--application-text) !important;
-                    border-top: 1px var(--application-border) solid;
-                    display: flex;
-                    align-items: center;
-                    cursor: pointer;
-                    padding: 10px 0;
-                    width: 100%;
-
-                    &:first-child {
-                        border-top: 0 none;
-                    }
-
-                    &.open {
-                        color: var(--application-highlight) !important;
-
-                        &:hover {
-                            color: var(--application-highlight) !important;
-                        }
-                    }
-
-                    &:hover {
-                        color: var(--application-highlight-text) !important;
-                        text-decoration: none !important;
-                    }
-
-                    .icon {
-                        font-size: 18px;
-                        margin: 0 0 0 4px;
-                    }
-                }
-            }
-
             .screen {
                 flex: 1;
                 display: flex;
@@ -448,19 +376,6 @@
     @media (min-width: 300px) and (max-width: 815px) {
         #users {
             .content {
-                .list {
-                    padding: 0 20px 10px 20px;
-                    margin: 0;
-                    background: transparent;
-                    backdrop-filter: unset;
-                    min-width: unset;
-                    flex: 1;
-                }
-
-                .open {
-                    display: none;
-                }
-
                 .screen {
                     max-width: unset;
                     background: transparent;

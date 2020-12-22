@@ -147,7 +147,7 @@
         }
 
         .error-text {
-            color:  #c20101;
+            color: #c20101;
         }
 
         .instance {

@@ -25,41 +25,22 @@
             </router-link>
         </context>
         <div v-if="!loading" class="content">
-            <div :class="id && id !== '' ? 'list open' : 'list'">
-                <router-link
-                    v-for="(instance, index) in instances"
-                    :key="index"
-                    :class="instance.id === id ? 'item open' : 'item'"
-                    :to="`/instances/${instance.id}`"
-                >{{ instance.display }}</router-link>
-            </div>
+            <list value="id" display="display" :values="instances" :selected="id" controller="instances" />
             <form v-if="id === 'add'" class="screen form">
                 <div class="wrapper">
                     <div class="row section">{{ $t("details") }}</div>
                     <div class="row">
-                        <text-field
-                            :name="$t('name')"
-                            style="flex: 1; padding-right: 5px;"
-                            v-model="display"
-                        />
-                        <text-field
-                            :name="$t('instance_pin')"
-                            style="flex: 1; padding-right: 0; padding-left: 5px;"
-                            v-model="pin"
-                        />
+                        <text-field :name="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
+                        <text-field :name="$t('instance_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
                     </div>
                     <div class="row">
-                        <port-field
-                            :name="$t('instance_port')"
-                            style="flex: 1; padding-right: 5px;"
-                            v-model="port"
-                        />
-                        <div style="flex: 1; padding-left: 5px;"></div>
+                        <port-field :name="$t('instance_port')" style="flex: 1; padding-right: 5px" v-model="port" />
+                        <div style="flex: 1; padding-left: 5px"></div>
                     </div>
                     <div class="row section">{{ $t("import") }}</div>
                     <div class="row">
                         <input type="file" ref="file" v-on:change="upload()" accept=".instance" hidden />
-                        <div v-on:click="$refs.file.click();" class="button">{{ $t("upload_file") }}</div>
+                        <div v-on:click="$refs.file.click()" class="button">{{ $t("upload_file") }}</div>
                         <div v-if="file" class="filename">{{ filename }}</div>
                     </div>
                     <div class="row actions">
@@ -72,58 +53,32 @@
                 <div class="wrapper">
                     <div class="row section">{{ $t("pairing") }}</div>
                     <div class="row">
-                        <p style="margin-top: 0;">
-                            {{ $t("pairing_description") }}
-                        </p>
+                        <p style="margin-top: 0">{{ $t("pairing_description") }}</p>
                     </div>
                     <div class="row qrcode">
-                        <qrcode v-if="!loading" :value="status.setup_id" :options="{ width: 200, color: { dark: theme.widget.text.default, light: '#00000000' } }" />
+                        <qrcode v-if="!loading" :value="status.setup_id" :options="{ width: 200, color: { dark: theme.widget.text.default, light: '#00000000' }}" />
                     </div>
                     <div class="row section">{{ $t("details") }}</div>
                     <div class="row">
-                        <text-field
-                            :name="$t('name')"
-                            style="flex: 1; padding-right: 5px;"
-                            v-model="display"
-                        />
-                        <text-field
-                            :name="$t('instance_pin')"
-                            style="flex: 1; padding-right: 0; padding-left: 5px;"
-                            v-model="pin"
-                        />
+                        <text-field :name="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
+                        <text-field :name="$t('instance_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
                     </div>
                     <div class="row">
                         <div v-on:click="generate()" class="button">{{ $t("instance_generate_new_id") }}</div>
                     </div>
                     <div class="row section">{{ $t("service") }}</div>
                     <div class="row">
-                        <integer-field
-                            :name="$t('instance_autostart')"
-                            :description="$t('instance_autostart_description')"
-                            :min="-1"
-                            :max="300"
-                            v-model="autostart"
-                        />
+                        <integer-field :name="$t('instance_autostart')" :description="$t('instance_autostart_description')" :min="-1" :max="300" v-model="autostart" />
                     </div>
                     <div class="row section">{{ $t("export") }}</div>
                     <div class="row">
                         <div v-on:click="backup()" class="button">{{ $t("export_instance") }}</div>
                     </div>
-                    <div class="row section" style="margin-bottom: 10px;">{{ $t("instance_port_pool") }}</div>
-                    <p style="margin-top: 0;">
-                        {{ $t("instance_port_pool_description") }}
-                    </p>
+                    <div class="row section" style="margin-bottom: 10px">{{ $t("instance_port_pool") }}</div>
+                    <p style="margin-top: 0">{{ $t("instance_port_pool_description") }}</p>
                     <div class="row">
-                        <port-field
-                            :name="$t('instance_port_pool_start')"
-                            style="flex: 1; padding-right: 5px;"
-                            v-model="start"
-                        />
-                        <port-field
-                            :name="$t('instance_port_pool_end')"
-                            style="flex: 1; padding-right: 0; padding-left: 5px;"
-                            v-model="end"
-                        />
+                        <port-field :name="$t('instance_port_pool_start')" style="flex: 1; padding-right: 5px" v-model="start" />
+                        <port-field :name="$t('instance_port_pool_end')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="end" />
                     </div>
                     <div class="row actions">
                         <div v-if="!loading" v-on:click="save()" class="button primary">{{ $t("save") }}</div>
@@ -149,6 +104,7 @@
     import { Wait } from "@hoobs/sdk/lib/wait";
     import Sanitize from "@hoobs/sdk/lib/sanitize";
     import QRCode from "@chenfengyuan/vue-qrcode";
+    import List from "../components/elements/list.vue";
 
     export default {
         name: "instances",
@@ -159,6 +115,7 @@
 
         components: {
             "qrcode": QRCode,
+            "list": List,
         },
 
         computed: {
@@ -446,53 +403,6 @@
             display: flex;
             overflow: hidden;
 
-            .list {
-                min-width: 200px;
-                margin: 0 0 20px 10px;
-                padding: 10px 20px ;
-                color: var(--widget-text);
-                background: var(--widget-background);
-                backdrop-filter: var(--transparency);
-                -ms-overflow-style: none;
-                overflow: auto;
-
-                &::-webkit-scrollbar {
-                    display: none;
-                }
-
-                .item {
-                    color: var(--application-text) !important;
-                    border-top: 1px var(--application-border) solid;
-                    display: flex;
-                    align-items: center;
-                    cursor: pointer;
-                    padding: 10px 0;
-                    width: 100%;
-
-                    &:first-child {
-                        border-top: 0 none;
-                    }
-
-                    &.open {
-                        color: var(--application-highlight) !important;
-
-                        &:hover {
-                            color: var(--application-highlight) !important;
-                        }
-                    }
-
-                    &:hover {
-                        color: var(--application-highlight-text) !important;
-                        text-decoration: none !important;
-                    }
-
-                    .icon {
-                        font-size: 18px;
-                        margin: 0 0 0 4px;
-                    }
-                }
-            }
-
             .screen {
                 flex: 1;
                 display: flex;
@@ -544,19 +454,6 @@
     @media (min-width: 300px) and (max-width: 815px) {
         #instances {
             .content {
-                .list {
-                    padding: 0 20px 10px 20px;
-                    margin: 0;
-                    background: transparent;
-                    backdrop-filter: unset;
-                    min-width: unset;
-                    flex: 1;
-                }
-
-                .open {
-                    display: none;
-                }
-
                 .screen {
                     max-width: unset;
                     background: transparent;

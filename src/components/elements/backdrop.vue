@@ -17,12 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div
-        id="backdrop"
-        v-on:click="select()"
-        :class="value === `url('/defaults/backdrops/${image}')` ? 'active' : ''"
-        :style="`background-image: url('/defaults/backdrops/${image}');`"
-    ></div>
+    <div id="backdrop" v-on:click="select()" :class="value === `url('/defaults/backdrops/${image}')` ? 'active' : ''" :style="`background-image: url('/defaults/backdrops/${image}');`"></div>
 </template>
 
 <script>

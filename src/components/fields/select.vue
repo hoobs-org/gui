@@ -20,19 +20,8 @@
     <div id="field" class="field">
         <span class="title">{{ name }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <select
-            :id="id || uuid"
-            :ref="uuid"
-            :value="value"
-            v-on:input="update"
-            v-on:change="change"
-            v-bind:required="required"
-        >
-            <option
-                v-for="option in options"
-                v-bind:value="option.value"
-                :key="option.value"
-            >{{ option.text }}</option>
+        <select :id="id || uuid" :ref="uuid" :value="value" v-on:input="update" v-on:change="change" v-bind:required="required">
+            <option v-for="option in options" v-bind:value="option.value" :key="option.value">{{ option.text }}</option>
         </select>
     </div>
 </template>

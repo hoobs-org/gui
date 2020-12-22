@@ -18,29 +18,15 @@
 
 <template>
     <div class="checkbox" :class="[classes]">
-        <div
-            class="group"
-            v-on:click="toggle()"
-        >
+        <div class="group" v-on:click="toggle()">
             <div v-if="state">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path fill="#fff" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                 </svg>
             </div>
-            <input
-                type="checkbox"
-                :id="id || uuid"
-                :name="name"
-                :value="value"
-                :disabled="disabled"
-                :required="required"
-                :checked="state"
-            />
+            <input type="checkbox" :id="id || uuid" :name="name" :value="value" :disabled="disabled" :required="required" :checked="state" />
         </div>
-        <label
-            class="label"
-            :for="id || uuid"
-        >
+        <label class="label" :for="id || uuid">
             <slot />
         </label>
     </div>

@@ -23,18 +23,8 @@
             <slot />
         </div>
         <notifications v-if="show.notifications" v-model="show.notifications" />
-        <alert
-            v-if="alerting"
-            :message="alert.message"
-            :close="() => { alerting = false; }"
-        />
-        <confirm
-            v-if="confirming"
-            :callback="confirm.callback"
-            :message="confirm.message"
-            :action="confirm.action"
-            :close="() => { confirming = false; }"
-        />
+        <alert v-if="alerting" :message="alert.message" :close="() => { alerting = false; }" />
+        <confirm v-if="confirming" :callback="confirm.callback" :message="confirm.message" :action="confirm.action" :close="() => { confirming = false; }" />
     </div>
 </template>
 

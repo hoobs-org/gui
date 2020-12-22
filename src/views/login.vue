@@ -22,40 +22,16 @@
             <div v-if="errors.length > 0" class="errors">
                 <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
             </div>
-            <form
-                class="modal"
-                autocomplete="false"
-                method="post"
-                action="/login"
-                v-on:submit.prevent="login()"
-            >
+            <form class="modal" autocomplete="false" method="post" action="/login" v-on:submit.prevent="login()">
                 <input type="submit" class="hidden-submit" value="submit" />
                 <div class="group">
                     <div class="upper">
                         <label for="username" class="label">{{ $t("username") }}</label>
-                        <input
-                            type="text"
-                            id="username"
-                            ref="username"
-                            autocomplete="false"
-                            data-lpignore="true"
-                            v-model="username"
-                            v-on:keyup.enter="login"
-                            :required="true"
-                        />
+                        <input type="text" id="username" ref="username" autocomplete="false" data-lpignore="true" v-model="username" v-on:keyup.enter="login" :required="true" />
                     </div>
                     <div class="lower">
                         <label for="password" class="label">{{ $t("password") }}</label>
-                        <input
-                            type="password"
-                            id="password"
-                            ref="password"
-                            autocomplete="false"
-                            data-lpignore="true"
-                            v-model="password"
-                            v-on:keyup.enter="login"
-                            :required="true"
-                        />
+                        <input type="password" id="password" ref="password" autocomplete="false" data-lpignore="true" v-model="password" v-on:keyup.enter="login" :required="true" />
                     </div>
                 </div>
                 <div class="remember">
@@ -67,7 +43,8 @@
             <div class="actions modal">
                 <div class="copyright">
                     HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
-                    <br />Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
+                    <br />
+                    Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
                 <div class="button primary" v-on:click="login()">{{ $t("login") }}</div>
             </div>

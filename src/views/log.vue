@@ -35,16 +35,8 @@
         <div ref="messages" class="messages">
             <message v-for="(message, index) in messages" :key="index" :value="message" />
         </div>
-        <instances-menu
-            v-if="parent.show.instances"
-            v-model="instances"
-            :close="() => { toggle('instances') }"
-        />
-        <plugins-menu
-            v-if="parent.show.plugins"
-            v-model="plugins"
-            :close="() => { toggle('plugins') }"
-        />
+        <instances-menu v-if="parent.show.instances" v-model="instances" :close="() => { toggle('instances') }" />
+        <plugins-menu v-if="parent.show.plugins" v-model="plugins" :close="() => { toggle('plugins') }" />
     </div>
 </template>
 

@@ -18,9 +18,7 @@
 
 <template>
     <modal width="490px" height="220px">
-        <div class="content message">
-            {{ message }}
-        </div>
+        <div class="content message">{{ message }}</div>
         <div class="actions modal">
             <div class="button primary" v-on:click="close()">{{ $t("ok") }}</div>
         </div>

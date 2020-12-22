@@ -18,9 +18,7 @@
 
 <template>
     <div v-if="!loading && (location || {}).id" id="widget">
-        <div
-            class="location"
-        >{{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text }}</div>
+        <div class="location">{{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text }}</div>
         <div class="today">{{ $t(weekday(new Date())) }}</div>
         <div class="weather">{{ $t(icon[current.icon].label) }}</div>
         <div class="current">

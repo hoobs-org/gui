@@ -18,27 +18,13 @@
 
 <template>
     <div class="radio" :class="[classes]">
-        <div
-            class="group"
-            v-on:click="toggle()"
-        >
+        <div class="group" v-on:click="toggle()">
             <div v-if="state">
                 <div class="marker"></div>
             </div>
-            <input
-                type="radio"
-                :id="id || uuid"
-                :name="name"
-                :value="value"
-                :disabled="disabled"
-                :required="required"
-                :checked="state"
-            />
+            <input type="radio" :id="id || uuid" :name="name" :value="value" :disabled="disabled" :required="required" :checked="state" />
         </div>
-        <label
-            class="label"
-            :for="id || uuid"
-        >
+        <label class="label" :for="id || uuid">
             <slot />
         </label>
     </div>

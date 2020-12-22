@@ -17,72 +17,73 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="widget">
-        <line-chart :key="key" id="activity" height="100%" suffix="%" :discrete="true" :data="graph" :min="0" :max="100" :colors="colors" :curve="false" legend="bottom" />
+    <div id="list" :class="selected && selected !== '' ? 'list open' : 'list'">
+        <router-link v-for="(item, index) in values" :key="index" :class="`${item[value]}` === selected ? 'item open' : 'item'" :to="`/${controller}/${item[value]}`">{{ item[display] }}</router-link>
     </div>
 </template>
 
 <script>
     export default {
-        name: "activity",
+        name: "list",
 
-        data() {
-            return {
-                key: 1,
-                colors: [],
-            };
-        },
-
-        created() {
-            this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "THEME:SET") {
-                    const theme = await this.$theme.get();
-
-                    this.colors = [
-                        theme.application.highlight,
-                        theme.application.accent,
-                    ];
-                }
-            });
-        },
-
-        async mounted() {
-            const theme = await this.$theme.get();
-
-            this.colors = [
-                theme.application.highlight,
-                theme.application.accent,
-            ];
-        },
-
-        computed: {
-            graph() {
-                return [{
-                    name: `${this.$t("cpu")} ${(this.cpu || {}).used || 0}%`,
-                    data: this.cpu.history,
-                }, {
-                    name: `${this.$t("memory")} ${(this.memory || {}).load || 0}% (${((this.memory || {}).used || {}).value || 0} ${((this.memory || {}).used || {}).units || "MB"})`,
-                    data: this.memory.history,
-                }];
-            },
-
-            cpu() {
-                return this.$store.state.cpu;
-            },
-
-            memory() {
-                return this.$store.state.memory;
-            },
+        props: {
+            values: Array,
+            value: String,
+            display: String,
+            selected: String,
+            controller: String,
         },
     };
 </script>
 
 <style lang="scss" scoped>
-    #widget {
-        width: 100%;
-        height: 100%;
-        padding: 30px 20px 15px 10px;
-        box-sizing: border-box;
-        cursor: default;
+    #list {
+        min-width: 200px;
+        margin: 0 0 20px 10px;
+        padding: 10px 20px;
+        color: var(--widget-text);
+        background: var(--widget-background);
+        backdrop-filter: var(--transparency);
+        -ms-overflow-style: none;
+        overflow: auto;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .item {
+            color: var(--application-text) !important;
+            border-top: 1px var(--application-border) solid;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px 0;
+            width: 100%;
+
+            &:first-child {
+                border-top: 0 none;
+            }
+
+            &.open {
+                color: var(--application-highlight) !important;
+
+                &:hover {
+                    color: var(--application-highlight) !important;
+                }
+            }
+
+            &:hover {
+                color: var(--application-highlight-text) !important;
+                text-decoration: none !important;
+            }
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #list {
+            &.open {
+                display: none;
+            }
+        }
     }
 </style>

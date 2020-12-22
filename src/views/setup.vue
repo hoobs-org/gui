@@ -24,45 +24,21 @@
         </modal>
         <modal v-else-if="step === 1" :welcome="$t('welcome')" width="760px" height="670px">
             <p>{{ $t("user_add_admin_account") }}</p>
-            <form
-                class="modal"
-                autocomplete="false"
-                method="post"
-                action="/setup"
-                v-on:submit.prevent="account()"
-            >
+            <form class="modal" autocomplete="false" method="post" action="/setup" v-on:submit.prevent="account()">
                 <div v-if="errors.length > 0" class="errors">
                     <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
                 </div>
                 <input type="submit" class="hidden-submit" value="submit" />
-                <text-field
-                    :name="$t('name')"
-                    :description="$t('name_description')"
-                    v-model="name"
-                    :required="true"
-                    :autofocus="true"
-                />
-                <text-field
-                    :name="$t('username')"
-                    :description="$t('username_description')"
-                    v-model="username"
-                    :required="true"
-                />
-                <password-field
-                    :name="$t('password')"
-                    :description="$t('password_description')"
-                    v-model="password"
-                />
-                <password-field
-                    :name="$t('password_confirm')"
-                    :description="$t('password_confirm_description')"
-                    v-model="challenge"
-                />
+                <text-field :name="$t('name')" :description="$t('name_description')" v-model="name" :required="true" :autofocus="true" />
+                <text-field :name="$t('username')" :description="$t('username_description')" v-model="username" :required="true" />
+                <password-field :name="$t('password')" :description="$t('password_description')" v-model="password" />
+                <password-field :name="$t('password_confirm')" :description="$t('password_confirm_description')" v-model="challenge" />
             </form>
             <div class="actions modal">
                 <div class="copyright">
                     HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
-                    <br />Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
+                    <br />
+                    Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
                 <div class="button" v-on:click="disable()">{{ $t("disable_login") }}</div>
                 <div class="button primary" v-on:click="account()">{{ $t("create_account") }}</div>
@@ -70,35 +46,19 @@
         </modal>
         <modal v-else-if="step === 2" :welcome="$t('welcome')" width="760px" height="670px">
             <p>{{ $t("instance_create_default") }}</p>
-            <form
-                class="modal"
-                autocomplete="false"
-                method="post"
-                action="/setup"
-                v-on:submit.prevent="setup()"
-            >
+            <form class="modal" autocomplete="false" method="post" action="/setup" v-on:submit.prevent="setup()">
                 <div v-if="errors.length > 0" class="errors">
                     <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
                 </div>
                 <input type="submit" class="hidden-submit" value="submit" />
-                <text-field
-                    :name="$t('instance_name')"
-                    :description="$t('instance_name_description')"
-                    v-model="instance"
-                    :required="true"
-                    :autofocus="true"
-                />
-                <port-field
-                    :name="$t('instance_port')"
-                    :description="$t('instance_port_description')"
-                    v-model="port"
-                    :required="true"
-                />
+                <text-field :name="$t('instance_name')" :description="$t('instance_name_description')" v-model="instance" :required="true" :autofocus="true" />
+                <port-field :name="$t('instance_port')" :description="$t('instance_port_description')" v-model="port" :required="true" />
             </form>
             <div class="actions modal">
                 <div class="copyright">
                     HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
-                    <br />Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
+                    <br />
+                    Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
                 <div class="button primary" v-on:click="setup()">{{ $t("create_instance") }}</div>
             </div>

@@ -19,11 +19,7 @@
 <template>
     <div :key="updated" id="dashboard" :class="backdrop ? 'backdrop' : ''">
         <context>
-            <div
-                v-if="show.locked"
-                v-on:click.stop="toggle('locked')"
-                class="icon desktop"
-            >lock</div>
+            <div v-if="show.locked" v-on:click.stop="toggle('locked')" class="icon desktop">lock</div>
             <div v-else v-on:click.stop="toggle('locked')" class="icon desktop">lock_open</div>
             <div v-on:click.stop="toggle('settings')" class="icon desktop">settings</div>
         </context>
@@ -40,16 +36,7 @@
                 :use-css-transforms="true"
                 v-on:layout-updated="save"
             >
-                <grid-item
-                    class="widget"
-                    v-for="(item, index) in items"
-                    :key="index"
-                    :x="item.x"
-                    :y="item.y"
-                    :w="item.w"
-                    :h="item.h"
-                    :i="item.i"
-                >
+                <grid-item class="widget" v-for="(item, index) in items" :key="index" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i">
                     <component :is="item.component" :item="item" :index="index" />
                 </grid-item>
             </grid-layout>

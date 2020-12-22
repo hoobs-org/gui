@@ -25,12 +25,7 @@
                 <div v-if="show.settings" class="form">
                     <div v-if="(product === 'box' || product === 'card') && mdns" class="row section">{{ $t("hostname") }}</div>
                     <div v-if="(product === 'box' || product === 'card') && mdns" class="row input-field">
-                        <text-field
-                            :description="$t('hostname_description')"
-                            :min="2"
-                            :max="300"
-                            v-model="hostname"
-                        />
+                        <text-field :description="$t('hostname_description')" :min="2" :max="300" v-model="hostname" />
                     </div>
                     <div v-if="(product === 'box' || product === 'card') && mdns" class="row title label">{{ $t("access_url") }}</div>
                     <div v-if="(product === 'box' || product === 'card') && mdns" class="row title url">{{ `http://${broadcast}.local` }}</div>
@@ -76,12 +71,7 @@
                     </div>
                     <div class="row section">{{ $t("monitor") }}</div>
                     <div class="row input-field">
-                        <integer-field
-                            :description="$t('update_interval_description')"
-                            :min="2"
-                            :max="300"
-                            v-model="interval"
-                        />
+                        <integer-field :description="$t('update_interval_description')" :min="2" :max="300" v-model="interval" />
                     </div>
                     <div v-if="user.permissions.reboot" class="row section" style="margin-bottom: 7px;">{{ $t("system") }}</div>
                     <div v-if="user.permissions.reboot" class="row">

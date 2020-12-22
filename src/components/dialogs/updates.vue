@@ -34,23 +34,12 @@
             </div>
             <div v-if="!loading && plugins.length > 0" class="row">
                 {{ $t("plugins") }}: {{ plugins.length }} {{ $t("plugin_updates") }}
-                <span
-                    class="value"
-                >{{ $t("available") }}</span>
+                <span class="value">{{ $t("available") }}</span>
             </div>
             <div v-if="!loading && !updated" class="row" style="margin-top: 7px;">
-                <a
-                    v-if="stack"
-                    class="button"
-                    href="https://github.com/hoobs-org/HOOBS"
-                    target="_blank"
-                >{{ $t("changelog") }}</a>
+                <a v-if="stack" class="button" href="https://github.com/hoobs-org/HOOBS" target="_blank">{{ $t("changelog") }}</a>
                 <div v-if="stack" v-on:click="upgrade()" class="button">{{ $t("update_now") }}</div>
-                <div
-                    v-if="plugins.length > 0"
-                    v-on:click="update()"
-                    class="button"
-                >{{ $t("update_plugins") }}</div>
+                <div v-if="plugins.length > 0" v-on:click="update()" class="button">{{ $t("update_plugins") }}</div>
             </div>
             <div v-if="!loading && updated" class="row updated">
                 <span class="icon">update</span>

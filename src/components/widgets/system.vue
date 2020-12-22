@@ -19,18 +19,13 @@
 <template>
     <div id="widget">
         <div class="status">
-            <div
-                v-if="instances.filter((item) => item.running).length === instances.length"
-                class="running"
-            >
+            <div v-if="instances.filter((item) => item.running).length === instances.length" class="running">
                 <div class="up all"></div>
                 <div class="title">{{ $t("instances_up") }}</div>
             </div>
             <div v-else-if="instances.filter((item) => item.running).length > 0" class="running">
                 <div class="up partial"></div>
-                <div
-                    class="title"
-                >{{ instances.filter((item) => item.running).length }} {{ $t("of") }} {{ instances.length }} {{ $t("instances_partial") }}</div>
+                <div class="title">{{ instances.filter((item) => item.running).length }} {{ $t("of") }} {{ instances.length }} {{ $t("instances_partial") }}</div>
             </div>
             <div v-else class="running">
                 <div class="up none"></div>
@@ -43,11 +38,7 @@
                     <td>{{ $t("version") }}</td>
                     <td v-if="!updated">
                         {{ version }}
-                        <a
-                            v-if="user.permissions.reboot"
-                            v-on:click.stop="update()"
-                            class="update"
-                        >{{ $t("update_avaliable") }}</a>
+                        <a v-if="user.permissions.reboot" v-on:click.stop="update()" class="update">{{ $t("update_avaliable") }}</a>
                     </td>
                     <td v-else>{{ version }}</td>
                 </tr>

@@ -21,9 +21,7 @@
         <context>
             <div v-on:click="refresh()" class="icon">refresh</div>
         </context>
-        <div class="measure" ref="measure">
-            abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
-        </div>
+        <div class="measure" ref="measure">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
         <div v-if="!loading" class="flow" ref="flow">
             <div class="container" ref="container" style="display: block;">
                 <div ref="terminal" class="shell"></div>

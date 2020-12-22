@@ -18,11 +18,7 @@
 
 <template>
     <h2 id="welcome" class="handle">
-        <svg
-            class="logo"
-            viewBox="0 0 80 80.92"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg class="logo" viewBox="0 0 80 80.92" xmlns="http://www.w3.org/2000/svg">
             <rect class="background" x="1.25" y="1.25" width="77" height="78" rx="16.3" />
             <path
                 class="foreground"

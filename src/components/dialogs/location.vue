@@ -19,39 +19,17 @@
 <template>
     <div id="location" class="form">
         <div class="row section">{{ $t("location") }}</div>
-        <form
-            class="row locations"
-            autocomplete="false"
-            method="post"
-            action="/login"
-            v-on:submit.prevent="search()"
-        >
+        <form class="row locations" autocomplete="false" method="post" action="/login" v-on:submit.prevent="search()">
             <input type="submit" class="hidden-submit" value="submit" />
             <div class="search">
-                <search-field
-                    id="query"
-                    ref="query"
-                    :name="$t('location_search')"
-                    :description="$t('location_description')"
-                    style="padding-right: 0;"
-                    v-model="query"
-                    :search="search"
-                    :autofocus="true"
-                />
+                <search-field id="query" ref="query" :name="$t('location_search')" :description="$t('location_description')" style="padding-right: 0;" v-model="query" :search="search" :autofocus="true" />
                 <div v-if="show.searching" class="loading">
                     <spinner />
                 </div>
                 <div v-else class="results">
-                    <div
-                        v-for="(location, index) in locations"
-                        :key="index"
-                        class="item"
-                        v-on:click="select(locations[index])"
-                    >
+                    <div v-for="(location, index) in locations" :key="index" class="item" v-on:click="select(locations[index])">
                         <span class="icon">my_location</span>
-                        <span
-                            class="title"
-                        >{{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text || location.country }}</span>
+                        <span class="title">{{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text || location.country }}</span>
                     </div>
                 </div>
             </div>

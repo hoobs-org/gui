@@ -29,14 +29,15 @@
                     </div>
                     <div class="row section">{{ $t("license") }}</div>
                     <div class="row">{{ $t("license_title") }}</div>
-                    <p>
-                        {{ $t("license_summary") }}
-                    </p>
+                    <p>{{ $t("license_summary") }}</p>
                     <div class="row">
                         <div>
-                            <a href="https://support.hoobs.org/docs/5e7649bee87d1e02b6c19d48" target="_blank">{{ $t("terms_conditions") }}</a><br>
-                            <a href="https://support.hoobs.org/docs/5e8f6c790ab68b0344e872d8" target="_blank">{{ $t("privacy_policy") }}</a><br>
-                            <a href="https://support.hoobs.org/docs/5e763ca9e87d1e02b6c19d2f" target="_blank">{{ $t("open_source") }}</a><br>
+                            <a href="https://support.hoobs.org/docs/5e7649bee87d1e02b6c19d48" target="_blank">{{ $t("terms_conditions") }}</a>
+                            <br />
+                            <a href="https://support.hoobs.org/docs/5e8f6c790ab68b0344e872d8" target="_blank">{{ $t("privacy_policy") }}</a>
+                            <br />
+                            <a href="https://support.hoobs.org/docs/5e763ca9e87d1e02b6c19d2f" target="_blank">{{ $t("open_source") }}</a>
+                            <br />
                         </div>
                     </div>
                 </div>
