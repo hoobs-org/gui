@@ -18,31 +18,147 @@
 
 <template>
     <div v-if="user.permissions.instances" id="instances">
-        <context />
+        <context>
+            <router-link v-if="id !== 'add'" to="/instances/add" class="button">
+                <div class="icon">add</div>
+                {{ $t("add") }}
+            </router-link>
+        </context>
         <div v-if="!loading" class="content">
-            <div v-for="(instance, index) in instances" :key="index" v-on:click="edit(instance.id)" class="card">
-                <div class="icon">layers</div>
-                <div class="details">
-                    <div class="name">{{ instance.display }}</div>
-                    <div class="pin">{{ instance.pin }}</div>
+            <div :class="id && id !== '' ? 'list open' : 'list'">
+                <router-link
+                    v-for="(instance, index) in instances"
+                    :key="index"
+                    :class="instance.id === id ? 'item open' : 'item'"
+                    :to="`/instances/${instance.id}`"
+                >{{ instance.display }}</router-link>
+            </div>
+            <form v-if="id === 'add'" class="screen form">
+                <div class="wrapper">
+                    <div class="row section">{{ $t("details") }}</div>
+                    <div class="row">
+                        <text-field
+                            :name="$t('name')"
+                            style="flex: 1; padding-right: 5px;"
+                            v-model="display"
+                        />
+                        <text-field
+                            :name="$t('instance_pin')"
+                            style="flex: 1; padding-right: 0; padding-left: 5px;"
+                            v-model="pin"
+                        />
+                    </div>
+                    <div class="row">
+                        <port-field
+                            :name="$t('instance_port')"
+                            style="flex: 1; padding-right: 5px;"
+                            v-model="port"
+                        />
+                        <div style="flex: 1; padding-left: 5px;"></div>
+                    </div>
+                    <div class="row section">{{ $t("import") }}</div>
+                    <div class="row">
+                        <input type="file" ref="file" v-on:change="upload()" accept=".instance" hidden />
+                        <div v-on:click="$refs.file.click();" class="button">{{ $t("upload_file") }}</div>
+                        <div v-if="file" class="filename">{{ filename }}</div>
+                    </div>
+                    <div class="row actions">
+                        <div v-if="!loading" v-on:click="save(true)" class="button primary">{{ $t("save") }}</div>
+                        <router-link to="/instances" class="button">{{ $t("cancel") }}</router-link>
+                    </div>
+                </div>
+            </form>
+            <form v-else-if="status" class="screen form">
+                <div class="wrapper">
+                    <div class="row section">{{ $t("pairing") }}</div>
+                    <div class="row">
+                        <p style="margin-top: 0;">
+                            {{ $t("pairing_description") }}
+                        </p>
+                    </div>
+                    <div class="row qrcode">
+                        <qrcode v-if="!loading" :value="status.setup_id" :options="{ width: 200, color: { dark: theme.widget.text.default, light: '#00000000' } }" />
+                    </div>
+                    <div class="row section">{{ $t("details") }}</div>
+                    <div class="row">
+                        <text-field
+                            :name="$t('name')"
+                            style="flex: 1; padding-right: 5px;"
+                            v-model="display"
+                        />
+                        <text-field
+                            :name="$t('instance_pin')"
+                            style="flex: 1; padding-right: 0; padding-left: 5px;"
+                            v-model="pin"
+                        />
+                    </div>
+                    <div class="row">
+                        <div v-on:click="generate()" class="button">{{ $t("instance_generate_new_id") }}</div>
+                    </div>
+                    <div class="row section">{{ $t("service") }}</div>
+                    <div class="row">
+                        <integer-field
+                            :name="$t('instance_autostart')"
+                            :description="$t('instance_autostart_description')"
+                            :min="-1"
+                            :max="300"
+                            v-model="autostart"
+                        />
+                    </div>
+                    <div class="row section">{{ $t("export") }}</div>
+                    <div class="row">
+                        <div v-on:click="backup()" class="button">{{ $t("export_instance") }}</div>
+                    </div>
+                    <div class="row section" style="margin-bottom: 10px;">{{ $t("instance_port_pool") }}</div>
+                    <p style="margin-top: 0;">
+                        {{ $t("instance_port_pool_description") }}
+                    </p>
+                    <div class="row">
+                        <port-field
+                            :name="$t('instance_port_pool_start')"
+                            style="flex: 1; padding-right: 5px;"
+                            v-model="start"
+                        />
+                        <port-field
+                            :name="$t('instance_port_pool_end')"
+                            style="flex: 1; padding-right: 0; padding-left: 5px;"
+                            v-model="end"
+                        />
+                    </div>
+                    <div class="row actions">
+                        <div v-if="!loading" v-on:click="save()" class="button primary">{{ $t("save") }}</div>
+                        <div v-on:click="remove()" class="button">{{ $t("remove") }}</div>
+                        <router-link to="/instances" class="button">{{ $t("cancel") }}</router-link>
+                    </div>
+                </div>
+            </form>
+            <div v-else class="initial desktop">
+                <div class="message">
+                    {{ $t("instance_select_add") }}
+                    <router-link to="/users/add">{{ $t("instance_add") }}</router-link>
                 </div>
             </div>
-            <div v-on:click="add()" class="card add">
-                <div class="icon">add</div>
-            </div>
         </div>
-        <instance v-if="show.instance" :id="id" :create="create" :close="cancel" />
+        <div v-else class="loading">
+            <spinner />
+        </div>
     </div>
 </template>
 
 <script>
-    import Instance from "@/components/dialogs/instance.vue";
+    import { Wait } from "@hoobs/sdk/lib/wait";
+    import Sanitize from "@hoobs/sdk/lib/sanitize";
+    import QRCode from "@chenfengyuan/vue-qrcode";
 
     export default {
         name: "instances",
 
+        props: {
+            id: String,
+        },
+
         components: {
-            "instance": Instance,
+            "qrcode": QRCode,
         },
 
         computed: {
@@ -54,52 +170,266 @@
         data() {
             return {
                 loading: true,
+                theme: null,
                 instances: [],
-                id: null,
-                create: false,
-                show: {
-                    instance: false,
-                },
+                subject: null,
+                status: null,
+                file: null,
+                filename: null,
+                display: "",
+                pin: "031-45-154",
+                username: "",
+                port: 51826,
+                autostart: 0,
+                start: null,
+                end: null,
             };
         },
 
-        async mounted() {
-            this.instances = await this.$hoobs.instances.list();
-            this.loading = false;
+        watch: {
+            id(value) {
+                this.load(value);
+            },
+        },
 
-            if (this.$route.query.id) {
-                if (this.instances.findIndex((item) => item.id === decodeURIComponent(this.$route.query.id)) >= 0) {
-                    this.edit(decodeURIComponent(this.$route.query.id));
-                } else {
-                    this.$router.push({ path: "/instances" });
-                }
-            }
+        created() {
+            this.$store.subscribe((mutation) => {
+                if (mutation.type === "THEME:SET") this.load(this.id);
+            });
+        },
+
+        async mounted() {
+            this.load(this.id);
         },
 
         methods: {
-            edit(id) {
-                this.id = id;
-                this.create = false;
-                this.show.instance = true;
-            },
-
-            add() {
-                this.id = null;
-                this.create = true;
-                this.show.instance = true;
-            },
-
-            async cancel() {
+            async load(id) {
                 this.loading = true;
-
-                if (this.$route.query.id) {
-                    this.$router.push({ path: "/instances" });
-                }
-
+                this.theme = await this.$hoobs.theme.get(this.$store.state.theme);
                 this.instances = await this.$hoobs.instances.list();
 
+                this.subject = null;
+                this.status = null;
+                this.file = null;
+                this.filename = null;
+                this.display = "";
+                this.pin = "031-45-154";
+                this.username = "";
+                this.port = 51826;
+                this.autostart = 0;
+                this.start = null;
+                this.end = null;
+
+                if (id && id !== "add" && id !== "api" && id !== "") {
+                    this.subject = await this.$hoobs.instance(this.id);
+
+                    if (this.subject) {
+                        this.status = await this.subject.status();
+                        this.display = this.subject.display;
+                        this.pin = this.subject.pin;
+                        this.username = this.subject.username;
+                        this.autostart = parseInt(this.subject.autostart, 10) || 0;
+
+                        if (this.subject.ports) {
+                            this.start = this.subject.ports.start;
+                            this.end = this.subject.ports.end;
+                        }
+                    }
+                } else {
+                    this.generate();
+                    this.port = this.port || 50826;
+
+                    const instances = await this.$hoobs.instances.list();
+
+                    while (instances.findIndex((item) => parseInt(`${item.port}`, 10) === this.port) >= 0) this.port += 1000;
+                }
+
                 this.loading = false;
-                this.show.instance = false;
+            },
+
+            async save(create) {
+                let valid = true;
+
+                const instances = await this.$hoobs.instances.list();
+
+                const reserved = [
+                    "new",
+                    "add",
+                    "api",
+                ];
+
+                if (create) {
+                    if (valid && (!this.display || this.display === "")) {
+                        this.$alert(this.$t("instance_name_required"));
+                        valid = false;
+                    }
+
+                    if (valid && reserved.indexOf(Sanitize(this.display)) >= 0) {
+                        this.$alert(this.$t("instance_name_reserved"));
+                        valid = false;
+                    }
+
+                    if (valid && instances.findIndex((item) => item.id === Sanitize(this.display)) >= 0) {
+                        this.$alert(this.$t("instance_name_taken"));
+                        valid = false;
+                    }
+
+                    if (valid && !this.port) {
+                        this.$alert(this.$t("instance_port_required"));
+                        valid = false;
+                    }
+
+                    if (valid && instances.findIndex((item) => item.port === parseInt(this.port, 10)) >= 0) {
+                        this.$alert(this.$t("instance_port_taken"));
+                        valid = false;
+                    }
+
+                    if (valid && this.pin && this.pin !== "" && !this.validate(this.pin)) {
+                        this.$alert(this.$t("instance_pin_invalid"));
+                        valid = false;
+                    }
+
+                    if (valid) {
+                        this.loading = true;
+
+                        if (this.file) {
+                            await this.$hoobs.instances.import(this.file, this.display, this.port, this.pin, this.username);
+                        } else {
+                            await this.$hoobs.instances.add(this.display, this.port, this.pin, this.username);
+                        }
+
+                        setTimeout(async () => {
+                            await Wait();
+
+                            this.instances = await this.$hoobs.instances.list();
+                            this.$router.push({ path: `/instances/${this.instances.find((item) => item.id === Sanitize(this.display)).id}` });
+                        }, 500);
+                    }
+                } else if (this.subject) {
+                    if (valid && (!this.display || this.display === "")) {
+                        this.$alert(this.$t("instance_name_required"));
+                        valid = false;
+                    }
+
+                    if (valid && this.pin && this.pin !== "" && !this.validate(this.pin)) {
+                        this.$alert(this.$t("instance_pin_invalid"));
+                        valid = false;
+                    }
+
+                    if (valid && (!this.username || this.username === "")) {
+                        this.$alert(this.$t("instance_username_invalid"));
+                        valid = false;
+                    }
+
+                    if (valid && (this.autostart < -1 || this.autostart > 300)) {
+                        this.$alert(this.$t("instance_autostart_invalid"));
+                        valid = false;
+                    }
+
+                    if (valid && (this.start || this.end)) {
+                        if (valid && (!this.start || !this.end)) {
+                            this.$alert(this.$t("instance_port_pool_required"));
+                            valid = false;
+                        }
+
+                        if (valid && this.end < this.start) {
+                            this.$alert(this.$t("instance_port_pool_invalid"));
+                            valid = false;
+                        }
+
+                        if (valid) {
+                            for (let i = this.start; i <= this.end; i += 1) {
+                                if (valid && instances.findIndex((item) => item.port === i) >= 0) {
+                                    this.$alert(this.$t("instance_port_pool_collision"));
+                                    valid = false;
+                                }
+                            }
+
+                            valid = false;
+                        }
+                    }
+
+                    if (valid) {
+                        this.loading = true;
+
+                        await this.subject.update(this.display, this.autostart, this.pin, this.username);
+
+                        if (this.start && this.end) {
+                            await this.subject.ports(this.start, this.end);
+                        }
+
+                        setTimeout(async () => {
+                            await Wait();
+
+                            this.load(this.id);
+                        }, 500);
+                    }
+                }
+            },
+
+            validate(pin) {
+                const parts = pin.split("-");
+
+                if (parts.length !== 3) return false;
+
+                for (let i = 0; i < parts.length; i += 1) {
+                    if (Number.isNaN(parseInt(parts[i], 10))) return false;
+                }
+
+                return true;
+            },
+
+            generate() {
+                let value = "";
+
+                for (let i = 0; i < 6; i += 1) {
+                    if (value !== "") value += ":";
+
+                    const hex = `00${Math.floor(Math.random() * 255).toString(16).toUpperCase()}`;
+
+                    value += hex.substring(hex.length - 2, hex.length);
+                }
+
+                this.username = value;
+            },
+
+            remove() {
+                if (this.subject) {
+                    this.$confirm(this.$t("remove"), this.$t("remove_instance_warning"), async () => {
+                        this.loading = true;
+
+                        await this.subject.remove();
+
+                        setTimeout(async () => {
+                            await Wait();
+
+                            this.$router.push({ path: "/instances" });
+                        }, 500);
+                    });
+                }
+            },
+
+            async backup() {
+                if (this.subject) {
+                    this.loading = true;
+
+                    const url = await this.subject.export();
+                    const link = document.createElement("a");
+
+                    this.loading = false;
+
+                    link.href = url;
+                    link.id = `instance_${(new Date()).getTime()}`;
+                    link.download = `${this.subject.id}.instance`;
+                    link.click();
+                }
+            },
+
+            async upload() {
+                if (this.$refs.file && this.$refs.file.files[0]) {
+                    [this.file] = this.$refs.file.files;
+                    this.filename = this.file.name;
+                }
             },
         },
     };
@@ -107,54 +437,148 @@
 
 <style lang="scss" scoped>
     #instances {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
         .content {
+            flex: 1;
             display: flex;
-            flex-wrap: wrap;
-            padding: 0 10px 10px 20px;
+            overflow: hidden;
 
-            .card {
-                width: 220px;
-                height: 87px;
-                padding: 20px;
-                margin: 0 10px 10px 0;
-                box-sizing: border-box;
-                display: flex;
-                flex-direction: row;
-                align-content: center;
-                align-items: center;
+            .list {
+                min-width: 200px;
+                margin: 0 0 20px 10px;
+                padding: 10px 20px ;
+                color: var(--widget-text);
                 background: var(--widget-background);
-                border: 1px var(--application-border) solid;
-                user-select: none;
-                cursor: pointer;
+                backdrop-filter: var(--transparency);
+                -ms-overflow-style: none;
+                overflow: auto;
 
-                &:hover {
-                    border: 1px var(--application-highlight) solid;
+                &::-webkit-scrollbar {
+                    display: none;
                 }
 
-                .icon {
-                    font-size: 47px;
-                    margin: 0 14px 0 0;
-                }
+                .item {
+                    color: var(--application-text) !important;
+                    border-top: 1px var(--application-border) solid;
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                    padding: 10px 0;
+                    width: 100%;
 
-                &.add {
-                    justify-content: space-around;
+                    &:first-child {
+                        border-top: 0 none;
+                    }
+
+                    &.open {
+                        color: var(--application-highlight) !important;
+
+                        &:hover {
+                            color: var(--application-highlight) !important;
+                        }
+                    }
+
+                    &:hover {
+                        color: var(--application-highlight-text) !important;
+                        text-decoration: none !important;
+                    }
 
                     .icon {
-                        font-size: 42px;
-                        color: var(--application-border);
+                        font-size: 18px;
+                        margin: 0 0 0 4px;
                     }
                 }
+            }
 
-                .details {
+            .screen {
+                flex: 1;
+                display: flex;
+                margin: 0 20px 20px 20px;
+                color: var(--widget-text);
+                background: var(--widget-background);
+                backdrop-filter: var(--transparency);
+                -ms-overflow-style: none;
+                overflow: auto;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
+                .wrapper {
+                    max-width: 800px;
+                }
+
+                .field {
                     flex: 1;
+                    padding-right: 0;
+                    padding-left: 5px;
 
-                    .name {
-                        color: var(--application-highlight);
-                        font-size: 17px;
+                    &:first-child {
+                        padding-right: 5px;
+                    }
+                }
+            }
+
+            .qrcode {
+                margin: -10px;
+            }
+
+            .initial {
+                flex: 1;
+                display: flex;
+                flex-direction: row;
+                padding: 0 20px 20% 20px;
+                align-items: center;
+                overflow: hidden;
+
+                .message {
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #instances {
+            .content {
+                .list {
+                    padding: 0 20px 10px 20px;
+                    margin: 0;
+                    background: transparent;
+                    backdrop-filter: unset;
+                    min-width: unset;
+                    flex: 1;
+                }
+
+                .open {
+                    display: none;
+                }
+
+                .screen {
+                    max-width: unset;
+                    background: transparent;
+                    backdrop-filter: unset;
+                    padding: 0 20px 10px 20px;
+                    margin: 0;
+
+                    .row {
+                        flex-direction: column;
                     }
 
-                    .pin {
-                        font-size: 14px;
+                    .actions {
+                        flex-direction: row;
+                    }
+
+                    .field {
+                        padding-right: 0;
+                        padding-left: 0;
+
+                        &:first-child {
+                            padding-right: 0;
+                        }
                     }
                 }
             }

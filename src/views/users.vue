@@ -18,31 +18,117 @@
 
 <template>
     <div v-if="user.permissions.users" id="users">
-        <context />
+        <context>
+            <router-link v-if="id !== 'add'" to="/users/add" class="button">
+                <div class="icon">add</div>
+                {{ $t("add") }}
+            </router-link>
+        </context>
         <div v-if="!loading" class="content">
-            <div v-for="(user, index) in users" :key="index" v-on:click="edit(user.id)" class="card">
-                <div class="icon">account_circle</div>
-                <div class="details">
-                    <div class="name">{{ user.name }}</div>
-                    <div class="username">{{ user.username }}</div>
+            <div :class="parseInt(id, 10) > 0 || id === 'add' ? 'list open' : 'list'">
+                <router-link
+                    v-for="(user, index) in users"
+                    :key="index"
+                    :class="user.id === parseInt(id, 10) ? 'item open' : 'item'"
+                    :to="`/users/${user.id}`"
+                >{{ user.name }}</router-link>
+            </div>
+            <form v-if="parseInt(id, 10) > 0" class="screen form">
+                <div class="wrapper">
+                    <div class="row section">{{ $t("profile") }}</div>
+                    <div class="row">
+                        <text-field
+                            :name="$t('name')"
+                            v-model="name"
+                        />
+                        <text-field
+                            :name="$t('username')"
+                            v-model="username"
+                        />
+                    </div>
+                    <div class="row section">{{ $t("security") }}</div>
+                    <div class="row">
+                        <password-field
+                            :name="$t('password')"
+                            v-model="password"
+                        />
+                        <password-field
+                            :name="$t('password_confirm')"
+                            v-model="challenge"
+                        />
+                    </div>
+                    <div v-if="subject.id > 1" class="row section">{{ $t("permissions") }}</div>
+                    <div v-if="subject.id > 1" class="grid">
+                        <div v-for="(permission, index) in permissions" :key="index">
+                            <checkbox :id="`permission_${index}`" v-model="permission.selected">
+                                <label :for="`permission_${index}`">{{ $t(permission.label) }}</label>
+                            </checkbox>
+                        </div>
+                    </div>
+                    <div class="row actions">
+                        <div v-if="!loading" v-on:click="save()" class="button primary">{{ $t("save") }}</div>
+                        <div v-if="subject.id > 1" v-on:click="remove()" class="button">{{ $t("remove") }}</div>
+                        <router-link to="/users" class="button">{{ $t("cancel") }}</router-link>
+                    </div>
+                </div>
+            </form>
+            <form v-else-if="id === 'add'" class="screen form">
+                <div class="wrapper">
+                    <div class="row section">{{ $t("profile") }}</div>
+                    <div class="row">
+                        <text-field
+                            :name="$t('name')"
+                            v-model="name"
+                        />
+                        <text-field
+                            :name="$t('username')"
+                            v-model="username"
+                        />
+                    </div>
+                    <div class="row section">{{ $t("security") }}</div>
+                    <div class="row">
+                        <password-field
+                            :name="$t('password')"
+                            v-model="password"
+                        />
+                        <password-field
+                            :name="$t('password_confirm')"
+                            v-model="challenge"
+                        />
+                    </div>
+                    <div class="row section">{{ $t("permissions") }}</div>
+                    <div class="grid">
+                        <div v-for="(permission, index) in permissions" :key="index">
+                            <checkbox :id="`permission_${index}`" v-model="permission.selected">
+                                <label :for="`permission_${index}`">{{ $t(permission.label) }}</label>
+                            </checkbox>
+                        </div>
+                    </div>
+                    <div class="row actions">
+                        <div v-if="!loading" v-on:click="save(true)" class="button primary">{{ $t("save") }}</div>
+                        <router-link to="/users" class="button">{{ $t("cancel") }}</router-link>
+                    </div>
+                </div>
+            </form>
+            <div v-else class="initial desktop">
+                <div class="message">
+                    {{ $t("user_select_add") }}
+                    <router-link to="/users/add">{{ $t("user_add") }}</router-link>
                 </div>
             </div>
-            <div v-on:click="add()" class="card add">
-                <div class="icon">add</div>
-            </div>
         </div>
-        <user v-if="show.user" :id="id" :create="create" :close="cancel" />
+        <div v-else class="loading">
+            <spinner />
+        </div>
     </div>
 </template>
 
 <script>
-    import User from "@/components/dialogs/user.vue";
-
     export default {
         name: "users",
 
-        components: {
-            "user": User,
+        props: {
+            id: String,
         },
 
         computed: {
@@ -55,39 +141,203 @@
             return {
                 loading: true,
                 users: [],
-                id: null,
-                create: false,
-                show: {
-                    user: false,
-                },
+                subject: {},
+                name: "",
+                username: "",
+                password: "",
+                challenge: "",
+                permissions: [{
+                    name: "accessories",
+                    label: "permission_accessories",
+                    selected: false,
+                }, {
+                    name: "controller",
+                    label: "permission_controller",
+                    selected: false,
+                }, {
+                    name: "instances",
+                    label: "permission_instances",
+                    selected: false,
+                }, {
+                    name: "terminal",
+                    label: "permission_terminal",
+                    selected: false,
+                }, {
+                    name: "plugins",
+                    label: "permission_plugins",
+                    selected: false,
+                }, {
+                    name: "users",
+                    label: "permission_users",
+                    selected: false,
+                }, {
+                    name: "reboot",
+                    label: "permission_reboot",
+                    selected: false,
+                }, {
+                    name: "config",
+                    label: "permission_config",
+                    selected: false,
+                }],
             };
         },
 
+        watch: {
+            id(value) {
+                this.load(value);
+            },
+        },
+
         async mounted() {
-            this.users = await this.$hoobs.users.list();
-            this.loading = false;
+            this.load(this.id);
         },
 
         methods: {
-            edit(id) {
-                this.id = id;
-                this.create = false;
-                this.show.user = true;
-            },
-
-            add() {
-                this.id = null;
-                this.create = true;
-                this.show.user = true;
-            },
-
-            async cancel() {
+            async load(id) {
                 this.loading = true;
-
                 this.users = await this.$hoobs.users.list();
+                this.subject = {};
+                this.name = "";
+                this.username = "";
+
+                for (let i = 0; i < this.permissions.length; i += 1) {
+                    this.permissions[i].selected = false;
+                }
+
+                if (parseInt(id, 10) > 0) {
+                    this.subject = await this.$hoobs.user(parseInt(id, 10));
+                    this.name = this.subject.name;
+                    this.username = this.subject.username;
+
+                    for (let i = 0; i < this.permissions.length; i += 1) {
+                        this.permissions[i].selected = this.subject.permissions[this.permissions[i].name];
+                    }
+                }
 
                 this.loading = false;
-                this.show.user = false;
+            },
+
+            async save(create) {
+                let valid = true;
+
+                if (create) {
+                    if (valid && this.username.length < 3) {
+                        this.$alert(this.$t("username_required"));
+                        valid = false;
+                    }
+
+                    if (valid && this.password.length < 5) {
+                        this.$alert(this.$t("password_weak"));
+                        valid = false;
+                    }
+
+                    if (valid && this.password !== this.challenge) {
+                        this.$alert(this.$t("password_mismatch"));
+                        valid = false;
+                    }
+
+                    if (valid) {
+                        this.loading = true;
+
+                        const permissions = {
+                            accessories: false,
+                            controller: false,
+                            instances: false,
+                            terminal: false,
+                            plugins: false,
+                            users: false,
+                            reboot: false,
+                            config: false,
+                        };
+
+                        for (let i = 0; i < this.permissions.length; i += 1) {
+                            permissions[this.permissions[i].name] = this.permissions[i].selected;
+                        }
+
+                        await this.$hoobs.users.add(this.username, this.password, !this.name || this.name === "" ? this.username : this.name, permissions);
+                    }
+                } else if (this.subject.id === 1) {
+                    if (valid && this.username.length < 3) {
+                        this.$alert(this.$t("username_required"));
+                        valid = false;
+                    }
+
+                    if (valid && this.password && this.password !== "" && this.password.length < 5) {
+                        this.$alert(this.$t("password_weak"));
+                        valid = false;
+                    }
+
+                    if (valid && this.password && this.password !== "" && this.password !== this.challenge) {
+                        this.$alert(this.$t("password_mismatch"));
+                        valid = false;
+                    }
+
+                    if (valid) {
+                        this.loading = true;
+
+                        await this.subject.update(this.username, !this.password || this.password === "" ? null : this.password, !this.name || this.name === "" ? this.username : this.name);
+                    }
+                } else {
+                    if (valid && this.username.length < 3) {
+                        this.$alert(this.$t("username_required"));
+                        valid = false;
+                    }
+
+                    if (valid && this.password && this.password !== "" && this.password.length < 5) {
+                        this.$alert(this.$t("password_weak"));
+                        valid = false;
+                    }
+
+                    if (valid && this.password && this.password !== "" && this.password !== this.challenge) {
+                        this.$alert(this.$t("password_mismatch"));
+                        valid = false;
+                    }
+
+                    if (valid) {
+                        this.loading = true;
+
+                        const permissions = {
+                            accessories: false,
+                            controller: false,
+                            instances: false,
+                            terminal: false,
+                            plugins: false,
+                            users: false,
+                            reboot: false,
+                            config: false,
+                        };
+
+                        for (let i = 0; i < this.permissions.length; i += 1) {
+                            permissions[this.permissions[i].name] = this.permissions[i].selected;
+                        }
+
+                        await this.subject.update(this.username, !this.password || this.password === "" ? null : this.password, !this.name || this.name === "" ? this.username : this.name, permissions);
+                    }
+                }
+
+                if (valid) {
+                    if (this.user.id === this.subject.id) {
+                        await this.$hoobs.auth.logout();
+
+                        this.$router.push({ path: "/login", query: { url: "/users" } });
+                    } else {
+                        this.users = await this.$hoobs.users.list();
+                        this.$router.push({ path: `/users/${this.users.find((item) => item.username === this.username).id}` });
+                    }
+                }
+            },
+
+            async remove() {
+                if (this.subject.id > 1) {
+                    this.$confirm(this.$t("remove"), this.$t("remove_user_warning"), async () => {
+                        await this.subject.remove();
+
+                        this.users = await this.$hoobs.users.list();
+                        this.$router.push({ path: "/users" });
+                    });
+                } else {
+                    this.$router.push({ path: "/users" });
+                }
             },
         },
     };
@@ -95,54 +345,149 @@
 
 <style lang="scss" scoped>
     #users {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
         .content {
+            flex: 1;
             display: flex;
-            flex-wrap: wrap;
-            padding: 0 10px 10px 20px;
+            overflow: hidden;
 
-            .card {
-                width: 220px;
-                height: 87px;
-                padding: 20px;
-                margin: 0 10px 10px 0;
-                box-sizing: border-box;
-                display: flex;
-                flex-direction: row;
-                align-content: center;
-                align-items: center;
+            .list {
+                min-width: 200px;
+                margin: 0 0 20px 10px;
+                padding: 10px 20px ;
+                color: var(--widget-text);
                 background: var(--widget-background);
-                border: 1px var(--application-border) solid;
-                user-select: none;
-                cursor: pointer;
+                backdrop-filter: var(--transparency);
+                -ms-overflow-style: none;
+                overflow: auto;
 
-                &:hover {
-                    border: 1px var(--application-highlight) solid;
+                &::-webkit-scrollbar {
+                    display: none;
                 }
 
-                .icon {
-                    font-size: 47px;
-                    margin: 0 14px 0 0;
-                }
+                .item {
+                    color: var(--application-text) !important;
+                    border-top: 1px var(--application-border) solid;
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                    padding: 10px 0;
+                    width: 100%;
 
-                &.add {
-                    justify-content: space-around;
+                    &:first-child {
+                        border-top: 0 none;
+                    }
+
+                    &.open {
+                        color: var(--application-highlight) !important;
+
+                        &:hover {
+                            color: var(--application-highlight) !important;
+                        }
+                    }
+
+                    &:hover {
+                        color: var(--application-highlight-text) !important;
+                        text-decoration: none !important;
+                    }
 
                     .icon {
-                        font-size: 42px;
-                        color: var(--application-border);
+                        font-size: 18px;
+                        margin: 0 0 0 4px;
                     }
                 }
+            }
 
-                .details {
+            .screen {
+                flex: 1;
+                display: flex;
+                margin: 0 20px 20px 20px;
+                color: var(--widget-text);
+                background: var(--widget-background);
+                backdrop-filter: var(--transparency);
+                -ms-overflow-style: none;
+                overflow: auto;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
+                .wrapper {
+                    max-width: 800px;
+                }
+
+                .field {
                     flex: 1;
+                    padding-right: 0;
+                    padding-left: 5px;
 
-                    .name {
-                        color: var(--application-highlight);
-                        font-size: 17px;
+                    &:first-child {
+                        padding-right: 5px;
+                    }
+                }
+            }
+
+            .initial {
+                flex: 1;
+                display: flex;
+                flex-direction: row;
+                padding: 0 20px 20% 20px;
+                align-items: center;
+                overflow: hidden;
+
+                .message {
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #users {
+            .content {
+                .list {
+                    padding: 0 20px 10px 20px;
+                    margin: 0;
+                    background: transparent;
+                    backdrop-filter: unset;
+                    min-width: unset;
+                    flex: 1;
+                }
+
+                .open {
+                    display: none;
+                }
+
+                .screen {
+                    max-width: unset;
+                    background: transparent;
+                    backdrop-filter: unset;
+                    padding: 0 20px 10px 20px;
+                    margin: 0;
+
+                    .row {
+                        flex-direction: column;
                     }
 
-                    .username {
-                        font-size: 14px;
+                    .grid {
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                    .actions {
+                        flex-direction: row;
+                    }
+
+                    .field {
+                        padding-right: 0;
+                        padding-left: 0;
+
+                        &:first-child {
+                            padding-right: 0;
+                        }
                     }
                 }
             }

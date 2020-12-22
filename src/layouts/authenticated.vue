@@ -24,16 +24,16 @@
         </div>
         <notifications v-if="show.notifications" v-model="show.notifications" />
         <alert
-            v-if="show.alert"
+            v-if="alerting"
             :message="alert.message"
-            :close="() => { show.alert = false; }"
+            :close="() => { alerting = false; }"
         />
         <confirm
-            v-if="show.confirm"
+            v-if="confirming"
             :callback="confirm.callback"
             :message="confirm.message"
             :action="confirm.action"
-            :close="() => { show.confirm = false; }"
+            :close="() => { confirming = false; }"
         />
     </div>
 </template>
@@ -74,9 +74,11 @@
                     about: false,
                     alert: false,
                 },
+                alerting: false,
                 alert: {
                     message: "",
                 },
+                confirming: false,
                 confirm: {
                     callback: () => { /* null */ },
                     message: "",
@@ -89,7 +91,7 @@
             this.$store.subscribe((mutation, state) => {
                 if (mutation.type === "ALERT:SHOW") {
                     this.alert.message = state.alert.message;
-                    this.show.alert = true;
+                    this.alerting = true;
                 }
 
                 if (mutation.type === "CONFIRM:SHOW") {
@@ -97,7 +99,7 @@
                     this.confirm.action = state.confirm.action;
                     this.confirm.callback = state.confirm.callback;
 
-                    this.show.confirm = true;
+                    this.confirming = true;
                 }
             });
 
@@ -142,6 +144,54 @@
             overflow: hidden;
         }
 
+        .form {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+
+            .spacer {
+                margin: 7px 0 14px 0;
+            }
+
+            .grid {
+                display: grid;
+                grid-template-columns: auto auto;
+            }
+
+            .row {
+                display: flex;
+                flex-direction: row;
+
+                &.section {
+                    padding: 20px 0 10px 0;
+                    border-bottom: var(--application-border) 1px solid;
+                    color: var(--application-highlight);
+                    margin: 0 0 20px 0;
+                    user-select: none;
+
+                    &:first-child {
+                        padding: 0 0 10px 0;
+                    }
+                }
+
+                &.actions {
+                    padding: 20px 0 10px 0;
+                    margin: 0 0 20px 0;
+                    user-select: none;
+
+                    &:first-child {
+                        padding: 0 0 10px 0;
+                    }
+                }
+
+                &.title {
+                    padding: 0 0 7px 0;
+                    user-select: none;
+                }
+            }
+        }
+
         .tray {
             position: absolute;
             top: 2px;
@@ -184,6 +234,10 @@
     @media (min-width: 300px) and (max-width: 815px) {
         #authenticated {
             flex-direction: column;
+
+            .form {
+                padding: 0;
+            }
         }
     }
 </style>

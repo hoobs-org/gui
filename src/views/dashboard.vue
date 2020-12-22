@@ -199,4 +199,15 @@
             }
         }
     }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #dashboard {
+            .content {
+                .widget {
+                    color: var(--application-text);
+                    background: var(--application-background);
+                }
+            }
+        }
+    }
 </style>

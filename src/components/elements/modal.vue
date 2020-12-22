@@ -90,6 +90,7 @@
             color: var(--modal-text);
             background: var(--modal-background);
             backdrop-filter: var(--transparency);
+            border-top: 7px var(--modal-highlight) solid;
             box-shadow: var(--elevation);
             -ms-overflow-style: none;
             scrollbar-width: none;

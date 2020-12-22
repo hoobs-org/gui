@@ -20,28 +20,28 @@
     <span id="message">
         <span v-if="value.level === 'debug'" class="content">
             <span class="dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
-            <span v-if="value.instance !== 'api'" v-on:click="navagation('instances', value.instance)" class="instance" :style="instance(value.display)">{{ value.display }}</span>
-            <span v-on:click="navagation('plugins', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
+            <span v-if="value.instance !== 'api'" v-on:click="navigation('instances', value.instance)" class="instance" :style="instance(value.display)">{{ value.display }}</span>
+            <span v-on:click="navigation('plugins', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
             <span>{{ value.message }}</span>
         </span>
         <span v-else-if="value.level === 'error'" class="content">
             <span class="dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
-            <span v-if="value.instance !== 'api'" v-on:click="navagation('instances', value.instance)" class="instance" :style="instance(value.display)">{{ value.display }}</span>
-            <span v-on:click="navagation('plugins', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
+            <span v-if="value.instance !== 'api'" v-on:click="navigation('instances', value.instance)" class="instance" :style="instance(value.display)">{{ value.display }}</span>
+            <span v-on:click="navigation('plugins', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
             <span class="error">{{ $t("error") }}</span>
             <span class="error-text">{{ value.message }}</span>
         </span>
         <span v-else-if="value.level === 'warn'" class="content">
             <span class="dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
-            <span v-if="value.instance !== 'api'" v-on:click="navagation('instances', value.instance)" class="instance" :style="instance(value.display)">{{ value.display }}</span>
-            <span v-on:click="navagation('plugins', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
+            <span v-if="value.instance !== 'api'" v-on:click="navigation('instances', value.instance)" class="instance" :style="instance(value.display)">{{ value.display }}</span>
+            <span v-on:click="navigation('plugins', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
             <span class="warning">{{ $t("warning") }}</span>
             <span class="warning-text">{{ value.message }}</span>
         </span>
         <span v-else-if="value.level === 'info'" class="content">
             <span class="dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
-            <span v-if="value.instance !== 'api'" v-on:click="navagation('instances', value.instance)" class="instance" :style="instance(value.display)">{{ value.display }}</span>
-            <span v-on:click="navagation('plugins', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
+            <span v-if="value.instance !== 'api'" v-on:click="navigation('instances', value.instance)" class="instance" :style="instance(value.display)">{{ value.display }}</span>
+            <span v-on:click="navigation('plugins', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
             <span class="text">{{ value.message }}</span>
         </span>
     </span>
@@ -94,8 +94,8 @@
                 return `color: ${this.analogic("000000".substring(0, 6 - hex.length) + hex, true)};`;
             },
 
-            navagation(route, value) {
-                this.$router.push({ path: `/${route}?id=${encodeURIComponent(value)}` });
+            navigation(route, value) {
+                this.$router.push({ path: `/${route}/${encodeURIComponent(value)}` });
             },
         },
     };

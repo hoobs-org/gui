@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="field">
+    <div id="field" class="field">
         <span class="title">{{ name }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
         <select

@@ -46,6 +46,10 @@
             },
         },
 
+        mounted() {
+            console.log(this.message);
+        },
+
         methods: {
             execute() {
                 this.close();

@@ -21,26 +21,76 @@
         <div id="personalize">
             <div v-if="!loading" class="content">
                 <div class="form">
-                    <div v-if="auth" class="row title desktop">
-                        {{ $t("login_image") }}
-                    </div>
+                    <div v-if="auth" class="row title desktop">{{ $t("login_image") }}</div>
                     <div v-if="auth" class="row desktop">
-                        <div class="backdrop" :style="`background-color: ${working.application.background}; background-image: ${backdrop};`">
-                            <div class="display dark" :style="`background: ${working.application.background}; box-shadow: ${working.elevation.default};`">
-                                <div v-if="!updating" class="title" :style="`color: ${working.application.highlight};`">{{ $t("title") }}</div>
-                                <div v-if="!updating" class="accent" :style="`color: ${working.application.accent};`">{{ $t("accent") }}</div>
-                                <div v-if="!updating" class="text" :style="`color: ${working.application.text.default};`">{{ $t("text") }}</div>
+                        <div
+                            class="backdrop"
+                            :style="`background-color: ${working.application.background}; background-image: ${backdrop};`"
+                        >
+                            <div
+                                class="display dark"
+                                :style="`background: ${working.application.background}; box-shadow: ${working.elevation.default};`"
+                            >
+                                <div
+                                    v-if="!updating"
+                                    class="title"
+                                    :style="`color: ${working.application.highlight};`"
+                                >{{ $t("title") }}</div>
+                                <div
+                                    v-if="!updating"
+                                    class="accent"
+                                    :style="`color: ${working.application.accent};`"
+                                >{{ $t("accent") }}</div>
+                                <div
+                                    v-if="!updating"
+                                    class="text"
+                                    :style="`color: ${working.application.text.default};`"
+                                >{{ $t("text") }}</div>
                             </div>
-                            <div class="display light" :style="`background: ${working.modal.background}; backdrop-filter: ${working.transparency}; box-shadow: ${working.elevation.default};`">
-                                <div v-if="!updating" class="title" :style="`color: ${working.modal.highlight};`">{{ $t("title") }}</div>
-                                <div v-if="!updating" class="text" :style="`color: ${working.modal.text.default};`">{{ $t("text") }}</div>
+                            <div
+                                class="display light"
+                                :style="`background: ${working.modal.background}; backdrop-filter: ${working.transparency}; box-shadow: ${working.elevation.default}; border-top: 4px ${working.modal.highlight} solid;`"
+                            >
+                                <div
+                                    v-if="!updating"
+                                    class="title"
+                                    :style="`color: ${working.modal.highlight};`"
+                                >{{ $t("title") }}</div>
+                                <div
+                                    v-if="!updating"
+                                    class="text"
+                                    :style="`color: ${working.modal.text.default};`"
+                                >{{ $t("text") }}</div>
                             </div>
-                            <div class="display navigation" :style="`background: ${working.navigation.background};`">
-                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.highlight};`">dashboard</span>
-                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.text.default};`">highlight</span>
-                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.text.default};`">subject</span>
-                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.text.default};`">layers</span>
-                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.text.default};`">extension</span>
+                            <div
+                                class="display navigation"
+                                :style="`background: ${working.navigation.background};`"
+                            >
+                                <span
+                                    v-if="!updating"
+                                    class="icon"
+                                    :style="`color: ${working.navigation.highlight};`"
+                                >dashboard</span>
+                                <span
+                                    v-if="!updating"
+                                    class="icon"
+                                    :style="`color: ${working.navigation.text.default};`"
+                                >highlight</span>
+                                <span
+                                    v-if="!updating"
+                                    class="icon"
+                                    :style="`color: ${working.navigation.text.default};`"
+                                >subject</span>
+                                <span
+                                    v-if="!updating"
+                                    class="icon"
+                                    :style="`color: ${working.navigation.text.default};`"
+                                >layers</span>
+                                <span
+                                    v-if="!updating"
+                                    class="icon"
+                                    :style="`color: ${working.navigation.text.default};`"
+                                >extension</span>
                             </div>
                         </div>
                         <div class="backdrops">
@@ -59,15 +109,19 @@
                             <div class="row">
                                 <backdrop image="red.jpg" v-model="backdrop" />
                                 <div v-on:click="$refs.backdrop.click();" class="add">
-                                    <input type="file" ref="backdrop" v-on:change="upload()" accept="image/*" hidden />
+                                    <input
+                                        type="file"
+                                        ref="backdrop"
+                                        v-on:change="upload()"
+                                        accept="image/*"
+                                        hidden
+                                    />
                                     <span class="icon">add</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row title" style="margin-top: 20px;">
-                        {{ $t("mode") }}
-                    </div>
+                    <div class="row title" style="margin-top: 20px;">{{ $t("mode") }}</div>
                     <div class="row">
                         <radio id="light" name="mode" v-model="mode" value="light">
                             <label for="light">{{ $t("light") }}</label>
@@ -78,16 +132,19 @@
                             <label for="dark">{{ $t("dark") }}</label>
                         </radio>
                     </div>
-                    <div class="row title" style="margin-top: 20px;">
-                        {{ $t("color") }}
-                    </div>
+                    <div class="row title" style="margin-top: 20px;">{{ $t("color") }}</div>
                     <div v-if="auth" class="row auto desktop">
                         <checkbox id="auto" v-model="auto">
                             <label for="auto">{{ $t("automatically_set") }}</label>
                         </checkbox>
                     </div>
                     <div v-on:click="() => { auto = false; }" class="row colors">
-                        <color v-for="(color, index) in colors" :key="index" v-model="highlight" :color="color" />
+                        <color
+                            v-for="(color, index) in colors"
+                            :key="index"
+                            v-model="highlight"
+                            :color="color"
+                        />
                     </div>
                 </div>
             </div>

@@ -53,13 +53,14 @@ const routes: Array<RouteConfig> = [
         component: () => import(/* webpackChunkName: "log" */ "../views/log.vue"),
     },
     {
-        path: "/users",
-        name: "users",
+        path: "/users/:id?",
+        name: "user",
         meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "users" */ "../views/users.vue"),
+        props: true,
     },
     {
-        path: "/instances",
+        path: "/instances/:id?",
         name: "instances",
         meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "instances" */ "../views/instances.vue"),

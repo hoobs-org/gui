@@ -161,6 +161,14 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        .loading {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 0 0 20% 0;
+        }
+
         .view {
             flex: 1;
         }
