@@ -29,6 +29,7 @@
             autocapitalize="none"
             data-lpignore="true"
             :value="value"
+            :placeholder="placeholder"
             v-on:input="update"
             v-on:change="change"
             v-bind:required="required"
@@ -47,6 +48,10 @@
             },
             name: String,
             description: String,
+            placeholder: {
+                type: String,
+                default: "",
+            },
             value: String,
             required: {
                 type: Boolean,
@@ -123,6 +128,10 @@
 
             &:focus {
                 outline: 0 none;
+            }
+
+            &::placeholder {
+                opacity: 0.5;
             }
         }
     }

@@ -37,6 +37,7 @@
         "colorthief": "^2.3.2",
         "compare-versions": "^3.6.0",
         "core-js": "^3.8.1",
+        "identicon.js": "^2.3.3",
         "socket.io-client": "^3.0.4",
         "vue": "^2.6.12",
         "vue-chartkick": "^0.6.1",

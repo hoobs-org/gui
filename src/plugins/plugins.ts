@@ -27,13 +27,19 @@ export default function plugins(): { [key: string]: any } {
                 async featured() {
                     const response = (await Request.get("https://plugins.hoobs.org/api/feed/featured")).data || {};
 
-                    return response.results;
+                    return response.results || [];
                 },
 
                 async popular() {
                     const response = (await Request.get("https://plugins.hoobs.org/api/feed/popular")).data || {};
 
-                    return response.results;
+                    return response.results || [];
+                },
+
+                async search(query: string, skip: number, limit: number) {
+                    const response = (await Request.get(`https://plugins.hoobs.org/api/search/${encodeURIComponent(query)}?skip=${skip}&limit=${limit}`)).data || {};
+
+                    return response.results || [];
                 },
             }),
         },

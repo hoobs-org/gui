@@ -30,6 +30,7 @@
             :max="max !== undefined ? max : ''"
             :step="step"
             :value="value"
+            :placeholder="placeholder"
             v-on:input="update"
             v-on:change="change"
             v-bind:required="required"
@@ -48,6 +49,10 @@
             },
             name: String,
             description: String,
+            placeholder: {
+                type: String,
+                default: "",
+            },
             value: Number,
             min: Number,
             max: Number,
@@ -130,6 +135,10 @@
 
             &:focus {
                 outline: 0 none;
+            }
+
+            &::placeholder {
+                opacity: 0.5;
             }
         }
     }

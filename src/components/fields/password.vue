@@ -20,7 +20,7 @@
     <div id="field" class="field">
         <span class="title">{{ name }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <input :id="id || uuid" :ref="uuid" type="password" autocomplete="false" data-lpignore="true" :value="value" v-on:input="update" v-on:change="change" v-bind:required="required" />
+        <input :id="id || uuid" :ref="uuid" type="password" autocomplete="false" data-lpignore="true" :value="value" :placeholder="placeholder" v-on:input="update" v-on:change="change" v-bind:required="required" />
     </div>
 </template>
 
@@ -35,6 +35,10 @@
             },
             name: String,
             description: String,
+            placeholder: {
+                type: String,
+                default: "",
+            },
             value: String,
             required: {
                 type: Boolean,
@@ -111,6 +115,10 @@
 
             &:focus {
                 outline: 0 none;
+            }
+
+            &::placeholder {
+                opacity: 0.5;
             }
         }
     }

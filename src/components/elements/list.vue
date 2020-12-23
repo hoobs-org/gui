@@ -18,7 +18,12 @@
 
 <template>
     <div id="list" :class="selected && selected !== '' ? 'list open' : 'list'">
-        <router-link v-for="(item, index) in values" :key="index" :class="`${item[value]}` === selected ? 'item open' : 'item'" :to="`/${controller}/${item[value]}`">{{ item[display] }}</router-link>
+        <router-link
+            v-for="(item, index) in values"
+            :key="index"
+            :class="`${item[value]}` === (selected || initial) ? 'item open' : 'item'"
+            :to="`/${controller}${item[value] && item[value] !== '' ? `/${item[value]}` : ''}`"
+        >{{ item[display] }}</router-link>
     </div>
 </template>
 
@@ -32,6 +37,7 @@
             display: String,
             selected: String,
             controller: String,
+            initial: String,
         },
     };
 </script>
@@ -81,8 +87,23 @@
 
     @media (min-width: 300px) and (max-width: 815px) {
         #list {
+            flex: 1;
+            min-width: unset;
+            background: unset;
+            backdrop-filter: unset;
+
             &.open {
                 display: none;
+            }
+
+            .item {
+                &.open {
+                    color: var(--application-text) !important;
+
+                    &:hover {
+                        color: var(--application-highlight-text) !important;
+                    }
+                }
             }
         }
     }

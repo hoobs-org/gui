@@ -213,6 +213,7 @@
                     "new",
                     "add",
                     "api",
+                    "library",
                 ];
 
                 if (create) {

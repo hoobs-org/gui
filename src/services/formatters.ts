@@ -63,3 +63,38 @@ export function timespan(value: number): { [key: string]: number } {
 
     return results;
 }
+
+export function decamel(value: string): string {
+    if (!value || value === "") return "";
+
+    let result = value;
+
+    result = result.replace("homebridge-", "");
+    result = result.replace(/[-_]/gi, " ");
+    result = result.replace(/([A-Z])/g, (item) => ` ${item.charAt(0).toLowerCase()}${item.slice(1)}`);
+    result = result.trim();
+    result = result.replace(/\w\S*/g, (item) => `${item.charAt(0).toUpperCase()}${item.slice(1)}`);
+    result = result.trim();
+
+    return result;
+}
+
+export function brands(value: string): string {
+    if (!value || value === "") return "";
+
+    let results = value;
+
+    results = results.replace(/myq/gi, "myQ");
+    results = results.replace(/smartthings/gi, "SmartThings");
+    results = results.replace(/smart things/gi, "SmartThings");
+    results = results.replace(/smartapp/gi, "SmartApp");
+    results = results.replace(/smart app/gi, "SmartApp");
+    results = results.replace(/webos/gi, "WebOS");
+    results = results.replace(/web os/gi, "WebOS");
+    results = results.replace(/web o s/gi, "WebOS");
+    results = results.replace(/macos/gi, "macOS");
+    results = results.replace(/mac os/gi, "macOS");
+    results = results.replace(/mac o s/gi, "macOS");
+
+    return results;
+}
