@@ -25,6 +25,7 @@ import Charts from "chart.js";
 import root from "./app.vue";
 
 import socket from "./plugins/socket";
+import plugins from "./plugins/plugins";
 import themes from "./plugins/themes";
 import drag from "./plugins/drag";
 
@@ -88,6 +89,7 @@ Vue.config.productionTip = false;
 
 Vue.mixin(io.mixin());
 Vue.mixin(hoobs.mixin());
+Vue.mixin(plugins());
 Vue.mixin(themes.mixin(hoobs, store));
 
 Vue.mixin({

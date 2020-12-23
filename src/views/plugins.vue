@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="user.permissions.plugins" id="plugins">
+    <div v-if="user.permissions.plugins && !loading" id="plugins">
         <context />
     </div>
 </template>
@@ -30,6 +30,21 @@
             user() {
                 return this.$store.state.user;
             },
+        },
+
+        data() {
+            return {
+                loading: true,
+                featured: [],
+                popular: [],
+            };
+        },
+
+        async mounted() {
+            this.featured = await this.$plugins.featured();
+            this.popular = await this.$plugins.popular();
+
+            this.loading = false;
         },
     };
 </script>
