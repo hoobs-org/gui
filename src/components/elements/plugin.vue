@@ -26,6 +26,9 @@
             <span class="description">{{ subject.description }}</span>
             <rating :value="subject.rating" :size="15" />
         </div>
+        <div v-if="subject.certified" class="certified">
+            <span>{{ $t("certified") }}</span>
+        </div>
     </router-link>
 </template>
 
@@ -68,12 +71,28 @@
     #plugin {
         width: 160px;
         height: 245px;
+        position: relative;
         margin: 0 0 10px 10px;
         display: flex;
         flex-direction: column;
         color: var(--widget-text) !important;
         text-decoration: none !important;
         background: var(--widget-background);
+
+        .certified {
+            top: 10px;
+            left: 0;
+            max-width: 100px;
+            position: absolute;
+            font-size: 14px;
+            padding: 3px 7px;
+            color: var(--application-highlight-text);
+            background: var(--application-highlight);
+            border-radius: 0 3px 3px 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
 
         .identity {
             width: 160px;
