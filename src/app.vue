@@ -144,6 +144,13 @@
             }
         }
 
+        .back {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            color: var(--application-text) !important;
+        }
+
         .icon {
             font-family: "Material Icons";
             font-weight: normal;

@@ -1,0 +1,151 @@
+<!-------------------------------------------------------------------------------------------------
+ | hoobs-gui                                                                                      |
+ | Copyright (C) 2020 HOOBS                                                                       |
+ |                                                                                                |
+ | This program is free software: you can redistribute it and/or modify                           |
+ | it under the terms of the GNU General Public License as published by                           |
+ | the Free Software Foundation, either version 3 of the License, or                              |
+ | (at your option) any later version.                                                            |
+ |                                                                                                |
+ | This program is distributed in the hope that it will be useful,                                |
+ | but WITHOUT ANY WARRANTY; without even the implied warranty of                                 |
+ | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                  |
+ | GNU General Public License for more details.                                                   |
+ |                                                                                                |
+ | You should have received a copy of the GNU General Public License                              |
+ | along with this program.  If not, see <http://www.gnu.org/licenses/>.                          |
+ -------------------------------------------------------------------------------------------------->
+
+<template>
+    <router-link id="plugin" :to="`/plugin/${subject.name}`" :title="title()">
+        <div class="identity">
+            <img :src="icon()" />
+        </div>
+        <div class="details">
+            <span class="title">{{ title() }}</span>
+            <span class="description">{{ subject.description }}</span>
+            <rating :value="subject.rating" :size="15" />
+        </div>
+    </router-link>
+</template>
+
+<script>
+    import crypto from "crypto";
+    import identicon from "identicon.js";
+    import { decamel, brands } from "../../services/formatters";
+    import Rating from "./rating.vue";
+
+    export default {
+        name: "plugin",
+
+        props: {
+            subject: Object,
+        },
+
+        components: {
+            "rating": Rating,
+        },
+
+        methods: {
+            title() {
+                return brands(decamel(this.subject.name));
+            },
+
+            icon() {
+                if (this.subject.icon) {
+                    return this.subject.icon;
+                }
+
+                const hash = crypto.createHash("md5").update(this.subject.name).digest("hex");
+
+                return `data:image/png;base64,${new identicon(hash, { background: [0, 0, 0, 0], size: 128 }).toString()}`; // eslint-disable-line new-cap
+            },
+        },
+    };
+</script>
+
+<style lang="scss" scoped>
+    #plugin {
+        width: 160px;
+        height: 245px;
+        margin: 0 0 10px 10px;
+        display: flex;
+        flex-direction: column;
+        color: var(--widget-text) !important;
+        text-decoration: none !important;
+        background: var(--widget-background);
+
+        .identity {
+            width: 160px;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+
+            img {
+                width: 128px;
+                height: 128px;
+                border-radius: 3px;
+            }
+        }
+
+        .details {
+            flex: 1;
+            padding: 0 17px 17px 17px;
+            display: flex;
+            flex-direction: column;
+            color: var(--widget-text);
+            text-decoration: none;
+            overflow: hidden;
+
+            .title {
+                font-size: 16px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .description {
+                flex: 1;
+                font-size: 12px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        &:hover {
+            box-shadow: var(--elevation-button);
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #plugin {
+            width: 47%;
+            height: 245px;
+            margin: 0 0 10px 10px;
+
+            .identity {
+                width: 100%;
+                height: 160px;
+
+                img {
+                    width: 128px;
+                    height: 128px;
+                }
+            }
+
+            .details {
+                padding: 0 17px 17px 17px;
+
+                .title {
+                    font-size: 16px;
+                }
+
+                .description {
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+</style>

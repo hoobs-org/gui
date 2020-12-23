@@ -22,87 +22,55 @@
         <div class="content">
             <list value="id" display="display" :values="instances" :selected="id" initial="library" controller="plugins" />
             <div v-if="id && id !== 'library'" class="screen">
+                <div class="nav mobile">
+                    <router-link to="/plugins" class="back"><span class="icon">keyboard_arrow_left</span> {{ $t("back") }}</router-link>
+                </div>
                 <div class="section">{{ $t("installed_plugins") }}</div>
-                <div v-if="installed.length > 0" class="cards">
-                    <router-link v-for="(plugin, index) in installed" :key="index" :to="`/plugin/${plugin.identifier}`" :title="title(plugin)" class="card">
-                        <div class="plugin-icon">
-                            <img :src="icon(plugin)" />
-                        </div>
-                        <div class="plugin-details">
-                            <span class="plugin-title">{{ title(plugin) }}</span>
-                            <span class="plugin-description">{{ plugin.description }}</span>
-                            <rating :value="plugin.rating" :size="15" />
-                        </div>
-                    </router-link>
-                </div>
-                <div v-else-if="!loading" class="empty">
-                    <div class="message">
-                        {{ $t("no_plugins_installed") }}
+                <div class="wrapper">
+                    <div v-if="installed.length > 0" class="cards">
+                        <plugin v-for="(plugin, index) in installed" :key="index" :subject="plugin" />
                     </div>
-                </div>
-                <div v-else class="loading">
-                    <spinner />
-                </div>
-                <div class="actions mobile">
-                    <router-link to="/plugins" class="button">{{ $t("cancel") }}</router-link>
+                    <div v-else-if="!loading" class="empty">
+                        <div class="message">
+                            {{ $t("no_plugins_installed") }}
+                        </div>
+                    </div>
+                    <div v-else class="loading">
+                        <spinner />
+                    </div>
                 </div>
             </div>
             <div v-else :class="!id ? 'screen desktop' : 'screen'">
-                <form class="plugin-search" autocomplete="false" method="post" action="/login" v-on:submit.prevent="search()">
+                <div class="nav mobile">
+                    <router-link to="/plugins" class="back"><span class="icon">keyboard_arrow_left</span> {{ $t("back") }}</router-link>
+                </div>
+                <form class="input" autocomplete="false" method="post" action="/login" v-on:submit.prevent="search()">
                     <input type="submit" class="hidden-submit" value="submit" />
                     <div class="search">
                         <search-field id="query" ref="query" style="padding-right: 0;" :placeholder="$t('search')" v-model="query" :search="search" />
                     </div>
                 </form>
-                <div v-if="featured.length > 0" class="section">{{ $t("featured_plugins") }}</div>
-                <div v-if="featured.length > 0" class="cards">
-                    <router-link v-for="(plugin, index) in featured" :key="index" :to="`/plugin/${plugin.name}`" :title="title(plugin)" class="card">
-                        <div class="plugin-icon">
-                            <img :src="icon(plugin)" />
-                        </div>
-                        <div class="plugin-details">
-                            <span class="plugin-title">{{ title(plugin) }}</span>
-                            <span class="plugin-description">{{ plugin.description }}</span>
-                            <rating :value="plugin.rating" :size="15" />
-                        </div>
-                    </router-link>
-                </div>
-                <div v-if="popular.length > 0" class="section">{{ $t("popular_plugins") }}</div>
-                <div v-if="popular.length > 0" class="cards">
-                    <router-link v-for="(plugin, index) in popular" :key="index" :to="`/plugin/${plugin.name}`" :title="title(plugin)" class="card">
-                        <div class="plugin-icon">
-                            <img :src="icon(plugin)" />
-                        </div>
-                        <div class="plugin-details">
-                            <span class="plugin-title">{{ title(plugin) }}</span>
-                            <span class="plugin-description">{{ plugin.description }}</span>
-                            <rating :value="plugin.rating" :size="15" />
-                        </div>
-                    </router-link>
-                </div>
-                <div v-if="results.length > 0" class="section">{{ $t("search_results") }}</div>
-                <div v-if="results.length > 0" class="cards">
-                    <router-link v-for="(plugin, index) in results" :key="index" :to="`/plugin/${plugin.name}`" :title="title(plugin)" class="card">
-                        <div class="plugin-icon">
-                            <img :src="icon(plugin)" />
-                        </div>
-                        <div class="plugin-details">
-                            <span class="plugin-title">{{ title(plugin) }}</span>
-                            <span class="plugin-description">{{ plugin.description }}</span>
-                            <rating :value="plugin.rating" :size="15" />
-                        </div>
-                    </router-link>
-                </div>
-                <div v-if="!loading && featured.length === 0 && popular.length === 0 && results.length === 0" class="empty">
-                    <div class="message">
-                        {{ $t("no_results") }}
+                <div class="wrapper">
+                    <div v-if="featured.length > 0" class="section">{{ $t("featured_plugins") }}</div>
+                    <div v-if="featured.length > 0" class="cards">
+                        <plugin v-for="(plugin, index) in featured" :key="index" :subject="plugin" />
                     </div>
-                </div>
-                <div v-if="loading" class="loading">
-                    <spinner />
-                </div>
-                <div class="actions mobile">
-                    <router-link to="/plugins" class="button">{{ $t("cancel") }}</router-link>
+                    <div v-if="popular.length > 0" class="section">{{ $t("popular_plugins") }}</div>
+                    <div v-if="popular.length > 0" class="cards">
+                        <plugin v-for="(plugin, index) in popular" :key="index" :subject="plugin" />
+                    </div>
+                    <div v-if="results.length > 0" class="section">{{ $t("search_results") }}</div>
+                    <div v-if="results.length > 0" class="cards">
+                        <plugin v-for="(plugin, index) in results" :key="index" :subject="plugin" />
+                    </div>
+                    <div v-if="!loading && featured.length === 0 && popular.length === 0 && results.length === 0" class="empty">
+                        <div class="message">
+                            {{ $t("no_results") }}
+                        </div>
+                    </div>
+                    <div v-if="loading" class="loading">
+                        <spinner />
+                    </div>
                 </div>
             </div>
         </div>
@@ -110,11 +78,8 @@
 </template>
 
 <script>
-    import crypto from "crypto";
-    import identicon from "identicon.js";
     import List from "../components/elements/list.vue";
-    import Rating from "../components/elements/rating.vue";
-    import { decamel, brands } from "../services/formatters";
+    import Plugin from "../components/elements/plugin.vue";
 
     export default {
         name: "plugins",
@@ -125,7 +90,7 @@
 
         components: {
             "list": List,
-            "rating": Rating,
+            "plugin": Plugin,
         },
 
         computed: {
@@ -190,7 +155,7 @@
                     this.featured = [];
                     this.popular = [];
 
-                    this.results = await this.$plugins.search(this.query, parseInt(this.$route.query.skip, 10) || 0, parseInt(this.$route.query.limit, 10) || 20);
+                    this.results = await this.$plugins.search(this.query, parseInt(this.$route.query.skip, 10) || 0, parseInt(this.$route.query.limit, 10) || 40);
                 }
 
                 this.loading = false;
@@ -205,24 +170,10 @@
                         query: {
                             search: encodeURIComponent(this.query),
                             skip: parseInt(this.$route.query.skip, 10) || 0,
-                            limit: parseInt(this.$route.query.limit, 10) || 20,
+                            limit: parseInt(this.$route.query.limit, 10) || 40,
                         },
                     });
                 }
-            },
-
-            title(plugin) {
-                return brands(decamel(plugin.name));
-            },
-
-            icon(plugin) {
-                if (plugin.icon) {
-                    return plugin.icon;
-                }
-
-                const hash = crypto.createHash("md5").update(plugin.name).digest("hex");
-
-                return `data:image/png;base64,${new identicon(hash, { background: [0, 0, 0, 0], size: 128 }).toString()}`; // eslint-disable-line new-cap
             },
         },
     };
@@ -230,6 +181,7 @@
 
 <style lang="scss">
     #plugins {
+        position: relative;
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -250,9 +202,10 @@
                     display: none;
                 }
 
-                .plugin-search {
+                .input {
                     background: var(--widget-background);
                     border: 1px var(--widget-background) solid;
+                    margin: 0 0 20px 7px;
                     padding: 3px;
 
                     .field {
@@ -273,6 +226,18 @@
                     }
                 }
 
+                .wrapper {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    -ms-overflow-style: none;
+                    overflow: auto;
+
+                    &::-webkit-scrollbar {
+                        display: none;
+                    }
+                }
+
                 .section {
                     display: flex;
                     flex-direction: row;
@@ -287,74 +252,21 @@
                     }
                 }
 
-                .actions {
+                .cards {
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+
+                .nav {
                     display: flex;
                     flex-direction: row;
                     padding: 20px 0 10px 0;
-                    margin: 0 0 20px 0;
+                    border-bottom: var(--application-border) 1px solid;
+                    margin: 0 0 0 7px;
                     user-select: none;
 
                     &:first-child {
                         padding: 0 0 10px 0;
-                    }
-                }
-            }
-
-            .cards {
-                display: flex;
-                flex-wrap: wrap;
-
-                .card {
-                    width: 160px;
-                    height: 245px;
-                    margin: 0 0 10px 10px;
-                    display: flex;
-                    flex-direction: column;
-                    color: var(--widget-text) !important;
-                    text-decoration: none !important;
-                    background: var(--widget-background);
-
-                    .plugin-icon {
-                        width: 160px;
-                        height: 160px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-around;
-
-                        img {
-                            width: 128px;
-                            height: 128px;
-                            border-radius: 3px;
-                        }
-                    }
-
-                    .plugin-details {
-                        flex: 1;
-                        padding: 0 17px 17px 17px;
-                        display: flex;
-                        flex-direction: column;
-                        color: var(--widget-text);
-                        text-decoration: none;
-                        overflow: hidden;
-
-                        .plugin-title {
-                            font-size: 16px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                        }
-
-                        .plugin-description {
-                            flex: 1;
-                            font-size: 12px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                        }
-                    }
-
-                    &:hover {
-                        box-shadow: var(--elevation-button);
                     }
                 }
             }

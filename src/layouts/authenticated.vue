@@ -167,7 +167,7 @@
 
                 &.actions {
                     padding: 20px 0 10px 0;
-                    margin: 0 0 20px 0;
+                    margin: 0;
                     user-select: none;
 
                     &:first-child {
