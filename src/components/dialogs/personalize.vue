@@ -84,7 +84,7 @@
                         </checkbox>
                     </div>
                     <div v-on:click="() => { auto = false; }" class="row colors">
-                        <color v-for="(color, index) in colors" :key="index" v-model="highlight" :color="color" />
+                        <color v-for="(color, index) in colors" :key="`color:${index}`" v-model="highlight" :color="color" />
                     </div>
                 </div>
             </div>

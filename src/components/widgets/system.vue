@@ -54,7 +54,7 @@
                     <td>{{ $t("memory") }}</td>
                     <td>{{ memory.load || 0 }}%</td>
                 </tr>
-                <tr v-for="(value, index) in Object.keys(system)" :key="index">
+                <tr v-for="(value, index) in Object.keys(system)" :key="`value:${index}`">
                     <td>{{ $t(`system_${value}`) }}</td>
                     <td>{{ system[value] }}</td>
                 </tr>

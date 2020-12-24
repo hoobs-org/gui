@@ -362,3 +362,101 @@
         }
     }
 </style>
+
+<style lang="scss">
+    .markdown {
+        font-size: 14px;
+
+        table {
+            width: 100%;
+            overflow: auto;
+
+            th {
+                font-weight: 600;
+                padding: 6px 13px;
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px var(--application-border) solid;
+            }
+
+            td {
+                padding: 6px 13px;
+                border-bottom: 1px var(--application-border) solid;
+            }
+
+            tr {
+                background-color: var(--modal-background);
+
+                &:nth-child(2n) {
+                    background-color: var(--modal-background);
+                }
+            }
+        }
+
+        img {
+            max-width: 100%;
+            box-sizing: content-box;
+
+            &[align="right"] {
+                padding-left: 20px;
+            }
+
+            &[align="left"] {
+                padding-right: 20px;
+            }
+        }
+
+        code {
+            padding: 0.2em 0.4em;
+            margin: 0;
+            font-size: 85%;
+            background-color: var(--modal-background);
+            border-radius: 3px;
+        }
+
+        pre {
+            word-wrap: normal;
+        }
+
+        pre > code {
+            padding: 0;
+            margin: 0;
+            font-size: 100%;
+            word-break: normal;
+            white-space: pre;
+            background: transparent;
+            border: 0;
+        }
+
+        pre {
+            padding: 16px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: var(--modal-background);
+            border-radius: 3px;
+
+            code {
+                display: inline;
+                max-width: auto;
+                padding: 0;
+                margin: 0;
+                overflow: visible;
+                line-height: inherit;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                background-color: transparent;
+                border: 0;
+            }
+        }
+
+        .highlight {
+            margin-bottom: 16px;
+
+            pre {
+                margin-bottom: 0;
+                word-break: normal;
+            }
+        }
+    }
+</style>

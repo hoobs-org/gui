@@ -36,7 +36,7 @@
                 :use-css-transforms="true"
                 v-on:layout-updated="save"
             >
-                <grid-item class="widget" v-for="(item, index) in items" :key="index" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i">
+                <grid-item class="widget" v-for="(item, index) in items" :key="`widget:${index}`" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i">
                     <component :is="item.component" :item="item" :index="index" />
                 </grid-item>
             </grid-layout>

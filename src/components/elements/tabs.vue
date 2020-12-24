@@ -17,66 +17,79 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="widget">
-        <div ref="messages" class="messages">
-            <message v-for="(message, index) in messages" :key="`message:${index}`" :value="message" />
+    <div id="tabs">
+        <div v-for="(item, index) in values" :key="`tab:${index}`" v-on:click="change(item.value)" :class="item.value === value ? 'tab open' : 'tab'">
+            <div class="title">{{ item.display }}</div>
         </div>
+        <div class="fill"></div>
     </div>
 </template>
 
 <script>
-    import Message from "@/components/elements/message.vue";
-
     export default {
-        name: "log",
+        name: "spinner",
 
-        components: {
-            "message": Message,
+        props: {
+            value: String,
+            values: Array,
         },
 
-        computed: {
-            messages() {
-                return this.$store.state.log.filter((item) => item.level !== "debug");
+        methods: {
+            change(value) {
+                this.$emit("update", value);
+                this.$emit("change", value);
             },
-        },
-
-        mounted() {
-            setTimeout(() => {
-                this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
-            }, 10);
-        },
-
-        updated() {
-            this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
         },
     };
 </script>
 
 <style lang="scss" scoped>
-    #widget {
-        width: 100%;
-        height: 100%;
+    #tabs {
+        margin: 20px 20px 0 20px;
+        height: 44px;
         display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-        overflow: hidden;
-        padding: 20px;
-        cursor: default;
+        flex-direction: row;
+        overflow-x: auto;
+        -ms-overflow-style: none;
 
-        .dim {
-            opacity: 0.3;
+        &::-webkit-scrollbar {
+            display: none;
         }
 
-        .messages {
-            flex: 1;
-            font-size: 10px;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            overflow: auto;
+        .tab {
+            padding: 0 20px;
+            display: flex;
+            flex-direction: row;
+            align-content: center;
+            align-items: center;
+            border-bottom: 1px var(--application-border) solid;
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+            opacity: 0.7;
 
-            &::-webkit-scrollbar {
-                display: none;
+            &.open {
+                opacity: 1;
+                border-top: 2px var(--application-highlight) solid;
+                border-right: 1px var(--application-border) solid;
+                border-bottom: 0 none;
+                border-left: 1px var(--application-border) solid;
             }
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+
+        .fill {
+            flex: 1;
+            border-bottom: 1px var(--application-border) solid;
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #tabs {
+            margin: 20px 0 0 0;
         }
     }
 </style>

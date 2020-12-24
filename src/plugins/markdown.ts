@@ -16,50 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-export function units(value: number): { [key: string]: number | string } {
-    const results = {
-        value: Math.round((value / 1073741824) * 100) / 100,
-        units: "GB",
-    };
+import Showdown, { Converter } from "showdown";
+import Highlight from "showdown-highlight";
+import Emoji from "./emoji";
 
-    while (results.value < 1 && results.units !== "KB") {
-        results.value = Math.round((results.value * 1024) * 100) / 100;
+class Markdown {
+    declare converter: Converter;
 
-        switch (results.units) {
-            case "GB":
-                results.units = "MB";
-                break;
+    constructor() {
+        Showdown.setFlavor("github");
 
-            case "MB":
-                results.units = "KB";
-                break;
-
-            default:
-                results.units = "GB";
-                break;
-        }
+        this.converter = new Showdown.Converter({
+            extensions: [
+                Emoji,
+                Highlight,
+            ],
+            tables: true,
+            simplifiedAutoLink: true,
+            excludeTrailingPunctuationFromURLs: true,
+        });
     }
 
-    return results;
+    mixin() {
+        return {
+            methods: {
+                $markdown: (value: string): string => this.converter.makeHtml((value || "").replace(/```[a-zA-Z ]*\n/gi, (match) => `${match.trim().toLowerCase()}\n`)),
+            },
+        };
+    }
 }
 
-export function timespan(value: number): { [key: string]: number } {
-    const results = {
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-    };
-
-    let timestamp = value;
-
-    results.days = Math.floor(timestamp / (1000 * 60 * 60 * 24));
-    timestamp -= results.days * (1000 * 60 * 60 * 24);
-    results.hours = Math.floor(timestamp / (1000 * 60 * 60));
-    timestamp -= results.hours * (1000 * 60 * 60);
-    results.minutes = Math.floor(timestamp / (1000 * 60));
-    timestamp -= results.minutes * (1000 * 60);
-    results.seconds = Math.floor(timestamp / (1000));
-
-    return results;
+export default function markdown(): Markdown {
+    return new Markdown();
 }

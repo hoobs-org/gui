@@ -20,9 +20,9 @@
     <div id="list" :class="selected && selected !== '' ? 'list open' : 'list'">
         <router-link
             v-for="(item, index) in values"
-            :key="index"
+            :key="`entry:${index}`"
             :class="`${item[value]}` === (selected || initial) ? 'item open' : 'item'"
-            :to="`/${controller}${item[value] && item[value] !== '' ? `/${item[value]}` : ''}`"
+            :to="navigate(controller, item[value], query)"
         >{{ item[display] }}</router-link>
     </div>
 </template>
@@ -38,6 +38,18 @@
             selected: String,
             controller: String,
             initial: String,
+            query: String,
+        },
+
+        methods: {
+            navigate(controller, action, query) {
+                let path = `/${controller}`;
+
+                if (action && action !== "") path = `${path}/${action}`;
+                if (query && query !== "") path = `${path}?${query}`;
+
+                return path;
+            },
         },
     };
 </script>
@@ -50,6 +62,7 @@
         color: var(--widget-text);
         background: var(--widget-background);
         backdrop-filter: var(--transparency);
+        user-select: none;
         -ms-overflow-style: none;
         overflow: auto;
 

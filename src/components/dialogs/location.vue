@@ -27,7 +27,7 @@
                     <spinner />
                 </div>
                 <div v-else class="results">
-                    <div v-for="(location, index) in locations" :key="index" class="item" v-on:click="select(locations[index])">
+                    <div v-for="(location, index) in locations" :key="`location:${index}`" class="item" v-on:click="select(locations[index])">
                         <span class="icon">my_location</span>
                         <span class="title">{{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text || location.country }}</span>
                     </div>

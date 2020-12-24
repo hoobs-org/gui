@@ -26,7 +26,7 @@
             <p>{{ $t("user_add_admin_account") }}</p>
             <form class="modal" autocomplete="false" method="post" action="/setup" v-on:submit.prevent="account()">
                 <div v-if="errors.length > 0" class="errors">
-                    <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
+                    <span v-for="(error, index) in errors" :key="`errors:${index}`">{{ error }}</span>
                 </div>
                 <input type="submit" class="hidden-submit" value="submit" />
                 <text-field :name="$t('name')" :description="$t('name_description')" v-model="name" :required="true" :autofocus="true" />
@@ -48,7 +48,7 @@
             <p>{{ $t("instance_create_default") }}</p>
             <form class="modal" autocomplete="false" method="post" action="/setup" v-on:submit.prevent="setup()">
                 <div v-if="errors.length > 0" class="errors">
-                    <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
+                    <span v-for="(error, index) in errors" :key="`error:${index}`">{{ error }}</span>
                 </div>
                 <input type="submit" class="hidden-submit" value="submit" />
                 <text-field :name="$t('instance_name')" :description="$t('instance_name_description')" v-model="instance" :required="true" :autofocus="true" />

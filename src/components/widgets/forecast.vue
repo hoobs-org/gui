@@ -20,7 +20,7 @@
     <div v-if="!loading && location.id" id="widget">
         <div class="location">{{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text }}</div>
         <div class="forecast">
-            <div v-for="(day, index) in forecast" :key="index" class="weather">
+            <div v-for="(day, index) in forecast" :key="`day:${index}`" class="weather">
                 <span class="title">{{ $t(weekday(new Date(day.date))) }}</span>
                 <div class="display" :class="`wi wi-day-${icon[day.icon].icon}`"></div>
                 <div class="temp">

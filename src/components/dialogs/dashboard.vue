@@ -29,7 +29,7 @@
                     </div>
                     <div class="row section">{{ $t("dashboard_items") }}</div>
                     <div class="grid">
-                        <div v-for="(item, index) in available" :key="index">
+                        <div v-for="(item, index) in available" :key="`item:${index}`">
                             <checkbox :id="`item_${index}`" v-model="item.selected">
                                 <label :for="`item_${index}`">{{ $t(item.label) }}</label>
                             </checkbox>

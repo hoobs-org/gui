@@ -20,7 +20,7 @@
     <div v-if="!loading" id="restore" class="form">
         <div v-if="files.length > 0" class="row section">{{ $t("restore") }}</div>
         <div v-if="files.length > 0" class="row title">{{ $t("available_backups") }}</div>
-        <div v-for="(file, index) in files" :key="index" class="row">
+        <div v-for="(file, index) in files" :key="`file:${index}`" class="row">
             <radio :id="`file_${index}`" name="filename" v-model="filename" :value="file.filename">
                 <label :for="`file_${index}`">{{ format(file.date) }}</label>
             </radio>

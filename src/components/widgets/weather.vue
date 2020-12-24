@@ -26,7 +26,7 @@
             <div class="temp">{{ Math.round(current.temp) }}°</div>
         </div>
         <div class="forecast">
-            <div v-for="(day, index) in forecast" :key="index" class="weather">
+            <div v-for="(day, index) in forecast" :key="`day:${index}`" class="weather">
                 <span class="title">{{ $t(weekday(new Date(day.date), true)) }}</span>
                 <div class="display" :class="`wi wi-day-${icon[day.icon].icon}`"></div>
                 <div class="temp">

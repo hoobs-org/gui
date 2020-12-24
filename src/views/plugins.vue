@@ -25,10 +25,10 @@
                 <div class="nav mobile">
                     <router-link to="/plugins" class="back"><span class="icon">keyboard_arrow_left</span> {{ $t("back") }}</router-link>
                 </div>
-                <div class="section">{{ $t("installed_plugins") }}</div>
+                <div class="section first">{{ $t("installed_plugins") }}</div>
                 <div class="wrapper">
                     <div v-if="installed.length > 0" class="cards">
-                        <plugin v-for="(plugin, index) in installed" :key="index" :subject="plugin" />
+                        <plugin v-for="(plugin, index) in installed" :key="`installed:${index}`" :subject="plugin" />
                     </div>
                     <div v-else-if="!loading" class="empty">
                         <div class="message">
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div v-else :class="!id ? 'screen desktop' : 'screen'">
-                <div class="nav mobile">
+                <div class="nav segmented mobile">
                     <router-link to="/plugins" class="back"><span class="icon">keyboard_arrow_left</span> {{ $t("back") }}</router-link>
                 </div>
                 <form class="input" autocomplete="false" method="post" action="/login" v-on:submit.prevent="search()">
@@ -53,15 +53,22 @@
                 <div class="wrapper">
                     <div v-if="featured.length > 0" class="section">{{ $t("featured_plugins") }}</div>
                     <div v-if="featured.length > 0" class="cards">
-                        <plugin v-for="(plugin, index) in featured" :key="index" :subject="plugin" />
+                        <plugin v-for="(plugin, index) in featured" :key="`featured:${index}`" :subject="plugin" />
                     </div>
                     <div v-if="popular.length > 0" class="section">{{ $t("popular_plugins") }}</div>
                     <div v-if="popular.length > 0" class="cards">
-                        <plugin v-for="(plugin, index) in popular" :key="index" :subject="plugin" />
+                        <plugin v-for="(plugin, index) in popular" :key="`popular:${index}`" :subject="plugin" />
                     </div>
                     <div v-if="results.length > 0" class="section">{{ $t("search_results") }}</div>
                     <div v-if="results.length > 0" class="cards">
-                        <plugin v-for="(plugin, index) in results" :key="index" :subject="plugin" />
+                        <plugin v-for="(plugin, index) in results" :key="`search:${index}`" :subject="plugin" />
+                    </div>
+                    <div v-if="total > 1 && pages.length > 1" class="pagination">
+                        <div v-if="pages[0] > 0" v-on:click="paginate(0, 27)" class="page">1</div>
+                        <div v-if="pages[0] > 0" class="more">...</div>
+                        <div v-for="(page, index) in pages" :key="`page:${index}`" v-on:click="paginate(page * 27, 27)" :class="`${page === current ? 'page off' : 'page'}`">{{ page + 1 }}</div>
+                        <div v-if="pages[pages.length - 1] < total - 1" class="more">...</div>
+                        <div v-if="pages[pages.length - 1] < total - 1" v-on:click="paginate((total - 1) * 27, 27)" class="page">{{ total }}</div>
                     </div>
                     <div v-if="!loading && featured.length === 0 && popular.length === 0 && results.length === 0" class="empty">
                         <div class="message">
@@ -108,6 +115,10 @@
                 featured: [],
                 popular: [],
                 results: [],
+                pages: [],
+                current: 0,
+                total: 0,
+                count: 0,
             };
         },
 
@@ -136,10 +147,27 @@
             async load(id) {
                 this.loading = true;
 
+                this.installed = [];
+                this.featured = [];
+                this.popular = [];
+                this.results = [];
+                this.pages = [];
+
+                this.current = 0;
+                this.total = 0;
+
+                if (this.$route.path === "/plugins/library") {
+                    const query = Object.keys(this.$route.query).map((item) => `${item}=${this.$route.query[item]}`).join("&");
+
+                    if (query && query !== "") {
+                        window.history.pushState({}, null, `/plugins?${query}`);
+                    } else {
+                        window.history.pushState({}, null, "/plugins");
+                    }
+                }
+
                 if (!this.$route.query.search || this.$route.query.search === "") {
                     this.query = "";
-                    this.installed = [];
-                    this.results = [];
                     this.featured = await this.$plugins.featured();
                     this.popular = await this.$plugins.popular();
 
@@ -151,11 +179,39 @@
                         }
                     }
                 } else {
-                    this.query = decodeURIComponent(this.$route.query.search);
-                    this.featured = [];
-                    this.popular = [];
+                    const skip = parseInt(this.$route.query.skip, 10) || 0;
+                    const limit = parseInt(this.$route.query.limit, 10) || 27;
 
-                    this.results = await this.$plugins.search(this.query, parseInt(this.$route.query.skip, 10) || 0, parseInt(this.$route.query.limit, 10) || 40);
+                    this.query = decodeURIComponent(this.$route.query.search);
+
+                    const response = await this.$plugins.search(this.query, skip, limit);
+
+                    this.results = response.results;
+                    this.count = response.count;
+
+                    this.current = limit > 0 ? skip / limit : 0;
+                    this.total = Math.min(Math.ceil(limit > 0 ? this.count / limit : 0), 27);
+
+                    let start = this.current - 2;
+                    let end = start + 4;
+
+                    if (start < 0) {
+                        start = 0;
+                        end = start + 4;
+                    }
+
+                    if (end > this.total) {
+                        end = this.total;
+                        start = end - 4;
+                    }
+
+                    if (start < 0) {
+                        start = 0;
+                    }
+
+                    for (let i = start; i < end; i += 1) {
+                        this.pages.push(i);
+                    }
                 }
 
                 this.loading = false;
@@ -169,11 +225,22 @@
                         path: "/plugins/library",
                         query: {
                             search: encodeURIComponent(this.query),
-                            skip: parseInt(this.$route.query.skip, 10) || 0,
-                            limit: parseInt(this.$route.query.limit, 10) || 40,
+                            skip: 0,
+                            limit: 27,
                         },
                     });
                 }
+            },
+
+            paginate(skip, limit) {
+                this.$router.push({
+                    path: "/plugins/library",
+                    query: {
+                        search: encodeURIComponent(this.query),
+                        skip,
+                        limit,
+                    },
+                });
             },
         },
     };
@@ -250,6 +317,10 @@
                     &:first-child {
                         padding: 0 0 10px 0;
                     }
+
+                    &.first {
+                        padding: 0 0 10px 0;
+                    }
                 }
 
                 .cards {
@@ -262,11 +333,62 @@
                     flex-direction: row;
                     padding: 20px 0 10px 0;
                     border-bottom: var(--application-border) 1px solid;
-                    margin: 0 0 0 7px;
+                    margin: 0 0 20px 7px;
                     user-select: none;
 
                     &:first-child {
                         padding: 0 0 10px 0;
+                    }
+
+                    &.segmented {
+                        margin: 0 0 0 7px;
+                        border-bottom: 0 none;
+                    }
+                }
+
+                .pagination {
+                    height: 50px;
+                    display: flex;
+                    padding: 10px 0 10px 14px;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    box-sizing: border-box;
+                    align-content: center;
+                    align-items: center;
+                    user-select: none;
+
+                    .more {
+                        font-size: 14px;
+                        margin: 0 0 0 3px;
+                        cursor: default;
+                        user-select: none;
+                    }
+
+                    .page {
+                        padding: 4px 10px;
+                        font-size: 14px;
+                        margin: 0 0 0 3px;
+                        background: var(--button);
+                        border: 1px var(--button-border) solid;
+                        border-radius: 3px;
+                        cursor: pointer;
+                        user-select: none;
+
+                        &:hover {
+                            box-shadow: var(--elevation-button);
+                        }
+
+                        &.off {
+                            padding: 4px 10px;
+                            font-size: 14px;
+                            margin: 0 0 0 3px;
+                            color: var(--application-highlight-text);
+                            background: var(--application-highlight);
+                            border: 1px var(--application-highlight) solid;
+                            border-radius: 3px;
+                            cursor: default;
+                            user-select: none;
+                        }
                     }
                 }
             }

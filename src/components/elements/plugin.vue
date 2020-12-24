@@ -17,12 +17,12 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <router-link id="plugin" :to="`/plugin/${subject.name}`" :title="title()">
+    <router-link id="plugin" :to="`/plugin/${subject.name}`" :title="$plugins.title(subject.name)">
         <div class="identity">
             <img :src="icon()" />
         </div>
         <div class="details">
-            <span class="title">{{ title() }}</span>
+            <span class="title">{{ $plugins.title(subject.name) }}</span>
             <span class="description">{{ subject.description }}</span>
             <rating :value="subject.rating" :size="15" />
         </div>
@@ -35,7 +35,6 @@
 <script>
     import crypto from "crypto";
     import identicon from "identicon.js";
-    import { decamel, brands } from "../../services/formatters";
     import Rating from "./rating.vue";
 
     export default {
@@ -50,10 +49,6 @@
         },
 
         methods: {
-            title() {
-                return brands(decamel(this.subject.name));
-            },
-
             icon() {
                 if (this.subject.icon) {
                     return this.subject.icon;

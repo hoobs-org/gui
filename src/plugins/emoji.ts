@@ -16,50 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-export function units(value: number): { [key: string]: number | string } {
-    const results = {
-        value: Math.round((value / 1073741824) * 100) / 100,
-        units: "GB",
-    };
+/* eslint-disable @typescript-eslint/no-var-requires */
 
-    while (results.value < 1 && results.units !== "KB") {
-        results.value = Math.round((results.value * 1024) * 100) / 100;
+const emojer = require("emojer");
+const emojis = require("github-api-emojis/lib/map");
 
-        switch (results.units) {
-            case "GB":
-                results.units = "MB";
-                break;
-
-            case "MB":
-                results.units = "KB";
-                break;
-
-            default:
-                results.units = "GB";
-                break;
-        }
-    }
-
-    return results;
-}
-
-export function timespan(value: number): { [key: string]: number } {
-    const results = {
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-    };
-
-    let timestamp = value;
-
-    results.days = Math.floor(timestamp / (1000 * 60 * 60 * 24));
-    timestamp -= results.days * (1000 * 60 * 60 * 24);
-    results.hours = Math.floor(timestamp / (1000 * 60 * 60));
-    timestamp -= results.hours * (1000 * 60 * 60);
-    results.minutes = Math.floor(timestamp / (1000 * 60));
-    timestamp -= results.minutes * (1000 * 60);
-    results.seconds = Math.floor(timestamp / (1000));
-
-    return results;
+export default function emoji(): any {
+    return [{
+        type: "output",
+        filter: (text: string) => emojer(
+            text,
+            "<img src=\"https://github.githubassets.com/images/icons/emoji/__EMOJI_NAME__.png?v5\" alt=\":__EMOJI_NAME__:\" title=\":__EMOJI_NAME__:\" class=\"emoji-img emoji\">",
+            emojis,
+        ),
+    }];
 }

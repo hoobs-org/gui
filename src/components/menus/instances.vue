@@ -18,7 +18,7 @@
 
 <template>
     <div v-on:click.stop id="menu" :style="`left: ${left}px`">
-        <div v-for="(instance, index) in selected" :key="index" class="item">
+        <div v-for="(instance, index) in selected" :key="`instance:${index}`" class="item">
             <checkbox :id="`instance_${index}`" v-model="instance.selected">
                 <label :for="`instance_${index}`">{{ instance.text }}</label>
             </checkbox>

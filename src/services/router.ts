@@ -74,6 +74,13 @@ const routes: Array<RouteConfig> = [
         props: true,
     },
     {
+        path: "/plugin/:scope/:name?",
+        name: "plugin",
+        meta: { layout: "authenticated" },
+        component: () => import(/* webpackChunkName: "plugin" */ "../views/plugin.vue"),
+        props: true,
+    },
+    {
         path: "/config",
         name: "config",
         meta: { layout: "authenticated" },

@@ -40,7 +40,7 @@
                     </div>
                     <div v-if="subject.id > 1" class="row section">{{ $t("permissions") }}</div>
                     <div v-if="subject.id > 1" class="grid">
-                        <div v-for="(permission, index) in permissions" :key="index">
+                        <div v-for="(permission, index) in permissions" :key="`permission:${index}`">
                             <checkbox :id="`permission_${index}`" v-model="permission.selected">
                                 <label :for="`permission_${index}`">{{ $t(permission.label) }}</label>
                             </checkbox>
@@ -67,7 +67,7 @@
                     </div>
                     <div class="row section">{{ $t("permissions") }}</div>
                     <div class="grid">
-                        <div v-for="(permission, index) in permissions" :key="index">
+                        <div v-for="(permission, index) in permissions" :key="`permission:${index}`">
                             <checkbox :id="`permission_${index}`" v-model="permission.selected">
                                 <label :for="`permission_${index}`">{{ $t(permission.label) }}</label>
                             </checkbox>

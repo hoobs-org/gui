@@ -24,8 +24,10 @@ import Charts from "chart.js";
 
 import root from "./app.vue";
 
+import dates from "./plugins/dates";
 import socket from "./plugins/socket";
 import plugins from "./plugins/plugins";
+import converter from "./plugins/markdown";
 import themes from "./plugins/themes";
 import drag from "./plugins/drag";
 
@@ -54,6 +56,7 @@ const open = [
 
 const io = socket();
 const hoobs = SDK();
+const markdown = converter();
 
 hoobs.config.token.get(() => store.state.session);
 hoobs.config.token.set((token) => { store.commit("SESSION:SET", token); });
@@ -87,9 +90,11 @@ router.beforeEach(async (to, _from, next) => {
 
 Vue.config.productionTip = false;
 
+Vue.mixin(dates());
 Vue.mixin(io.mixin());
 Vue.mixin(hoobs.mixin());
 Vue.mixin(plugins());
+Vue.mixin(markdown.mixin());
 Vue.mixin(themes.mixin(hoobs, store));
 
 Vue.mixin({

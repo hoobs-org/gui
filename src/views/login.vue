@@ -20,7 +20,7 @@
     <div id="login">
         <modal :welcome="$t('login')" width="420px">
             <div v-if="errors.length > 0" class="errors">
-                <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
+                <span v-for="(error, index) in errors" :key="`error:${index}`">{{ error }}</span>
             </div>
             <form class="modal" autocomplete="false" method="post" action="/login" v-on:submit.prevent="login()">
                 <input type="submit" class="hidden-submit" value="submit" />
