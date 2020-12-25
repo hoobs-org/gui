@@ -27,7 +27,7 @@
                         </p>
                     </div>
                     <div class="grid">
-                        <div v-for="(value, index) in values" :key="`instance:${index}`" v-on:click="select(value.id)" class="button primary full">{{ value.display }}</div>
+                        <div v-for="(instance, index) in instances" :key="`instance:${index}`" v-on:click="select(instance.id)" class="button primary full">{{ instance.display }}</div>
                     </div>
                 </div>
             </div>
@@ -56,8 +56,21 @@
             },
         },
 
+        data() {
+            return {
+                instances: [],
+            };
+        },
+
         mounted() {
-            console.log(this.values);
+            this.instances = this.values;
+
+            this.instances.sort((a, b) => {
+                if (a.id < b.id) return -1;
+                if (a.id > b.id) return 1;
+
+                return 0;
+            });
         },
     };
 </script>
