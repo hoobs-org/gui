@@ -287,7 +287,7 @@
                                             }
                                         });
                                     });
-                                }, 500);
+                                }, 3000);
                             });
                         }));
                     }
@@ -323,7 +323,9 @@
                                             instance.plugins.list().then((plugins) => {
                                                 if (plugins.length === 0) {
                                                     instance.remove().then(() => {
-                                                        resolve();
+                                                        setTimeout(() => {
+                                                            resolve();
+                                                        }, 3000);
                                                     });
                                                 } else {
                                                     resolve();
