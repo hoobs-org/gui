@@ -149,6 +149,10 @@
                     flex-direction: row;
                     align-items: center;
 
+                    &:hover {
+                        text-decoration: none !important;
+                    }
+
                     .icon {
                         margin: 0 7px 0 0;
                     }

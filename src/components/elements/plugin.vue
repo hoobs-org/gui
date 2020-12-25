@@ -74,6 +74,10 @@
         text-decoration: none !important;
         background: var(--widget-background);
 
+        &:hover {
+            text-decoration: none !important;
+        }
+
         .certified {
             top: 10px;
             left: 0;
