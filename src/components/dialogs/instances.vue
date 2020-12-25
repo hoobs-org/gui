@@ -17,24 +17,36 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal width="490px" height="220px">
-        <div class="content message">{{ message }}</div>
-        <div class="actions modal">
-            <div class="button" v-on:click="close()">{{ cancel || $t("cancel") }}</div>
-            <div class="button primary" v-on:click="execute()">{{ action || $t("ok") }}</div>
+    <modal :title="title" :draggable="true" width="670px" height="470px">
+        <div id="instances">
+            <div class="content">
+                <div class="form">
+                    <div class="row">
+                        <p>
+                            {{ description }}
+                        </p>
+                    </div>
+                    <div class="grid">
+                        <div v-for="(value, index) in values" :key="`instance:${index}`" v-on:click="select(value.id)" class="button primary full">{{ value.display }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="actions modal">
+                <div v-on:click="close()" class="button">{{ $t("cancel") }}</div>
+            </div>
         </div>
     </modal>
 </template>
 
 <script>
     export default {
-        name: "confirm",
+        name: "instances",
 
         props: {
-            message: String,
-            action: String,
-            cancel: String,
-            callback: {
+            title: String,
+            values: Array,
+            description: String,
+            select: {
                 type: Function,
                 default: () => { /* null */ },
             },
@@ -44,11 +56,23 @@
             },
         },
 
-        methods: {
-            execute() {
-                this.close();
-                this.callback();
-            },
+        mounted() {
+            console.log(this.values);
         },
     };
 </script>
+
+<style lang="scss" scoped>
+    #instances {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        margin: 0 0 0 10px;
+
+        .full {
+            flex: 1;
+            margin: 0 10px 10px 0;
+            justify-content: space-around;
+        }
+    }
+</style>

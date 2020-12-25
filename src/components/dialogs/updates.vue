@@ -74,32 +74,54 @@
         },
 
         async mounted() {
-            this.status = await this.$hoobs.status();
-            this.version = await this.$hoobs.version();
-            this.plugins = (await this.$hoobs.plugins()).filter((item) => !Semver.compare(item.version, item.latest, ">="));
-
-            this.stack = !(this.status.upgraded && this.status.cli_upgraded && this.status.node_upgraded);
-            this.updated = !(this.stack || this.plugins.length > 0);
-
-            this.loading = false;
+            this.load();
         },
 
         methods: {
+            async load() {
+                this.loading = true;
+
+                this.status = await this.$hoobs.status();
+                this.version = await this.$hoobs.version();
+                this.plugins = (await this.$hoobs.plugins()).filter((item) => !Semver.compare(item.version, item.latest, ">="));
+
+                this.stack = !(this.status.upgraded && this.status.cli_upgraded && this.status.node_upgraded);
+                this.updated = !(this.stack || this.plugins.length > 0);
+
+                this.loading = false;
+                this.updating = false;
+            },
+
             async upgrade() {
                 this.updating = true;
 
-                const system = await this.$hoobs.system();
-
-                await system.update();
+                this.$hoobs.system().then((system) => {
+                    system.update().then(() => {
+                        this.load();
+                    });
+                });
             },
 
-            async update() {
+            update() {
+                this.updating = true;
+
+                const waits = [];
+
                 for (let i = 0; i < this.plugins.length; i += 1) {
                     const { ...plugin } = this.plugins[i];
-                    const instance = await this.$hoobs.instance(plugin.instance);
 
-                    await instance.plugin.upgrade(plugin.identifier);
+                    waits.push(new Promise((resolve) => {
+                        this.$hoobs.instance(plugin.instance).then((instance) => {
+                            instance.plugins.upgrade(plugin.identifier).then(() => {
+                                resolve();
+                            });
+                        });
+                    }));
                 }
+
+                Promise.all(waits).then(() => {
+                    this.load();
+                });
             },
         },
     };
