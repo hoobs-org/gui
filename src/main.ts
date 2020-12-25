@@ -67,7 +67,7 @@ io.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
 io.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
 
 io.on("reconnect", async () => {
-    if ((await hoobs.auth.status()) === "uninitialized" || (await hoobs.instances.count()) === 0) {
+    if ((await hoobs.auth.status()) === "uninitialized") {
         window.location.href = "/";
     } else if (!(await hoobs.auth.validate())) {
         await hoobs.auth.logout();
@@ -79,7 +79,7 @@ io.on("reconnect", async () => {
 hoobs.log().then((messages) => { store.commit("LOG:HISTORY", messages); });
 
 router.beforeEach(async (to, _from, next) => {
-    if (open.indexOf(to.path) === -1 && ((await hoobs.auth.status()) === "uninitialized" || (await hoobs.instances.count()) === 0)) {
+    if (open.indexOf(to.path) === -1 && (await hoobs.auth.status()) === "uninitialized") {
         router.push({ path: "/setup" });
     } else if (open.indexOf(to.path) === -1 && !(await hoobs.auth.validate())) {
         router.push({ path: "/login", query: { url: to.path } });

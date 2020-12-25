@@ -16,13 +16,13 @@
  | along with this program.  If not, see <http://www.gnu.org/licenses/>.                          |
  -------------------------------------------------------------------------------------------------->
 <template>
-    <div v-if="step >= 0" id="setup">
-        <modal v-if="step === 0" :welcome="$t('welcome')" width="760px" height="670px">
+    <div id="setup">
+        <modal v-if="loading" :welcome="$t('welcome')" width="760px" height="670px">
             <div class="loading">
                 <spinner v-model="message" />
             </div>
         </modal>
-        <modal v-else-if="step === 1" :welcome="$t('welcome')" width="760px" height="670px">
+        <modal v-else :welcome="$t('welcome')" width="760px" height="670px">
             <p>{{ $t("user_add_admin_account") }}</p>
             <form class="modal" autocomplete="false" method="post" action="/setup" v-on:submit.prevent="account()">
                 <div v-if="errors.length > 0" class="errors">
@@ -44,25 +44,6 @@
                 <div class="button primary" v-on:click="account()">{{ $t("create_account") }}</div>
             </div>
         </modal>
-        <modal v-else-if="step === 2" :welcome="$t('welcome')" width="760px" height="670px">
-            <p>{{ $t("instance_create_default") }}</p>
-            <form class="modal" autocomplete="false" method="post" action="/setup" v-on:submit.prevent="setup()">
-                <div v-if="errors.length > 0" class="errors">
-                    <span v-for="(error, index) in errors" :key="`error:${index}`">{{ error }}</span>
-                </div>
-                <input type="submit" class="hidden-submit" value="submit" />
-                <text-field :name="$t('instance_name')" :description="$t('instance_name_description')" v-model="instance" :required="true" :autofocus="true" />
-                <port-field :name="$t('instance_port')" :description="$t('instance_port_description')" v-model="port" :required="true" />
-            </form>
-            <div class="actions modal">
-                <div class="copyright">
-                    HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
-                    <br />
-                    Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
-                </div>
-                <div class="button primary" v-on:click="setup()">{{ $t("create_instance") }}</div>
-            </div>
-        </modal>
     </div>
 </template>
 
@@ -74,7 +55,7 @@
 
         data() {
             return {
-                step: -1,
+                loading: true,
                 name: "",
                 username: "",
                 password: "",
@@ -88,7 +69,7 @@
 
         async mounted() {
             this.$theme.set("dark");
-            this.step = await this.progress();
+            this.loading = false;
         },
 
         methods: {
@@ -103,23 +84,6 @@
                 return this.wait(callback, compare, (saftey || 0) + 1);
             },
 
-            async progress() {
-                if (this.step > 0) this.step = 0;
-
-                const status = await this.$hoobs.auth.status();
-                const instances = await this.$hoobs.instances.count();
-
-                this.message = "";
-
-                if (status === "uninitialized") return 1;
-                if (instances === 0 && !(await this.$hoobs.auth.validate())) this.$router.push({ path: "/login", query: { url: "/setup" } });
-                if (instances === 0) return 2;
-
-                this.$router.push({ path: "/" });
-
-                return -1;
-            },
-
             async account() {
                 this.errors = [];
 
@@ -128,50 +92,28 @@
                 if (this.password !== this.challenge) this.errors.push(this.$t("password_mismatch"));
 
                 if (this.errors.length === 0) {
-                    this.step = 0;
+                    this.loading = true;
                     this.message = `${this.$t("user_add_creating")} ...`;
 
                     await this.$hoobs.users.add(this.username.toLowerCase(), this.password, this.name, true);
 
                     if (await this.$hoobs.auth.login(this.username.toLowerCase(), this.password)) {
-                        this.$router.push({ path: this.url });
+                        this.$router.push({ path: "/" });
                     } else {
+                        this.loading = false;
                         this.errors.push(this.$t("user_add_failed"));
                     }
-
-                    this.step = await this.progress();
-                }
-            },
-
-            async setup() {
-                this.errors = [];
-
-                if (this.instance.length < 3) this.errors.push(this.$t("instance_name_required"));
-                if (Number.isNaN(parseInt(this.port, 10)) || parseInt(this.port, 10) < 1 || parseInt(this.port, 10) > 65535) this.errors.push(this.$t("instance_port_required"));
-
-                const instances = await this.$hoobs.instances.list();
-
-                if (instances.findIndex((item) => item.port === parseInt(this.port, 10)) >= 0) this.errors.push(this.$t("instance_port_taken"));
-
-                if (this.errors.length === 0) {
-                    this.step = 0;
-                    this.message = `${this.$t("instance_create")} ...`;
-
-                    await this.$hoobs.instances.add(this.instance, parseInt(this.port, 10));
-                    await this.wait(this.$hoobs.instances.count, (value) => value > 0);
-
-                    this.step = await this.progress();
                 }
             },
 
             async disable() {
-                this.step = 0;
+                this.loading = true;
                 this.message = `${this.$t("disable_login_disabling")} ...`;
 
                 await this.$hoobs.auth.disable();
                 await this.wait(this.$hoobs.auth.status, (value) => value === "disabled");
 
-                this.step = await this.progress();
+                this.$router.push({ path: "/" });
             },
         },
     };

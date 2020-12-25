@@ -42,7 +42,7 @@
                     <div class="actions">
                         <div v-if="installed.length > 0" v-on:click="uninstall()" class="button">{{ $t("plugin_uninstall") }}</div>
                         <div v-if="!updated" v-on:click="update()" class="button">{{ $t("plugin_update") }}</div>
-                        <div v-if="available.length > 0" v-on:click="install()" class="button primary">{{ $t("plugin_install") }}</div>
+                        <div v-on:click="install()" class="button primary">{{ $t("plugin_install") }}</div>
                     </div>
                 </div>
                 <tabs :values="tabs" v-on:change="change" :value="section" />
@@ -64,19 +64,19 @@
                         <div class="heading">{{ $t("releases") }}</div>
                         <div v-for="(release, index) in releases.versions" :key="`version:${index}`" class="version">
                             <div v-on:click="install(release.version, true)" class="icon" :title="$t('plugin_install')">cloud_download</div>
-                            <div v-on:click="install(release.version, true)" class="value">{{ release.version }}</div>
+                            <div v-on:click="install(release.version, true)" class="value" :title="$t('plugin_install')">{{ release.version }}</div>
                             <div class="fill"></div>
                             <div class="value">{{ $dates.age(release.published) }}</div>
                         </div>
                     </div>
-                    <detail :plugin="plugin" :installed="installed.length > 0" />
+                    <detail :plugin="plugin" :installed="installed" />
                 </div>
             </div>
             <div v-else class="loading">
                 <spinner />
             </div>
         </div>
-        <instances v-if="select.show" :title="select.title" :description="select.description" :values="select.values" :select="select.select" :close="() => { select.show = false; }" />
+        <instances v-if="select.show" :type="select.type" :plugin="plugin" :values="select.values" :select="select.select" :close="() => { select.show = false; }" />
     </div>
 </template>
 
@@ -144,9 +144,9 @@
                 ],
                 select: {
                     show: false,
+                    type: "",
                     title: "",
                     values: [],
-                    description: "",
                     select: () => { /* null */ },
                 },
                 section: "details",
@@ -219,6 +219,7 @@
                                                 this.installed.push({
                                                     id: this.instances[i].id,
                                                     display: this.instances[i].display,
+                                                    version: plugin.version,
                                                     updated: Semver.compare(plugin.version, plugin.latest, ">="),
                                                 });
                                             }
@@ -245,104 +246,108 @@
             },
 
             install(tag, all) {
-                if (this.instances.length > 1) {
-                    if (all) {
-                        this.select.values = [...this.available, ...this.installed];
+                this.select.type = "install";
+
+                if (all) {
+                    this.select.values = [...this.available, ...this.installed];
+                } else {
+                    this.select.values = this.available;
+                }
+
+                this.select.select = (data) => {
+                    this.select.show = false;
+                    this.loading = true;
+
+                    const waits = [];
+
+                    if (typeof data === "string") {
+                        waits.push(new Promise((resolve) => {
+                            this.$hoobs.instance(data).then((instance) => {
+                                if (instance) {
+                                    instance.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
+                                        resolve();
+                                    });
+                                } else {
+                                    resolve();
+                                }
+                            });
+                        }));
                     } else {
-                        this.select.values = this.available;
+                        waits.push(new Promise((resolve) => {
+                            this.$hoobs.instances.add(data.display, data.port, data.pin, data.username).then(() => {
+                                setTimeout(() => {
+                                    Wait().then(() => {
+                                        this.$hoobs.instance(data.id).then((instance) => {
+                                            if (instance) {
+                                                instance.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
+                                                    resolve();
+                                                });
+                                            } else {
+                                                resolve();
+                                            }
+                                        });
+                                    });
+                                }, 500);
+                            });
+                        }));
                     }
 
-                    this.select.title = `${this.$t("plugin_install")} ${this.$plugins.title(this.plugin.name)}`;
-                    this.select.description = this.$t("plugin_install_instance");
-
-                    this.select.select = (id) => {
-                        this.select.show = false;
-                        this.loading = true;
-
-                        this.$hoobs.instance(id).then((instance) => {
-                            const waits = [];
-
-                            if (instance) waits.push(instance.plugins.install(`${this.identifier}@${tag || "latest"}`));
-
-                            Promise.all(waits).then(() => {
-                                setTimeout(() => {
-                                    Wait().then(() => {
-                                        this.load(this.identifier);
-                                    });
-                                }, 500);
+                    Promise.all(waits).then(() => {
+                        setTimeout(() => {
+                            Wait().then(() => {
+                                this.load(this.identifier);
                             });
-                        });
-                    };
-
-                    this.select.show = true;
-                } else if (this.instances.length === 1) {
-                    this.$confirm(this.$t("plugin_install"), this.$t("plugin_install_warning"), () => {
-                        this.loading = true;
-
-                        this.$hoobs.instance(this.instances[0].id).then((instance) => {
-                            const waits = [];
-
-                            if (instance) waits.push(instance.plugins.install(`${this.identifier}@${tag || "latest"}`));
-
-                            Promise.all(waits).then(() => {
-                                setTimeout(() => {
-                                    Wait().then(() => {
-                                        this.load(this.identifier);
-                                    });
-                                }, 500);
-                            });
-                        });
+                        }, 500);
                     });
-                }
+                };
+
+                this.select.show = true;
             },
 
             uninstall() {
-                if (this.instances.length > 1) {
-                    this.select.values = this.installed;
-                    this.select.title = `${this.$t("plugin_uninstall")} ${this.$plugins.title(this.plugin.name)}`;
-                    this.select.description = this.$t("plugin_uninstall_instance");
+                this.select.type = "uninstall";
+                this.select.values = this.installed;
 
-                    this.select.select = (id) => {
-                        this.select.show = false;
-                        this.loading = true;
+                this.select.select = (id, remove) => {
+                    this.select.show = false;
+                    this.loading = true;
 
-                        this.$hoobs.instance(id).then((instance) => {
-                            const waits = [];
+                    this.$hoobs.instance(id).then((instance) => {
+                        const waits = [];
 
-                            if (instance) {
-                                waits.push(instance.plugins.uninstall(this.identifier));
-                            }
+                        if (instance) {
+                            waits.push(new Promise((resolve) => {
+                                instance.plugins.uninstall(this.identifier).then(() => {
+                                    setTimeout(() => {
+                                        if (remove) {
+                                            instance.plugins.list().then((plugins) => {
+                                                if (plugins.length === 0) {
+                                                    instance.remove().then(() => {
+                                                        resolve();
+                                                    });
+                                                } else {
+                                                    resolve();
+                                                }
+                                            });
+                                        } else {
+                                            resolve();
+                                        }
+                                    }, 500);
+                                });
+                            }));
+                        }
 
-                            Promise.all(waits).then(() => {
-                                setTimeout(() => {
-                                    Wait().then(() => {
-                                        this.load(this.identifier);
-                                    });
-                                }, 500);
-                            });
-                        });
-                    };
-
-                    this.select.show = true;
-                } else if (this.instances.length === 1) {
-                    this.$confirm(this.$t("plugin_uninstall"), this.$t("plugin_uninstall_warning"), () => {
-                        this.loading = true;
-
-                        this.$hoobs.instance(this.instances[0].id).then((instance) => {
-                            const waits = [];
-
-                            if (instance) waits.push(instance.plugins.uninstall(this.identifier));
-
-                            Promise.all(waits).then(() => {
-                                setTimeout(() => {
-                                    Wait().then(() => {
-                                        this.load(this.identifier);
-                                    });
-                                }, 500);
-                            });
+                        Promise.all(waits).then(() => {
+                            setTimeout(() => {
+                                Wait().then(() => {
+                                    this.load(this.identifier);
+                                });
+                            }, 500);
                         });
                     });
-                }
+                };
+
+                this.select.show = true;
             },
 
             update() {

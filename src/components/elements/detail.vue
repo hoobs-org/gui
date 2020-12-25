@@ -18,11 +18,14 @@
 
 <template>
     <div id="detail">
-        <div v-if="installed" class="title">
+        <div v-if="installed.length > 0" class="title">
             <h1>{{ $t("installed") }}</h1>
         </div>
-        <div v-if="installed" class="item">
-            <div class="value">
+        <div v-if="installed.length > 0" class="item vertical">
+            <div v-for="(item, index) in installed" :key="`installed:${index}`" class="value smaller">
+                {{ item.version }} {{ item.display }}
+            </div>
+            <div class="value spaced">
                 <router-link :to="`/config/${plugin.name}`">
                     <span class="icon">settings</span>
                     {{ $t("configuration") }}
@@ -130,7 +133,7 @@
 
         props: {
             plugin: Object,
-            installed: Boolean,
+            installed: Array,
         },
 
         components: {
@@ -290,6 +293,22 @@
                     .icon {
                         margin: 0 7px -1px 0;
                     }
+                }
+
+                &.smaller {
+                    font-size: 14px;
+                }
+
+                &.spaced {
+                    margin: 10px 0 0 0;
+                }
+            }
+
+            &.vertical {
+                flex-direction: column;
+
+                .value {
+                    flex: unset;
                 }
             }
 

@@ -28,6 +28,12 @@
             <list value="id" display="display" :values="instances" :selected="id" controller="instances" />
             <form v-if="id === 'add'" class="screen form">
                 <div class="wrapper">
+                    <div class="row section">{{ $t("import") }}</div>
+                    <div class="row">
+                        <input type="file" ref="file" v-on:change="upload()" accept=".instance" hidden />
+                        <div v-on:click="$refs.file.click()" class="button">{{ $t("upload_file") }}</div>
+                        <div v-if="file" class="filename">{{ filename }}</div>
+                    </div>
                     <div class="row section">{{ $t("details") }}</div>
                     <div class="row">
                         <text-field :name="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
@@ -37,12 +43,6 @@
                         <port-field :name="$t('instance_port')" style="flex: 1; padding-right: 5px" v-model="port" />
                         <div style="flex: 1; padding-left: 5px"></div>
                     </div>
-                    <div class="row section">{{ $t("import") }}</div>
-                    <div class="row">
-                        <input type="file" ref="file" v-on:change="upload()" accept=".instance" hidden />
-                        <div v-on:click="$refs.file.click()" class="button">{{ $t("upload_file") }}</div>
-                        <div v-if="file" class="filename">{{ filename }}</div>
-                    </div>
                     <div class="row actions">
                         <div v-if="!loading" v-on:click="save(true)" class="button primary">{{ $t("save") }}</div>
                         <router-link to="/instances" class="button">{{ $t("cancel") }}</router-link>
@@ -51,6 +51,7 @@
             </form>
             <form v-else-if="status" class="screen form">
                 <div class="wrapper">
+                    <div class="row title">{{ display }}</div>
                     <div class="row section">{{ $t("pairing") }}</div>
                     <div class="row">
                         <p style="margin-top: 0">{{ $t("pairing_description") }}</p>
@@ -63,6 +64,10 @@
                         <div v-if="!status.running" v-on:click="control('start')" class="button">{{ $t("start") }}</div>
                         <div v-if="status.running" v-on:click="control('stop')" class="button">{{ $t("stop") }}</div>
                     </div>
+                    <div class="row section">{{ $t("export") }}</div>
+                    <div class="row">
+                        <div v-on:click="backup()" class="button">{{ $t("export_instance") }}</div>
+                    </div>
                     <div class="row section">{{ $t("details") }}</div>
                     <div class="row">
                         <text-field :name="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
@@ -74,10 +79,6 @@
                     <div class="row section">{{ $t("service") }}</div>
                     <div class="row">
                         <integer-field :name="$t('instance_autostart')" :description="$t('instance_autostart_description')" :min="-1" :max="300" v-model="autostart" />
-                    </div>
-                    <div class="row section">{{ $t("export") }}</div>
-                    <div class="row">
-                        <div v-on:click="backup()" class="button">{{ $t("export_instance") }}</div>
                     </div>
                     <div class="row section" style="margin-bottom: 10px">{{ $t("instance_port_pool") }}</div>
                     <p style="margin-top: 0">{{ $t("instance_port_pool_description") }}</p>
@@ -203,7 +204,9 @@
 
                     const instances = await this.$hoobs.instances.list();
 
-                    while (instances.findIndex((item) => parseInt(`${item.port}`, 10) === this.port) >= 0) this.port += 1000;
+                    while (instances.findIndex((item) => parseInt(`${item.port}`, 10) === this.port) >= 0) {
+                        this.port += 1000;
+                    }
                 }
 
                 this.loading = false;
@@ -446,6 +449,10 @@
 
                 &::-webkit-scrollbar {
                     display: none;
+                }
+
+                .title {
+                    font-size: 17px;
                 }
 
                 .wrapper {

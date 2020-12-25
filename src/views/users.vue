@@ -28,6 +28,7 @@
             <list value="id" display="name" :values="users" :selected="id" controller="users" />
             <form v-if="parseInt(id, 10) > 0" class="screen form">
                 <div class="wrapper">
+                    <div class="row title">{{ name }}</div>
                     <div class="row section">{{ $t("profile") }}</div>
                     <div class="row">
                         <text-field :name="$t('name')" v-model="name" />
@@ -341,6 +342,10 @@
 
                 &::-webkit-scrollbar {
                     display: none;
+                }
+
+                .title {
+                    font-size: 17px;
                 }
 
                 .wrapper {

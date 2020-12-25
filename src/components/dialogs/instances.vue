@@ -17,35 +17,64 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="title" :draggable="true" width="670px" height="470px">
+    <modal :title="title" :draggable="true" width="670px" height="670px">
         <div id="instances">
             <div class="content">
-                <div class="form">
+                <form v-if="type === 'install'" class="form">
+                    <div class="row section" style="margin: 0;">{{ $t("instance_add") }}</div>
+                    <p>
+                        {{ $t("plugin_install_add_instance") }}
+                    </p>
                     <div class="row">
-                        <p>
-                            {{ description }}
-                        </p>
+                        <text-field :name="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
+                        <text-field :name="$t('instance_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
                     </div>
+                    <div class="row">
+                        <port-field :name="$t('instance_port')" style="flex: 1; padding-right: 5px" v-model="port" />
+                        <div style="flex: 1; padding-left: 5px"></div>
+                    </div>
+                    <div v-if="instances.length > 0" class="row section" style="margin: 0;">{{ $t("instances") }}</div>
+                    <p v-if="instances.length > 0">
+                        {{ $t("plugin_install_instance") }}
+                    </p>
+                    <div v-if="instances.length > 0" class="grid">
+                        <div v-for="(instance, index) in instances" :key="`instance:${index}`" v-on:click="install(instance.id)" class="button full">{{ instance.display }}</div>
+                    </div>
+                </form>
+                <form v-if="type === 'uninstall'" class="form">
+                    <div class="row section">{{ $t("remove") }}</div>
+                    <div class="row">
+                        <checkbox id="remove" v-model="remove">
+                            <label for="remove">{{ $t("instance_remove_empty") }}</label>
+                        </checkbox>
+                    </div>
+                    <div class="row section" style="margin: 0;">{{ $t("instances") }}</div>
+                    <p>
+                        {{ $t("plugin_uninstall_instance") }}
+                    </p>
                     <div class="grid">
-                        <div v-for="(instance, index) in instances" :key="`instance:${index}`" v-on:click="select(instance.id)" class="button primary full">{{ instance.display }}</div>
+                        <div v-for="(instance, index) in instances" :key="`instance:${index}`" v-on:click="uninstall(instance.id)" class="button full">{{ instance.display }}</div>
                     </div>
-                </div>
+                </form>
             </div>
             <div class="actions modal">
                 <div v-on:click="close()" class="button">{{ $t("cancel") }}</div>
+                <div v-if="type === 'install'" v-on:click="create()" class="button primary">{{ $t("plugin_install") }}</div>
             </div>
         </div>
     </modal>
 </template>
 
 <script>
+    import Sanitize from "@hoobs/sdk/lib/sanitize";
+
     export default {
         name: "instances",
 
         props: {
-            title: String,
+            type: String,
+            plugin: Object,
             values: Array,
-            description: String,
             select: {
                 type: Function,
                 default: () => { /* null */ },
@@ -59,10 +88,16 @@
         data() {
             return {
                 instances: [],
+                title: "",
+                display: "",
+                pin: "031-45-154",
+                username: "",
+                port: 50826,
+                remove: true,
             };
         },
 
-        mounted() {
+        async mounted() {
             this.instances = this.values;
 
             this.instances.sort((a, b) => {
@@ -71,6 +106,129 @@
 
                 return 0;
             });
+
+            let instances = [];
+            let count = 1;
+
+            switch (this.type) {
+                case "install":
+                    this.title = `${this.$t("plugin_install")} ${this.$plugins.title(this.plugin.name)}`;
+
+                    this.generate();
+                    this.port = 51826;
+                    this.display = this.$plugins.title(this.plugin.name);
+
+                    instances = await this.$hoobs.instances.list();
+
+                    while (instances.findIndex((item) => parseInt(`${item.port}`, 10) === this.port) >= 0) {
+                        this.port += 1000;
+                    }
+
+                    while (instances.findIndex((item) => item.id === Sanitize(this.display)) >= 0) {
+                        count += 1;
+
+                        this.display = `${this.$plugins.title(this.plugin.name)} ${count}`;
+                    }
+
+                    break;
+
+                case "uninstall":
+                    this.title = `${this.$t("plugin_uninstall")} ${this.$plugins.title(this.plugin.name)}`;
+                    break;
+
+                default:
+                    this.close();
+                    break;
+            }
+        },
+
+        methods: {
+            async create() {
+                let valid = true;
+
+                const instances = await this.$hoobs.instances.list();
+
+                const reserved = [
+                    "new",
+                    "add",
+                    "api",
+                    "library",
+                ];
+
+                if (valid && (!this.display || this.display === "")) {
+                    this.$alert(this.$t("instance_name_required"));
+                    valid = false;
+                }
+
+                if (valid && reserved.indexOf(Sanitize(this.display)) >= 0) {
+                    this.$alert(this.$t("instance_name_reserved"));
+                    valid = false;
+                }
+
+                if (valid && instances.findIndex((item) => item.id === Sanitize(this.display)) >= 0) {
+                    this.$alert(this.$t("instance_name_taken"));
+                    valid = false;
+                }
+
+                if (valid && !this.port) {
+                    this.$alert(this.$t("instance_port_required"));
+                    valid = false;
+                }
+
+                if (valid && instances.findIndex((item) => item.port === parseInt(this.port, 10)) >= 0) {
+                    this.$alert(this.$t("instance_port_taken"));
+                    valid = false;
+                }
+
+                if (valid && this.pin && this.pin !== "" && !this.validate(this.pin)) {
+                    this.$alert(this.$t("instance_pin_invalid"));
+                    valid = false;
+                }
+
+                if (valid) {
+                    this.select({
+                        id: Sanitize(this.display),
+                        display: this.display,
+                        port: this.port,
+                        pin: this.pin,
+                        username: this.username,
+                    });
+                }
+            },
+
+            install(id) {
+                this.select(id);
+            },
+
+            uninstall(id) {
+                this.select(id, this.remove);
+            },
+
+            validate(pin) {
+                const parts = pin.split("-");
+
+                if (parts.length !== 3) return false;
+
+                for (let i = 0; i < parts.length; i += 1) {
+                    if (Number.isNaN(parseInt(parts[i], 10))) return false;
+                }
+
+                return true;
+            },
+
+            generate() {
+                let value = "";
+
+                for (let i = 0; i < 6; i += 1) {
+                    if (value !== "") value += ":";
+
+                    const hex = `00${Math.floor(Math.random() * 255).toString(16).toUpperCase()}`;
+
+                    value += hex.substring(hex.length - 2, hex.length);
+                }
+
+                this.username = value;
+            },
         },
     };
 </script>
