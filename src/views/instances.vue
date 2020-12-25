@@ -58,6 +58,11 @@
                     <div class="row qrcode">
                         <qrcode v-if="!loading" :value="status.setup_id" :options="{ width: 200, color: { dark: theme.widget.text.default, light: '#00000000' }}" />
                     </div>
+                    <div class="row actions">
+                        <div v-if="status.running" v-on:click="control('restart')" class="button">{{ $t("restart") }}</div>
+                        <div v-if="!status.running" v-on:click="control('start')" class="button">{{ $t("start") }}</div>
+                        <div v-if="status.running" v-on:click="control('stop')" class="button">{{ $t("stop") }}</div>
+                    </div>
                     <div class="row section">{{ $t("details") }}</div>
                     <div class="row">
                         <text-field :name="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
@@ -202,6 +207,31 @@
                 }
 
                 this.loading = false;
+            },
+
+            async control(action) {
+                this.loading = true;
+
+                switch (action) {
+                    case "start":
+                        await this.subject.start();
+                        break;
+
+                    case "stop":
+                        await this.subject.stop();
+                        break;
+
+                    case "restart":
+                        await this.subject.restart();
+                        break;
+
+                    default:
+                        break;
+                }
+
+                setTimeout(() => {
+                    this.load(this.id);
+                }, 500);
             },
 
             async save(create) {

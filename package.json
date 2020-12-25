@@ -30,7 +30,7 @@
     },
     "dependencies": {
         "@chenfengyuan/vue-qrcode": "^1.0.2",
-        "@hoobs/sdk": "^4.0.9",
+        "@hoobs/sdk": "^4.0.11",
         "axios": "^0.21.0",
         "chart.js": "^2.9.4",
         "color-scheme": "^1.0.1",
