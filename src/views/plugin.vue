@@ -40,8 +40,8 @@
                 </div>
                 <div class="header">
                     <div class="actions">
-                        <div v-if="installed.length > 0" v-on:click="uninstall('uninstall')" ref="uninstall" class="button">{{ $t("plugin_uninstall") }}</div>
-                        <div v-if="!updated" v-on:click="upgrade('upgrade')" class="button" ref="upgrade">{{ $t("plugin_upgrade") }}</div>
+                        <div v-if="installed.length > 0" v-on:click="uninstall()" class="button">{{ $t("plugin_uninstall") }}</div>
+                        <div v-if="!updated" v-on:click="update()" class="button">{{ $t("plugin_update") }}</div>
                         <div v-if="available.length > 0" v-on:click="install()" class="button primary">{{ $t("plugin_install") }}</div>
                     </div>
                 </div>
@@ -56,15 +56,15 @@
                     <div v-if="section === 'versions'" class="section">
                         <div class="heading">{{ $t("tags") }}</div>
                         <div v-for="(tag, index) in releases.tags" :key="`tag:${index}`" class="version">
-                            <div v-on:click="install(tag.tag)" class="icon" :title="$t('plugin_install')">cloud_download</div>
-                            <div v-on:click="install(tag.tag)" class="value">{{ tag.version }}</div>
+                            <div v-on:click="install(tag.tag, true)" class="icon" :title="$t('plugin_install')">cloud_download</div>
+                            <div v-on:click="install(tag.tag, true)" class="value">{{ tag.version }}</div>
                             <div class="fill"></div>
                             <div class="value">{{ tag.tag }}</div>
                         </div>
                         <div class="heading">{{ $t("releases") }}</div>
                         <div v-for="(release, index) in releases.versions" :key="`version:${index}`" class="version">
-                            <div v-on:click="install(release.version)" class="icon" :title="$t('plugin_install')">cloud_download</div>
-                            <div v-on:click="install(release.version)" class="value">{{ release.version }}</div>
+                            <div v-on:click="install(release.version, true)" class="icon" :title="$t('plugin_install')">cloud_download</div>
+                            <div v-on:click="install(release.version, true)" class="value">{{ release.version }}</div>
                             <div class="fill"></div>
                             <div class="value">{{ $dates.age(release.published) }}</div>
                         </div>
@@ -220,7 +220,6 @@
                                                     id: this.instances[i].id,
                                                     display: this.instances[i].display,
                                                     updated: Semver.compare(plugin.version, plugin.latest, ">="),
-                                                    instance: this.instances[i],
                                                 });
                                             }
 
@@ -245,9 +244,14 @@
                 }
             },
 
-            install(tag) {
+            install(tag, all) {
                 if (this.instances.length > 1) {
-                    this.select.values = this.available;
+                    if (all) {
+                        this.select.values = [...this.available, ...this.installed];
+                    } else {
+                        this.select.values = this.available;
+                    }
+
                     this.select.title = `${this.$t("plugin_install")} ${this.$plugins.title(this.plugin.name)}`;
                     this.select.description = this.$t("plugin_install_instance");
 
@@ -341,7 +345,7 @@
                 }
             },
 
-            upgrade() {
+            update() {
                 this.loading = true;
 
                 const waits = [];
@@ -420,7 +424,6 @@
                         this.available.push({
                             id: instance.id,
                             display: instance.display,
-                            instance,
                         });
                     }
                 }

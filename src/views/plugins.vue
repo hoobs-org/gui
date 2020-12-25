@@ -63,12 +63,12 @@
                     <div v-if="results.length > 0" class="cards">
                         <plugin v-for="(plugin, index) in results" :key="`search:${index}`" :subject="plugin" />
                     </div>
-                    <div v-if="total > 1 && pages.length > 1" class="pagination">
-                        <div v-if="pages[0] > 0" v-on:click="paginate(0, 27)" class="page">1</div>
-                        <div v-if="pages[0] > 0" class="more">...</div>
-                        <div v-for="(page, index) in pages" :key="`page:${index}`" v-on:click="paginate(page * 27, 27)" :class="`${page === current ? 'page off' : 'page'}`">{{ page + 1 }}</div>
-                        <div v-if="pages[pages.length - 1] < total - 1" class="more">...</div>
-                        <div v-if="pages[pages.length - 1] < total - 1" v-on:click="paginate((total - 1) * 27, 27)" class="page">{{ total }}</div>
+                    <div v-if="total > 1 && pagination.length > 1" class="pagination">
+                        <div v-if="pagination[0] > 0" v-on:click="paginate(0, 27)" class="page">1</div>
+                        <div v-if="pagination[0] > 0" class="more">...</div>
+                        <div v-for="(page, index) in pagination" :key="`page:${index}`" v-on:click="paginate(page * 27, 27)" :class="`${page === current ? 'page off' : 'page'}`">{{ page + 1 }}</div>
+                        <div v-if="pagination[pagination.length - 1] < total - 1" class="more">...</div>
+                        <div v-if="pagination[pagination.length - 1] < total - 1" v-on:click="paginate((total - 1) * 27, 27)" class="page">{{ total }}</div>
                     </div>
                     <div v-if="!loading && featured.length === 0 && popular.length === 0 && results.length === 0" class="empty">
                         <div class="message">
@@ -110,12 +110,12 @@
             return {
                 loading: true,
                 query: "",
+                pagination: [],
                 installed: [],
                 instances: [],
                 featured: [],
                 popular: [],
                 results: [],
-                pages: [],
                 current: 0,
                 total: 0,
                 count: 0,
@@ -147,11 +147,11 @@
             async load(id) {
                 this.loading = true;
 
+                this.pagination = [];
                 this.installed = [];
                 this.featured = [];
                 this.popular = [];
                 this.results = [];
-                this.pages = [];
 
                 this.current = 0;
                 this.total = 0;
@@ -191,6 +191,7 @@
 
                     this.current = limit > 0 ? skip / limit : 0;
                     this.total = Math.min(Math.ceil(limit > 0 ? this.count / limit : 0), 27);
+                    this.pagination = [];
 
                     let start = this.current - 2;
                     let end = start + 4;
@@ -210,7 +211,7 @@
                     }
 
                     for (let i = start; i < end; i += 1) {
-                        this.pages.push(i);
+                        this.pagination.push(i);
                     }
                 }
 
