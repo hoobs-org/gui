@@ -17,42 +17,49 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="updates" class="content">
-        <div v-if="!updating" class="form">
-            <div class="row section">{{ $t("software") }}</div>
-            <div v-if="!loading && !status.upgraded" class="row">
-                {{ $t("version_server") }}: {{ status.current }}
-                <span class="value">{{ $t("available") }}</span>
+    <modal :title="$t('updates')" :draggable="true" width="720px" height="520px">
+        <div id="updates">
+            <div class="content">
+                <div v-if="!updating" class="form">
+                    <div class="row section">{{ $t("software") }}</div>
+                    <div v-if="!loading && !status.upgraded" class="row">
+                        {{ $t("version_server") }}: {{ status.current }}
+                        <span class="value">{{ $t("available") }}</span>
+                    </div>
+                    <div v-if="!loading && !status.cli_upgraded" class="row">
+                        {{ $t("version_cli") }}: {{ status.cli_current }}
+                        <span class="value">{{ $t("available") }}</span>
+                    </div>
+                    <div v-if="!loading && !status.node_upgraded" class="row">
+                        {{ $t("version_node") }}: {{ status.node_current }}
+                        <span class="value">{{ $t("available") }}</span>
+                    </div>
+                    <div v-if="!loading && plugins.length > 0" class="row">
+                        {{ $t("plugins") }}: {{ plugins.length }} {{ $t("plugin_updates") }}
+                        <span class="value">{{ $t("available") }}</span>
+                    </div>
+                    <div v-if="!loading && !updated" class="row" style="margin-top: 7px;">
+                        <a v-if="stack" class="button" href="https://github.com/hoobs-org/HOOBS" target="_blank">{{ $t("changelog") }}</a>
+                        <div v-if="stack" v-on:click="upgrade()" class="button">{{ $t("update_now") }}</div>
+                        <div v-if="plugins.length > 0" v-on:click="update()" class="button">{{ $t("update_plugins") }}</div>
+                    </div>
+                    <div v-if="!loading && updated" class="row updated">
+                        <span class="icon">update</span>
+                        <div class="text">{{ $t("updated") }}</div>
+                    </div>
+                    <div v-if="loading" class="row loading">
+                        <spinner />
+                    </div>
+                </div>
+                <div v-else class="loading">
+                    <spinner />
+                </div>
             </div>
-            <div v-if="!loading && !status.cli_upgraded" class="row">
-                {{ $t("version_cli") }}: {{ status.cli_current }}
-                <span class="value">{{ $t("available") }}</span>
-            </div>
-            <div v-if="!loading && !status.node_upgraded" class="row">
-                {{ $t("version_node") }}: {{ status.node_current }}
-                <span class="value">{{ $t("available") }}</span>
-            </div>
-            <div v-if="!loading && plugins.length > 0" class="row">
-                {{ $t("plugins") }}: {{ plugins.length }} {{ $t("plugin_updates") }}
-                <span class="value">{{ $t("available") }}</span>
-            </div>
-            <div v-if="!loading && !updated" class="row" style="margin-top: 7px;">
-                <a v-if="stack" class="button" href="https://github.com/hoobs-org/HOOBS" target="_blank">{{ $t("changelog") }}</a>
-                <div v-if="stack" v-on:click="upgrade()" class="button">{{ $t("update_now") }}</div>
-                <div v-if="plugins.length > 0" v-on:click="update()" class="button">{{ $t("update_plugins") }}</div>
-            </div>
-            <div v-if="!loading && updated" class="row updated">
-                <span class="icon">update</span>
-                <div class="text">{{ $t("updated") }}</div>
-            </div>
-            <div v-if="loading" class="row loading">
-                <spinner />
+            <div class="actions modal">
+                <div v-on:click="close()" class="button">{{ $t("cancel") }}</div>
             </div>
         </div>
-        <div v-else class="loading">
-            <spinner />
-        </div>
-    </div>
+    </modal>
 </template>
 
 <script>
@@ -60,6 +67,13 @@
 
     export default {
         name: "updates",
+
+        props: {
+            close: {
+                type: Function,
+                default: () => { /* null */ },
+            },
+        },
 
         data() {
             return {
@@ -129,6 +143,11 @@
 
 <style lang="scss" scoped>
     #updates {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        margin: 0 0 0 10px;
+
         .value {
             font-weight: bold;
             margin: 0 4px;

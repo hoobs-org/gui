@@ -39,6 +39,7 @@
             :logout="logout"
         />
         <about v-if="parent.show.about" :close="() => { toggle('about') }" />
+        <updates v-if="parent.show.updates" :close="() => { toggle('updates') }" />
         <settings v-if="parent.show.settings" :close="() => { toggle('settings') }" />
         <personalize v-if="parent.show.personalize" :close="() => { toggle('personalize') }" />
     </div>
@@ -46,6 +47,7 @@
 
 <script>
     import About from "@/components/dialogs/about.vue";
+    import Updates from "@/components/dialogs/updates.vue";
     import Settings from "@/components/dialogs/settings.vue";
     import Personalize from "@/components/dialogs/personalize.vue";
     import ApplicationMenu from "@/components/menus/application.vue";
@@ -55,6 +57,7 @@
 
         components: {
             "about": About,
+            "updates": Updates,
             "settings": Settings,
             "personalize": Personalize,
             "application-menu": ApplicationMenu,

@@ -216,6 +216,7 @@
         "update_interval_description": "Send monitor updates interval (in seconds).",
         "update_now": "Update Now",
         "update_plugins": "Update Plugins",
+        "updates": "Updates",
         "updated": "You're up to date.",
         "upload_file": "Upload File",
         "user_add_admin_account": "To start you need to setup the administrator account.",

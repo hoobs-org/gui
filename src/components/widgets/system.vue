@@ -40,7 +40,10 @@
                         {{ version }}
                         <a v-if="user.permissions.reboot" v-on:click.stop="update()" class="update">{{ $t("update_avaliable") }}</a>
                     </td>
-                    <td v-else>{{ version }}</td>
+                    <td v-else>
+                        {{ version }}
+                        <a v-if="user.permissions.reboot" v-on:click.stop="update()" class="update">{{ $t("check_updates") }}</a>
+                    </td>
                 </tr>
                 <tr>
                     <td>{{ $t("version_node") }}</td>
@@ -109,7 +112,7 @@
 
         methods: {
             update() {
-                this.$store.commit("DIALOG:SHOW", "about");
+                this.$store.commit("DIALOG:SHOW", "updates");
             },
         },
     };

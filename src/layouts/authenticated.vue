@@ -61,6 +61,7 @@
                     settings: false,
                     plugins: false,
                     confirm: false,
+                    updates: false,
                     about: false,
                     alert: false,
                 },

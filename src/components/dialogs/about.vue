@@ -19,8 +19,7 @@
 <template>
     <modal :title="$t('about')" :draggable="true" width="720px" height="520px">
         <div id="about">
-            <updates v-if="show.updates" />
-            <div v-else class="content">
+            <div class="content">
                 <div class="form">
                     <div class="row section">{{ $t("software") }}</div>
                     <div class="row" style="margin-bottom: 7px;">{{ $t("version") }}: {{ version }}</div>
@@ -42,10 +41,7 @@
                     </div>
                 </div>
             </div>
-            <div v-if="show.updates" class="actions modal">
-                <div v-on:click="back()" class="button">{{ $t("cancel") }}</div>
-            </div>
-            <div v-else class="actions modal">
+            <div class="actions modal">
                 <div v-on:click="donate()" class="button">{{ $t("donate") }}</div>
                 <div v-on:click="close()" class="button primary">{{ $t("ok") }}</div>
             </div>
@@ -54,14 +50,8 @@
 </template>
 
 <script>
-    import Updates from "@/components/dialogs/updates.vue";
-
     export default {
         name: "about",
-
-        components: {
-            "updates": Updates,
-        },
 
         props: {
             close: {
@@ -73,9 +63,6 @@
         data() {
             return {
                 version: "",
-                show: {
-                    updates: false,
-                },
             };
         },
 
@@ -89,11 +76,8 @@
             },
 
             updates() {
-                this.show.updates = true;
-            },
-
-            back() {
-                this.show.updates = false;
+                this.close();
+                this.$store.commit("DIALOG:SHOW", "updates");
             },
         },
     };
