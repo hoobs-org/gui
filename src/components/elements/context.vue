@@ -39,7 +39,7 @@
             :logout="logout"
         />
         <about v-if="parent.show.about" :close="() => { toggle('about') }" />
-        <updates v-if="parent.show.updates" :close="() => { toggle('updates') }" />
+        <updates v-if="parent.show.upgrades" :close="() => { toggle('upgrades') }" />
         <settings v-if="parent.show.settings" :close="() => { toggle('settings') }" />
         <personalize v-if="parent.show.personalize" :close="() => { toggle('personalize') }" />
     </div>

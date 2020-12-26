@@ -110,7 +110,11 @@
                 if (mutation.type === "DASHBOARD:ITEMS" || mutation.type === "DASHBOARD:BACKDROP") {
                     this.loading = true;
 
-                    window.location.reload();
+                    const { dashboard } = this.$store.state;
+
+                    this.items = dashboard.items;
+                    this.backdrop = dashboard.backdrop || false;
+                    this.loading = false;
                 }
             });
         },

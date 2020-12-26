@@ -112,7 +112,7 @@
 
         methods: {
             update() {
-                this.$store.commit("DIALOG:SHOW", "updates");
+                this.$store.commit("DIALOG:SHOW", "upgrades");
             },
         },
     };

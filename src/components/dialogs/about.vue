@@ -24,7 +24,7 @@
                     <div class="row section">{{ $t("software") }}</div>
                     <div class="row" style="margin-bottom: 7px;">{{ $t("version") }}: {{ version }}</div>
                     <div class="row">
-                        <div v-on:click="updates()" class="button">{{ $t("check_updates") }}</div>
+                        <div v-on:click="upgrades()" class="button">{{ $t("check_updates") }}</div>
                     </div>
                     <div class="row section">{{ $t("license") }}</div>
                     <div class="row">{{ $t("license_title") }}</div>
@@ -75,9 +75,9 @@
                 window.open("https://paypal.me/hoobsorg");
             },
 
-            updates() {
+            upgrades() {
                 this.close();
-                this.$store.commit("DIALOG:SHOW", "updates");
+                this.$store.commit("DIALOG:SHOW", "upgrades");
             },
         },
     };
