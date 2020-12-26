@@ -92,6 +92,10 @@
 
                     this.confirming = true;
                 }
+
+                if (mutation.type === "SETTINGS:UPDATE") {
+                    window.location.reload();
+                }
             });
 
             this.$store.commit("AUTH:STATE", (await this.$hoobs.auth.status()));

@@ -23,13 +23,8 @@
         </div>
         <div v-if="installed.length > 0" class="item vertical">
             <div v-for="(item, index) in installed" :key="`installed:${index}`" class="value smaller">
-                {{ item.version }} {{ item.display }}
-            </div>
-            <div class="value spaced">
-                <router-link :to="`/config/${plugin.name}`">
-                    <span class="icon">settings</span>
-                    {{ $t("configuration") }}
-                </router-link>
+                <router-link :to="`/instances/${item.id}`" :style="instance(item.display)">{{ item.display }}</router-link>
+                {{ item.version }}
             </div>
         </div>
         <div v-if="plugin.certified" class="title">
@@ -90,6 +85,17 @@
             <div class="value">{{ plugin.version || plugin.tags.latest }}</div>
             <div class="value">{{ plugin.license || "" }}</div>
         </div>
+        <div v-if="support" class="title">
+            <h1>{{ $t("support") }}</h1>
+        </div>
+        <div v-if="support" class="item">
+            <div class="value">
+                <a :href="support" target="_blank">
+                    <span class="icon">help</span>
+                    {{ $t("plugin_issues") }}
+                </a>
+            </div>
+        </div>
         <div class="title">
             <h1>{{ $t("homepage") }}</h1>
         </div>
@@ -127,6 +133,7 @@
 
 <script>
     import Chart from "vue-trend-chart";
+    import ColorScheme from "color-scheme";
 
     export default {
         name: "detail",
@@ -146,6 +153,7 @@
                 current: null,
                 homepage: null,
                 repository: null,
+                support: null,
                 downloads: {},
             };
         },
@@ -198,6 +206,13 @@
                 smooth: true,
                 fill: true,
             };
+
+            if (this.plugin.versions) {
+                const version = Object.keys(this.plugin.versions).pop();
+                const latest = this.plugin.versions[version];
+
+                if (latest && (latest.bugs || {}).url) this.support = latest.bugs.url;
+            }
         },
 
         methods: {
@@ -237,6 +252,30 @@
 
             domain(value) {
                 return value.replace("http://", "").replace("https://", "").split("/")[0];
+            },
+
+            analogic(value, double) {
+                const scheme = new ColorScheme();
+
+                scheme.from_hex(value.replace("#", "").toUpperCase());
+                scheme.scheme("analogic");
+                scheme.variation("hard");
+
+                if (double) {
+                    return this.analogic(scheme.colors()[7]);
+                }
+
+                return `#${scheme.colors()[7]}`;
+            },
+
+            instance(value) {
+                let hash = 0;
+
+                for (let i = 0; i < value.length; i += 1) hash = value.charCodeAt(i) + ((hash << 6) - hash);
+
+                const hex = (hash & 0x00FFFFFF).toString(16).toLowerCase();
+
+                return `color: ${this.analogic("000000".substring(0, 6 - hex.length) + hex)} !important;`;
             },
         },
     };
@@ -297,10 +336,16 @@
 
                 &.smaller {
                     font-size: 14px;
-                }
+                    display: flex;
+                    flex-direction: row;
 
-                &.spaced {
-                    margin: 10px 0 0 0;
+                    a {
+                        margin: 0 5px 0 0;
+
+                        &:hover {
+                            text-decoration: underline !important;
+                        }
+                    }
                 }
             }
 

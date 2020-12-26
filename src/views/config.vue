@@ -26,6 +26,10 @@
     export default {
         name: "config",
 
+        props: {
+            section: String,
+        },
+
         computed: {
             user() {
                 return this.$store.state.user;

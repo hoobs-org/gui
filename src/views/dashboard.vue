@@ -107,7 +107,7 @@
 
         created() {
             this.$store.subscribe((mutation) => {
-                if (mutation.type === "SETTINGS:UPDATE" || mutation.type === "DASHBOARD:ITEMS" || mutation.type === "DASHBOARD:BACKDROP") {
+                if (mutation.type === "DASHBOARD:ITEMS" || mutation.type === "DASHBOARD:BACKDROP") {
                     this.loading = true;
 
                     const { dashboard } = this.$store.state;

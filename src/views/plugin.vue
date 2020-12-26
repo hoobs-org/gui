@@ -42,7 +42,8 @@
                     <div class="actions">
                         <div v-if="installed.length > 0" v-on:click="uninstall()" class="button">{{ $t("plugin_uninstall") }}</div>
                         <div v-if="!updated" v-on:click="update()" class="button">{{ $t("plugin_update") }}</div>
-                        <div v-on:click="install()" class="button primary">{{ $t("plugin_install") }}</div>
+                        <div v-on:click="install()" :class="installed.length > 0 ? 'button' : 'button primary'">{{ $t("plugin_install") }}</div>
+                        <router-link v-if="installed.length > 0" :to="`/config/${identifier}`" class="button primary">{{ $t("configuration") }}</router-link>
                     </div>
                 </div>
                 <tabs :values="tabs" v-on:change="change" :value="section" />
@@ -280,6 +281,8 @@
                                         this.$hoobs.instance(data.id).then((instance) => {
                                             if (instance) {
                                                 instance.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
+                                                    this.$store.commit("SETTINGS:UPDATE");
+
                                                     resolve();
                                                 });
                                             } else {
@@ -324,6 +327,8 @@
                                                 if (plugins.length === 0) {
                                                     instance.remove().then(() => {
                                                         setTimeout(() => {
+                                                            this.$store.commit("SETTINGS:UPDATE");
+
                                                             resolve();
                                                         }, 3000);
                                                     });

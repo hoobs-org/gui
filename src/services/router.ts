@@ -81,10 +81,11 @@ const routes: Array<RouteConfig> = [
         props: true,
     },
     {
-        path: "/config",
+        path: "/config/:section?",
         name: "config",
         meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "config" */ "../views/config.vue"),
+        props: true,
     },
     {
         path: "/terminal",

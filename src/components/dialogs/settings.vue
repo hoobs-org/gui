@@ -265,7 +265,6 @@
                 await Wait();
 
                 this.$store.commit("SETTINGS:UPDATE");
-                this.close();
             },
 
             back() {
