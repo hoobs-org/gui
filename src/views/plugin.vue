@@ -267,13 +267,9 @@
                                             this.$hoobs.instance(data.id).then((instance) => {
                                                 if (instance) {
                                                     instance.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
-                                                        this.$action.emit("log", "history");
-
                                                         resolve();
                                                     });
                                                 } else {
-                                                    this.$action.emit("log", "history");
-
                                                     resolve();
                                                 }
                                             });
@@ -315,8 +311,6 @@
                                                     if (plugins.length === 0) {
                                                         instance.remove().then(() => {
                                                             setTimeout(() => {
-                                                                this.$action.emit("log", "history");
-
                                                                 resolve();
                                                             }, 3000);
                                                         });
