@@ -111,6 +111,8 @@
     import Sanitize from "@hoobs/sdk/lib/sanitize";
     import QRCode from "@chenfengyuan/vue-qrcode";
     import List from "../components/elements/list.vue";
+    import Validators from "../services/validators";
+    import { mac } from "../services/formatters";
 
     export default {
         name: "instances",
@@ -238,49 +240,10 @@
             },
 
             async save(create) {
-                let valid = true;
+                const validation = Validators.instance(create, await this.$hoobs.instances.list(), this.display, this.pin, this.port, this.username, this.autostart, this.start, this.end);
 
-                const instances = await this.$hoobs.instances.list();
-
-                const reserved = [
-                    "new",
-                    "add",
-                    "api",
-                    "library",
-                ];
-
-                if (create) {
-                    if (valid && (!this.display || this.display === "")) {
-                        this.$alert(this.$t("instance_name_required"));
-                        valid = false;
-                    }
-
-                    if (valid && reserved.indexOf(Sanitize(this.display)) >= 0) {
-                        this.$alert(this.$t("instance_name_reserved"));
-                        valid = false;
-                    }
-
-                    if (valid && instances.findIndex((item) => item.id === Sanitize(this.display)) >= 0) {
-                        this.$alert(this.$t("instance_name_taken"));
-                        valid = false;
-                    }
-
-                    if (valid && !this.port) {
-                        this.$alert(this.$t("instance_port_required"));
-                        valid = false;
-                    }
-
-                    if (valid && instances.findIndex((item) => item.port === parseInt(this.port, 10)) >= 0) {
-                        this.$alert(this.$t("instance_port_taken"));
-                        valid = false;
-                    }
-
-                    if (valid && this.pin && this.pin !== "" && !this.validate(this.pin)) {
-                        this.$alert(this.$t("instance_pin_invalid"));
-                        valid = false;
-                    }
-
-                    if (valid) {
+                if (validation.valid) {
+                    if (create) {
                         this.loading = true;
 
                         if (this.file) {
@@ -295,52 +258,7 @@
                             this.instances = await this.$hoobs.instances.list();
                             this.$router.push({ path: `/instances/${this.instances.find((item) => item.id === Sanitize(this.display)).id}` });
                         }, 500);
-                    }
-                } else if (this.subject) {
-                    if (valid && (!this.display || this.display === "")) {
-                        this.$alert(this.$t("instance_name_required"));
-                        valid = false;
-                    }
-
-                    if (valid && this.pin && this.pin !== "" && !this.validate(this.pin)) {
-                        this.$alert(this.$t("instance_pin_invalid"));
-                        valid = false;
-                    }
-
-                    if (valid && (!this.username || this.username === "")) {
-                        this.$alert(this.$t("instance_username_invalid"));
-                        valid = false;
-                    }
-
-                    if (valid && (this.autostart < -1 || this.autostart > 300)) {
-                        this.$alert(this.$t("instance_autostart_invalid"));
-                        valid = false;
-                    }
-
-                    if (valid && (this.start || this.end)) {
-                        if (valid && (!this.start || !this.end)) {
-                            this.$alert(this.$t("instance_port_pool_required"));
-                            valid = false;
-                        }
-
-                        if (valid && this.end < this.start) {
-                            this.$alert(this.$t("instance_port_pool_invalid"));
-                            valid = false;
-                        }
-
-                        if (valid) {
-                            for (let i = this.start; i <= this.end; i += 1) {
-                                if (valid && instances.findIndex((item) => item.port === i) >= 0) {
-                                    this.$alert(this.$t("instance_port_pool_collision"));
-                                    valid = false;
-                                }
-                            }
-
-                            valid = false;
-                        }
-                    }
-
-                    if (valid) {
+                    } else if (this.subject) {
                         this.loading = true;
 
                         await this.subject.update(this.display, this.autostart, this.pin, this.username);
@@ -355,33 +273,13 @@
                             this.load(this.id);
                         }, 500);
                     }
+                } else {
+                    this.$alert(this.$t(validation.error));
                 }
-            },
-
-            validate(pin) {
-                const parts = pin.split("-");
-
-                if (parts.length !== 3) return false;
-
-                for (let i = 0; i < parts.length; i += 1) {
-                    if (Number.isNaN(parseInt(parts[i], 10))) return false;
-                }
-
-                return true;
             },
 
             generate() {
-                let value = "";
-
-                for (let i = 0; i < 6; i += 1) {
-                    if (value !== "") value += ":";
-
-                    const hex = `00${Math.floor(Math.random() * 255).toString(16).toUpperCase()}`;
-
-                    value += hex.substring(hex.length - 2, hex.length);
-                }
-
-                this.username = value;
+                this.username = mac();
             },
 
             remove() {

@@ -67,6 +67,8 @@
 
 <script>
     import Sanitize from "@hoobs/sdk/lib/sanitize";
+    import Validators from "../../services/validators";
+    import { mac } from "../../services/formatters";
 
     export default {
         name: "instances",
@@ -134,48 +136,9 @@
 
         methods: {
             async create() {
-                let valid = true;
+                const validation = Validators.instance(true, await this.$hoobs.instances.list(), this.display, this.pin, this.port, this.username);
 
-                const instances = await this.$hoobs.instances.list();
-
-                const reserved = [
-                    "new",
-                    "add",
-                    "api",
-                    "library",
-                ];
-
-                if (valid && (!this.display || this.display === "")) {
-                    this.$alert(this.$t("instance_name_required"));
-                    valid = false;
-                }
-
-                if (valid && reserved.indexOf(Sanitize(this.display)) >= 0) {
-                    this.$alert(this.$t("instance_name_reserved"));
-                    valid = false;
-                }
-
-                if (valid && instances.findIndex((item) => item.id === Sanitize(this.display)) >= 0) {
-                    this.$alert(this.$t("instance_name_taken"));
-                    valid = false;
-                }
-
-                if (valid && !this.port) {
-                    this.$alert(this.$t("instance_port_required"));
-                    valid = false;
-                }
-
-                if (valid && instances.findIndex((item) => item.port === parseInt(this.port, 10)) >= 0) {
-                    this.$alert(this.$t("instance_port_taken"));
-                    valid = false;
-                }
-
-                if (valid && this.pin && this.pin !== "" && !this.validate(this.pin)) {
-                    this.$alert(this.$t("instance_pin_invalid"));
-                    valid = false;
-                }
-
-                if (valid) {
+                if (validation.valid) {
                     this.options.select({
                         id: Sanitize(this.display),
                         display: this.display,
@@ -183,6 +146,8 @@
                         pin: this.pin,
                         username: this.username,
                     });
+                } else {
+                    this.$alert(this.$t(validation.error));
                 }
             },
 
@@ -207,17 +172,7 @@
             },
 
             generate() {
-                let value = "";
-
-                for (let i = 0; i < 6; i += 1) {
-                    if (value !== "") value += ":";
-
-                    const hex = `00${Math.floor(Math.random() * 255).toString(16).toUpperCase()}`;
-
-                    value += hex.substring(hex.length - 2, hex.length);
-                }
-
-                this.username = value;
+                this.username = mac();
             },
         },
     };

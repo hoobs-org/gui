@@ -63,3 +63,17 @@ export function timespan(value: number): { [key: string]: number } {
 
     return results;
 }
+
+export function mac(): string {
+    let value = "";
+
+    for (let i = 0; i < 6; i += 1) {
+        if (value !== "") value += ":";
+
+        const hex = `00${Math.floor(Math.random() * 255).toString(16).toUpperCase()}`;
+
+        value += hex.substring(hex.length - 2, hex.length);
+    }
+
+    return value;
+}

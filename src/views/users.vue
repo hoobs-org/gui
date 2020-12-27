@@ -94,6 +94,7 @@
 </template>
 
 <script>
+    import Validators from "../services/validators";
     import List from "../components/elements/list.vue";
 
     export default {
@@ -194,25 +195,10 @@
             },
 
             async save(create) {
-                let valid = true;
+                const validation = Validators.user(create, await this.$hoobs.users.list(), this.username, this.password, this.challenge);
 
-                if (create) {
-                    if (valid && this.username.length < 3) {
-                        this.$alert(this.$t("username_required"));
-                        valid = false;
-                    }
-
-                    if (valid && this.password.length < 5) {
-                        this.$alert(this.$t("password_weak"));
-                        valid = false;
-                    }
-
-                    if (valid && this.password !== this.challenge) {
-                        this.$alert(this.$t("password_mismatch"));
-                        valid = false;
-                    }
-
-                    if (valid) {
+                if (validation.valid) {
+                    if (create) {
                         this.loading = true;
 
                         const permissions = {
@@ -231,45 +217,11 @@
                         }
 
                         await this.$hoobs.users.add(this.username, this.password, !this.name || this.name === "" ? this.username : this.name, permissions);
-                    }
-                } else if (this.subject.id === 1) {
-                    if (valid && this.username.length < 3) {
-                        this.$alert(this.$t("username_required"));
-                        valid = false;
-                    }
-
-                    if (valid && this.password && this.password !== "" && this.password.length < 5) {
-                        this.$alert(this.$t("password_weak"));
-                        valid = false;
-                    }
-
-                    if (valid && this.password && this.password !== "" && this.password !== this.challenge) {
-                        this.$alert(this.$t("password_mismatch"));
-                        valid = false;
-                    }
-
-                    if (valid) {
+                    } else if (this.subject.id === 1) {
                         this.loading = true;
 
                         await this.subject.update(this.username, !this.password || this.password === "" ? null : this.password, !this.name || this.name === "" ? this.username : this.name);
-                    }
-                } else {
-                    if (valid && this.username.length < 3) {
-                        this.$alert(this.$t("username_required"));
-                        valid = false;
-                    }
-
-                    if (valid && this.password && this.password !== "" && this.password.length < 5) {
-                        this.$alert(this.$t("password_weak"));
-                        valid = false;
-                    }
-
-                    if (valid && this.password && this.password !== "" && this.password !== this.challenge) {
-                        this.$alert(this.$t("password_mismatch"));
-                        valid = false;
-                    }
-
-                    if (valid) {
+                    } else {
                         this.loading = true;
 
                         const permissions = {
@@ -289,9 +241,7 @@
 
                         await this.subject.update(this.username, !this.password || this.password === "" ? null : this.password, !this.name || this.name === "" ? this.username : this.name, permissions);
                     }
-                }
 
-                if (valid) {
                     if (this.user.id === this.subject.id) {
                         await this.$hoobs.auth.logout();
 
@@ -300,6 +250,8 @@
                         this.users = await this.$hoobs.users.list();
                         this.$router.push({ path: `/users/${this.users.find((item) => item.username === this.username).id}` });
                     }
+                } else {
+                    this.$alert(this.$t(validation.error));
                 }
             },
 

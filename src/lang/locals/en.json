@@ -226,6 +226,7 @@
         "user_add_failed": "Unable to create profile.",
         "user_select_add": "Select a profile, or",
         "username": "Username",
+        "username_already_taken": "Username already taken",
         "username_description": "Define your desired username. Usernames must be at least 3 characters long.",
         "username_required": "Username is required.",
         "user_add": "Add Profile",
