@@ -115,15 +115,26 @@
             .upper {
                 display: flex;
                 flex-direction: column;
-                background: var(--modal-input);
-                padding: 10px 5px 5px 5px;
                 border-top: 1px var(--modal-border) solid;
                 border-right: 1px var(--modal-border) solid;
                 border-bottom: 1px var(--modal-border) solid;
                 border-left: 1px var(--modal-border) solid;
 
                 &:focus-within {
-                    background: var(--modal-input-accent);
+                    .label {
+                        background: var(--modal-input-accent);
+                    }
+
+                    input {
+                        background: var(--modal-input-accent);
+                    }
+                }
+
+                .label {
+                    padding: 10px 10px 0 10px;
+                    background: var(--modal-input);
+                    font-size: 12px;
+                    user-select: none;
                 }
             }
 
@@ -144,35 +155,42 @@
             .lower {
                 display: flex;
                 flex-direction: column;
-                background: var(--modal-input);
-                padding: 10px 5px 5px 5px;
+                margin: -1px 0 0 0;
                 border-right: 1px var(--modal-border) solid;
                 border-bottom: 1px var(--modal-border) solid;
                 border-left: 1px var(--modal-border) solid;
 
                 &:focus-within {
-                    background: var(--modal-input-accent);
+                    .label {
+                        background: var(--modal-input-accent);
+                    }
+
+                    input {
+                        background: var(--modal-input-accent);
+                    }
+                }
+
+                .label {
+                    padding: 10px 10px 0 10px;
+                    margin: 2px 0 0 0;
+                    background: var(--modal-input);
+                    font-size: 12px;
+                    user-select: none;
                 }
             }
 
             input {
                 border: 0 none;
                 outline: 0 none;
-                background: transparent;
+                padding: 5px 10px 10px 10px;
+                background: var(--modal-input);
                 color: var(--modal-input-text);
                 font-size: 15px;
-                padding: 5px;
 
                 &:focus {
                     border: 0 none;
                     outline: 0 none;
                 }
-            }
-
-            .label {
-                padding: 0 5px;
-                font-size: 12px;
-                user-select: none;
             }
         }
 
