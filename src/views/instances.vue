@@ -107,10 +107,12 @@
 </template>
 
 <script>
-    import { Wait } from "@hoobs/sdk/lib/wait";
-    import Sanitize from "@hoobs/sdk/lib/sanitize";
     import QRCode from "@chenfengyuan/vue-qrcode";
-    import List from "../components/elements/list.vue";
+    import Sanitize from "@hoobs/sdk/lib/sanitize";
+    import { Wait } from "@hoobs/sdk/lib/wait";
+
+    import List from "@/components/elements/list.vue";
+
     import Validators from "../services/validators";
     import { mac } from "../services/formatters";
 

@@ -85,11 +85,12 @@
     import Semver from "compare-versions";
     import crypto from "crypto";
     import identicon from "identicon.js";
-    import Tabs from "../components/elements/tabs.vue";
-    import List from "../components/elements/list.vue";
-    import Detail from "../components/elements/detail.vue";
-    import Rating from "../components/elements/rating.vue";
-    import Reviews from "../components/elements/reviews.vue";
+
+    import Tabs from "@/components/elements/tabs.vue";
+    import List from "@/components/elements/list.vue";
+    import Detail from "@/components/elements/detail.vue";
+    import Rating from "@/components/elements/rating.vue";
+    import Reviews from "@/components/elements/reviews.vue";
 
     export default {
         name: "plugin",

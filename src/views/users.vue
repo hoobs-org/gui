@@ -94,8 +94,9 @@
 </template>
 
 <script>
+    import List from "@/components/elements/list.vue";
+
     import Validators from "../services/validators";
-    import List from "../components/elements/list.vue";
 
     export default {
         name: "users",

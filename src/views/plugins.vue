@@ -85,8 +85,8 @@
 </template>
 
 <script>
-    import List from "../components/elements/list.vue";
-    import Plugin from "../components/elements/plugin.vue";
+    import List from "@/components/elements/list.vue";
+    import Plugin from "@/components/elements/plugin.vue";
 
     export default {
         name: "plugins",
