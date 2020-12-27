@@ -19,6 +19,4 @@
 import graphing from "vue-chartkick";
 import charts from "chart.js";
 
-export default function use(): any {
-    return graphing.use(charts);
-}
+export default graphing.use(charts);

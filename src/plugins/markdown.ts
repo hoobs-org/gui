@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
+import Vue, { VueConstructor } from "vue";
 import Showdown, { Converter } from "showdown";
 import Highlight from "showdown-highlight";
 import Emoji from "./emoji";
@@ -37,12 +38,12 @@ class Markdown {
         });
     }
 
-    mixin() {
-        return {
+    install(vue: VueConstructor<Vue>): void {
+        vue.mixin({
             methods: {
                 $markdown: (value: string): string => this.converter.makeHtml((value || "").replace(/```[a-zA-Z ]*\n/gi, (match) => `${match.trim().toLowerCase()}\n`)),
             },
-        };
+        });
     }
 }
 

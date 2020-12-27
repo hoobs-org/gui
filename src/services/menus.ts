@@ -16,55 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-import Vue from "vue";
-
-class Menus {
-    declare private menus: any[];
-
-    declare private events: Vue;
-
-    declare private open: undefined | string;
-
-    constructor(menus: any[]) {
-        this.events = new Vue();
-        this.menus = menus;
-    }
-
-    on(event: string, callback: (value?: any) => void) {
-        this.events.$on(event, callback);
-    }
-
-    show(name: string, options?: { [key: string]: any }) {
-        if (this.open && this.open === name) {
-            this.close();
-        } else {
-            const source = this.menus.findIndex((item) => item.name === name);
-
-            if (source >= 0) {
-                this.open = name;
-                this.menus[source].options = options;
-                this.events.$emit("open", this.menus[source]);
-            }
-        }
-    }
-
-    close() {
-        for (let i = 0; i < this.menus.length; i += 1) {
-            delete this.menus[i].options;
-        }
-
-        this.open = undefined;
-        this.events.$emit("close");
-    }
-
-    mixin() {
-        return {
-            computed: {
-                $menu: () => this,
-            },
-        };
-    }
-}
+import Menus from "../plugins/menus";
 
 export default new Menus([
     {

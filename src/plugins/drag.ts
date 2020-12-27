@@ -138,7 +138,7 @@ export function events(element: HTMLElement, binding: { [key: string]: any }): v
     document.body.addEventListener("mouseleave", contain);
 }
 
-const drag = {
+export default {
     install(Vue: VueConstructor<Vue>, options: { [key: string]: any }): void {
         window.data = {};
 
@@ -188,5 +188,3 @@ const drag = {
         });
     },
 };
-
-export default drag;

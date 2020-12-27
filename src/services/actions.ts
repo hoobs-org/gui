@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-import Vue from "vue";
+import Vue, { VueConstructor } from "vue";
 
 class Events {
     declare private events: Vue;
@@ -33,12 +33,8 @@ class Events {
         this.events.$emit(`${view}:${event}`, payload);
     }
 
-    mixin() {
-        return {
-            computed: {
-                $action: () => this,
-            },
-        };
+    install(vue: VueConstructor<Vue>): void {
+        vue.mixin({ computed: { $action: () => this } });
     }
 }
 

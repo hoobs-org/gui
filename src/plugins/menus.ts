@@ -16,39 +16,54 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-import Dialogs from "../plugins/dialogs";
+import Vue, { VueConstructor } from "vue";
 
-export default new Dialogs([
-    {
-        name: "alert",
-        component: () => import(/* webpackChunkName: "dialog:alert" */ "@/components/dialogs/alert.vue"),
-    },
-    {
-        name: "confirm",
-        component: () => import(/* webpackChunkName: "dialog:confirm" */ "@/components/dialogs/confirm.vue"),
-    },
-    {
-        name: "about",
-        component: () => import(/* webpackChunkName: "dialog:about" */ "@/components/dialogs/about.vue"),
-    },
-    {
-        name: "updates",
-        component: () => import(/* webpackChunkName: "dialog:updates" */ "@/components/dialogs/updates.vue"),
-    },
-    {
-        name: "settings",
-        component: () => import(/* webpackChunkName: "dialog:settings" */ "@/components/dialogs/settings.vue"),
-    },
-    {
-        name: "personalize",
-        component: () => import(/* webpackChunkName: "dialog:personalize" */ "@/components/dialogs/personalize.vue"),
-    },
-    {
-        name: "dashboard",
-        component: () => import(/* webpackChunkName: "dialog:dashboard" */ "@/components/dialogs/dashboard.vue"),
-    },
-    {
-        name: "instances",
-        component: () => import(/* webpackChunkName: "dialog:instances" */ "@/components/dialogs/instances.vue"),
-    },
-]);
+export default class Menus {
+    declare private menus: any[];
+
+    declare private events: Vue;
+
+    declare private open: undefined | string;
+
+    constructor(menus: any[]) {
+        this.events = new Vue();
+        this.menus = menus;
+    }
+
+    on(event: string, callback: (value?: any) => void): void {
+        this.events.$on(event, callback);
+    }
+
+    show(name: string, options?: { [key: string]: any }): void {
+        if (this.open && this.open === name) {
+            this.close();
+        } else {
+            const source = this.menus.findIndex((item) => item.name === name);
+
+            if (source >= 0) {
+                this.open = name;
+                this.menus[source].options = options;
+                this.events.$emit("open", this.menus[source]);
+            }
+        }
+    }
+
+    close(): void {
+        for (let i = 0; i < this.menus.length; i += 1) {
+            delete this.menus[i].options;
+        }
+
+        this.open = undefined;
+        this.events.$emit("close");
+    }
+
+    install(vue: VueConstructor<Vue>): void {
+        vue.mixin({
+            computed: {
+                $menu: () => this,
+            },
+        });
+
+        Vue.component("menu-view", () => import("@/components/menus.vue"));
+    }
+}

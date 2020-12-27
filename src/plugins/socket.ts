@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
+import Vue, { VueConstructor } from "vue";
 import { io } from "socket.io-client";
 
 const SOCKET_URL = process.env.VUE_APP_SOCKET || "/";
@@ -31,9 +32,7 @@ class Socket {
 
     constructor() {
         this.events = {};
-
         this.io = io(SOCKET_URL);
-
         this.terminal = false;
     }
 
@@ -65,8 +64,8 @@ class Socket {
         this.io.emit(event, args);
     }
 
-    mixin() {
-        return { data: () => ({ io: this }) };
+    install(vue: VueConstructor<Vue>): void {
+        vue.mixin({ data: () => ({ io: this }) });
     }
 }
 

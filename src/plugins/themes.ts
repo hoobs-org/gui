@@ -16,51 +16,53 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
 import { Store } from "vuex";
+import Vue, { VueConstructor } from "vue";
 import Sanitize from "@hoobs/sdk/lib/sanitize";
+
+interface Options {
+    store: Store<any>;
+    hoobs: any;
+}
 
 const THEMES_URL = process.env.VUE_APP_THEMES || "/themes";
 
-export default class Themes {
-    static set(name: string, store?: Store<any>): void {
-        const style = document.getElementById("theme");
+export function path(theme: string): string {
+    switch (theme) {
+        case "light":
+        case "dark":
+            return `/defaults/${theme}/theme.css`;
 
-        if (style) style.setAttribute("href", Themes.path(Sanitize(name)));
-        if (store) store.commit("THEME:SET", Sanitize(name));
+        default:
+            return `${THEMES_URL}/${theme}/theme.css`;
     }
+}
 
-    static path(theme: string): string {
-        switch (theme) {
-            case "light":
-            case "dark":
-                return `/defaults/${theme}/theme.css`;
+export function set(name: string, store?: Store<any>): void {
+    const style = document.getElementById("theme");
 
-            default:
-                return `${THEMES_URL}/${theme}/theme.css`;
-        }
-    }
+    if (style) style.setAttribute("href", path(Sanitize(name)));
+    if (store) store.commit("THEME:SET", Sanitize(name));
+}
 
-    static mixin(hoobs: any, store?: Store<any>): { [key: string]: any } {
-        this.set(store?.state.theme, store);
-
-        return {
+export default {
+    install(vue: VueConstructor<Vue>, options: Options): void {
+        vue.mixin({
             computed: {
                 $theme() {
                     return {
                         set(name: string) {
-                            Themes.set(name, store);
+                            set(name, options?.store);
                         },
 
                         async get() {
-                            const theme = await hoobs.theme.get(store?.state.theme);
+                            const theme = await options?.hoobs.theme.get(options?.store?.state.theme);
 
                             return theme;
                         },
                     };
                 },
             },
-        };
-    }
-}
+        });
+    },
+};

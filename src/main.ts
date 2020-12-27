@@ -16,18 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-import SDK from "@hoobs/sdk";
+import { hoobs, sdk } from "@hoobs/sdk";
 
 import Vue from "vue";
-import Graphing from "vue-chartkick";
-import Charts from "chart.js";
-
-import root from "./app.vue";
+import App from "./app.vue";
 
 import dates from "./plugins/dates";
 import socket from "./plugins/socket";
 import plugins from "./plugins/plugins";
 import converter from "./plugins/markdown";
+import graphing from "./plugins/graphing";
 import themes from "./plugins/themes";
 import drag from "./plugins/drag";
 
@@ -53,11 +51,10 @@ import PortField from "./components/fields/port.vue";
 import Spinner from "./components/elements/spinner.vue";
 
 const io = socket();
-const hoobs = SDK();
 const markdown = converter();
 
 hoobs.config.token.get(() => store.state.session);
-hoobs.config.token.set((token) => { store.commit("SESSION:SET", token); });
+hoobs.config.token.set((token: string) => { store.commit("SESSION:SET", token); });
 
 io.on("log", (data) => store.commit("IO:LOG", data));
 io.on("monitor", (data) => store.commit("IO:MONITOR", data));
@@ -75,7 +72,7 @@ io.on("reconnect", async () => {
 });
 
 actions.on("log", "history", () => {
-    hoobs.log().then((messages) => { store.commit("LOG:HISTORY", messages); });
+    hoobs.log().then((messages: any) => { store.commit("LOG:HISTORY", messages); });
 });
 
 router.beforeEach(async (to, _from, next) => {
@@ -90,18 +87,18 @@ router.beforeEach(async (to, _from, next) => {
 
 Vue.config.productionTip = false;
 
-Vue.mixin(dates());
-Vue.mixin(plugins());
-Vue.mixin(io.mixin());
-Vue.mixin(menus.mixin());
-Vue.mixin(hoobs.mixin());
-Vue.mixin(dialogs.mixin());
-Vue.mixin(actions.mixin());
-Vue.mixin(markdown.mixin());
-Vue.mixin(themes.mixin(hoobs, store));
-
+Vue.use(io);
+Vue.use(sdk);
 Vue.use(drag);
-Vue.use(Graphing.use(Charts));
+Vue.use(dates);
+Vue.use(menus);
+Vue.use(dialogs);
+Vue.use(plugins);
+Vue.use(actions);
+Vue.use(markdown);
+Vue.use(graphing);
+
+Vue.use(themes, { hoobs, store });
 
 Vue.component("context", Context);
 Vue.component("modal", Modal);
@@ -117,11 +114,12 @@ Vue.component("port-field", PortField);
 Vue.component("spinner", Spinner);
 
 tasks(store);
+
 actions.emit("log", "history");
 
 new Vue({
     router,
     store,
     i18n: lang,
-    render: (h) => h(root),
+    render: (h) => h(App),
 }).$mount("#app");

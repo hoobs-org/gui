@@ -21,9 +21,9 @@
         <navigation />
         <div class="screen">
             <slot />
-            <component v-if="menu" :key="menu.name" :is="menu.component" :options="menu.options"></component>
+            <menu-view />
         </div>
-        <component v-for="(dialog) in dialogs" :key="dialog.name" :is="dialog.component" :options="dialog.options"></component>
+        <dialog-view />
     </div>
 </template>
 
@@ -43,27 +43,7 @@
             },
         },
 
-        data() {
-            return {
-                dialogs: [],
-                menu: null,
-            };
-        },
-
         async created() {
-            this.$dialog.on("state", (dialogs) => {
-                this.$menu.close();
-                this.dialogs = dialogs;
-            });
-
-            this.$menu.on("open", (menu) => {
-                this.menu = menu;
-            });
-
-            this.$menu.on("close", () => {
-                this.menu = null;
-            });
-
             this.$store.commit("AUTH:STATE", (await this.$hoobs.auth.status()));
         },
     };
