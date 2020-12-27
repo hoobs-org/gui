@@ -21,9 +21,9 @@
         <navigation />
         <div class="screen">
             <slot />
-            <component v-if="menu" :key="menu.name" :is="menu" :options="menu.options"></component>
+            <component v-if="menu" :key="menu.name" :is="menu.component" :options="menu.options"></component>
         </div>
-        <component v-for="(dialog) in dialogs" :key="dialog.name" :is="dialog" :options="dialog.options"></component>
+        <component v-for="(dialog) in dialogs" :key="dialog.name" :is="dialog.component" :options="dialog.options"></component>
     </div>
 </template>
 
@@ -47,10 +47,6 @@
             return {
                 dialogs: [],
                 menu: null,
-                show: {
-                    instances: false,
-                    plugins: false,
-                },
             };
         },
 

@@ -19,7 +19,7 @@
 <template>
     <div :key="version" id="dashboard" :class="backdrop ? 'backdrop' : ''">
         <context>
-            <div v-if="show.locked" v-on:click.stop="toggle('locked')" class="icon desktop">lock</div>
+            <div v-if="locked" v-on:click.stop="toggle('locked')" class="icon desktop">lock</div>
             <div v-else v-on:click.stop="toggle('locked')" class="icon desktop">lock_open</div>
             <div v-on:click.stop="$dialog.show('dashboard')" class="icon desktop">settings</div>
         </context>
@@ -28,8 +28,8 @@
                 :layout="items"
                 :col-num="12"
                 :row-height="30"
-                :is-draggable="!show.locked"
-                :is-resizable="!show.locked"
+                :is-draggable="!locked"
+                :is-resizable="!locked"
                 :is-mirrored="false"
                 :vertical-compact="true"
                 :margin="[10, 10]"
@@ -87,12 +87,10 @@
         data() {
             return {
                 version: 0,
+                locked: true,
                 loading: true,
                 backdrop: false,
                 items: [],
-                show: {
-                    locked: true,
-                },
             };
         },
 
@@ -128,7 +126,7 @@
             },
 
             toggle(field) {
-                this.show[field] = !this.show[field];
+                this[field] = !this[field];
             },
 
             save() {

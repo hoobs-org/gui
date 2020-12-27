@@ -18,11 +18,6 @@
 
 import Vue from "vue";
 
-import Application from "@/components/menus/application.vue";
-import Notifications from "@/components/notifications.vue";
-import Instances from "@/components/menus/instances.vue";
-import Plugins from "@/components/menus/plugins.vue";
-
 class Menus {
     declare private menus: any[];
 
@@ -72,8 +67,20 @@ class Menus {
 }
 
 export default new Menus([
-    Application,
-    Notifications,
-    Instances,
-    Plugins,
+    {
+        name: "application",
+        component: () => import(/* webpackChunkName: "menu:application" */ "@/components/menus/application.vue"),
+    },
+    {
+        name: "notifications",
+        component: () => import(/* webpackChunkName: "menu:notifications" */ "@/components/notifications.vue"),
+    },
+    {
+        name: "instances",
+        component: () => import(/* webpackChunkName: "menu:instances" */ "@/components/menus/instances.vue"),
+    },
+    {
+        name: "plugins",
+        component: () => import(/* webpackChunkName: "menu:plugins" */ "@/components/menus/plugins.vue"),
+    },
 ]);

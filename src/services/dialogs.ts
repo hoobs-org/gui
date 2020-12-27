@@ -18,15 +18,6 @@
 
 import Vue from "vue";
 
-import Alert from "@/components/dialogs/alert.vue";
-import Confirm from "@/components/dialogs/confirm.vue";
-import About from "@/components/dialogs/about.vue";
-import Updates from "@/components/dialogs/updates.vue";
-import Settings from "@/components/dialogs/settings.vue";
-import Personalize from "@/components/dialogs/personalize.vue";
-import Dashboard from "@/components/dialogs/dashboard.vue";
-import Instances from "../components/dialogs/instances.vue";
-
 class Dialogs {
     declare private open: any[];
 
@@ -104,12 +95,36 @@ class Dialogs {
 }
 
 export default new Dialogs([
-    Alert,
-    Confirm,
-    About,
-    Updates,
-    Settings,
-    Personalize,
-    Dashboard,
-    Instances,
+    {
+        name: "alert",
+        component: () => import(/* webpackChunkName: "dialog:alert" */ "@/components/dialogs/alert.vue"),
+    },
+    {
+        name: "confirm",
+        component: () => import(/* webpackChunkName: "dialog:confirm" */ "@/components/dialogs/confirm.vue"),
+    },
+    {
+        name: "about",
+        component: () => import(/* webpackChunkName: "dialog:about" */ "@/components/dialogs/about.vue"),
+    },
+    {
+        name: "updates",
+        component: () => import(/* webpackChunkName: "dialog:updates" */ "@/components/dialogs/updates.vue"),
+    },
+    {
+        name: "settings",
+        component: () => import(/* webpackChunkName: "dialog:settings" */ "@/components/dialogs/settings.vue"),
+    },
+    {
+        name: "personalize",
+        component: () => import(/* webpackChunkName: "dialog:personalize" */ "@/components/dialogs/personalize.vue"),
+    },
+    {
+        name: "dashboard",
+        component: () => import(/* webpackChunkName: "dialog:dashboard" */ "@/components/dialogs/dashboard.vue"),
+    },
+    {
+        name: "instances",
+        component: () => import(/* webpackChunkName: "dialog:instances" */ "@/components/dialogs/instances.vue"),
+    },
 ]);

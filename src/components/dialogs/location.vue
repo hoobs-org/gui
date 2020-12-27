@@ -23,7 +23,7 @@
             <input type="submit" class="hidden-submit" value="submit" />
             <div class="search">
                 <search-field id="query" ref="query" :name="$t('location_search')" :description="$t('location_description')" style="padding-right: 0;" v-model="query" :search="search" :autofocus="true" />
-                <div v-if="show.searching" class="loading">
+                <div v-if="searching" class="loading">
                     <spinner />
                 </div>
                 <div v-else class="results">
@@ -52,11 +52,9 @@
 
         data() {
             return {
-                show: {
-                    searching: false,
-                },
                 query: "",
                 locations: [],
+                searching: false,
                 country: countries,
             };
         },
@@ -69,7 +67,7 @@
                     return;
                 }
 
-                this.show.searching = true;
+                this.searching = true;
 
                 this.locations = (await this.$hoobs.location(this.query, 10)).map((item) => ({
                     id: item.id,
@@ -77,7 +75,7 @@
                     country: item.country,
                 }));
 
-                this.show.searching = false;
+                this.searching = false;
             },
         },
     };
