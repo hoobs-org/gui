@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="actions modal">
-                <div v-on:click="close()" class="button">{{ $t("cancel") }}</div>
+                <div v-on:click="$dialog.close('updates')" class="button">{{ $t("cancel") }}</div>
             </div>
         </div>
     </modal>
@@ -67,13 +67,6 @@
 
     export default {
         name: "updates",
-
-        props: {
-            close: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-        },
 
         data() {
             return {

@@ -19,11 +19,11 @@
 <template>
     <div id="log">
         <context>
-            <div ref="instances" v-on:click.stop="toggle('instances')" class="button">
+            <div ref="instances" v-on:click.stop="menu('instances')" class="button">
                 <div class="icon">layers</div>
                 {{ $t("instances") }}
             </div>
-            <div ref="plugins" v-on:click.stop="toggle('plugins')" class="button">
+            <div ref="plugins" v-on:click.stop="menu('plugins')" class="button">
                 <div class="icon">extension</div>
                 {{ $t("plugins") }}
             </div>
@@ -35,30 +35,20 @@
         <div ref="messages" class="messages">
             <message v-for="(message, index) in messages" :key="`message:${index}`" :value="message" />
         </div>
-        <instances-menu v-if="parent.show.instances" v-model="instances" :close="() => { toggle('instances') }" />
-        <plugins-menu v-if="parent.show.plugins" v-model="plugins" :close="() => { toggle('plugins') }" />
     </div>
 </template>
 
 <script>
     import Message from "@/components/elements/message.vue";
-    import PluginsMenu from "@/components/menus/plugins.vue";
-    import InstancesMenu from "@/components/menus/instances.vue";
 
     export default {
         name: "log",
 
         components: {
             "message": Message,
-            "plugins-menu": PluginsMenu,
-            "instances-menu": InstancesMenu,
         },
 
         computed: {
-            parent() {
-                return this.$parent;
-            },
-
             messages() {
                 return this.$store.state.log.filter(this.filter);
             },
@@ -70,6 +60,16 @@
                 instances: [],
                 plugins: [],
             };
+        },
+
+        created() {
+            this.$action.on("log", "plugins", (plugins) => {
+                this.plugins = plugins;
+            });
+
+            this.$action.on("log", "instances", (instances) => {
+                this.instances = instances;
+            });
         },
 
         async mounted() {
@@ -121,8 +121,11 @@
                 this.debug = !this.debug;
             },
 
-            toggle(field) {
-                this.parent.toggle(field);
+            menu(name) {
+                this.$menu.show(name, {
+                    opener: this.$refs[name],
+                    values: this[name],
+                });
             },
 
             filter(message) {

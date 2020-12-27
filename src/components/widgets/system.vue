@@ -38,11 +38,11 @@
                     <td>{{ $t("version") }}</td>
                     <td v-if="!updated">
                         {{ version }}
-                        <a v-if="user.permissions.reboot" v-on:click.stop="update()" class="update">{{ $t("update_avaliable") }}</a>
+                        <a v-if="user.permissions.reboot" v-on:click.stop="$dialog.show('updates')" class="update">{{ $t("update_avaliable") }}</a>
                     </td>
                     <td v-else>
                         {{ version }}
-                        <a v-if="user.permissions.reboot" v-on:click.stop="update()" class="update">{{ $t("check_updates") }}</a>
+                        <a v-if="user.permissions.reboot" v-on:click.stop="$dialog.show('updates')" class="update">{{ $t("check_updates") }}</a>
                     </td>
                 </tr>
                 <tr>
@@ -108,12 +108,6 @@
             this.system = (await this.$hoobs.system()).system;
 
             this.loading = false;
-        },
-
-        methods: {
-            update() {
-                this.$store.commit("DIALOG:SHOW", "upgrades");
-            },
         },
     };
 </script>

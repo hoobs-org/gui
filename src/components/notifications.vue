@@ -17,10 +17,10 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="value" v-on:click.stop v-on:mouseenter="toggle(true)" v-on:mouseleave="toggle(false)" id="notifications">
+    <div v-on:click.stop id="notifications">
         <div class="title">
             {{ $t("notifications") }}
-            <div v-on:click="close(true)" class="icon">close</div>
+            <div v-on:click="$menu.close()" class="icon">close</div>
         </div>
         <div v-if="notifications.length === 0" class="empty">{{ $t("notifications_empty") }}</div>
         <div v-else class="list">
@@ -39,10 +39,6 @@
             "notification": Notification,
         },
 
-        props: {
-            value: Boolean,
-        },
-
         computed: {
             notifications() {
                 return this.$store.state.notifications;
@@ -54,22 +50,6 @@
                 active: true,
                 timeout: undefined,
             };
-        },
-
-        methods: {
-            toggle(value) {
-                this.active = value;
-
-                if (this.timeout) clearTimeout(this.timeout);
-
-                this.timeout = setTimeout(() => {
-                    this.close();
-                }, 2 * 1000);
-            },
-
-            close(now) {
-                if (now || !this.active) this.$emit("input", !this.value);
-            },
         },
     };
 </script>

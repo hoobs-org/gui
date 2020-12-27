@@ -18,9 +18,9 @@
 
 <template>
     <modal width="490px" height="220px">
-        <div class="content message">{{ message }}</div>
+        <div class="content message">{{ options.message }}</div>
         <div class="actions modal">
-            <div class="button primary" v-on:click="close()">{{ $t("ok") }}</div>
+            <div class="button primary" v-on:click="$dialog.close('alert')">{{ $t("ok") }}</div>
         </div>
     </modal>
 </template>
@@ -30,11 +30,7 @@
         name: "alert",
 
         props: {
-            message: String,
-            close: {
-                type: Function,
-                default: () => { /* null */ },
-            },
+            options: Object,
         },
     };
 </script>

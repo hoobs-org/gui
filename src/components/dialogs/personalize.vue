@@ -92,7 +92,7 @@
                 <spinner />
             </div>
             <div v-if="!loading" class="actions modal">
-                <div class="button" v-on:click="close()">{{ $t("cancel") }}</div>
+                <div class="button" v-on:click="$dialog.close('personalize')">{{ $t("cancel") }}</div>
                 <div class="button primary" v-on:click="save()">{{ $t("apply") }}</div>
             </div>
         </div>
@@ -114,13 +114,6 @@
         components: {
             "color": Color,
             "backdrop": Backdrop,
-        },
-
-        props: {
-            close: {
-                type: Function,
-                default: () => { /* null */ },
-            },
         },
 
         data() {
@@ -203,7 +196,7 @@
                 if (this.working.name !== "light" && this.working.name !== "dark") await this.$hoobs.theme.save(this.working.display, this.working);
 
                 this.$theme.set(this.working.name);
-                this.close();
+                this.$dialog.close("personalize");
             },
 
             dirty() {

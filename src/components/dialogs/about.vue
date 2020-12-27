@@ -43,7 +43,7 @@
             </div>
             <div class="actions modal">
                 <div v-on:click="donate()" class="button">{{ $t("donate") }}</div>
-                <div v-on:click="close()" class="button primary">{{ $t("ok") }}</div>
+                <div v-on:click="$dialog.close('about')" class="button primary">{{ $t("ok") }}</div>
             </div>
         </div>
     </modal>
@@ -52,13 +52,6 @@
 <script>
     export default {
         name: "about",
-
-        props: {
-            close: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-        },
 
         data() {
             return {
@@ -76,8 +69,8 @@
             },
 
             upgrades() {
-                this.close();
-                this.$store.commit("DIALOG:SHOW", "upgrades");
+                this.$dialog.close("about");
+                this.$dialog.show("updates");
             },
         },
     };

@@ -31,7 +31,10 @@ import converter from "./plugins/markdown";
 import themes from "./plugins/themes";
 import drag from "./plugins/drag";
 
+import actions from "./services/actions";
+import dialogs from "./services/dialogs";
 import router from "./services/router";
+import menus from "./services/menus";
 import store from "./services/store";
 import tasks from "./services/tasks";
 import lang from "./lang";
@@ -48,11 +51,6 @@ import SearchField from "./components/fields/search.vue";
 import SelectField from "./components/fields/select.vue";
 import PortField from "./components/fields/port.vue";
 import Spinner from "./components/elements/spinner.vue";
-
-const open = [
-    "/login",
-    "/setup",
-];
 
 const io = socket();
 const hoobs = SDK();
@@ -76,12 +74,14 @@ io.on("reconnect", async () => {
     }
 });
 
-hoobs.log().then((messages) => { store.commit("LOG:HISTORY", messages); });
+actions.on("log", "history", () => {
+    hoobs.log().then((messages) => { store.commit("LOG:HISTORY", messages); });
+});
 
 router.beforeEach(async (to, _from, next) => {
-    if (open.indexOf(to.path) === -1 && (await hoobs.auth.status()) === "uninitialized") {
+    if (["/login", "/setup"].indexOf(to.path) === -1 && (await hoobs.auth.status()) === "uninitialized") {
         router.push({ path: "/setup" });
-    } else if (open.indexOf(to.path) === -1 && !(await hoobs.auth.validate())) {
+    } else if (["/login", "/setup"].indexOf(to.path) === -1 && !(await hoobs.auth.validate())) {
         router.push({ path: "/login", query: { url: to.path } });
     } else {
         next();
@@ -91,27 +91,14 @@ router.beforeEach(async (to, _from, next) => {
 Vue.config.productionTip = false;
 
 Vue.mixin(dates());
-Vue.mixin(io.mixin());
-Vue.mixin(hoobs.mixin());
 Vue.mixin(plugins());
+Vue.mixin(io.mixin());
+Vue.mixin(menus.mixin());
+Vue.mixin(hoobs.mixin());
+Vue.mixin(dialogs.mixin());
+Vue.mixin(actions.mixin());
 Vue.mixin(markdown.mixin());
 Vue.mixin(themes.mixin(hoobs, store));
-
-Vue.mixin({
-    methods: {
-        $alert(message) {
-            store.commit("ALERT:SHOW", message);
-        },
-
-        $confirm(action, message, callback) {
-            store.commit("CONFIRM:SHOW", {
-                action,
-                message,
-                callback,
-            });
-        },
-    },
-});
 
 Vue.use(drag);
 Vue.use(Graphing.use(Charts));
@@ -130,6 +117,7 @@ Vue.component("port-field", PortField);
 Vue.component("spinner", Spinner);
 
 tasks(store);
+actions.emit("log", "history");
 
 new Vue({
     router,

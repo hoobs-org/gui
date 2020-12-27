@@ -20,7 +20,7 @@
     <modal :title="title" :draggable="true" width="670px" height="670px">
         <div id="instances">
             <div class="content">
-                <form v-if="type === 'install'" class="form">
+                <form v-if="options.type === 'install'" class="form">
                     <div class="row section" style="margin: 0;">{{ $t("instance_add") }}</div>
                     <p>
                         {{ $t("plugin_install_add_instance") }}
@@ -41,7 +41,7 @@
                         <div v-for="(instance, index) in instances" :key="`instance:${index}`" v-on:click="install(instance.id)" class="button full">{{ instance.display }}</div>
                     </div>
                 </form>
-                <form v-if="type === 'uninstall'" class="form">
+                <form v-if="options.type === 'uninstall'" class="form">
                     <div class="row section">{{ $t("remove") }}</div>
                     <div class="row">
                         <checkbox id="remove" v-model="remove">
@@ -58,8 +58,8 @@
                 </form>
             </div>
             <div class="actions modal">
-                <div v-on:click="close()" class="button">{{ $t("cancel") }}</div>
-                <div v-if="type === 'install'" v-on:click="create()" class="button primary">{{ $t("plugin_install") }}</div>
+                <div v-on:click="$dialog.close('instances')" class="button">{{ $t("cancel") }}</div>
+                <div v-if="options.type === 'install'" v-on:click="create()" class="button primary">{{ $t("plugin_install") }}</div>
             </div>
         </div>
     </modal>
@@ -72,17 +72,7 @@
         name: "instances",
 
         props: {
-            type: String,
-            plugin: Object,
-            values: Array,
-            select: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-            close: {
-                type: Function,
-                default: () => { /* null */ },
-            },
+            options: Object,
         },
 
         data() {
@@ -98,7 +88,7 @@
         },
 
         async mounted() {
-            this.instances = this.values;
+            this.instances = this.options.values;
 
             this.instances.sort((a, b) => {
                 if (a.id < b.id) return -1;
@@ -110,13 +100,13 @@
             let instances = [];
             let count = 1;
 
-            switch (this.type) {
+            switch (this.options.type) {
                 case "install":
-                    this.title = `${this.$t("plugin_install")} ${this.$plugins.title(this.plugin.name)}`;
+                    this.title = `${this.$t("plugin_install")} ${this.$plugins.title(this.options.plugin.name)}`;
 
                     this.generate();
                     this.port = 51826;
-                    this.display = this.$plugins.title(this.plugin.name);
+                    this.display = this.$plugins.title(this.options.plugin.name);
 
                     instances = await this.$hoobs.instances.list();
 
@@ -127,17 +117,17 @@
                     while (instances.findIndex((item) => item.id === Sanitize(this.display)) >= 0) {
                         count += 1;
 
-                        this.display = `${this.$plugins.title(this.plugin.name)} ${count}`;
+                        this.display = `${this.$plugins.title(this.options.plugin.name)} ${count}`;
                     }
 
                     break;
 
                 case "uninstall":
-                    this.title = `${this.$t("plugin_uninstall")} ${this.$plugins.title(this.plugin.name)}`;
+                    this.title = `${this.$t("plugin_uninstall")} ${this.$plugins.title(this.options.plugin.name)}`;
                     break;
 
                 default:
-                    this.close();
+                    this.$dialog.close("instances");
                     break;
             }
         },
@@ -186,7 +176,7 @@
                 }
 
                 if (valid) {
-                    this.select({
+                    this.options.select({
                         id: Sanitize(this.display),
                         display: this.display,
                         port: this.port,
@@ -197,11 +187,11 @@
             },
 
             install(id) {
-                this.select(id);
+                this.options.select(id);
             },
 
             uninstall(id) {
-                this.select(id, this.remove);
+                this.options.select(id, this.remove);
             },
 
             validate(pin) {

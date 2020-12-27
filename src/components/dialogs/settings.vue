@@ -88,7 +88,7 @@
                 <div class="button" v-on:click="back()">{{ $t("cancel") }}</div>
             </div>
             <div v-if="!loading && show.settings" class="actions modal">
-                <div v-on:click="close()" class="button">{{ $t("cancel") }}</div>
+                <div v-on:click="$dialog.close('settings')" class="button">{{ $t("cancel") }}</div>
                 <div v-on:click="save()" class="button primary">{{ $t("apply") }}</div>
             </div>
         </div>
@@ -102,18 +102,11 @@
     import Countries from "@/lang/country-codes.json";
 
     export default {
-        name: "personalize",
+        name: "settings",
 
         components: {
             "restore": Restore,
             "location": Location,
-        },
-
-        props: {
-            close: {
-                type: Function,
-                default: () => { /* null */ },
-            },
         },
 
         computed: {
@@ -264,7 +257,8 @@
 
                 await Wait();
 
-                this.$store.commit("SETTINGS:UPDATE");
+                this.$dialog.close("settings");
+                this.$action.emit("settings", "update");
             },
 
             back() {

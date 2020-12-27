@@ -41,7 +41,7 @@
                 <spinner />
             </div>
             <div class="actions modal">
-                <div v-on:click="close()" class="button">{{ $t("cancel") }}</div>
+                <div v-on:click="$dialog.close('dashboard')" class="button">{{ $t("cancel") }}</div>
                 <div v-on:click="save()" class="button primary">{{ $t("apply") }}</div>
             </div>
         </div>
@@ -51,13 +51,6 @@
 <script>
     export default {
         name: "dashboard",
-
-        props: {
-            close: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-        },
 
         data() {
             return {
@@ -142,7 +135,8 @@
                 this.$store.commit("DASHBOARD:ITEMS", current);
                 this.$store.commit("DASHBOARD:BACKDROP", this.backdrop);
 
-                this.close();
+                this.$action.emit("dashboard", "update");
+                this.$dialog.close("dashboard");
             },
 
             defaults(item) {

@@ -74,7 +74,6 @@ export default new Vuex.Store({
         notifications: [],
         navigation: false,
         accessory: null,
-        updated: (new Date()).getTime(),
         theme: "dark",
     },
 
@@ -168,7 +167,7 @@ export default new Vuex.Store({
         },
 
         "LOG:HISTORY": (state: { [key: string]: any }, messages: string) => {
-            state.log.unshift(...messages);
+            state.log = messages;
             state.log = state.log.slice(1).slice(-5000);
         },
 
@@ -209,10 +208,6 @@ export default new Vuex.Store({
             state.theme = theme;
         },
 
-        "SETTINGS:UPDATE": (state: { [key: string]: any }) => {
-            state.updated = (new Date()).getTime();
-        },
-
         "DASHBOARD:LAYOUT": (state: { [key: string]: any }, data: { [key: string]: string | number | boolean }) => {
             state.dashboard.items = data;
         },
@@ -223,20 +218,6 @@ export default new Vuex.Store({
 
         "DASHBOARD:BACKDROP": (state: { [key: string]: any }, value: boolean) => {
             state.dashboard.backdrop = value;
-        },
-
-        "DIALOG:SHOW": (state: { [key: string]: any }, value: string) => {
-            state.dialog = value;
-        },
-
-        "ALERT:SHOW": (state: { [key: string]: any }, message: string) => {
-            state.alert = {
-                message,
-            };
-        },
-
-        "CONFIRM:SHOW": (state: { [key: string]: any }, data: { [key: string]: any }) => {
-            state.confirm = data;
         },
     },
 

@@ -96,6 +96,7 @@
         font-family: "Montserrat", sans-serif;
         color: var(--application-text);
         background: var(--application-background);
+        overflow: hidden;
 
         ::placeholder {
             color: var(--application-text);
@@ -178,6 +179,7 @@
 
         .view {
             flex: 1;
+            overflow: hidden;
         }
 
         .vue-grid-placeholder {

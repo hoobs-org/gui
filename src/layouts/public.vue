@@ -39,6 +39,7 @@
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
+        overflow: hidden;
     }
 
     @media (min-width: 300px) and (max-width: 815px) {

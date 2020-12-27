@@ -73,6 +73,7 @@
         background: var(--modal-mask);
         justify-content: space-around;
         padding: 0 0 4% 0;
+        overflow: hidden;
         z-index: 2000;
 
         .subject {

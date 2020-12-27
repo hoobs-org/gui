@@ -77,7 +77,6 @@
                 <spinner />
             </div>
         </div>
-        <instances v-if="select.show" :type="select.type" :plugin="plugin" :values="select.values" :select="select.select" :close="() => { select.show = false; }" />
     </div>
 </template>
 
@@ -91,7 +90,6 @@
     import Detail from "../components/elements/detail.vue";
     import Rating from "../components/elements/rating.vue";
     import Reviews from "../components/elements/reviews.vue";
-    import Instances from "../components/dialogs/instances.vue";
 
     export default {
         name: "plugin",
@@ -102,7 +100,6 @@
             "detail": Detail,
             "rating": Rating,
             "reviews": Reviews,
-            "instances": Instances,
         },
 
         props: {
@@ -143,13 +140,6 @@
                         display: this.$t("versions"),
                     },
                 ],
-                select: {
-                    show: false,
-                    type: "",
-                    title: "",
-                    values: [],
-                    select: () => { /* null */ },
-                },
                 section: "details",
                 sections: [],
                 instances: [],
@@ -247,99 +237,48 @@
             },
 
             install(tag, all) {
-                this.select.type = "install";
+                this.$dialog.show("instances", {
+                    type: "install",
+                    plugin: this.plugin,
+                    values: all ? [...this.available, ...this.installed] : this.available,
+                    select: (data) => {
+                        this.$dialog.close("instances");
+                        this.loading = true;
 
-                if (all) {
-                    this.select.values = [...this.available, ...this.installed];
-                } else {
-                    this.select.values = this.available;
-                }
-
-                this.select.select = (data) => {
-                    this.select.show = false;
-                    this.loading = true;
-
-                    const waits = [];
-
-                    if (typeof data === "string") {
-                        waits.push(new Promise((resolve) => {
-                            this.$hoobs.instance(data).then((instance) => {
-                                if (instance) {
-                                    instance.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
-                                        resolve();
-                                    });
-                                } else {
-                                    resolve();
-                                }
-                            });
-                        }));
-                    } else {
-                        waits.push(new Promise((resolve) => {
-                            this.$hoobs.instances.add(data.display, data.port, data.pin, data.username).then(() => {
-                                setTimeout(() => {
-                                    Wait().then(() => {
-                                        this.$hoobs.instance(data.id).then((instance) => {
-                                            if (instance) {
-                                                instance.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
-                                                    this.$store.commit("SETTINGS:UPDATE");
-
-                                                    resolve();
-                                                });
-                                            } else {
-                                                resolve();
-                                            }
-                                        });
-                                    });
-                                }, 3000);
-                            });
-                        }));
-                    }
-
-                    Promise.all(waits).then(() => {
-                        setTimeout(() => {
-                            Wait().then(() => {
-                                this.load(this.identifier);
-                            });
-                        }, 500);
-                    });
-                };
-
-                this.select.show = true;
-            },
-
-            uninstall() {
-                this.select.type = "uninstall";
-                this.select.values = this.installed;
-
-                this.select.select = (id, remove) => {
-                    this.select.show = false;
-                    this.loading = true;
-
-                    this.$hoobs.instance(id).then((instance) => {
                         const waits = [];
 
-                        if (instance) {
+                        if (typeof data === "string") {
                             waits.push(new Promise((resolve) => {
-                                instance.plugins.uninstall(this.identifier).then(() => {
+                                this.$hoobs.instance(data).then((instance) => {
+                                    if (instance) {
+                                        instance.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
+                                            resolve();
+                                        });
+                                    } else {
+                                        resolve();
+                                    }
+                                });
+                            }));
+                        } else {
+                            waits.push(new Promise((resolve) => {
+                                this.$hoobs.instances.add(data.display, data.port, data.pin, data.username).then(() => {
                                     setTimeout(() => {
-                                        if (remove) {
-                                            instance.plugins.list().then((plugins) => {
-                                                if (plugins.length === 0) {
-                                                    instance.remove().then(() => {
-                                                        setTimeout(() => {
-                                                            this.$store.commit("SETTINGS:UPDATE");
+                                        Wait().then(() => {
+                                            this.$hoobs.instance(data.id).then((instance) => {
+                                                if (instance) {
+                                                    instance.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
+                                                        this.$action.emit("log", "history");
 
-                                                            resolve();
-                                                        }, 3000);
+                                                        resolve();
                                                     });
                                                 } else {
+                                                    this.$action.emit("log", "history");
+
                                                     resolve();
                                                 }
                                             });
-                                        } else {
-                                            resolve();
-                                        }
-                                    }, 500);
+                                        });
+                                    }, 3000);
                                 });
                             }));
                         }
@@ -351,10 +290,58 @@
                                 });
                             }, 500);
                         });
-                    });
-                };
+                    },
+                });
+            },
 
-                this.select.show = true;
+            uninstall() {
+                this.$dialog.show("instances", {
+                    type: "uninstall",
+                    plugin: this.plugin,
+                    values: this.installed,
+                    select: (id, remove) => {
+                        this.$dialog.close("instances");
+                        this.loading = true;
+
+                        this.$hoobs.instance(id).then((instance) => {
+                            const waits = [];
+
+                            if (instance) {
+                                waits.push(new Promise((resolve) => {
+                                    instance.plugins.uninstall(this.identifier).then(() => {
+                                        setTimeout(() => {
+                                            if (remove) {
+                                                instance.plugins.list().then((plugins) => {
+                                                    if (plugins.length === 0) {
+                                                        instance.remove().then(() => {
+                                                            setTimeout(() => {
+                                                                this.$action.emit("log", "history");
+
+                                                                resolve();
+                                                            }, 3000);
+                                                        });
+                                                    } else {
+                                                        resolve();
+                                                    }
+                                                });
+                                            } else {
+                                                resolve();
+                                            }
+                                        }, 500);
+                                    });
+                                }));
+                            }
+
+                            Promise.all(waits).then(() => {
+                                setTimeout(() => {
+                                    Wait().then(() => {
+                                        this.load(this.identifier);
+                                    });
+                                }, 500);
+                            });
+                        });
+                    },
+                });
             },
 
             update() {

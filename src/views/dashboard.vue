@@ -17,11 +17,11 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div :key="updated" id="dashboard" :class="backdrop ? 'backdrop' : ''">
+    <div :key="version" id="dashboard" :class="backdrop ? 'backdrop' : ''">
         <context>
             <div v-if="show.locked" v-on:click.stop="toggle('locked')" class="icon desktop">lock</div>
             <div v-else v-on:click.stop="toggle('locked')" class="icon desktop">lock_open</div>
-            <div v-on:click.stop="toggle('settings')" class="icon desktop">settings</div>
+            <div v-on:click.stop="$dialog.show('dashboard')" class="icon desktop">settings</div>
         </context>
         <div class="content desktop">
             <grid-layout
@@ -52,13 +52,11 @@
                 <system />
             </div>
         </div>
-        <settings v-if="show.settings" :close="() => { toggle('settings') }" />
     </div>
 </template>
 
 <script>
     import GridLayout from "vue-grid-layout";
-    import Dashboard from "@/components/dialogs/dashboard.vue";
     import Activity from "@/components/widgets/activity.vue";
     import CPU from "@/components/widgets/cpu.vue";
     import Memory from "@/components/widgets/memory.vue";
@@ -75,7 +73,6 @@
         components: {
             "grid-layout": GridLayout.GridLayout,
             "grid-item": GridLayout.GridItem,
-            "settings": Dashboard,
             "activity": Activity,
             "cpu": CPU,
             "memory": Memory,
@@ -87,47 +84,49 @@
             "forecast": Forecast,
         },
 
-        computed: {
-            updated() {
-                return this.$store.state.updated;
-            },
-        },
-
         data() {
             return {
+                version: 0,
                 loading: true,
                 backdrop: false,
                 items: [],
                 show: {
-                    settings: false,
                     locked: true,
                 },
             };
         },
 
         created() {
-            this.$store.subscribe((mutation) => {
-                if (mutation.type === "DASHBOARD:ITEMS" || mutation.type === "DASHBOARD:BACKDROP") {
-                    this.loading = true;
+            this.$action.on("settings", "update", () => {
+                this.load();
+                this.render();
+            });
 
-                    const { dashboard } = this.$store.state;
-
-                    this.items = dashboard.items;
-                    this.backdrop = dashboard.backdrop || false;
-                    this.loading = false;
-                }
+            this.$action.on("dashboard", "update", () => {
+                this.load();
+                this.render();
             });
         },
 
         mounted() {
-            const { dashboard } = this.$store.state;
-
-            this.items = dashboard.items;
-            this.backdrop = dashboard.backdrop || false;
-            this.loading = false;
+            this.load();
         },
 
         methods: {
+            load() {
+                this.loading = true;
+
+                const { dashboard } = this.$store.state;
+
+                this.items = dashboard.items;
+                this.backdrop = dashboard.backdrop || false;
+                this.loading = false;
+            },
+
+            render() {
+                this.version += 1;
+            },
+
             toggle(field) {
                 this.show[field] = !this.show[field];
             },

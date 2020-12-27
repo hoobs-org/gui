@@ -23,20 +23,16 @@
                 <label :for="`plugin_${index}`">{{ plugin.text }}</label>
             </checkbox>
         </div>
-        <div v-on:click="close()" class="icon close mobile">close</div>
+        <div v-on:click="$menu.close()" class="icon close mobile">close</div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "plugins-menu",
+        name: "plugins",
 
         props: {
-            value: Array,
-            close: {
-                type: Function,
-                default: () => { /* null */ },
-            },
+            options: Object,
         },
 
         data() {
@@ -47,13 +43,13 @@
         },
 
         mounted() {
-            this.left = this.$parent.$refs.plugins.offsetLeft;
-            this.selected = this.value;
+            this.left = this.options.opener.offsetLeft;
+            this.selected = this.options.values;
         },
 
         watch: {
             selected() {
-                this.$emit("input", this.selected);
+                this.$action.emit("log", "plugins", this.selected);
             },
         },
     };

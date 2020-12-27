@@ -22,88 +22,22 @@
             <slot />
         </div>
         <div class="system">
-            <div v-on:click.stop="toggle('notifications')" class="icon">
+            <div v-on:click.stop="$menu.show('notifications')" class="icon">
                 notifications_none
                 <div v-if="notifications.length > 0" class="active">&bull;</div>
             </div>
-            <div v-on:click.stop="toggle('application')" class="icon">more_vert</div>
+            <div v-on:click.stop="$menu.show('application')" class="icon">more_vert</div>
         </div>
-        <application-menu
-            v-if="parent.show.application"
-            :about="() => { toggle('about') }"
-            :help="() => navigate('https://support.hoobs.org/docs')"
-            :settings="() => { toggle('settings') }"
-            :personalize="() => { toggle('personalize') }"
-            :terminal="terminal"
-            :close="() => { toggle('application') }"
-            :logout="logout"
-        />
-        <about v-if="parent.show.about" :close="() => { toggle('about') }" />
-        <updates v-if="parent.show.upgrades" :close="() => { toggle('upgrades') }" />
-        <settings v-if="parent.show.settings" :close="() => { toggle('settings') }" />
-        <personalize v-if="parent.show.personalize" :close="() => { toggle('personalize') }" />
     </div>
 </template>
 
 <script>
-    import About from "@/components/dialogs/about.vue";
-    import Updates from "@/components/dialogs/updates.vue";
-    import Settings from "@/components/dialogs/settings.vue";
-    import Personalize from "@/components/dialogs/personalize.vue";
-    import ApplicationMenu from "@/components/menus/application.vue";
-
     export default {
         name: "context",
 
-        components: {
-            "about": About,
-            "updates": Updates,
-            "settings": Settings,
-            "personalize": Personalize,
-            "application-menu": ApplicationMenu,
-        },
-
         computed: {
-            parent() {
-                return this.$parent.$parent;
-            },
-
             notifications() {
                 return this.$store.state.notifications;
-            },
-        },
-
-        async created() {
-            this.$store.subscribe((mutation, state) => {
-                if (mutation.type === "DIALOG:SHOW") {
-                    this.toggle(state.dialog);
-                }
-            });
-        },
-
-        methods: {
-            async logout() {
-                this.parent.reset();
-
-                await this.$hoobs.auth.logout();
-
-                this.$router.push({ path: "/login", query: { url: "/" } });
-            },
-
-            terminal() {
-                this.parent.show.application = false;
-
-                if (this.$route.name !== "terminal") this.$router.push({ path: "/terminal" });
-            },
-
-            toggle(field) {
-                this.parent.toggle(field);
-            },
-
-            navigate(url) {
-                this.parent.reset();
-
-                window.open(url);
             },
         },
     };

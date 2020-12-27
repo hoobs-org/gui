@@ -26,52 +26,21 @@
             </div>
         </div>
         <div v-if="auth" class="seperator desktop"></div>
-        <div v-on:click="about()" class="item">{{ $t("about") }}</div>
+        <div v-on:click="$dialog.show('about')" class="item">{{ $t("about") }}</div>
         <div v-on:click="help()" class="item">{{ $t("help") }}</div>
         <div v-if="auth" class="seperator desktop"></div>
-        <div v-if="user.permissions.controller" v-on:click="settings()" class="item">{{ $t("settings") }}</div>
-        <div v-on:click="personalize()" class="item">{{ $t("personalize") }}</div>
+        <div v-if="user.permissions.controller" v-on:click="$dialog.show('settings')" class="item">{{ $t("settings") }}</div>
+        <div v-on:click="$dialog.show('personalize')" class="item">{{ $t("personalize") }}</div>
         <div v-if="user.permissions.terminal" v-on:click="terminal()" class="item desktop">{{ $t("terminal") }}</div>
         <div v-if="auth" class="seperator desktop"></div>
         <div v-if="auth" v-on:click="logout()" class="item">{{ $t("logout") }}</div>
-        <div v-on:click="close()" class="icon close mobile">close</div>
+        <div v-on:click="$menu.close()" class="icon close mobile">close</div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "service-menu",
-
-        props: {
-            about: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-            help: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-            settings: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-            personalize: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-            terminal: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-            logout: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-            close: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-        },
+        name: "application",
 
         computed: {
             user() {
@@ -87,6 +56,28 @@
 
         async mounted() {
             this.auth = await this.$hoobs.auth.status() === "enabled";
+        },
+
+        methods: {
+            help() {
+                this.$menu.close();
+
+                window.open("https://support.hoobs.org/docs");
+            },
+
+            terminal() {
+                this.$menu.close();
+
+                if (this.$route.name !== "terminal") this.$router.push({ path: "/terminal" });
+            },
+
+            async logout() {
+                this.$menu.close();
+
+                await this.$hoobs.auth.logout();
+
+                this.$router.push({ path: "/login", query: { url: "/" } });
+            },
         },
     };
 </script>

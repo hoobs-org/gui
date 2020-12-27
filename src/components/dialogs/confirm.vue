@@ -18,10 +18,10 @@
 
 <template>
     <modal width="490px" height="220px">
-        <div class="content message">{{ message }}</div>
+        <div class="content message">{{ options.message }}</div>
         <div class="actions modal">
-            <div class="button" v-on:click="close()">{{ cancel || $t("cancel") }}</div>
-            <div class="button primary" v-on:click="execute()">{{ action || $t("ok") }}</div>
+            <div class="button" v-on:click="$dialog.close('confirm')">{{ $t("cancel") }}</div>
+            <div class="button primary" v-on:click="execute()">{{ options.button || $t("ok") }}</div>
         </div>
     </modal>
 </template>
@@ -31,23 +31,14 @@
         name: "confirm",
 
         props: {
-            message: String,
-            action: String,
-            cancel: String,
-            callback: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-            close: {
-                type: Function,
-                default: () => { /* null */ },
-            },
+            options: Object,
         },
 
         methods: {
             execute() {
-                this.close();
-                this.callback();
+                if ((this.options || {}).callback) this.options.callback();
+
+                this.$dialog.close("confirm");
             },
         },
     };

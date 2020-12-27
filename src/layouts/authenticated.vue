@@ -17,31 +17,24 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-on:click="reset()" id="authenticated">
+    <div v-on:click="$menu.close()" id="authenticated">
         <navigation />
         <div class="screen">
             <slot />
+            <component v-if="menu" :key="menu.name" :is="menu" :options="menu.options"></component>
         </div>
-        <notifications v-if="show.notifications" v-model="show.notifications" />
-        <alert v-if="alerting" :message="alert.message" :close="() => { alerting = false; }" />
-        <confirm v-if="confirming" :callback="confirm.callback" :message="confirm.message" :action="confirm.action" :close="() => { confirming = false; }" />
+        <component v-for="(dialog) in dialogs" :key="dialog.name" :is="dialog" :options="dialog.options"></component>
     </div>
 </template>
 
 <script>
-    import Alert from "@/components/dialogs/alert.vue";
-    import Confirm from "@/components/dialogs/confirm.vue";
     import Navigation from "@/components/navigation.vue";
-    import Notifications from "@/components/notifications.vue";
 
     export default {
         name: "authenticated",
 
         components: {
-            "alert": Alert,
-            "confirm": Confirm,
             "navigation": Navigation,
-            "notifications": Notifications,
         },
 
         computed: {
@@ -52,73 +45,30 @@
 
         data() {
             return {
+                dialogs: [],
+                menu: null,
                 show: {
-                    notifications: false,
-                    application: false,
-                    personalize: false,
-                    dashboard: false,
                     instances: false,
-                    settings: false,
-                    upgrades: false,
                     plugins: false,
-                    confirm: false,
-                    about: false,
-                    alert: false,
-                },
-                alerting: false,
-                alert: {
-                    message: "",
-                },
-                confirming: false,
-                confirm: {
-                    callback: () => { /* null */ },
-                    message: "",
-                    action: "",
                 },
             };
         },
 
         async created() {
-            this.$store.subscribe((mutation, state) => {
-                if (mutation.type === "ALERT:SHOW") {
-                    this.alert.message = state.alert.message;
-                    this.alerting = true;
-                }
+            this.$dialog.on("state", (dialogs) => {
+                this.$menu.close();
+                this.dialogs = dialogs;
+            });
 
-                if (mutation.type === "CONFIRM:SHOW") {
-                    this.confirm.message = state.confirm.message;
-                    this.confirm.action = state.confirm.action;
-                    this.confirm.callback = state.confirm.callback;
+            this.$menu.on("open", (menu) => {
+                this.menu = menu;
+            });
 
-                    this.confirming = true;
-                }
-
-                if (mutation.type === "SETTINGS:UPDATE") {
-                    window.location.reload();
-                }
+            this.$menu.on("close", () => {
+                this.menu = null;
             });
 
             this.$store.commit("AUTH:STATE", (await this.$hoobs.auth.status()));
-        },
-
-        methods: {
-            reset(ignore) {
-                const keys = Object.keys(this.show);
-
-                for (let i = 0; i < keys.length; i += 1) {
-                    if (keys[i] !== (ignore || "")) this.show[keys[i]] = false;
-                }
-            },
-
-            toggle(field) {
-                this.reset(field);
-
-                this.show[field] = !this.show[field];
-            },
-
-            navigate(url) {
-                window.open(url);
-            },
         },
     };
 </script>
@@ -131,11 +81,13 @@
         font-family: "Montserrat", sans-serif;
         color: var(--application-text);
         background: var(--application-background);
+        overflow: hidden;
 
         .screen {
             flex: 1;
             display: flex;
             flex-direction: column;
+            position: relative;
             overflow: hidden;
         }
 
