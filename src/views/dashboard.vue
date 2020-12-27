@@ -57,15 +57,6 @@
 
 <script>
     import GridLayout from "vue-grid-layout";
-    import Activity from "@/components/widgets/activity.vue";
-    import CPU from "@/components/widgets/cpu.vue";
-    import Memory from "@/components/widgets/memory.vue";
-    import Instances from "@/components/widgets/instances.vue";
-    import System from "@/components/widgets/system.vue";
-    import Log from "@/components/widgets/log.vue";
-    import Weather from "@/components/widgets/weather.vue";
-    import Current from "@/components/widgets/current.vue";
-    import Forecast from "@/components/widgets/forecast.vue";
 
     export default {
         name: "dashboard",
@@ -73,15 +64,16 @@
         components: {
             "grid-layout": GridLayout.GridLayout,
             "grid-item": GridLayout.GridItem,
-            "activity": Activity,
-            "cpu": CPU,
-            "memory": Memory,
-            "instances": Instances,
-            "system": System,
-            "log": Log,
-            "weather": Weather,
-            "current": Current,
-            "forecast": Forecast,
+
+            "activity": () => import(/* webpackChunkName: "dialog:activity" */ "@/components/widgets/activity.vue"),
+            "cpu": () => import(/* webpackChunkName: "dialog:cpu" */ "@/components/widgets/cpu.vue"),
+            "memory": () => import(/* webpackChunkName: "dialog:memory" */ "@/components/widgets/memory.vue"),
+            "instances": () => import(/* webpackChunkName: "dialog:instances" */ "@/components/widgets/instances.vue"),
+            "system": () => import(/* webpackChunkName: "dialog:system" */ "@/components/widgets/system.vue"),
+            "log": () => import(/* webpackChunkName: "dialog:log" */ "@/components/widgets/log.vue"),
+            "weather": () => import(/* webpackChunkName: "dialog:weather" */ "@/components/widgets/weather.vue"),
+            "current": () => import(/* webpackChunkName: "dialog:current" */ "@/components/widgets/current.vue"),
+            "forecast": () => import(/* webpackChunkName: "dialog:forecast" */ "@/components/widgets/forecast.vue"),
         },
 
         data() {
