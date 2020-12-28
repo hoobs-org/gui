@@ -93,7 +93,7 @@
     import Reviews from "@/components/elements/reviews.vue";
 
     const SOCKET_RECONNECT_DELAY = 500;
-    const INSTANCE_CREATE_DELAY = 500;
+    const INSTANCE_CREATE_DELAY = 4000;
 
     export default {
         name: "plugin",
