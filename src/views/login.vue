@@ -172,7 +172,7 @@
 
                 .label {
                     padding: 10px 10px 0 10px;
-                    margin: 2px 0 0 0;
+                    border-top: 1px var(--modal-background) solid;
                     background: var(--modal-input);
                     font-size: 12px;
                     user-select: none;
