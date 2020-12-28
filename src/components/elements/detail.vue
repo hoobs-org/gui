@@ -22,7 +22,7 @@
             <h1>{{ $t("installed") }}</h1>
         </div>
         <div v-if="installed.length > 0" class="item vertical">
-            <div v-for="(item, index) in installed" :key="`installed:${index}`" class="value smaller">
+            <div v-for="(item, index) in instances" :key="`installed:${index}`" class="value smaller">
                 <router-link :to="`/instances/${item.id}`" :style="instance(item.display)">{{ item.display }}</router-link>
                 {{ item.version }}
             </div>
@@ -153,6 +153,7 @@
                 current: null,
                 homepage: null,
                 repository: null,
+                instances: [],
                 support: null,
                 downloads: {},
             };
@@ -161,6 +162,14 @@
         mounted() {
             this.homepage = this.url(this.plugin.homepage);
             this.repository = this.url((this.plugin.repository || {}).url);
+            this.instances = this.installed;
+
+            this.instances.sort((a, b) => {
+                if (a.id < b.id) return -1;
+                if (a.id > b.id) return 1;
+
+                return 0;
+            });
 
             const points = [];
 
