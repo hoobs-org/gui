@@ -92,6 +92,9 @@
     import Rating from "@/components/elements/rating.vue";
     import Reviews from "@/components/elements/reviews.vue";
 
+    const SOCKET_RECONNECT_DELAY = 500;
+    const INSTANCE_CREATE_DELAY = 500;
+
     export default {
         name: "plugin",
 
@@ -275,7 +278,7 @@
                                                 }
                                             });
                                         });
-                                    }, 3000);
+                                    }, INSTANCE_CREATE_DELAY);
                                 });
                             }));
                         }
@@ -285,7 +288,7 @@
                                 Wait().then(() => {
                                     this.load(this.identifier);
                                 });
-                            }, 500);
+                            }, SOCKET_RECONNECT_DELAY);
                         });
                     },
                 });
@@ -313,7 +316,7 @@
                                                         instance.remove().then(() => {
                                                             setTimeout(() => {
                                                                 resolve();
-                                                            }, 3000);
+                                                            }, INSTANCE_CREATE_DELAY);
                                                         });
                                                     } else {
                                                         resolve();
@@ -322,7 +325,7 @@
                                             } else {
                                                 resolve();
                                             }
-                                        }, 500);
+                                        }, SOCKET_RECONNECT_DELAY);
                                     });
                                 }));
                             }
@@ -332,7 +335,7 @@
                                     Wait().then(() => {
                                         this.load(this.identifier);
                                     });
-                                }, 500);
+                                }, SOCKET_RECONNECT_DELAY);
                             });
                         });
                     },
@@ -359,7 +362,7 @@
                         Wait().then(() => {
                             this.load(this.identifier);
                         });
-                    }, 500);
+                    }, SOCKET_RECONNECT_DELAY);
                 });
             },
 

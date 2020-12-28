@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </form>
-            <form v-else-if="status" class="screen form">
+            <form v-else-if="subject" class="screen form">
                 <div class="wrapper">
                     <div class="row title">{{ display }}</div>
                     <div class="row section">{{ $t("pairing") }}</div>
@@ -115,6 +115,8 @@
 
     import Validators from "../services/validators";
     import { mac } from "../services/formatters";
+
+    const SOCKET_RECONNECT_DELAY = 500;
 
     export default {
         name: "instances",
@@ -188,7 +190,7 @@
                 this.end = null;
 
                 if (id && id !== "add" && id !== "api" && id !== "") {
-                    this.subject = await this.$hoobs.instance(this.id);
+                    this.subject = await this.$hoobs.instance(id);
 
                     if (this.subject) {
                         this.status = await this.subject.status();
@@ -238,7 +240,7 @@
 
                 setTimeout(() => {
                     this.load(this.id);
-                }, 500);
+                }, SOCKET_RECONNECT_DELAY);
             },
 
             async save(create) {
@@ -259,7 +261,7 @@
 
                             this.instances = await this.$hoobs.instances.list();
                             this.$router.push({ path: `/instances/${this.instances.find((item) => item.id === Sanitize(this.display)).id}` });
-                        }, 500);
+                        }, SOCKET_RECONNECT_DELAY);
                     } else if (this.subject) {
                         this.loading = true;
 
@@ -273,7 +275,7 @@
                             await Wait();
 
                             this.load(this.id);
-                        }, 500);
+                        }, SOCKET_RECONNECT_DELAY);
                     }
                 } else {
                     this.$alert(this.$t(validation.error));
@@ -295,7 +297,7 @@
                             await Wait();
 
                             this.$router.push({ path: "/instances" });
-                        }, 500);
+                        }, SOCKET_RECONNECT_DELAY);
                     });
                 }
             },

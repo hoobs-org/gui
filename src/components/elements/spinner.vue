@@ -36,6 +36,8 @@
 </template>
 
 <script>
+    const SPINNER_START_DELAY = 500;
+
     export default {
         name: "spinner",
 
@@ -52,7 +54,7 @@
         mounted() {
             setTimeout(() => {
                 this.display = true;
-            }, 500);
+            }, SPINNER_START_DELAY);
         },
     };
 </script>

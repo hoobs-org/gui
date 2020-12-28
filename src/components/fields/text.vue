@@ -38,6 +38,8 @@
 </template>
 
 <script>
+    const INPUT_FOCUS_DELAY = 10;
+
     export default {
         name: "text-field",
 
@@ -79,7 +81,7 @@
             if (this.autofocus) {
                 setTimeout(() => {
                     if (this.$refs[this.uuid]) this.$refs[this.uuid].focus();
-                }, 10);
+                }, INPUT_FOCUS_DELAY);
             }
         },
 

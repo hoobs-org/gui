@@ -27,6 +27,8 @@
 <script>
     import Message from "@/components/elements/message.vue";
 
+    const SCROLL_DELAY = 10;
+
     export default {
         name: "log",
 
@@ -43,7 +45,7 @@
         mounted() {
             setTimeout(() => {
                 this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
-            }, 10);
+            }, SCROLL_DELAY);
         },
 
         updated() {

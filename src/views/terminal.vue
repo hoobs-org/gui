@@ -37,6 +37,8 @@
     import Chunk from "@hoobs/sdk/lib/chunk";
     import Socket from "@hoobs/sdk/lib/socket";
 
+    const TERMINAL_RESIZE_DELAY = 10;
+
     export default {
         name: "terminal",
 
@@ -176,8 +178,8 @@
 
                 setTimeout(() => {
                     if (this.term && this.$refs.flow) {
-                        const cols = Math.floor((this.$refs.flow.clientWidth + 1) / this.text.width) - 1;
-                        const rows = Math.floor((this.$refs.flow.clientHeight + 1) / this.text.height) + 3;
+                        const cols = Math.floor((this.$refs.flow.clientWidth + 1) / this.text.width) - 7;
+                        const rows = Math.floor((this.$refs.flow.clientHeight + 1) / this.text.height);
 
                         if (this.$refs.container) this.$refs.container.style.display = "block";
                         if (this.screen) this.screen.fit();
@@ -186,7 +188,7 @@
                         this.socket.emit("shell_resize", `${cols}:${rows}`);
                         this.term.focus();
                     }
-                }, 10);
+                }, TERMINAL_RESIZE_DELAY);
             },
         },
     };
