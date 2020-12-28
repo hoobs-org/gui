@@ -17,12 +17,12 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <router-link id="plugin" :to="`/plugin/${subject.name}`" :title="$plugins.title(subject.name)">
+    <router-link id="plugin" :to="`/plugin/${subject.name}`" :title="$repository.title(subject.name)">
         <div class="identity">
             <img :src="icon()" />
         </div>
         <div class="details">
-            <span class="title">{{ $plugins.title(subject.name) }}</span>
+            <span class="title">{{ $repository.title(subject.name) }}</span>
             <span class="description">{{ subject.description }}</span>
             <rating :value="subject.rating" :size="15" />
         </div>

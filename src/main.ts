@@ -16,14 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-import { hoobs, sdk } from "@hoobs/sdk";
+import {
+    hoobs,
+    socket,
+    repository,
+    dates,
+    sdk,
+} from "@hoobs/sdk";
 
 import Vue from "vue";
 import App from "./app.vue";
 
-import dates from "./plugins/dates";
-import socket from "./plugins/socket";
-import plugins from "./plugins/plugins";
 import converter from "./plugins/markdown";
 import graphing from "./plugins/graphing";
 import themes from "./plugins/themes";
@@ -90,13 +93,13 @@ Vue.config.productionTip = false;
 Vue.use(io);
 Vue.use(sdk);
 Vue.use(drag);
-Vue.use(dates);
 Vue.use(menus);
+Vue.use(dates);
 Vue.use(dialogs);
-Vue.use(plugins);
 Vue.use(actions);
 Vue.use(markdown);
 Vue.use(graphing);
+Vue.use(repository);
 
 Vue.use(themes, { hoobs, store });
 

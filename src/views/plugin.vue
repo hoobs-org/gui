@@ -34,7 +34,7 @@
                     </div>
                     <div class="title">
                         <rating :value="plugin.rating" />
-                        <h1>{{ $plugins.title(plugin.name) }}</h1>
+                        <h1>{{ $repository.title(plugin.name) }}</h1>
                         <div v-if="(plugin.tags && plugin.tags.latest) || plugin.version" class="version">{{ plugin.version || plugin.tags.latest }} • Published {{ $dates.age(plugin.published) }}</div>
                     </div>
                 </div>
@@ -193,7 +193,7 @@
                 }, ...this.instances];
 
                 if (identifier && identifier !== "") {
-                    this.plugin = await this.$plugins.details(identifier);
+                    this.plugin = await this.$repository.details(identifier);
 
                     if (this.plugin) {
                         this.releases = this.versions(this.plugin);

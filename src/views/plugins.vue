@@ -168,8 +168,8 @@
 
                 if (!this.$route.query.search || this.$route.query.search === "") {
                     this.query = "";
-                    this.featured = await this.$plugins.featured();
-                    this.popular = await this.$plugins.popular();
+                    this.featured = await this.$repository.featured();
+                    this.popular = await this.$repository.popular();
 
                     if (id && id !== "") {
                         const instance = await this.$hoobs.instance(id);
@@ -184,7 +184,7 @@
 
                     this.query = decodeURIComponent(this.$route.query.search);
 
-                    const response = await this.$plugins.search(this.query, skip, limit);
+                    const response = await this.$repository.search(this.query, skip, limit);
 
                     this.results = response.results;
                     this.count = response.count;
