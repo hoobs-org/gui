@@ -117,7 +117,7 @@ export function events(element: HTMLElement, binding: { [key: string]: any }): v
     const { value } = binding;
 
     const selector: string = value instanceof Object ? value.handle : value;
-    const handles = document.querySelectorAll(selector);
+    const handles = element.querySelectorAll(selector);
 
     if (handles.length !== 0) {
         element.classList.add(window.data.class.usesHandle);
@@ -128,8 +128,6 @@ export function events(element: HTMLElement, binding: { [key: string]: any }): v
             current.classList.add(window.data.class.handle);
             current.onmousedown = (item: MouseEvent) => start(current, element, item);
         });
-    } else {
-        element.onmousedown = (item: MouseEvent) => start(element, element, item);
     }
 
     element.classList.add(window.data.class.initial);

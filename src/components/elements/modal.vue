@@ -20,12 +20,12 @@
     <div v-on:click.stop id="dialog">
         <div v-if="draggable" v-drag="{ handle: '.handle' }" class="window modal" :style="`width: ${width}; height: ${height};`">
             <welcome v-if="welcome" :message="welcome" />
-            <div v-else-if="title" class="subject handle">{{ title }}</div>
+            <div v-else class="subject handle">{{ title || "" }}</div>
             <slot />
         </div>
         <div v-else class="window modal" :style="`width: ${width}; height: ${height};`">
             <welcome v-if="welcome" :message="welcome" />
-            <div v-else-if="title" class="subject handle">{{ title }}</div>
+            <div v-else-if="title" class="subject handle">{{ title || "" }}</div>
             <slot />
         </div>
     </div>
