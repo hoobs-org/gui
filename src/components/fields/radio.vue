@@ -83,6 +83,8 @@
                 if (this.disabled) return;
 
                 this.view = this.model === this.value;
+
+                this.$emit("input", this.value, this.value);
                 this.$emit("change", this.value, this.value);
             },
         },
@@ -126,6 +128,9 @@
             position: relative;
             padding-left: 7px;
             font-size: 14px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
             user-select: none;
             cursor: pointer;
         }
@@ -139,7 +144,6 @@
             box-sizing: border-box;
             position: relative;
             border-radius: 100%;
-            transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             cursor: pointer;
 
             input[type="radio"] {
@@ -150,9 +154,11 @@
             }
 
             .marker {
-                width: 12px;
-                height: 12px;
+                position: absolute;
                 border-radius: 100%;
+                box-sizing: border-box;
+                border: 3px var(--application-input) solid;
+                inset: 0;
             }
         }
 

@@ -180,5 +180,13 @@ module.exports = {
                 "global-require": "off",
             },
         },
+        {
+            files: [
+                "src/services/schema.ts",
+            ],
+            rules: {
+                "@typescript-eslint/explicit-module-boundary-types": "off",
+            },
+        },
     ],
 };

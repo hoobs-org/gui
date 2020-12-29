@@ -1,5 +1,5 @@
 <!-------------------------------------------------------------------------------------------------
- | hoobs-core                                                                                     |
+ | hoobs-gui                                                                                      |
  | Copyright (C) 2020 HOOBS                                                                       |
  |                                                                                                |
  | This program is free software: you can redistribute it and/or modify                           |
@@ -17,84 +17,43 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="field" class="field">
-        <span class="title">{{ title }}</span>
-        <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <input
-            :id="id || uuid"
-            :ref="uuid"
-            :name="name"
-            type="number"
-            autocomplete="false"
-            data-lpignore="true"
-            min="1"
-            max="65535"
-            step="1"
-            :value="value"
-            :placeholder="placeholder"
-            v-on:input="update"
-            v-on:change="change"
-            v-bind:required="required"
-        />
+    <div id="field">
+        <label class="title" v-if="schema.title && schema.title !== ''">{{ schema.title }}</label>
+        <span v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</span>
+        <div v-for="(item, index) in schema.items.anyOf" class="item" :key="index">
+            <checkbox :title="item.title" :value="items.indexOf(item.enum[0]) !== -1" v-on:input="updateValue($event, index)" />
+        </div>
     </div>
 </template>
 
 <script>
-    const INPUT_FOCUS_DELAY = 10;
+    import { scaffold } from "../../services/schema";
 
     export default {
-        name: "port-field",
+        name: "anyof-field",
 
-        props: {
-            id: {
-                type: String,
-                default: undefined,
-            },
-            name: String,
-            title: String,
-            description: String,
-            placeholder: {
-                type: String,
-                default: "",
-            },
-            value: Number,
-            required: {
-                type: Boolean,
-                default: false,
-            },
-            autofocus: {
-                type: Boolean,
-                default: false,
-            },
-        },
+        props: [
+            "schema",
+            "value",
+        ],
 
         data() {
             return {
-                uuid: "",
+                items: (this.value !== undefined) ? this.value : scaffold(this.schema),
             };
         },
 
-        mounted() {
-            if (this.id === undefined || typeof String) {
-                this.uuid = `port_field_${Math.random().toString(36).substring(2, 10)}`;
-            } else {
-                this.uuid = this.id;
-            }
-
-            if (this.autofocus) {
-                setTimeout(() => {
-                    if (this.$refs[this.uuid]) this.$refs[this.uuid].focus();
-                }, INPUT_FOCUS_DELAY);
-            }
-        },
-
         methods: {
-            update() {
-                this.$emit("input", parseInt(this.$refs[this.uuid].value, 10) || null);
-            },
+            updateValue(value, index) {
+                const location = this.items.indexOf(this.schema.items.anyOf[index].enum[0]);
 
-            change() {
-                this.$emit("change", parseInt(this.$refs[this.uuid].value, 10) || null);
+                if (value && location === -1) {
+                    this.items.push(this.schema.items.anyOf[index].enum[0]);
+                } else if (!value && location !== -1) {
+                    this.items.splice(location, 1);
+                }
+
+                this.$emit("input", this.items);
             },
         },
     };
@@ -129,18 +88,8 @@
             }
         }
 
-        input {
-            flex: 1;
-            padding: 7px;
-            font-size: 14px;
-
-            &:focus {
-                outline: 0 none;
-            }
-
-            &::placeholder {
-                opacity: 0.5;
-            }
+        .item {
+            padding: 0;
         }
     }
 </style>

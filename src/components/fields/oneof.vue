@@ -1,5 +1,5 @@
 <!-------------------------------------------------------------------------------------------------
- | hoobs-core                                                                                     |
+ | hoobs-gui                                                                                      |
  | Copyright (C) 2020 HOOBS                                                                       |
  |                                                                                                |
  | This program is free software: you can redistribute it and/or modify                           |
@@ -17,85 +17,34 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="field" class="field">
-        <span class="title">{{ title }}</span>
-        <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <input
-            :id="id || uuid"
-            :ref="uuid"
-            :name="name"
-            type="number"
-            autocomplete="false"
-            data-lpignore="true"
-            min="1"
-            max="65535"
-            step="1"
-            :value="value"
-            :placeholder="placeholder"
-            v-on:input="update"
-            v-on:change="change"
-            v-bind:required="required"
-        />
+    <div id="field">
+        <span class="title" v-if="schema.title && schema.title !== ''">{{ schema.title }}</span>
+        <span v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</span>
+        <div v-for="(item, index) in schema.oneOf" class="item" :key="index">
+            <radio id="light" :name="uuid" :title="item.title" v-model="working" :value="item.enum[0]" v-on:input="$emit('input', $event)" />
+        </div>
     </div>
 </template>
 
 <script>
-    const INPUT_FOCUS_DELAY = 10;
-
     export default {
-        name: "port-field",
+        name: "oneof-field",
 
-        props: {
-            id: {
-                type: String,
-                default: undefined,
-            },
-            name: String,
-            title: String,
-            description: String,
-            placeholder: {
-                type: String,
-                default: "",
-            },
-            value: Number,
-            required: {
-                type: Boolean,
-                default: false,
-            },
-            autofocus: {
-                type: Boolean,
-                default: false,
-            },
-        },
+        props: [
+            "schema",
+            "value",
+        ],
 
         data() {
             return {
                 uuid: "",
+                working: null,
             };
         },
 
         mounted() {
-            if (this.id === undefined || typeof String) {
-                this.uuid = `port_field_${Math.random().toString(36).substring(2, 10)}`;
-            } else {
-                this.uuid = this.id;
-            }
-
-            if (this.autofocus) {
-                setTimeout(() => {
-                    if (this.$refs[this.uuid]) this.$refs[this.uuid].focus();
-                }, INPUT_FOCUS_DELAY);
-            }
-        },
-
-        methods: {
-            update() {
-                this.$emit("input", parseInt(this.$refs[this.uuid].value, 10) || null);
-            },
-
-            change() {
-                this.$emit("change", parseInt(this.$refs[this.uuid].value, 10) || null);
-            },
+            this.working = this.value;
+            this.uuid = `oneof_${Math.random().toString(36).substring(2, 10)}`;
         },
     };
 </script>
@@ -129,18 +78,8 @@
             }
         }
 
-        input {
-            flex: 1;
-            padding: 7px;
-            font-size: 14px;
-
-            &:focus {
-                outline: 0 none;
-            }
-
-            &::placeholder {
-                opacity: 0.5;
-            }
+        .item {
+            padding: 0;
         }
     }
 </style>

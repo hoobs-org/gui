@@ -1,5 +1,5 @@
 <!-------------------------------------------------------------------------------------------------
- | hoobs-core                                                                                     |
+ | hoobs-gui                                                                                      |
  | Copyright (C) 2020 HOOBS                                                                       |
  |                                                                                                |
  | This program is free software: you can redistribute it and/or modify                           |
@@ -23,15 +23,9 @@
         <input
             :id="id || uuid"
             :ref="uuid"
-            :name="name"
-            type="number"
-            autocomplete="false"
+            type="date"
             data-lpignore="true"
-            min="1"
-            max="65535"
-            step="1"
             :value="value"
-            :placeholder="placeholder"
             v-on:input="update"
             v-on:change="change"
             v-bind:required="required"
@@ -43,7 +37,7 @@
     const INPUT_FOCUS_DELAY = 10;
 
     export default {
-        name: "port-field",
+        name: "date-field",
 
         props: {
             id: {
@@ -57,7 +51,7 @@
                 type: String,
                 default: "",
             },
-            value: Number,
+            value: String,
             required: {
                 type: Boolean,
                 default: false,
@@ -76,7 +70,7 @@
 
         mounted() {
             if (this.id === undefined || typeof String) {
-                this.uuid = `port_field_${Math.random().toString(36).substring(2, 10)}`;
+                this.uuid = `text_field_${Math.random().toString(36).substring(2, 10)}`;
             } else {
                 this.uuid = this.id;
             }
@@ -90,11 +84,11 @@
 
         methods: {
             update() {
-                this.$emit("input", parseInt(this.$refs[this.uuid].value, 10) || null);
+                this.$emit("input", this.$refs[this.uuid].value);
             },
 
             change() {
-                this.$emit("change", parseInt(this.$refs[this.uuid].value, 10) || null);
+                this.$emit("change", this.$refs[this.uuid].value);
             },
         },
     };
