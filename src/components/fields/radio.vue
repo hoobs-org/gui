@@ -24,9 +24,7 @@
             </div>
             <input type="radio" :id="id || uuid" :name="name" :value="value" :disabled="disabled" :required="required" :checked="state" />
         </div>
-        <label class="label" :for="id || uuid">
-            <slot />
-        </label>
+        <label class="label" :for="id || uuid">{{ title }}</label>
     </div>
 </template>
 
@@ -54,6 +52,7 @@
                 default: undefined,
             },
             name: String,
+            title: String,
             required: Boolean,
             disabled: Boolean,
             size: Number,
@@ -113,8 +112,8 @@
 <style lang="scss" scoped>
     .radio {
         width: 100%;
-        height: 28px;
-        min-height: 28px;
+        height: 29px;
+        min-height: 29px;
         box-sizing: border-box;
         display: inline-flex;
         align-items: center;
@@ -126,6 +125,7 @@
         .label {
             position: relative;
             padding-left: 7px;
+            font-size: 14px;
             user-select: none;
             cursor: pointer;
         }

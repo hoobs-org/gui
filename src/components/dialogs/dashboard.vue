@@ -23,16 +23,12 @@
                 <div class="form">
                     <div class="row section">{{ $t("background") }}</div>
                     <div class="row">
-                        <checkbox id="backdrop" v-model="backdrop">
-                            <label for="backdrop">{{ $t("dashboard_background") }}</label>
-                        </checkbox>
+                        <checkbox id="backdrop" :title="$t('dashboard_background')" v-model="backdrop" />
                     </div>
                     <div class="row section">{{ $t("dashboard_items") }}</div>
                     <div class="grid">
                         <div v-for="(item, index) in available" :key="`item:${index}`">
-                            <checkbox :id="`item_${index}`" v-model="item.selected">
-                                <label :for="`item_${index}`">{{ $t(item.label) }}</label>
-                            </checkbox>
+                            <checkbox :id="`item_${index}`" :title="item.label" v-model="item.selected" />
                         </div>
                     </div>
                 </div>

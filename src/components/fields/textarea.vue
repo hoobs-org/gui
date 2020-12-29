@@ -20,9 +20,19 @@
     <div id="field" class="field">
         <span class="title">{{ title }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
-        <select :id="id || uuid" :ref="uuid" :name="name" :value="value" v-on:input="update" v-on:change="change" v-bind:required="required">
-            <option v-for="option in options" v-bind:value="option.value" :key="option.value">{{ option.text }}</option>
-        </select>
+        <textarea
+            :id="id || uuid"
+            :ref="uuid"
+            :name="name"
+            autocorrect="off"
+            autocapitalize="none"
+            data-lpignore="true"
+            :style="`min-height: ${height};`"
+            v-on:input="update"
+            v-on:change="change"
+            v-model="working"
+            v-bind:required="required"
+        ></textarea>
     </div>
 </template>
 
@@ -30,7 +40,7 @@
     const INPUT_FOCUS_DELAY = 10;
 
     export default {
-        name: "select-field",
+        name: "textarea-field",
 
         props: {
             id: {
@@ -40,10 +50,20 @@
             name: String,
             title: String,
             description: String,
-            value: [String, Number, Boolean, Object, Date],
-            type: String,
-            options: Array,
+            height: {
+                type: String,
+                default: "140px",
+            },
+            placeholder: {
+                type: String,
+                default: "",
+            },
+            value: String,
             required: {
+                type: Boolean,
+                default: false,
+            },
+            autofocus: {
                 type: Boolean,
                 default: false,
             },
@@ -52,12 +72,15 @@
         data() {
             return {
                 uuid: "",
+                working: "",
             };
         },
 
         mounted() {
+            this.working = this.value;
+
             if (this.id === undefined || typeof String) {
-                this.uuid = `text_field_${Math.random().toString(36).substring(2, 10)}`;
+                this.uuid = `textarea_field_${Math.random().toString(36).substring(2, 10)}`;
             } else {
                 this.uuid = this.id;
             }
@@ -71,81 +94,11 @@
 
         methods: {
             update() {
-                let value = null;
-
-                switch ((this.type || "string").toLowerCase()) {
-                    case "bool":
-                    case "boolean":
-                        this.$emit("input", (this.$refs.field.value || "").toLowerCase() === "true");
-                        break;
-
-                    case "float":
-                    case "double":
-                    case "decimal":
-                    case "number":
-                        value = parseFloat(this.$refs.field.value);
-
-                        if (Number.isNaN(value)) {
-                            value = null;
-                        }
-
-                        this.$emit("input", value);
-                        break;
-
-                    case "int":
-                    case "integer":
-                        value = parseInt(this.$refs.field.value, 10);
-
-                        if (Number.isNaN(value)) {
-                            value = null;
-                        }
-
-                        this.$emit("input", value);
-                        break;
-
-                    default:
-                        this.$emit("input", this.$refs.field.value);
-                        break;
-                }
+                this.$emit("input", this.$refs[this.uuid].value);
             },
 
             change() {
-                let value = null;
-
-                switch ((this.type || "string").toLowerCase()) {
-                    case "bool":
-                    case "boolean":
-                        this.$emit("change", (this.$refs.field.value || "").toLowerCase() === "true");
-                        break;
-
-                    case "float":
-                    case "double":
-                    case "decimal":
-                    case "number":
-                        value = parseFloat(this.$refs.field.value);
-
-                        if (Number.isNaN(value)) {
-                            value = null;
-                        }
-
-                        this.$emit("change", value);
-                        break;
-
-                    case "int":
-                    case "integer":
-                        value = parseInt(this.$refs.field.value, 10);
-
-                        if (Number.isNaN(value)) {
-                            value = null;
-                        }
-
-                        this.$emit("change", value);
-                        break;
-
-                    default:
-                        this.$emit("change", this.$refs.field.value);
-                        break;
-                }
+                this.$emit("change", this.$refs[this.uuid].value);
             },
         },
     };
@@ -177,13 +130,19 @@
             }
         }
 
-        select {
+        textarea {
             flex: 1;
             padding: 7px;
             font-size: 14px;
+            font-family: "Montserrat", sans-serif;
+            resize: none;
 
             &:focus {
                 outline: 0 none;
+            }
+
+            &::placeholder {
+                opacity: 0.5;
             }
         }
     }

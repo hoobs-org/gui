@@ -68,20 +68,14 @@
                     </div>
                     <div class="row title" style="margin-top: 20px;">{{ $t("mode") }}</div>
                     <div class="row">
-                        <radio id="light" name="mode" v-model="mode" value="light">
-                            <label for="light">{{ $t("light") }}</label>
-                        </radio>
+                        <radio id="light" name="mode" :title="$t('light')" v-model="mode" value="light" />
                     </div>
                     <div class="row">
-                        <radio id="dark" name="mode" v-model="mode" value="dark">
-                            <label for="dark">{{ $t("dark") }}</label>
-                        </radio>
+                        <radio id="dark" name="mode" :title="$t('dark')" v-model="mode" value="dark" />
                     </div>
                     <div class="row title" style="margin-top: 20px;">{{ $t("color") }}</div>
                     <div v-if="auth" class="row auto desktop">
-                        <checkbox id="auto" v-model="auto">
-                            <label for="auto">{{ $t("automatically_set") }}</label>
-                        </checkbox>
+                        <checkbox id="auto" :title="$t('automatically_set')" v-model="auto" />
                     </div>
                     <div v-on:click="() => { auto = false; }" class="row colors">
                         <color v-for="(color, index) in colors" :key="`color:${index}`" v-model="highlight" :color="color" />

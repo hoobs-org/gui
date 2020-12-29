@@ -29,10 +29,10 @@
                     <span v-for="(error, index) in errors" :key="`errors:${index}`">{{ error }}</span>
                 </div>
                 <input type="submit" class="hidden-submit" value="submit" />
-                <text-field :name="$t('name')" :description="$t('name_description')" v-model="name" :required="true" :autofocus="true" />
-                <text-field :name="$t('username')" :description="$t('username_description')" v-model="username" :required="true" />
-                <password-field :name="$t('password')" :description="$t('password_description')" v-model="password" />
-                <password-field :name="$t('password_confirm')" :description="$t('password_confirm_description')" v-model="challenge" />
+                <text-field :title="$t('name')" :description="$t('name_description')" v-model="name" :required="true" :autofocus="true" />
+                <text-field :title="$t('username')" :description="$t('username_description')" v-model="username" :required="true" />
+                <password-field :title="$t('password')" :description="$t('password_description')" v-model="password" />
+                <password-field :title="$t('password_confirm')" :description="$t('password_confirm_description')" v-model="challenge" />
             </form>
             <div class="actions modal">
                 <div class="copyright">

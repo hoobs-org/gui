@@ -18,11 +18,12 @@
 
 <template>
     <div id="field" class="field">
-        <span class="title">{{ name }}</span>
+        <span class="title">{{ title }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
         <input
             :id="id || uuid"
             :ref="uuid"
+            :name="name"
             type="number"
             autocomplete="false"
             data-lpignore="true"
@@ -50,6 +51,7 @@
                 default: undefined,
             },
             name: String,
+            title: String,
             description: String,
             placeholder: {
                 type: String,
@@ -59,8 +61,8 @@
             min: Number,
             max: Number,
             step: {
-                type: Number,
-                default: 0.1,
+                type: [Number, String],
+                default: "any",
             },
             required: {
                 type: Boolean,

@@ -26,9 +26,7 @@
             </div>
             <input type="checkbox" :id="id || uuid" :name="name" :value="value" :disabled="disabled" :required="required" :checked="state" />
         </div>
-        <label class="label" :for="id || uuid">
-            <slot />
-        </label>
+        <label class="label" :for="id || uuid">{{ title }}</label>
     </div>
 </template>
 
@@ -56,6 +54,7 @@
                 default: false,
             },
             name: String,
+            title: String,
             required: Boolean,
             disabled: Boolean,
             size: Number,
@@ -90,6 +89,8 @@
                 value = !value;
 
                 this.view = value;
+
+                this.$emit("input", value, this.value);
                 this.$emit("change", value, this.value);
             },
         },
@@ -119,8 +120,8 @@
 <style lang="scss" scoped>
     .checkbox {
         width: 100%;
-        height: 28px;
-        min-height: 28px;
+        height: 29px;
+        min-height: 29px;
         box-sizing: border-box;
         display: inline-flex;
         align-items: center;
@@ -131,6 +132,7 @@
         .label {
             position: relative;
             padding-left: 7px;
+            font-size: 14px;
             user-select: none;
             cursor: pointer;
         }

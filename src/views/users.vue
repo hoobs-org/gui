@@ -31,20 +31,18 @@
                     <div class="row title">{{ name }}</div>
                     <div class="row section">{{ $t("profile") }}</div>
                     <div class="row">
-                        <text-field :name="$t('name')" v-model="name" />
-                        <text-field :name="$t('username')" v-model="username" />
+                        <text-field :title="$t('name')" v-model="name" />
+                        <text-field :title="$t('username')" v-model="username" />
                     </div>
                     <div class="row section">{{ $t("security") }}</div>
                     <div class="row">
-                        <password-field :name="$t('password')" v-model="password" />
-                        <password-field :name="$t('password_confirm')" v-model="challenge" />
+                        <password-field :title="$t('password')" v-model="password" />
+                        <password-field :title="$t('password_confirm')" v-model="challenge" />
                     </div>
                     <div v-if="subject.id > 1" class="row section">{{ $t("permissions") }}</div>
                     <div v-if="subject.id > 1" class="grid">
                         <div v-for="(permission, index) in permissions" :key="`permission:${index}`">
-                            <checkbox :id="`permission_${index}`" v-model="permission.selected">
-                                <label :for="`permission_${index}`">{{ $t(permission.label) }}</label>
-                            </checkbox>
+                            <checkbox :id="`permission_${index}`" :title="$t(permission.label)" v-model="permission.selected" />
                         </div>
                     </div>
                     <div class="row actions">
@@ -58,20 +56,18 @@
                 <div class="wrapper">
                     <div class="row section">{{ $t("profile") }}</div>
                     <div class="row">
-                        <text-field :name="$t('name')" v-model="name" />
-                        <text-field :name="$t('username')" v-model="username" />
+                        <text-field :title="$t('name')" v-model="name" />
+                        <text-field :title="$t('username')" v-model="username" />
                     </div>
                     <div class="row section">{{ $t("security") }}</div>
                     <div class="row">
-                        <password-field :name="$t('password')" v-model="password" />
-                        <password-field :name="$t('password_confirm')" v-model="challenge" />
+                        <password-field :title="$t('password')" v-model="password" />
+                        <password-field :title="$t('password_confirm')" v-model="challenge" />
                     </div>
                     <div class="row section">{{ $t("permissions") }}</div>
                     <div class="grid">
                         <div v-for="(permission, index) in permissions" :key="`permission:${index}`">
-                            <checkbox :id="`permission_${index}`" v-model="permission.selected">
-                                <label :for="`permission_${index}`">{{ $t(permission.label) }}</label>
-                            </checkbox>
+                            <checkbox :id="`permission_${index}`" :title="$t(permission.label)" v-model="permission.selected" />
                         </div>
                     </div>
                     <div class="row actions">

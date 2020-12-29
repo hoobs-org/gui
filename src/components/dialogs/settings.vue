@@ -25,7 +25,7 @@
                 <div v-if="show.settings" class="form">
                     <div v-if="(product === 'box' || product === 'card') && mdns" class="row section">{{ $t("hostname") }}</div>
                     <div v-if="(product === 'box' || product === 'card') && mdns" class="row input-field">
-                        <text-field :description="$t('hostname_description')" :min="2" :max="300" v-model="hostname" />
+                        <text-field :description="$t('hostname_description')" v-model="hostname" />
                     </div>
                     <div v-if="(product === 'box' || product === 'card') && mdns" class="row title label">{{ $t("access_url") }}</div>
                     <div v-if="(product === 'box' || product === 'card') && mdns" class="row title url">{{ `http://${broadcast}.local` }}</div>
@@ -39,14 +39,10 @@
                         <div style="width: 180px;">
                             <div class="row title">{{ $t("temperature_units") }}</div>
                             <div class="row">
-                                <radio id="celsius" name="units" v-model="units" value="celsius">
-                                    <label for="celsius">{{ $t("celsius") }}</label>
-                                </radio>
+                                <radio id="celsius" name="units" :title="$t('celsius')" v-model="units" value="celsius" />
                             </div>
                             <div class="row">
-                                <radio id="fahrenheit" name="units" v-model="units" value="fahrenheit">
-                                    <label for="fahrenheit">{{ $t("fahrenheit") }}</label>
-                                </radio>
+                                <radio id="fahrenheit" name="units" :title="$t('fahrenheit')" v-model="units" value="fahrenheit" />
                             </div>
                         </div>
                         <div style="flex: 1;">

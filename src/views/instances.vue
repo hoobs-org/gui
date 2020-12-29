@@ -36,11 +36,11 @@
                     </div>
                     <div class="row section">{{ $t("details") }}</div>
                     <div class="row">
-                        <text-field :name="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
-                        <text-field :name="$t('instance_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
+                        <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
+                        <text-field :title="$t('instance_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
                     </div>
                     <div class="row">
-                        <port-field :name="$t('instance_port')" style="flex: 1; padding-right: 5px" v-model="port" />
+                        <port-field :title="$t('instance_port')" style="flex: 1; padding-right: 5px" v-model="port" />
                         <div style="flex: 1; padding-left: 5px"></div>
                     </div>
                     <div class="row actions">
@@ -70,21 +70,21 @@
                     </div>
                     <div class="row section">{{ $t("details") }}</div>
                     <div class="row">
-                        <text-field :name="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
-                        <text-field :name="$t('instance_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
+                        <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
+                        <text-field :title="$t('instance_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
                     </div>
                     <div class="row">
                         <div v-on:click="generate()" class="button">{{ $t("instance_generate_new_id") }}</div>
                     </div>
                     <div class="row section">{{ $t("service") }}</div>
                     <div class="row">
-                        <integer-field :name="$t('instance_autostart')" :description="$t('instance_autostart_description')" :min="-1" :max="300" v-model="autostart" />
+                        <integer-field :title="$t('instance_autostart')" :description="$t('instance_autostart_description')" :min="-1" :max="300" v-model="autostart" />
                     </div>
                     <div class="row section" style="margin-bottom: 10px">{{ $t("instance_port_pool") }}</div>
                     <p style="margin-top: 0">{{ $t("instance_port_pool_description") }}</p>
                     <div class="row">
-                        <port-field :name="$t('instance_port_pool_start')" style="flex: 1; padding-right: 5px" v-model="start" />
-                        <port-field :name="$t('instance_port_pool_end')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="end" />
+                        <port-field :title="$t('instance_port_pool_start')" style="flex: 1; padding-right: 5px" v-model="start" />
+                        <port-field :title="$t('instance_port_pool_end')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="end" />
                     </div>
                     <div class="row actions">
                         <div v-if="!loading" v-on:click="save()" class="button primary">{{ $t("save") }}</div>

@@ -26,11 +26,11 @@
                         {{ $t("plugin_install_add_instance") }}
                     </p>
                     <div class="row">
-                        <text-field :name="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
-                        <text-field :name="$t('instance_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
+                        <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
+                        <text-field :title="$t('instance_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
                     </div>
                     <div class="row">
-                        <port-field :name="$t('instance_port')" style="flex: 1; padding-right: 5px" v-model="port" />
+                        <port-field :title="$t('instance_port')" style="flex: 1; padding-right: 5px" v-model="port" />
                         <div style="flex: 1; padding-left: 5px"></div>
                     </div>
                     <div v-if="instances.length > 0" class="row section" style="margin: 0;">{{ $t("instances") }}</div>
@@ -44,9 +44,7 @@
                 <form v-if="options.type === 'uninstall'" class="form">
                     <div class="row section">{{ $t("remove") }}</div>
                     <div class="row">
-                        <checkbox id="remove" v-model="remove">
-                            <label for="remove">{{ $t("instance_remove_empty") }}</label>
-                        </checkbox>
+                        <checkbox id="remove" :title="$t('instance_remove_empty')" v-model="remove" />
                     </div>
                     <div class="row section" style="margin: 0;">{{ $t("instances") }}</div>
                     <p>

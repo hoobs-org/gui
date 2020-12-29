@@ -18,11 +18,12 @@
 
 <template>
     <div id="field" class="field">
-        <span class="title">{{ name }}</span>
+        <span class="title">{{ title }}</span>
         <span v-if="description && description !== ''" class="description">{{ description }}</span>
         <input
             :id="id || uuid"
             :ref="uuid"
+            :name="name"
             type="text"
             autocomplete="false"
             autocorrect="off"
@@ -49,6 +50,7 @@
                 default: undefined,
             },
             name: String,
+            title: String,
             description: String,
             placeholder: {
                 type: String,
