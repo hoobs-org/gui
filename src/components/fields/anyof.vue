@@ -21,7 +21,7 @@
         <label class="title" v-if="schema.title && schema.title !== ''">{{ schema.title }}</label>
         <span v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</span>
         <div v-for="(item, index) in schema.items.anyOf" class="item" :key="index">
-            <checkbox :title="item.title" :value="items.indexOf(item.enum[0]) !== -1" v-on:input="updateValue($event, index)" />
+            <checkbox :title="item.title" :checked="items.indexOf(item.enum[0]) !== -1" v-on:input="updateValue($event, index)" />
         </div>
     </div>
 </template>
