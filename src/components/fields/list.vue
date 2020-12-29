@@ -73,10 +73,10 @@
         flex: 1;
         padding: 0 10px 10px 10px;
         border: none;
-        border-left: 4px #dfdfdf solid;
+        border-left: 4px var(--application-border) solid;
 
         .legend {
-            color: #feb400;
+            color: var(--application-highlight);
             margin: 0 0 20px 0;
             font-size: 14px;
             overflow: hidden;

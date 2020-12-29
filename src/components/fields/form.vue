@@ -18,10 +18,8 @@
 
 <template>
     <fieldset id="field">
-        <legend v-if="schema.title">{{ schema.title }}</legend>
-        <div class="content" v-if="schema.description">
-            {{ schema.description }}
-        </div>
+        <legend v-if="schema.title" :class="schema.description && schema.description !== '' ? 'legend collapsed' : 'legend'">{{ schema.title }}</legend>
+        <div v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</div>
         <schema v-for="(child, key) in schema.properties" :schema="child" :value="internalValue[key]" :key="key" @input="updateValue($event, key)" />
     </fieldset>
 </template>
@@ -64,16 +62,31 @@
 <style lang="scss" scoped>
     #field {
         flex: 1;
-        padding: 10px;
+        padding: 0 10px 10px 10px;
         border: none;
-        border-left: 4px #dfdfdf solid;
+        border-left: 4px var(--application-border) solid;
 
-        legend {
-            color: #feb400;
+        .legend {
+            color: var(--application-highlight);
+            margin: 0 0 20px 0;
+            font-size: 14px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            font-size: 14px;
+
+            &.collapsed {
+                margin: 0;
+            }
+        }
+
+        .description {
+            font-size: 12px;
+            margin: 0 0 20px 0;
+            user-select: none;
+
+            &:empty {
+                display: none;
+            }
         }
     }
 </style>
