@@ -18,7 +18,7 @@
 
 <template>
     <fieldset id="field">
-        <legend v-if="schema.title" :class="schema.description && schema.description !== '' ? 'legend collapsed' : 'legend'">{{ schema.title }}</legend>
+        <legend v-if="title && title !== ''" :class="schema.description && schema.description !== '' ? 'legend collapsed' : 'legend'">{{ title }}</legend>
         <div v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</div>
         <schema v-for="(child, key) in schema.properties" :schema="child" :value="internalValue[key]" :key="key" @input="updateValue($event, key)" />
     </fieldset>
@@ -36,6 +36,7 @@
         props: [
             "schema",
             "value",
+            "title",
         ],
 
         data() {

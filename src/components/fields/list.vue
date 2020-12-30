@@ -18,7 +18,7 @@
 
 <template>
     <fieldset id="field">
-        <legend v-if="schema.title" :class="schema.description && schema.description !== '' ? 'legend collapsed' : 'legend'">{{ schema.title }}</legend>
+        <legend v-if="title && title !== ''" :class="schema.description && schema.description !== '' ? 'legend collapsed' : 'legend'">{{ title }}</legend>
         <div v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</div>
         <div v-for="(item, index) in items" class="item" :key="index">
             <div class="field">
@@ -45,6 +45,7 @@
         props: [
             "schema",
             "value",
+            "title",
         ],
 
         data() {

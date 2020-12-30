@@ -18,7 +18,7 @@
 
 <template>
     <div id="field">
-        <span class="title" v-if="schema.title && schema.title !== ''">{{ schema.title }}</span>
+        <span class="title" v-if="title && title !== ''">{{ title }}</span>
         <span v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</span>
         <div v-for="(item, index) in schema.oneOf" class="item" :key="index">
             <radio id="light" :name="uuid" :title="item.title" v-model="working" :value="item.enum[0]" v-on:input="$emit('input', $event)" />
@@ -33,6 +33,7 @@
         props: [
             "schema",
             "value",
+            "title",
         ],
 
         data() {
