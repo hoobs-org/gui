@@ -25,7 +25,7 @@
                 <schema  :title="schema.title" :description="schema.description" :placeholder="schema.example" :schema="schema.items" :value="item" v-on:input="updateValue($event, index)" />
             </div>
             <div class="action">
-                <div class="icon" v-if="items.length > 0" v-on:click="items.splice(index, 1)" :key="`remove-${index}`">delete</div>
+                <div class="icon" v-if="items.length > 0" v-on:click="removeItem(index)" :key="`remove-${index}`">delete</div>
             </div>
         </div>
         <div class="icon add" v-on:click="addItem()">add_circle</div>
@@ -57,6 +57,13 @@
         methods: {
             addItem() {
                 this.items.push(scaffold(this.schema)[0]);
+            },
+
+            removeItem(index) {
+                this.items.splice(index, 1);
+
+                this.$emit("input", this.items);
+                this.$emit("change", this.items);
             },
 
             updateValue(value, index) {
