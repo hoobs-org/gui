@@ -34,6 +34,7 @@
 </template>
 
 <script>
+    import RootField from "@/components/fields/root.vue";
     import FormField from "@/components/fields/form.vue";
     import ListField from "@/components/fields/list.vue";
     import OneOfField from "@/components/fields/oneof.vue";
@@ -43,6 +44,7 @@
         name: "schema",
 
         components: {
+            "root-field": RootField,
             "form-field": FormField,
             "list-field": ListField,
             "oneof-field": OneOfField,
@@ -64,6 +66,8 @@
                     return "select-field";
                 } else if (this.schema.type === "boolean") {
                     return "checkbox";
+                } else if (this.schema.type === "array" && this.schema.format === "root") {
+                    return "root-field";
                 } else if (this.schema.type === "array") {
                     return this.schema.items.anyOf === undefined || !Array.isArray(this.schema.items.anyOf) ? "list-field" : "anyof-field";
                 } else if (this.schema.type === "object") {
@@ -74,6 +78,8 @@
                     return "number-field";
                 } else if (this.schema.format === "date") {
                     return "date-field";
+                } else if (this.schema.format === "password") {
+                    return "password-field";
                 }
 
                 return "text-field";

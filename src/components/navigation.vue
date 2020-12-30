@@ -47,32 +47,32 @@
                 <span v-else class="icon">chevron_right</span>
             </div>
             <div class="spacer desktop"></div>
-            <router-link class="route" to="/">
+            <router-link :class="$route.name === 'dashboard' ? 'route active' : 'route'" to="/">
                 <span class="icon">dashboard</span>
                 <span v-if="expanded" class="title desktop">{{ $t("dashboard") }}</span>
             </router-link>
-            <router-link v-if="user.permissions.accessories" class="route" to="/accessories">
+            <router-link v-if="user.permissions.accessories" :class="$route.name === 'accessories' ? 'route active' : 'route'" to="/accessories">
                 <span class="icon">highlight</span>
                 <span v-if="expanded" class="title desktop">{{ $t("accessories") }}</span>
             </router-link>
-            <router-link class="route" to="/log">
+            <router-link :class="$route.name === 'log' ? 'route active' : 'route'" to="/log">
                 <span class="icon">subject</span>
                 <span v-if="expanded" class="title desktop">{{ $t("log") }}</span>
             </router-link>
-            <router-link v-if="auth && user.permissions.users" class="route" to="/users">
+            <router-link v-if="auth && user.permissions.users" :class="$route.name === 'users' ? 'route active' : 'route'" to="/users">
                 <span class="icon">people</span>
                 <span v-if="expanded" class="title desktop">{{ $t("users") }}</span>
             </router-link>
-            <router-link v-if="user.permissions.instances" class="route" to="/instances">
+            <router-link v-if="user.permissions.instances" :class="$route.name === 'instances' ? 'route active' : 'route'" to="/instances">
                 <span class="icon">layers</span>
                 <span v-if="expanded" class="title desktop">{{ $t("instances") }}</span>
             </router-link>
-            <router-link v-if="user.permissions.plugins" class="route" to="/plugins">
+            <router-link v-if="user.permissions.plugins" :class="$route.name === 'plugins' || $route.name === 'plugin' ? 'route active' : 'route'" to="/plugins">
                 <span class="icon">extension</span>
                 <span v-if="expanded" class="title desktop">{{ $t("plugins") }}</span>
             </router-link>
             <div class="fill desktop"></div>
-            <router-link v-if="user.permissions.config" class="route" to="/config">
+            <router-link v-if="user.permissions.config" :class="$route.name === 'config' ? 'route active' : 'route'" to="/config">
                 <span class="icon">settings</span>
             </router-link>
         </div>
@@ -163,7 +163,7 @@
                     color: var(--navigation-highlight-text) !important;
                 }
 
-                &.router-link-exact-active {
+                &.active {
                     color: var(--navigation-active-text) !important;
 
                     &:hover {

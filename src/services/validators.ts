@@ -91,6 +91,7 @@ export default class Validators {
             "add",
             "api",
             "library",
+            "advanced",
         ];
 
         if (create) {

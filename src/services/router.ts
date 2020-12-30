@@ -81,7 +81,7 @@ const routes: Array<RouteConfig> = [
         props: true,
     },
     {
-        path: "/config/:section?",
+        path: "/config/:scope?/:name?",
         name: "config",
         meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "view:config" */ "../views/config.vue"),

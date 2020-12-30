@@ -46,7 +46,7 @@
                         <router-link v-if="installed.length > 0" :to="`/config/${identifier}`" class="button primary">{{ $t("configuration") }}</router-link>
                     </div>
                 </div>
-                <tabs :values="tabs" v-on:change="change" :value="section" />
+                <tabs :values="tabs" v-on:change="change" :value="section" class="tabs" />
                 <div ref="layout" class="layout">
                     <div v-if="section === 'details'" class="section">
                         <div class="markdown" v-html="readme()"></div>
@@ -533,6 +533,10 @@
                         flex-direction: row;
                         justify-content: flex-start;
                     }
+                }
+
+                .tabs {
+                    margin: 20px 20px 0 20px;
                 }
 
                 .layout {

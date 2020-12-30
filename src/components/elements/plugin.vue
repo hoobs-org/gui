@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <router-link id="plugin" :to="`/plugin/${subject.name}`" :title="$repository.title(subject.name)">
+    <router-link id="plugin" :to="`/plugin/${subject.identifier || subject.name}`" :title="$repository.title(subject.name)">
         <div class="identity">
             <img :src="icon()" />
         </div>

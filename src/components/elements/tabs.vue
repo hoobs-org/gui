@@ -18,8 +18,8 @@
 
 <template>
     <div id="tabs">
-        <div v-for="(item, index) in values" :key="`tab:${index}`" v-on:click="change(item.value)" :class="item.value === value ? 'tab open' : 'tab'">
-            <div class="title">{{ item.display }}</div>
+        <div v-for="(item, index) in values" :key="`tab:${index}`" v-on:click="change(item[field])" :class="item[field] === value ? 'tab open' : 'tab'">
+            <div class="title">{{ item[display] }}</div>
         </div>
         <div class="fill"></div>
     </div>
@@ -32,6 +32,14 @@
         props: {
             value: String,
             values: Array,
+            field: {
+                type: String,
+                default: "value",
+            },
+            display: {
+                type: String,
+                default: "display",
+            },
         },
 
         methods: {
@@ -45,7 +53,7 @@
 
 <style lang="scss" scoped>
     #tabs {
-        margin: 20px 20px 0 20px;
+        margin: 20px 0 0 0;
         height: 44px;
         display: flex;
         flex-direction: row;

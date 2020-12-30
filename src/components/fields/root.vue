@@ -36,7 +36,7 @@
     import { scaffold } from "../../services/schema";
 
     export default {
-        name: "list-field",
+        name: "root-field",
 
         components: {
             "schema": () => import("@/components/elements/schema.vue"),
@@ -81,7 +81,6 @@
         flex: 1;
         padding: 0 10px 10px 10px;
         border: none;
-        border-left: 4px var(--application-border) solid;
 
         .legend {
             color: var(--application-highlight);
@@ -90,10 +89,6 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-
-            &.collapsed {
-                margin: 0;
-            }
         }
 
         .description {
@@ -108,6 +103,7 @@
 
         .add {
             cursor: pointer;
+            margin: 0 0 0 -7px;
             opacity: 0.7;
 
             &:hover {
@@ -119,6 +115,7 @@
             display: flex;
             flex-direction: row;
             align-items: flex-end;
+            margin: 0 0 20px 0;
 
             .field {
                 flex: 1;
@@ -129,7 +126,7 @@
                 display: flex;
                 flex-direction: row;
                 align-items: center;
-                margin: 0 0 20px 0;
+                margin: 0 0 30px 0;
                 cursor: pointer;
                 opacity: 0.7;
 

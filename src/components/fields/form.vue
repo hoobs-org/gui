@@ -18,7 +18,7 @@
 
 <template>
     <fieldset id="field">
-        <legend v-if="title && title !== ''" :class="schema.description && schema.description !== '' ? 'legend collapsed' : 'legend'">{{ title }}</legend>
+        <legend v-if="title && title !== ''" class="legend">{{ title }}</legend>
         <div v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</div>
         <schema v-for="(child, key) in schema.properties" :schema="child" :value="internalValue[key]" :key="key" @input="updateValue($event, key)" />
     </fieldset>
@@ -69,15 +69,10 @@
 
         .legend {
             color: var(--application-highlight);
-            margin: 0 0 20px 0;
             font-size: 14px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-
-            &.collapsed {
-                margin: 0;
-            }
         }
 
         .description {
