@@ -33,10 +33,10 @@
                 </div>
             </div>
             <div v-else-if="identifier && identifier === 'advanced'" class="screen">
-                <tabs :values="instances" v-on:change="change" :value="instance" field="id" display="display" class="tabs tight" />
-                <div ref="editor" class="editor"></div>
+                <tabs v-if="instances.length > 0" :values="instances" v-on:change="change" :value="instance" field="id" display="display" class="tabs tight" />
+                <div v-if="instances.length > 0" ref="editor" class="editor"></div>
                 <div class="row actions">
-                    <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
+                    <div v-if="instances.length > 0" v-on:click="save" class="button primary">{{ $t("save") }}</div>
                     <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
                 </div>
             </div>
@@ -368,7 +368,11 @@
                 if (!this.identifier || this.identifier === "" || this.identifier === "api") {
                     this.change("");
                 } else if (this.identifier === "advanced") {
-                    this.change(((this.instances || [])[0] || {}).id || "");
+                    if (this.instances.length > 0) {
+                        this.change(((this.instances || [])[0] || {}).id || "");
+                    } else {
+                        this.loading = false;
+                    }
                 } else {
                     this.plugin = this.plugins.find((item) => item.identifier === identifier);
 
