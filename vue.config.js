@@ -1,7 +1,7 @@
-const path = require("path");
+const { resolve } = require("path");
 
 module.exports = {
-    outputDir: path.resolve(__dirname, "./lib"),
+    outputDir: resolve(__dirname, "./lib"),
 
     chainWebpack: (config) => {
         config.plugin("html").tap((args) => {

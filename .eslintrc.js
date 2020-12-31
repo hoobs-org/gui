@@ -186,6 +186,10 @@ module.exports = {
             ],
             rules: {
                 "@typescript-eslint/explicit-module-boundary-types": "off",
+                "no-else-return": "off",
+                "no-restricted-syntax": "off",
+                "guard-for-in": "off",
+                "consistent-return": "off",
             },
         },
     ],

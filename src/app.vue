@@ -41,6 +41,14 @@
                 return this.$store.state.theme;
             },
         },
+
+        created() {
+            this.$theme.set(this.$store.state.theme);
+
+            window.addEventListener("resize", () => {
+                this.$action.emit("window", "resize");
+            }, true);
+        },
     };
 </script>
 

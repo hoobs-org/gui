@@ -39,7 +39,7 @@ export function path(theme: string): string {
 }
 
 export function set(name: string, store?: Store<any>): void {
-    const style = document.getElementById("theme");
+    const style = document.getElementById("app-theme");
 
     if (style) style.setAttribute("href", path(Sanitize(name)));
     if (store) store.commit("THEME:SET", Sanitize(name));

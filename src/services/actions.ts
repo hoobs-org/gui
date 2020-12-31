@@ -29,6 +29,10 @@ class Events {
         this.events.$on(`${view}:${event}`, callback);
     }
 
+    off(view: string, event: string) {
+        this.events.$off(`${view}:${event}`);
+    }
+
     emit(view: string, event: string, payload?: any) {
         this.events.$emit(`${view}:${event}`, payload);
     }

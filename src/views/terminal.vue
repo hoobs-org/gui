@@ -68,29 +68,28 @@
             };
         },
 
-        created() {
-            this.$store.subscribe((mutation) => {
-                if (mutation.type === "THEME:SET") {
-                    this.loading = true;
-                    this.disconnect();
-
-                    window.location.reload();
-                }
-            });
-
-            window.addEventListener("resize", this.resize, true);
-        },
-
         beforeRouteLeave(_to, _from, next) {
-            this.disconnect();
+            this.$action.off("window", "resize");
+            this.$action.off("personalize", "update");
 
-            window.removeEventListener("resize", this.resize, true);
+            this.disconnect();
 
             next();
         },
 
         async mounted() {
-            window.addEventListener("resize", this.resize, true);
+            this.$action.off("window", "resize");
+            this.$action.off("personalize", "update");
+            this.$action.on("window", "resize", this.resize);
+
+            this.$action.on("personalize", "update", () => {
+                this.loading = true;
+                this.disconnect();
+
+                window.location.reload();
+            });
+
+            this.$action.on("personalize", "update");
 
             this.opening = true;
             this.version = await this.$hoobs.version();

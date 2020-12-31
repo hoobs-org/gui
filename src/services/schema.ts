@@ -20,25 +20,21 @@ export function prune(input: any): any {
     if (typeof (input) === "object") {
         if (input instanceof Date) {
             return input.toISOString().slice(0, 10);
-        }
-
-        if (!Array.isArray(input)) {
+        } else if (!Array.isArray(input)) {
             const output: any = {};
-            const members = Object.keys(input);
 
-            for (let i = 0; i < members.length; i += 1) {
-                const value = prune(input[members[i]]);
+            for (const member in input) {
+                const value = prune(input[member]);
 
-                if (value !== undefined) output[members[i]] = value;
+                if (value !== undefined) output[member] = value;
             }
 
             if (Object.keys(output).length > 0) return output;
         } else {
-            const output: any = [];
-            const members = Object.keys(input);
+            const output = [];
 
-            for (let i = 0; i < members.length; i += 1) {
-                const value = prune(members[i]);
+            for (const member of input) {
+                const value = prune(member);
 
                 if (value !== undefined) output.push(value);
             }
@@ -48,46 +44,36 @@ export function prune(input: any): any {
     } else if (input !== undefined && input !== "") {
         return input;
     }
-
-    return undefined;
 }
 
 export function scaffold(input: any, callback: any): any {
     if (input.type === "object") {
         const output: any = {};
-        const keys = Object.keys(input.properties);
 
-        for (let i = 0; i < keys.length; i += 1) {
-            output[keys[i]] = scaffold(input.properties[keys[i]], callback);
-        }
+        for (const item in input.properties) output[item] = scaffold(input.properties[item], callback);
 
         return output;
-    }
-
-    if (input.type === "array") {
+    } else if (input.type === "array") {
         return [scaffold(input.items, callback)];
+    } else {
+        return callback === undefined ? callback : callback(input);
     }
-
-    return callback === undefined ? callback : callback(input);
 }
 
 export function merge(first: any, second: any) {
     if (typeof (first) === "object" && typeof (second) === "object") {
         if (!Array.isArray(first)) {
             const output: any = {};
-            const members = Object.keys(first);
 
-            for (let i = 0; i < members.length; i += 1) {
-                output[members[i]] = merge(first[members[i]], second[members[i]]);
-            }
+            for (const member in first) output[member] = merge(first[member], second[member]);
 
             return output;
+        } else {
+            return Array.isArray(second) && second.length > 0 && prune(second[0]) !== undefined ? second : first;
         }
-
-        return Array.isArray(second) && second.length > 0 && prune(second[0]) !== undefined ? second : first;
+    } else {
+        return (second !== undefined) ? second : first;
     }
-
-    return (second !== undefined) ? second : first;
 }
 
 export const draft = {

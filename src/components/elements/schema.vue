@@ -27,6 +27,7 @@
             :max="schema.maximum"
             :schema="schema"
             :value="value"
+            :checked="value"
             :options="options"
             v-on:input="$emit('input', $event)"
         />

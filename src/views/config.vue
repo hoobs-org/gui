@@ -25,25 +25,46 @@
                 <div class="wrapper">
                     <div class="section">{{ plugin.display }}</div>
                     <tabs :values="instances" v-on:change="change" :value="instance" field="id" display="display" class="tabs" />
-                    <schema-form :schema="schema" v-model="current" />
+                    <schema-form :schema="schema" v-model="working" />
                     <div class="row actions">
+                        <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
                         <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
                     </div>
                 </div>
             </div>
             <div v-else-if="identifier && identifier === 'advanced'" class="screen">
-                <div class="wrapper">
-                    <div class="section">{{ $t("advanced") }}</div>
-                    <tabs :values="instances" v-on:change="change" :value="instance" field="id" display="display" class="tabs" />
-                    <div class="row actions">
-                        <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
-                    </div>
+                <tabs :values="instances" v-on:change="change" :value="instance" field="id" display="display" class="tabs tight" />
+                <div ref="editor" class="editor"></div>
+                <div class="row actions">
+                    <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
+                    <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
                 </div>
             </div>
             <div v-else :class="!identifier ? 'screen desktop' : 'screen'">
                 <div class="wrapper">
-                    <div class="section">{{ $t("api") }}</div>
+                    <div class="section">{{ $t("authentication") }}</div>
+                    <div class="row">
+                        <integer-field :title="$t('inactive_logoff')" :description="$t('inactive_logoff_description')" :min="5" :max="300" v-model="working.inactive_logoff" />
+                    </div>
+                    <div class="row">
+                        <checkbox id="disable_auth" :title="$t('disable_auth')" v-model="working.disable_auth" />
+                    </div>
+                    <div class="section extra">{{ $t("monitor") }}</div>
+                    <div class="row">
+                        <integer-field :title="$t('update_interval')" :description="$t('update_interval_description')" :min="2" :max="300" v-model="working.polling_seconds" />
+                    </div>
+                    <div class="section">{{ $t("interface") }}</div>
+                    <div class="row">
+                        <text-field :title="$t('cors_orgin')" :description="$t('cors_orgin_description')" v-model="working.origin" />
+                    </div>
+                    <div class="row">
+                        <text-field :title="$t('gui_path')" :description="$t('gui_path_description')" v-model="working.gui_path" />
+                    </div>
+                    <div class="row">
+                        <text-field :title="$t('touch_path')" :description="$t('touch_path_description')" v-model="working.touch_path" />
+                    </div>
                     <div class="row actions">
+                        <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
                         <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
                     </div>
                 </div>
@@ -59,6 +80,8 @@
     import List from "@/components/elements/list.vue";
     import Tabs from "@/components/elements/tabs.vue";
     import Form from "@/components/form.vue";
+
+    const INSTANCE_RESTART_DELAY = 4000;
 
     export default {
         name: "config",
@@ -93,48 +116,266 @@
                 type: null,
                 alias: null,
                 schema: null,
-                current: {},
+                working: {},
                 plugins: [],
                 plugin: null,
                 instances: [],
                 instance: "",
+                editor: null,
             };
         },
 
+        async created() {
+            window.require.config({
+                paths: { "vs": "/vs" },
+            });
+
+            await (new Promise((resolve) => {
+                window.require(["/vs/editor/editor.main"], () => {
+                    resolve();
+                });
+            }));
+        },
+
+        beforeRouteLeave(_to, _from, next) {
+            this.$action.off("window", "resize");
+            this.$action.off("personalize", "update");
+
+            if (this.editor) {
+                this.editor.dispose();
+                this.editor = null;
+            }
+
+            next();
+        },
+
         mounted() {
+            this.$action.off("window", "resize");
+            this.$action.off("personalize", "update");
+            this.$action.on("window", "resize", this.resize);
+
+            this.$action.on("personalize", "update", () => {
+                if (this.identifier === "advanced") {
+                    this.change(this.instance);
+                }
+            });
+
             this.load(this.name && this.name !== "" ? `${this.scope}/${this.name}` : this.scope);
         },
 
         methods: {
-            change(instance) {
+            async save() {
+                this.loading = true;
+
+                if (!this.identifier || this.identifier === "" || this.identifier === "api") {
+                    const config = await this.$hoobs.config.get();
+                    const { ...working } = this.working;
+
+                    config.api = working;
+                    config.api.origin = config.api.origin || "*";
+
+                    this.$hoobs.config.update(config);
+
+                    setTimeout(() => {
+                        this.change(this.instance);
+                    }, INSTANCE_RESTART_DELAY);
+                } else if (this.identifier === "advanced") {
+                    const instance = await this.$hoobs.instance(this.instance);
+                    const plugins = await instance.plugins.list();
+
+                    let { ...working } = this.working;
+
+                    working.accessories = working.accessories || [];
+                    working.platforms = working.platforms || [];
+
+                    if (this.editor) {
+                        try {
+                            working = JSON.parse(this.editor.getValue());
+                        } catch (_error) {
+                            working = this.working;
+                        }
+
+                        for (let i = 0; i < working.platforms.length; i += 1) {
+                            const { identifier } = ((plugins.find((plugin) => plugin.alias === working.platforms[i].platform)) || {});
+
+                            if (identifier) working.platforms[i].plugin_map = { plugin_name: identifier };
+                        }
+
+                        for (let i = 0; i < working.accessories.length; i += 1) {
+                            const { identifier } = ((plugins.find((plugin) => plugin.alias === working.accessories[i].accessory)) || {});
+
+                            if (identifier) working.accessories[i].plugin_map = { plugin_name: identifier };
+                        }
+                    }
+
+                    await instance.config.update(working);
+
+                    setTimeout(() => {
+                        this.change(this.instance);
+                    }, INSTANCE_RESTART_DELAY);
+                } else {
+                    const instance = await this.$hoobs.instance(this.instance);
+                    const config = await instance.config.get();
+                    const { ...working } = this.working;
+
+                    let index = -1;
+
+                    switch (this.type) {
+                        case "accessory":
+                            index = config.accessories.findIndex((item) => item.accessory === this.alias);
+                            working.accessories = working.accessories || [];
+
+                            while (index >= 0) {
+                                config.accessories.splice(index, 1);
+                                index = config.accessories.findIndex((item) => item.accessory === this.alias);
+                            }
+
+                            for (let i = 0; i < working.accessories.length; i += 1) {
+                                working.accessories[i].accessory = this.alias;
+                                working.accessories[i].plugin_map = { plugin_name: this.identifier };
+                            }
+
+                            config.accessories = [...config.accessories, ...working.accessories];
+                            break;
+
+                        default:
+                            index = config.platforms.findIndex((item) => item.platform === this.alias);
+
+                            while (index >= 0) {
+                                config.platforms.splice(index, 1);
+                                index = config.platforms.findIndex((item) => item.platform === this.alias);
+                            }
+
+                            working.platform = this.alias;
+                            working.plugin_map = { plugin_name: this.identifier };
+
+                            config.platforms = [...config.platforms, working];
+                            break;
+                    }
+
+                    await instance.config.update(config);
+
+                    setTimeout(() => {
+                        this.change(this.instance);
+                    }, INSTANCE_RESTART_DELAY);
+                }
+            },
+
+            async change(instance) {
+                this.loading = true;
                 this.instance = instance;
+
+                if (this.editor) {
+                    this.editor.dispose();
+                    this.editor = null;
+                }
+
+                if (!this.identifier || this.identifier === "" || this.identifier === "api") {
+                    this.working = (await this.$hoobs.config.get()).api || {};
+
+                    this.working.inactive_logoff = this.working.inactive_logoff || 30;
+                    this.working.disable_auth = this.working.disable_auth || false;
+                    this.working.polling_seconds = this.working.polling_seconds || 5;
+                    this.working.origin = this.working.origin === "*" ? "" : this.working.origin;
+
+                    this.loading = false;
+                } else if (this.identifier === "advanced") {
+                    const theme = await this.$hoobs.theme.get(this.$store.state.theme);
+
+                    let foreground = theme.widget.text.default.replace("#", "");
+                    let background = "00000000";
+
+                    if (foreground.length === 3) {
+                        foreground = foreground.split("").map((item) => `${item}${item}`).join("");
+                    }
+
+                    if (background.length === 3) {
+                        background = background.split("").map((item) => `${item}${item}`).join("");
+                    }
+
+                    this.working = await (await this.$hoobs.instance(instance)).config.get();
+                    this.loading = false;
+
+                    setTimeout(() => {
+                        this.$refs.editor.innerHTML = "";
+
+                        window.monaco.editor.defineTheme("theme", {
+                            base: theme.mode === "dark" ? "vs-dark" : "vs",
+                            inherit: true,
+                            colors: {
+                                "editor.foreground": `#${foreground}`,
+                                "editor.background": `#${background}`,
+                            },
+                            rules: [
+                                { token: "", foreground, background },
+                            ],
+                        });
+
+                        this.editor = window.monaco.editor.create(this.$refs.editor, {
+                            value: JSON.stringify(this.working, null, 4),
+                            language: "json",
+                            theme: "theme",
+                            wordWrap: "on",
+                            wrappingIndent: "indent",
+                            renderLineHighlight: "none",
+                            scrollBeyondLastLine: false,
+                            contextmenu: false,
+                            minimap: {
+                                enabled: false,
+                            },
+                            scrollbar: {
+                                useShadows: false,
+                                horizontal: "hidden",
+                                vertical: "hidden",
+                            },
+                            lineNumbers: false,
+                        });
+                    }, 10);
+                } else {
+                    const config = await (await this.$hoobs.instance(instance)).config.get();
+
+                    const platforms = (config || {}).platforms || [];
+                    const accessories = (config || {}).accessories || [];
+
+                    switch (this.type) {
+                        case "accessory":
+                            this.working = { accessories: accessories.filter((item) => item.accessory === this.alias) || [] };
+                            break;
+
+                        default:
+                            this.working = platforms.find((item) => item.platform === this.alias) || { platform: this.alias };
+                            break;
+                    }
+
+                    this.loading = false;
+                }
             },
 
             async switch(identifier) {
                 this.loading = true;
                 this.identifier = identifier;
-                this.instances = [];
+                this.instances = await this.$hoobs.instances.list();
                 this.schema = null;
                 this.plugin = null;
 
-                const waits = [];
+                this.instances.sort((a, b) => {
+                    if (a.id < b.id) return -1;
+                    if (a.id > b.id) return 1;
 
-                if (identifier && identifier !== "" && identifier !== "api" && identifier !== "advanced") {
+                    return 0;
+                });
+
+                if (!this.identifier || this.identifier === "" || this.identifier === "api") {
+                    this.change("");
+                } else if (this.identifier === "advanced") {
+                    this.change(((this.instances || [])[0] || {}).id || "");
+                } else {
                     this.plugin = this.plugins.find((item) => item.identifier === identifier);
 
                     if (this.plugin && this.plugin.schema && this.plugin.schema.schema) {
                         this.type = this.plugin.schema.pluginType;
                         this.alias = this.plugin.alias || this.plugin.schema.pluginAlias;
-
-                        for (let i = 0; i < this.plugin.instances.length; i += 1) {
-                            waits.push(new Promise((resolve) => {
-                                this.$hoobs.instance(this.plugin.instances[i].id).then((instance) => {
-                                    this.instances.push(instance);
-                                }).finally(() => {
-                                    resolve();
-                                });
-                            }));
-                        }
+                        this.instances = this.instances.filter((instance) => this.plugin.instances.findIndex((item) => item.id === instance.id) >= 0);
 
                         switch (this.type) {
                             case "accessory":
@@ -160,21 +401,9 @@
                                 break;
                         }
                     }
-                } else if (identifier === "advanced") {
-                    this.instances = await this.$hoobs.instances.list();
+
+                    this.change(((this.instances || [])[0] || {}).id || "");
                 }
-
-                await Promise.all(waits);
-
-                this.instances.sort((a, b) => {
-                    if (a.id < b.id) return -1;
-                    if (a.id > b.id) return 1;
-
-                    return 0;
-                });
-
-                this.instance = ((this.instances || [])[0] || {}).id || "";
-                this.loading = false;
             },
 
             async load(identifier) {
@@ -182,7 +411,7 @@
 
                 this.plugins = [{
                     identifier: "api",
-                    display: this.$t("api"),
+                    display: this.$t("hub"),
                 }];
 
                 const plugins = await this.$hoobs.plugins();
@@ -220,6 +449,12 @@
                 });
 
                 this.switch(identifier);
+            },
+
+            resize() {
+                if (this.editor) {
+                    this.editor.layout();
+                }
             },
         },
     };
@@ -259,6 +494,10 @@
                     color: var(--application-highlight);
                     margin: 0 0 20px 0;
                     user-select: none;
+
+                    &.extra {
+                        margin: 20px 0;
+                    }
                 }
 
                 .wrapper {
@@ -267,6 +506,14 @@
 
                 .tabs {
                     margin: 20px 0;
+
+                    &.tight {
+                        margin: 0 0 7px 0;
+                    }
+                }
+
+                .editor {
+                    flex: 1;
                 }
 
                 .actions {

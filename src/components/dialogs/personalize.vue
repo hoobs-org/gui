@@ -191,6 +191,7 @@
 
                 this.$theme.set(this.working.name);
                 this.$dialog.close("personalize");
+                this.$action.emit("personalize", "update");
             },
 
             dirty() {
