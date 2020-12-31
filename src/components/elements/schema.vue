@@ -25,6 +25,7 @@
             :placeholder="schema.placeholder || schema.example"
             :min="schema.minimum"
             :max="schema.maximum"
+            :identifier="identifier"
             :schema="schema"
             :value="value"
             :checked="value"
@@ -40,6 +41,7 @@
     import ListField from "@/components/fields/list.vue";
     import OneOfField from "@/components/fields/oneof.vue";
     import AnyOfField from "@/components/fields/anyof.vue";
+    import ButtonField from "@/components/fields/button.vue";
 
     export default {
         name: "schema",
@@ -50,38 +52,32 @@
             "list-field": ListField,
             "oneof-field": OneOfField,
             "anyof-field": AnyOfField,
+            "button-field": ButtonField,
         },
 
-        props: [
-            "schema",
-            "value",
-        ],
+        props: {
+            schema: Object,
+            value: [Object, String, Number, Boolean, Array],
+            identifier: String,
+        },
 
         computed: {
             type() {
-                if (this.schema.widget !== undefined) {
-                    if (this.schema.widget === "textarea") return "textarea-field";
-                } else if (this.schema.oneOf !== undefined && Array.isArray(this.schema.oneOf)) {
-                    return "oneof-field";
-                } else if (this.schema.enum !== undefined && Array.isArray(this.schema.enum)) {
-                    return "select-field";
-                } else if (this.schema.type === "boolean") {
-                    return "checkbox";
-                } else if (this.schema.type === "array" && this.schema.format === "root") {
-                    return "root-field";
-                } else if (this.schema.type === "array") {
-                    return this.schema.items.anyOf === undefined || !Array.isArray(this.schema.items.anyOf) ? "list-field" : "anyof-field";
-                } else if (this.schema.type === "object") {
-                    return "form-field";
-                } else if (this.schema.type === "integer") {
-                    return "integer-field";
-                } else if (this.schema.type === "number") {
-                    return "number-field";
-                } else if (this.schema.format === "date") {
-                    return "date-field";
-                } else if (this.schema.format === "password") {
-                    return "password-field";
-                }
+                if (this.schema.widget === "button") return "button-field";
+                if (this.schema.widget === "textarea") return "textarea-field";
+
+                if (this.schema.oneOf !== undefined && Array.isArray(this.schema.oneOf)) return "oneof-field";
+                if (this.schema.enum !== undefined && Array.isArray(this.schema.enum)) return "select-field";
+
+                if (this.schema.type === "boolean") return "checkbox";
+                if (this.schema.type === "array" && this.schema.format === "root") return "root-field";
+                if (this.schema.type === "array") return this.schema.items.anyOf === undefined || !Array.isArray(this.schema.items.anyOf) ? "list-field" : "anyof-field";
+                if (this.schema.type === "object") return "form-field";
+                if (this.schema.type === "integer") return "integer-field";
+                if (this.schema.type === "number") return "number-field";
+
+                if (this.schema.format === "date") return "date-field";
+                if (this.schema.format === "password") return "password-field";
 
                 return "text-field";
             },

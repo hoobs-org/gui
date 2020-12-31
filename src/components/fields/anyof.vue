@@ -32,11 +32,11 @@
     export default {
         name: "anyof-field",
 
-        props: [
-            "schema",
-            "value",
-            "title",
-        ],
+        props: {
+            schema: Object,
+            value: [Object, String, Number, Boolean, Array],
+            title: String,
+        },
 
         data() {
             return {
