@@ -34,8 +34,8 @@
                     </div>
                     <div class="title">
                         <rating :value="plugin.rating" />
-                        <h1>{{ $repository.title(plugin.name) }}</h1>
-                        <div v-if="(plugin.tags && plugin.tags.latest) || plugin.version" class="version">{{ plugin.version || plugin.tags.latest }} • Published {{ $dates.age(plugin.published) }}</div>
+                        <h1>{{ $hoobs.repository.title(plugin.name) }}</h1>
+                        <div v-if="(plugin.tags && plugin.tags.latest) || plugin.version" class="version">{{ plugin.version || plugin.tags.latest }} • Published {{ $hoobs.dates.age(plugin.published) }}</div>
                     </div>
                 </div>
                 <div class="header">
@@ -67,7 +67,7 @@
                             <div v-on:click="install(release.version, true)" class="icon" :title="$t('plugin_install')">cloud_download</div>
                             <div v-on:click="install(release.version, true)" class="value" :title="$t('plugin_install')">{{ release.version }}</div>
                             <div class="fill"></div>
-                            <div class="value">{{ $dates.age(release.published) }}</div>
+                            <div class="value">{{ $hoobs.dates.age(release.published) }}</div>
                         </div>
                     </div>
                     <detail :plugin="plugin" :installed="installed" />
@@ -196,7 +196,7 @@
                 }, ...this.instances];
 
                 if (identifier && identifier !== "") {
-                    this.plugin = await this.$repository.details(identifier);
+                    this.plugin = await this.$hoobs.repository.details(identifier);
 
                     if (this.plugin) {
                         this.releases = this.versions(this.plugin);

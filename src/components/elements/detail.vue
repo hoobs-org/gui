@@ -126,7 +126,7 @@
             <h1>{{ $t("last_publish") }}</h1>
         </div>
         <div class="item">
-            <div class="value">{{ $dates.age(plugin.published) }}</div>
+            <div class="value">{{ $hoobs.dates.age(plugin.published) }}</div>
         </div>
     </div>
 </template>

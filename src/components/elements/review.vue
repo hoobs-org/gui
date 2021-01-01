@@ -27,7 +27,7 @@
                 <div class="age">
                     Reviewed by
                     <span class="name">{{ value.author.name }}</span>
-                    on {{ $dates.display(value.date) }}
+                    on {{ $hoobs.dates.display(value.date) }}
                 </div>
             </div>
         </div>

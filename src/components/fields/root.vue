@@ -22,7 +22,16 @@
         <div v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</div>
         <div v-for="(item, index) in items" class="item" :key="index">
             <div class="field">
-                <schema :identifier="identifier" :schema="schema.items" :title="schema.title" :description="schema.description" :placeholder="schema.example" :value="item" v-on:input="updateValue($event, index)" />
+                <schema
+                    :instance="instance"
+                    :identifier="identifier"
+                    :schema="schema.items"
+                    :title="schema.title"
+                    :description="schema.description"
+                    :placeholder="schema.example"
+                    :value="item"
+                    v-on:input="updateValue($event, index)"
+                />
             </div>
             <div class="action">
                 <div class="icon" v-if="items.length > 0" v-on:click="removeItem(index)" :key="`remove-${index}`">delete</div>
@@ -46,6 +55,7 @@
             schema: Object,
             value: [Object, String, Number, Boolean, Array],
             title: String,
+            instance: String,
             identifier: String,
         },
 

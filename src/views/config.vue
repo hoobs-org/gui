@@ -25,7 +25,7 @@
                 <div class="wrapper">
                     <div class="section">{{ plugin.display }}</div>
                     <tabs :values="instances" v-on:change="change" :value="instance" field="id" display="display" class="tabs" />
-                    <schema-form :identifier="identifier" :schema="schema" v-model="working" />
+                    <schema-form :instance="instance" :identifier="identifier" :schema="schema" v-model="working" />
                     <div class="row actions">
                         <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
                         <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
@@ -432,7 +432,7 @@
                         if (index === -1) {
                             index = this.plugins.length;
                             plugin.instances = [];
-                            plugin.display = this.$repository.title(plugin.name);
+                            plugin.display = this.$hoobs.repository.title(plugin.name);
 
                             delete plugin.instance;
                             delete plugin.version;

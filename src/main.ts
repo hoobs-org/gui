@@ -16,13 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
-import {
-    hoobs,
-    socket,
-    repository,
-    dates,
-    sdk,
-} from "@hoobs/sdk";
+import hoobs from "@hoobs/sdk";
 
 import Vue from "vue";
 import App from "./app.vue";
@@ -54,11 +48,11 @@ import SelectField from "./components/fields/select.vue";
 import PortField from "./components/fields/port.vue";
 import Spinner from "./components/elements/spinner.vue";
 
-const io = socket();
+const io = hoobs.sdk.io();
 const markdown = converter();
 
-hoobs.config.token.get(() => store.state.session);
-hoobs.config.token.set((token: string) => { store.commit("SESSION:SET", token); });
+hoobs.sdk.config.token.get(() => store.state.session);
+hoobs.sdk.config.token.set((token: string) => { store.commit("SESSION:SET", token); });
 
 io.on("log", (data) => store.commit("IO:LOG", data));
 io.on("monitor", (data) => store.commit("IO:MONITOR", data));
@@ -66,23 +60,23 @@ io.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
 io.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
 
 io.on("reconnect", async () => {
-    if ((await hoobs.auth.status()) === "uninitialized") {
+    if ((await hoobs.sdk.auth.status()) === "uninitialized") {
         window.location.href = "/";
-    } else if (!(await hoobs.auth.validate())) {
-        await hoobs.auth.logout();
+    } else if (!(await hoobs.sdk.auth.validate())) {
+        await hoobs.sdk.auth.logout();
 
         window.location.href = "/";
     }
 });
 
 actions.on("log", "history", () => {
-    hoobs.log().then((messages: any) => { store.commit("LOG:HISTORY", messages); });
+    hoobs.sdk.log().then((messages: any) => { store.commit("LOG:HISTORY", messages); });
 });
 
 router.beforeEach(async (to, _from, next) => {
-    if (["/login", "/setup"].indexOf(to.path) === -1 && (await hoobs.auth.status()) === "uninitialized") {
+    if (["/login", "/setup"].indexOf(to.path) === -1 && (await hoobs.sdk.auth.status()) === "uninitialized") {
         router.push({ path: "/setup" });
-    } else if (["/login", "/setup"].indexOf(to.path) === -1 && !(await hoobs.auth.validate())) {
+    } else if (["/login", "/setup"].indexOf(to.path) === -1 && !(await hoobs.sdk.auth.validate())) {
         router.push({ path: "/login", query: { url: to.path } });
     } else {
         next();
@@ -92,15 +86,13 @@ router.beforeEach(async (to, _from, next) => {
 Vue.config.productionTip = false;
 
 Vue.use(io);
-Vue.use(sdk);
 Vue.use(drag);
+Vue.use(hoobs);
 Vue.use(menus);
-Vue.use(dates);
 Vue.use(dialogs);
 Vue.use(actions);
 Vue.use(markdown);
 Vue.use(graphing);
-Vue.use(repository);
 
 Vue.use(themes, { hoobs, store });
 

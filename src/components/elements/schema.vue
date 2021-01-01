@@ -25,6 +25,7 @@
             :placeholder="schema.placeholder || schema.example"
             :min="schema.minimum"
             :max="schema.maximum"
+            :instance="instance"
             :identifier="identifier"
             :schema="schema"
             :value="value"
@@ -58,6 +59,7 @@
         props: {
             schema: Object,
             value: [Object, String, Number, Boolean, Array],
+            instance: String,
             identifier: String,
         },
 

@@ -26,6 +26,8 @@
 </template>
 
 <script>
+    const PLUGIN_URL = (process.env.API_URL || process.env.VUE_APP_API || "/api").replace("/api", "/ui/plugin");
+
     export default {
         name: "button-field",
 
@@ -33,22 +35,36 @@
             schema: Object,
             value: [Object, String, Number, Boolean, Array],
             title: String,
+            instance: String,
             identifier: String,
         },
 
         data() {
             return {
-                action: (this.schema.action !== undefined) ? eval(this.schema.action.indexOf("this.") !== 0 ? `this.${this.schema.action}` : this.schema.action) : () => { /* null */ }, // eslint-disable-line no-eval
+                action: (this.schema.action !== undefined && typeof this[this.schema.action] === "function") ? this[this.schema.action] : () => { /* null */ },
             };
         },
 
         methods: {
             dialog() {
-                console.log(`dialog: /ui/plugin/${this.identifier}`);
+                this.$dialog.show("plugin", {
+                    url: `${PLUGIN_URL}/${this.identifier}`,
+                    instance: this.instance,
+                    identifier: this.identifier,
+                });
             },
 
             popup() {
-                console.log(`popup: /ui/plugin/${this.identifier}`);
+                const left = (window.screen.width / 2) - (760 / 2);
+                const top = ((window.screen.height / 2) - (760 / 2)) / 2;
+
+                const dialog = window.open(`${PLUGIN_URL}/${this.identifier}`, "HOOBS", `toolbar=no,status=no,menubar=no,resizable=yes,width=760,height=760,top=${top},left=${left}`);
+
+                dialog.addEventListener("load", () => {
+                    dialog.window.$hoobs = this.$hoobs;
+                    dialog.window.$instance = this.instance;
+                    dialog.window.$identifier = this.identifier;
+                }, true);
             },
         },
     };

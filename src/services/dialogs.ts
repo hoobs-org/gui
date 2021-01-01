@@ -51,4 +51,8 @@ export default new Dialogs([
         name: "instances",
         component: () => import(/* webpackChunkName: "dialog:instances" */ "@/components/dialogs/instances.vue"),
     },
+    {
+        name: "plugin",
+        component: () => import(/* webpackChunkName: "dialog:instances" */ "@/components/dialogs/plugin.vue"),
+    },
 ]);

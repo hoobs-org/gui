@@ -17,73 +17,60 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <fieldset id="field">
-        <legend v-if="title && title !== ''" class="legend">{{ title }}</legend>
-        <div v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</div>
-        <schema v-for="(child, key) in schema.properties" :instance="instance" :identifier="identifier" :schema="child" :value="internalValue[key]" :key="key" v-on:input="updateValue($event, key)" />
-    </fieldset>
+    <modal-frame :draggable="true" width="760px" height="760px">
+        <div id="plugin">
+            <div class="content">
+                <iframe ref="frame" :src="options.url" class="frame" frameborder="0"></iframe>
+            </div>
+            <div class="actions modal">
+                <div class="button" v-on:click="$dialog.close('plugin')">{{ $t("cancel") }}</div>
+            </div>
+        </div>
+    </modal-frame>
 </template>
 
 <script>
+    import ModalFrame from "@/components/elements/frame.vue";
 
     export default {
-        name: "form-field",
+        name: "plugin",
 
         components: {
-            "schema": () => import("@/components/elements/schema.vue"),
+            "modal-frame": ModalFrame,
         },
 
         props: {
-            schema: Object,
-            value: [Object, String, Number, Boolean, Array],
-            title: String,
-            instance: String,
-            identifier: String,
+            options: Object,
         },
 
-        data() {
-            return {
-                internalValue: (this.value !== undefined) ? this.value : {},
-            };
-        },
-
-        watch: {
-            value(value) {
-                this.internalValue = value;
-            },
-        },
-
-        methods: {
-            updateValue(value, child) {
-                this.internalValue[child] = value;
-                this.$emit("input", this.internalValue);
-            },
+        mounted() {
+            this.$refs.frame.addEventListener("load", () => {
+                this.$refs.frame.contentWindow.$hoobs = this.$hoobs;
+                this.$refs.frame.contentWindow.$instance = this.options.instance;
+                this.$refs.frame.contentWindow.$identifier = this.options.identifier;
+            }, true);
         },
     };
 </script>
 
 <style lang="scss" scoped>
-    #field {
+    #plugin {
         flex: 1;
-        padding: 0 10px 10px 10px;
-        border: none;
-        border-left: 4px var(--application-border) solid;
+        display: flex;
+        flex-direction: column;
+        margin: 0 0 0 10px;
 
-        .legend {
-            color: var(--application-highlight);
-            font-size: 14px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+        .frame {
+            flex: 1;
         }
 
-        .description {
-            font-size: 12px;
-            margin: 0 0 20px 0;
-            user-select: none;
+        .button {
+            background: #f8f8f8 !important;
+            color: #1a1a1a !important;
+            border: 1px #dfdfdf solid !important;
 
-            &:empty {
-                display: none;
+            &:hover {
+                box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
             }
         }
     }

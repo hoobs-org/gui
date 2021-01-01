@@ -87,7 +87,7 @@
             async load() {
                 this.loading = true;
 
-                const response = await this.$repository.reviews(this.identifier, this.skip, this.limit);
+                const response = await this.$hoobs.repository.reviews(this.identifier, this.skip, this.limit);
 
                 this.reviews = response.results || [];
                 this.count = response.count;
