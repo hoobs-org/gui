@@ -411,8 +411,8 @@
                 this.dirty = false;
 
                 this.instances.sort((a, b) => {
-                    if (a.id < b.id) return -1;
-                    if (a.id > b.id) return 1;
+                    if (a.display < b.display) return -1;
+                    if (a.display > b.display) return 1;
 
                     return 0;
                 });
@@ -465,11 +465,6 @@
             async load(identifier) {
                 this.loading = true;
 
-                this.plugins = [{
-                    identifier: "api",
-                    display: this.$t("hub"),
-                }];
-
                 const plugins = await this.$hoobs.plugins();
 
                 for (let i = 0; i < plugins.length; i += 1) {
@@ -498,6 +493,18 @@
                         });
                     }
                 }
+
+                this.plugins.sort((a, b) => {
+                    if (a.display < b.display) return -1;
+                    if (a.display > b.display) return 1;
+
+                    return 0;
+                });
+
+                this.plugins.unshift({
+                    identifier: "api",
+                    display: this.$t("hub"),
+                });
 
                 this.plugins.push({
                     identifier: "advanced",
