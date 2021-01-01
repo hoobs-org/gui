@@ -57,7 +57,7 @@
 <style lang="scss" scoped>
     #list {
         min-width: 200px;
-        margin: 0 0 20px 10px;
+        margin: 0 10px 20px 10px;
         padding: 10px 20px;
         color: var(--widget-text);
         background: var(--widget-background);

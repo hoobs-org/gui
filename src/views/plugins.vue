@@ -262,7 +262,7 @@
             .screen {
                 flex: 1;
                 display: flex;
-                margin: 0 20px 10px 10px;
+                margin: 0 20px 10px 5px;
                 -ms-overflow-style: none;
                 overflow: auto;
 

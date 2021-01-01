@@ -81,6 +81,7 @@
         "instance_create": "Creating Bridge",
         "instance_edit": "Edit Bridge",
         "instance_generate_new_id": "Generate New Identifier",
+        "instance_initilize": "No bridges defined",
         "instance_name_required": "Bridge name is required.",
         "instance_name_reserved": "Bridge name is reserved, please select another name.",
         "instance_name_taken": "This name is already taken, please select a different name",

@@ -25,7 +25,7 @@
             </router-link>
         </context>
         <div v-if="!loading" class="content">
-            <list value="id" display="display" :values="instances" :selected="id" controller="instances" />
+            <list v-if="instances.length > 0" value="id" display="display" :values="instances" :selected="id" controller="instances" />
             <form v-if="id === 'add'" class="screen form">
                 <div class="wrapper">
                     <div class="row section">{{ $t("import") }}</div>
@@ -94,9 +94,13 @@
                 </div>
             </form>
             <div v-else class="initial desktop">
-                <div class="message">
+                <div v-if="instances.length > 0" class="message">
                     {{ $t("instance_select_add") }}
-                    <router-link to="/users/add">{{ $t("instance_add") }}</router-link>
+                    <router-link to="/instances/add">{{ $t("instance_add") }}</router-link>
+                </div>
+                <div v-else class="message">
+                    {{ $t("instance_initilize") }}
+                    <router-link to="/instances/add">{{ $t("instance_add") }}</router-link>
                 </div>
             </div>
         </div>
@@ -342,7 +346,7 @@
             .screen {
                 flex: 1;
                 display: flex;
-                margin: 0 20px 20px 20px;
+                margin: 0 20px 20px 10px;
                 color: var(--widget-text);
                 background: var(--widget-background);
                 backdrop-filter: var(--transparency);

@@ -54,7 +54,7 @@ const routes: Array<RouteConfig> = [
     },
     {
         path: "/users/:id?",
-        name: "user",
+        name: "users",
         meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "view:users" */ "../views/users.vue"),
         props: true,

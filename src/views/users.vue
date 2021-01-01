@@ -282,7 +282,7 @@
             .screen {
                 flex: 1;
                 display: flex;
-                margin: 0 20px 20px 20px;
+                margin: 0 20px 20px 10px;
                 color: var(--widget-text);
                 background: var(--widget-background);
                 backdrop-filter: var(--transparency);
