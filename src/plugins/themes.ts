@@ -56,7 +56,7 @@ export default {
                         },
 
                         async get() {
-                            const theme = await options?.hoobs.theme.get(options?.store?.state.theme);
+                            const theme = await options?.hoobs.sdk.theme.get(options?.store?.state.theme);
 
                             return theme;
                         },

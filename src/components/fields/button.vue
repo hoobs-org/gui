@@ -41,7 +41,7 @@
 
         data() {
             return {
-                action: (this.schema.action !== undefined && typeof this[this.schema.action] === "function") ? this[this.schema.action] : () => { /* null */ },
+                action: (typeof this[this.schema.action || "dialog"] === "function") ? this[this.schema.action || "dialog"] : () => { /* null */ },
             };
         },
 
