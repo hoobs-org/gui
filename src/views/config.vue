@@ -24,8 +24,8 @@
             <div v-if="identifier && identifier !== 'api' && identifier !== 'advanced'" class="screen">
                 <div class="wrapper">
                     <div class="section">{{ plugin.display }}</div>
-                    <tabs :values="instances" v-on:change="change" :value="instance" field="id" display="display" class="tabs" />
-                    <schema-form :instance="instance" :identifier="identifier" :schema="schema" v-model="working" />
+                    <tabs :values="instances" v-on:change="exit" :value="instance" field="id" display="display" class="tabs" />
+                    <schema-form :instance="instance" :identifier="identifier" :schema="schema" v-model="working" v-on:input="() => { dirty = true }" />
                     <div class="row actions">
                         <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
                         <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div v-else-if="identifier && identifier === 'advanced'" class="screen">
-                <tabs v-if="instances.length > 0" :values="instances" v-on:change="change" :value="instance" field="id" display="display" class="tabs tight" />
+                <tabs v-if="instances.length > 0" :values="instances" v-on:change="exit" :value="instance" field="id" display="display" class="tabs tight" />
                 <div v-if="instances.length > 0" ref="editor" class="editor"></div>
                 <div class="row actions">
                     <div v-if="instances.length > 0" v-on:click="save" class="button primary">{{ $t("save") }}</div>
@@ -44,24 +44,24 @@
                 <div class="wrapper">
                     <div class="section">{{ $t("authentication") }}</div>
                     <div class="row">
-                        <integer-field :title="$t('inactive_logoff')" :description="$t('inactive_logoff_description')" :min="5" :max="300" v-model="working.inactive_logoff" />
+                        <integer-field :title="$t('inactive_logoff')" :description="$t('inactive_logoff_description')" :min="5" :max="300" v-model="working.inactive_logoff" v-on:input="() => { dirty = true }" />
                     </div>
                     <div class="row">
-                        <checkbox id="disable_auth" :title="$t('disable_auth')" v-model="working.disable_auth" />
+                        <checkbox id="disable_auth" :title="$t('disable_auth')" v-model="working.disable_auth" v-on:input="() => { dirty = true }" />
                     </div>
                     <div class="section extra">{{ $t("monitor") }}</div>
                     <div class="row">
-                        <integer-field :title="$t('update_interval')" :description="$t('update_interval_description')" :min="2" :max="300" v-model="working.polling_seconds" />
+                        <integer-field :title="$t('update_interval')" :description="$t('update_interval_description')" :min="2" :max="300" v-model="working.polling_seconds" v-on:input="() => { dirty = true }" />
                     </div>
                     <div class="section">{{ $t("interface") }}</div>
                     <div class="row">
-                        <text-field :title="$t('cors_orgin')" :description="$t('cors_orgin_description')" v-model="working.origin" />
+                        <text-field :title="$t('cors_orgin')" :description="$t('cors_orgin_description')" v-model="working.origin" v-on:input="() => { dirty = true }" />
                     </div>
                     <div class="row">
-                        <text-field :title="$t('gui_path')" :description="$t('gui_path_description')" v-model="working.gui_path" />
+                        <text-field :title="$t('gui_path')" :description="$t('gui_path_description')" v-model="working.gui_path" v-on:input="() => { dirty = true }" />
                     </div>
                     <div class="row">
-                        <text-field :title="$t('touch_path')" :description="$t('touch_path_description')" v-model="working.touch_path" />
+                        <text-field :title="$t('touch_path')" :description="$t('touch_path_description')" v-model="working.touch_path" v-on:input="() => { dirty = true }" />
                     </div>
                     <div class="row actions">
                         <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
@@ -105,13 +105,30 @@
 
         watch: {
             scope() {
-                this.switch(this.name && this.name !== "" ? `${this.scope}/${this.name}` : this.scope);
+                if (!this.intermediate) {
+                    if (this.dirty) {
+                        this.$confirm(this.$t("ok"), this.$t("unsaved_changes_warning"), () => {
+                            this.switch(this.name && this.name !== "" ? `${this.scope}/${this.name}` : this.scope);
+                        }, () => {
+                            if (this.$route.path !== `/config/${this.identifier}`) {
+                                this.intermediate = true;
+                                this.$router.push({ path: `/config/${this.identifier}` });
+                            }
+                        });
+                    } else {
+                        this.switch(this.name && this.name !== "" ? `${this.scope}/${this.name}` : this.scope);
+                    }
+                }
+
+                this.intermediate = false;
             },
         },
 
         data() {
             return {
+                intermediate: false,
                 loading: true,
+                dirty: false,
                 identifier: "",
                 type: null,
                 alias: null,
@@ -138,15 +155,31 @@
         },
 
         beforeRouteLeave(_to, _from, next) {
-            this.$action.off("window", "resize");
-            this.$action.off("personalize", "update");
+            if (this.dirty) {
+                this.$confirm(this.$t("ok"), this.$t("unsaved_changes_warning"), () => {
+                    this.$action.off("window", "resize");
+                    this.$action.off("personalize", "update");
 
-            if (this.editor) {
-                this.editor.dispose();
-                this.editor = null;
+                    if (this.editor) {
+                        this.editor.dispose();
+                        this.editor = null;
+                    }
+
+                    next();
+                }, () => {
+                    next(false);
+                });
+            } else {
+                this.$action.off("window", "resize");
+                this.$action.off("personalize", "update");
+
+                if (this.editor) {
+                    this.editor.dispose();
+                    this.editor = null;
+                }
+
+                next();
             }
-
-            next();
         },
 
         mounted() {
@@ -177,6 +210,7 @@
                     this.$hoobs.config.update(config);
 
                     setTimeout(() => {
+                        this.dirty = false;
                         this.change(this.instance);
                     }, INSTANCE_RESTART_DELAY);
                 } else if (this.identifier === "advanced") {
@@ -211,6 +245,7 @@
                     await instance.config.update(working);
 
                     setTimeout(() => {
+                        this.dirty = false;
                         this.change(this.instance);
                     }, INSTANCE_RESTART_DELAY);
                 } else {
@@ -256,8 +291,17 @@
                     await instance.config.update(config);
 
                     setTimeout(() => {
+                        this.dirty = false;
                         this.change(this.instance);
                     }, INSTANCE_RESTART_DELAY);
+                }
+            },
+
+            exit(instance) {
+                if (this.dirty) {
+                    this.$confirm(this.$t("ok"), this.$t("unsaved_changes_warning"), () => { this.change(instance); });
+                } else {
+                    this.change(instance);
                 }
             },
 
@@ -279,6 +323,7 @@
                     this.working.origin = this.working.origin === "*" ? "" : this.working.origin;
 
                     this.loading = false;
+                    this.dirty = false;
                 } else if (this.identifier === "advanced") {
                     const theme = await this.$hoobs.theme.get(this.$store.state.theme);
 
@@ -295,6 +340,7 @@
 
                     this.working = await (await this.$hoobs.instance(instance)).config.get();
                     this.loading = false;
+                    this.dirty = false;
 
                     setTimeout(() => {
                         this.$refs.editor.innerHTML = "";
@@ -330,6 +376,10 @@
                             },
                             lineNumbers: false,
                         });
+
+                        this.editor.getModel().onDidChangeContent(() => {
+                            this.dirty = true;
+                        });
                     }, 10);
                 } else {
                     const config = await (await this.$hoobs.instance(instance)).config.get();
@@ -348,6 +398,7 @@
                     }
 
                     this.loading = false;
+                    this.dirty = false;
                 }
             },
 
@@ -357,6 +408,7 @@
                 this.instances = await this.$hoobs.instances.list();
                 this.schema = null;
                 this.plugin = null;
+                this.dirty = false;
 
                 this.instances.sort((a, b) => {
                     if (a.id < b.id) return -1;

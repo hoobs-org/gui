@@ -76,6 +76,78 @@ export function merge(first: any, second: any) {
     }
 }
 
+export function component(name: string) {
+    switch (name) {
+        case "custom:gsh":
+            return () => import(/* webpackChunkName: "custom:gsh" */ "@/partner/gsh.vue");
+
+        case "field:button":
+            return () => import(/* webpackChunkName: "field:button" */ "@/components/fields/button.vue");
+
+        case "field:oneof":
+            return () => import(/* webpackChunkName: "field:oneof" */ "@/components/fields/oneof.vue");
+
+        case "field:root":
+            return () => import(/* webpackChunkName: "field:root" */ "@/components/fields/root.vue");
+
+        case "field:list":
+            return () => import(/* webpackChunkName: "field:list" */ "@/components/fields/list.vue");
+
+        case "field:anyof":
+            return () => import(/* webpackChunkName: "field:anyof" */ "@/components/fields/anyof.vue");
+
+        case "field:form":
+            return () => import(/* webpackChunkName: "field:form" */ "@/components/fields/form.vue");
+
+        case "field:textarea":
+            return "textarea-field";
+
+        case "field:select":
+            return "select-field";
+
+        case "field:checkbox":
+            return "checkbox";
+
+        case "field:integer":
+            return "integer-field";
+
+        case "field:number":
+            return "number-field";
+
+        case "field:date":
+            return "date-field";
+
+        case "field:password":
+            return "password-field";
+
+        default:
+            return "text-field";
+    }
+}
+
+export function field(schema: { [key: string]: any }) {
+    if (schema.widget === "gsh") return component("custom:gsh");
+
+    if (schema.widget === "button") return component("field:button");
+    if (schema.widget === "textarea") return component("field:textarea");
+
+    if (schema.oneOf !== undefined && Array.isArray(schema.oneOf)) return component("field:oneof");
+    if (schema.enum !== undefined && Array.isArray(schema.enum)) return component("field:select");
+
+    if (schema.type === "boolean") return component("field:checkbox");
+    if (schema.type === "array" && schema.format === "root") return component("field:root");
+    if (schema.type === "array") return schema.items.anyOf === undefined || !Array.isArray(schema.items.anyOf) ? component("field:list") : component("field:anyof");
+    if (schema.type === "object") return component("field:form");
+
+    if (schema.type === "integer") return component("field:integer");
+    if (schema.type === "number") return component("field:number");
+
+    if (schema.format === "date") return component("field:date");
+    if (schema.format === "password") return component("field:password");
+
+    return component("field:text");
+}
+
 export const draft = {
     $schema: "http://json-schema.org/draft-07/schema#",
     $id: "http://json-schema.org/draft-07/schema#",

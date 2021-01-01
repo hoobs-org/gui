@@ -1,6 +1,7 @@
 <!-------------------------------------------------------------------------------------------------
  | hoobs-gui                                                                                      |
  | Copyright (C) 2020 HOOBS                                                                       |
+ | Copyright (C) 2019 Oznu                                                                        |
  |                                                                                                |
  | This program is free software: you can redistribute it and/or modify                           |
  | it under the terms of the GNU General Public License as published by                           |
@@ -17,64 +18,67 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="directive" :class="type === 'checkbox' || type === 'radio' ? 'collapsed' : 'normal'">
-        <component
-            :is="type"
-            :title="schema.title"
-            :description="schema.description"
-            :placeholder="schema.placeholder || schema.example"
-            :min="schema.minimum"
-            :max="schema.maximum"
-            :instance="instance"
-            :identifier="identifier"
-            :schema="schema"
-            :value="value"
-            :checked="value"
-            :options="options"
-            v-on:input="$emit('input', $event)"
-        />
+    <div id="field">
+        <div class="action">
+            <div class="button primary" v-on:click="link">{{ $t("link_account") }}</div>
+        </div>
     </div>
 </template>
 
 <script>
-    import { field } from "../../services/schema";
-
     export default {
-        name: "schema",
+        name: "gsh",
 
         props: {
-            schema: Object,
             value: [Object, String, Number, Boolean, Array],
-            instance: String,
-            identifier: String,
         },
 
-        computed: {
-            type() {
-                return field(this.schema);
+        data() {
+            return {
+                token: "",
+                dialog: null,
+                interval: null,
+            };
+        },
+
+        mounted() {
+            this.token = this.value;
+        },
+
+        methods: {
+            link() {
+                window.addEventListener("message", this.message, false);
+
+                const left = (window.screen.width / 2) - (760 / 2);
+                const top = ((window.screen.height / 2) - (760 / 2)) / 2;
+
+                this.dialog = window.open("https://homebridge-gsh.iot.oz.nu/link-account", "oznu-google-smart-home-auth", `toolbar=no,status=no,menubar=no,resizable=yes,width=760,height=760,top=${top},left=${left}`);
+                this.interval = setInterval(() => { this.dialog.postMessage("origin-check", "https://homebridge-gsh.iot.oz.nu"); }, 2000);
             },
 
-            options() {
-                if (this.schema.enum !== undefined && Array.isArray(this.schema.enum)) {
-                    return this.schema.enum.map((item) => ({ value: item, text: item }));
-                }
+            message(event) {
+                if (event.origin === "https://homebridge-gsh.iot.oz.nu") {
+                    try {
+                        const data = JSON.parse(event.data);
 
-                return [];
+                        if (data.token) this.update(data.token);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            },
+
+            update(token) {
+                if (this.interval) clearInterval(this.interval);
+                if (this.dialog) this.dialog.close();
+
+                this.interval = null;
+                this.dialog = null;
+                this.token = token;
+
+                this.$emit("input", this.token);
+                this.$emit("change", this.token);
             },
         },
     };
 </script>
-
-<style lang="scss" scoped>
-    #directive {
-        margin: 20px 0 0 0;
-
-        &:first-child {
-            margin: 0;
-        }
-
-        &.collapsed {
-            margin: 0;
-        }
-    }
-</style>

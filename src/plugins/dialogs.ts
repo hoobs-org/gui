@@ -86,8 +86,13 @@ export default class Dialogs {
                     this.show("alert", { message });
                 },
 
-                $confirm: (action: string, message: string, callback: () => void) => {
-                    this.show("confirm", { message, action, callback });
+                $confirm: (action: string, message: string, confirm: () => void, cancel?: () => void) => {
+                    this.show("confirm", {
+                        message,
+                        action,
+                        confirm,
+                        cancel,
+                    });
                 },
             },
         });

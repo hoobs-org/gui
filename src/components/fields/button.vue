@@ -46,9 +46,16 @@
         },
 
         methods: {
+            update(value) {
+                this.$emit("input", value);
+                this.$emit("change", value);
+            },
+
             dialog() {
                 this.$dialog.show("plugin", {
                     url: `${PLUGIN_URL}/${this.identifier}`,
+                    value: this.value,
+                    update: this.update,
                     instance: this.instance,
                     identifier: this.identifier,
                 });
@@ -61,6 +68,8 @@
                 const dialog = window.open(`${PLUGIN_URL}/${this.identifier}`, "HOOBS", `toolbar=no,status=no,menubar=no,resizable=yes,width=760,height=760,top=${top},left=${left}`);
 
                 dialog.addEventListener("load", () => {
+                    dialog.window.$value = this.value;
+                    dialog.window.$update = this.update;
                     dialog.window.$hoobs = this.$hoobs;
                     dialog.window.$instance = this.instance;
                     dialog.window.$identifier = this.identifier;
