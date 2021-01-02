@@ -181,6 +181,13 @@
                 this.theme = await this.$hoobs.theme.get(this.$store.state.theme);
                 this.instances = await this.$hoobs.instances.list();
 
+                this.instances.sort((a, b) => {
+                    if (a.display < b.display) return -1;
+                    if (a.display > b.display) return 1;
+
+                    return 0;
+                });
+
                 this.subject = null;
                 this.status = null;
                 this.file = null;

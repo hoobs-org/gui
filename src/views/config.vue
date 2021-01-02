@@ -82,6 +82,8 @@
     import Form from "@/components/form.vue";
 
     const INSTANCE_RESTART_DELAY = 4000;
+    const MONACO_LOAD_DELAY = 10;
+    const CONFIG_LOAD_DELAY = 100;
 
     export default {
         name: "config",
@@ -324,6 +326,10 @@
 
                     this.loading = false;
                     this.dirty = false;
+
+                    setTimeout(() => {
+                        this.dirty = false;
+                    }, CONFIG_LOAD_DELAY);
                 } else if (this.identifier === "advanced") {
                     const theme = await this.$hoobs.theme.get(this.$store.state.theme);
 
@@ -380,7 +386,7 @@
                         this.editor.getModel().onDidChangeContent(() => {
                             this.dirty = true;
                         });
-                    }, 10);
+                    }, MONACO_LOAD_DELAY);
                 } else {
                     const config = await (await this.$hoobs.instance(instance)).config.get();
 
@@ -399,6 +405,10 @@
 
                     this.loading = false;
                     this.dirty = false;
+
+                    setTimeout(() => {
+                        this.dirty = false;
+                    }, CONFIG_LOAD_DELAY);
                 }
             },
 
