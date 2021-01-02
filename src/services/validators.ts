@@ -90,6 +90,8 @@ export default class Validators {
             "new",
             "add",
             "api",
+            "bridge",
+            "bridges",
             "library",
             "advanced",
         ];
