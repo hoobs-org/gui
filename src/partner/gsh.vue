@@ -72,6 +72,8 @@
                 if (this.interval) clearInterval(this.interval);
                 if (this.dialog) this.dialog.close();
 
+                window.removeEventListener("message", this.message);
+
                 this.interval = null;
                 this.dialog = null;
                 this.token = token;
