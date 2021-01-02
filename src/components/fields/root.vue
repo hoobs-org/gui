@@ -23,7 +23,7 @@
         <div v-for="(item, index) in items" class="item" :key="index">
             <div class="field">
                 <schema
-                    :instance="instance"
+                    :bridge="bridge"
                     :identifier="identifier"
                     :schema="schema.items"
                     :title="schema.title"
@@ -55,7 +55,7 @@
             schema: Object,
             value: [Object, String, Number, Boolean, Array],
             title: String,
-            instance: String,
+            bridge: String,
             identifier: String,
         },
 

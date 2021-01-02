@@ -19,17 +19,17 @@
 <template>
     <div id="widget">
         <div class="status">
-            <div v-if="instances.filter((item) => item.running).length === instances.length" class="running">
+            <div v-if="bridges.filter((item) => item.running).length === bridges.length" class="running">
                 <div class="up all"></div>
-                <div class="title">{{ $t("instances_up") }}</div>
+                <div class="title">{{ $t("bridges_up") }}</div>
             </div>
-            <div v-else-if="instances.filter((item) => item.running).length > 0" class="running">
+            <div v-else-if="bridges.filter((item) => item.running).length > 0" class="running">
                 <div class="up partial"></div>
-                <div class="title">{{ instances.filter((item) => item.running).length }} {{ $t("of") }} {{ instances.length }} {{ $t("instances_partial") }}</div>
+                <div class="title">{{ bridges.filter((item) => item.running).length }} {{ $t("of") }} {{ bridges.length }} {{ $t("bridges_partial") }}</div>
             </div>
             <div v-else class="running">
                 <div class="up none"></div>
-                <div class="title">{{ $t("instances_none") }}</div>
+                <div class="title">{{ $t("bridges_none") }}</div>
             </div>
         </div>
         <table v-if="!loading">
@@ -75,8 +75,8 @@
                 return this.$store.state.user;
             },
 
-            instances() {
-                return this.$store.state.instances;
+            bridges() {
+                return this.$store.state.bridges;
             },
 
             cpu() {

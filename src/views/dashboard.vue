@@ -46,7 +46,7 @@
                 <weather />
             </div>
             <div class="widget">
-                <instances />
+                <bridges />
             </div>
             <div class="widget">
                 <system />
@@ -68,7 +68,7 @@
             "activity": () => import(/* webpackChunkName: "dialog:activity" */ "@/components/widgets/activity.vue"),
             "cpu": () => import(/* webpackChunkName: "dialog:cpu" */ "@/components/widgets/cpu.vue"),
             "memory": () => import(/* webpackChunkName: "dialog:memory" */ "@/components/widgets/memory.vue"),
-            "instances": () => import(/* webpackChunkName: "dialog:instances" */ "@/components/widgets/instances.vue"),
+            "bridges": () => import(/* webpackChunkName: "dialog:bridges" */ "@/components/widgets/bridges.vue"),
             "system": () => import(/* webpackChunkName: "dialog:system" */ "@/components/widgets/system.vue"),
             "log": () => import(/* webpackChunkName: "dialog:log" */ "@/components/widgets/log.vue"),
             "weather": () => import(/* webpackChunkName: "dialog:weather" */ "@/components/widgets/weather.vue"),

@@ -20,7 +20,7 @@
 
 import Sanitize from "@hoobs/sdk/lib/sanitize";
 import { UserRecord } from "@hoobs/sdk/lib/users";
-import { InstanceRecord } from "@hoobs/sdk/lib/instances";
+import { BridgeRecord } from "@hoobs/sdk/lib/bridges";
 
 interface Validation {
     valid: boolean;
@@ -85,7 +85,7 @@ export default class Validators {
         };
     }
 
-    static instance(create: boolean, instances: InstanceRecord[], display: any, pin: any, port?: any, username?: any, autostart?: any, start?: any, end?: any): Validation {
+    static bridge(create: boolean, bridges: BridgeRecord[], display: any, pin: any, port?: any, username?: any, autostart?: any, start?: any, end?: any): Validation {
         const reserved = [
             "new",
             "add",
@@ -97,70 +97,70 @@ export default class Validators {
         if (create) {
             if (!display || display === "") {
                 return {
-                    error: "instance_name_required",
+                    error: "bridge_name_required",
                     valid: false,
                 };
             }
 
             if (reserved.indexOf(Sanitize(display || "")) >= 0) {
                 return {
-                    error: "instance_name_reserved",
+                    error: "bridge_name_reserved",
                     valid: false,
                 };
             }
 
-            if (instances.findIndex((item) => item.id === Sanitize(display)) >= 0) {
+            if (bridges.findIndex((item) => item.id === Sanitize(display)) >= 0) {
                 return {
-                    error: "instance_name_taken",
+                    error: "bridge_name_taken",
                     valid: false,
                 };
             }
 
             if (Number.isNaN(parseInt(port, 10))) {
                 return {
-                    error: "instance_port_required",
+                    error: "bridge_port_required",
                     valid: false,
                 };
             }
 
-            if (instances.findIndex((item) => item.port === parseInt(port, 10)) >= 0) {
+            if (bridges.findIndex((item) => item.port === parseInt(port, 10)) >= 0) {
                 return {
-                    error: "instance_port_taken",
+                    error: "bridge_port_taken",
                     valid: false,
                 };
             }
 
             if (pin && pin !== "" && !Validators.pin(pin)) {
                 return {
-                    error: "instance_pin_invalid",
+                    error: "bridge_pin_invalid",
                     valid: false,
                 };
             }
         } else {
             if (!display || display === "") {
                 return {
-                    error: "instance_name_required",
+                    error: "bridge_name_required",
                     valid: false,
                 };
             }
 
             if (pin && pin !== "" && !Validators.pin(pin)) {
                 return {
-                    error: "instance_pin_invalid",
+                    error: "bridge_pin_invalid",
                     valid: false,
                 };
             }
 
             if (!username || username === "") {
                 return {
-                    error: "instance_username_invalid",
+                    error: "bridge_username_invalid",
                     valid: false,
                 };
             }
 
             if (Number.isNaN(parseInt(autostart, 10)) || autostart < -1 || autostart > 300) {
                 return {
-                    error: "instance_autostart_invalid",
+                    error: "bridge_autostart_invalid",
                     valid: false,
                 };
             }
@@ -168,22 +168,22 @@ export default class Validators {
             if (!Number.isNaN(parseInt(start, 10)) || !Number.isNaN(parseInt(end, 10))) {
                 if (Number.isNaN(parseInt(start, 10)) || Number.isNaN(parseInt(end, 10))) {
                     return {
-                        error: "instance_port_pool_required",
+                        error: "bridge_port_pool_required",
                         valid: false,
                     };
                 }
 
                 if (parseInt(end, 10) < parseInt(start, 10)) {
                     return {
-                        error: "instance_port_pool_invalid",
+                        error: "bridge_port_pool_invalid",
                         valid: false,
                     };
                 }
 
                 for (let i = parseInt(start, 10); i <= parseInt(end, 10); i += 1) {
-                    if (instances.findIndex((item) => item.port === i) >= 0) {
+                    if (bridges.findIndex((item) => item.port === i) >= 0) {
                         return {
-                            error: "instance_port_pool_collision",
+                            error: "bridge_port_pool_collision",
                             valid: false,
                         };
                     }

@@ -19,9 +19,9 @@
 <template>
     <div id="log">
         <context>
-            <div ref="instances" v-on:click.stop="menu('instances')" class="button">
+            <div ref="bridges" v-on:click.stop="menu('bridges')" class="button">
                 <div class="icon">layers</div>
-                {{ $t("instances") }}
+                {{ $t("bridges") }}
             </div>
             <div ref="plugins" v-on:click.stop="menu('plugins')" class="button">
                 <div class="icon">extension</div>
@@ -59,7 +59,7 @@
         data() {
             return {
                 debug: false,
-                instances: [],
+                bridges: [],
                 plugins: [],
             };
         },
@@ -69,24 +69,24 @@
                 this.plugins = plugins;
             });
 
-            this.$action.on("log", "instances", (instances) => {
-                this.instances = instances;
+            this.$action.on("log", "bridges", (bridges) => {
+                this.bridges = bridges;
             });
         },
 
         async mounted() {
-            const { instances } = this.$store.state;
+            const { bridges } = this.$store.state;
 
-            this.instances.push({
+            this.bridges.push({
                 value: "api",
                 text: "API",
                 selected: true,
             });
 
-            for (let i = 0; i < instances.length; i += 1) {
-                this.instances.push({
-                    value: instances[i].id,
-                    text: instances[i].display,
+            for (let i = 0; i < bridges.length; i += 1) {
+                this.bridges.push({
+                    value: bridges[i].id,
+                    text: bridges[i].display,
                     selected: true,
                 });
             }
@@ -137,7 +137,7 @@
                     return false;
                 }
 
-                if (!((this.instances.find((item) => item.value === (message.instance || "api")) || {}).selected)) {
+                if (!((this.bridges.find((item) => item.value === (message.bridge || "api")) || {}).selected)) {
                     return false;
                 }
 

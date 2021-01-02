@@ -18,8 +18,8 @@
 
 <template>
     <div v-on:click.stop id="menu" :style="`left: ${left}px`">
-        <div v-for="(instance, index) in selected" :key="`instance:${index}`" class="item">
-            <checkbox :id="`instance_${index}`" :title="instance.text" v-model="instance.selected" />
+        <div v-for="(bridge, index) in selected" :key="`bridge:${index}`" class="item">
+            <checkbox :id="`bridge_${index}`" :title="bridge.text" v-model="bridge.selected" />
         </div>
         <div v-on:click="$menu.close()" class="icon close mobile">close</div>
     </div>
@@ -27,7 +27,7 @@
 
 <script>
     export default {
-        name: "instances",
+        name: "bridges",
 
         props: {
             options: Object,
@@ -47,7 +47,7 @@
 
         watch: {
             selected() {
-                this.$action.emit("log", "instances", this.selected);
+                this.$action.emit("log", "bridges", this.selected);
             },
         },
     };

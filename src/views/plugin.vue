@@ -93,7 +93,7 @@
     import Reviews from "@/components/elements/reviews.vue";
 
     const SOCKET_RECONNECT_DELAY = 500;
-    const INSTANCE_CREATE_DELAY = 4000;
+    const BRIDGE_CREATE_DELAY = 4000;
 
     export default {
         name: "plugin",
@@ -146,7 +146,7 @@
                 ],
                 section: "details",
                 sections: [],
-                instances: [],
+                bridges: [],
                 identifier: "",
                 installed: [],
                 available: [],
@@ -188,12 +188,12 @@
                 this.downloads = {};
                 this.releases = {};
 
-                this.instances = await this.$hoobs.instances.list();
+                this.bridges = await this.$hoobs.bridges.list();
 
                 this.sections = [{
                     id: "library",
                     display: this.$t("library"),
-                }, ...this.instances];
+                }, ...this.bridges];
 
                 if (identifier && identifier !== "") {
                     this.plugin = await this.$hoobs.repository.details(identifier);
@@ -203,17 +203,17 @@
 
                         const waits = [];
 
-                        for (let i = 0; i < this.instances.length; i += 1) {
+                        for (let i = 0; i < this.bridges.length; i += 1) {
                             waits.push(new Promise((resolve) => {
-                                this.$hoobs.instance(this.instances[i].id).then((instance) => {
-                                    if (instance) {
-                                        instance.plugins.list().then((results) => {
+                                this.$hoobs.bridge(this.bridges[i].id).then((bridge) => {
+                                    if (bridge) {
+                                        bridge.plugins.list().then((results) => {
                                             const plugin = results.find((item) => item.identifier === identifier);
 
                                             if (plugin) {
                                                 this.installed.push({
-                                                    id: this.instances[i].id,
-                                                    display: this.instances[i].display,
+                                                    id: this.bridges[i].id,
+                                                    display: this.bridges[i].display,
                                                     version: plugin.version,
                                                     updated: Semver.compare(plugin.version, plugin.latest, ">="),
                                                 });
@@ -241,21 +241,21 @@
             },
 
             install(tag, all) {
-                this.$dialog.show("instances", {
+                this.$dialog.show("bridges", {
                     type: "install",
                     plugin: this.plugin,
                     values: all ? [...this.available, ...this.installed] : this.available,
                     select: (data) => {
-                        this.$dialog.close("instances");
+                        this.$dialog.close("bridges");
                         this.loading = true;
 
                         const waits = [];
 
                         if (typeof data === "string") {
                             waits.push(new Promise((resolve) => {
-                                this.$hoobs.instance(data).then((instance) => {
-                                    if (instance) {
-                                        instance.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
+                                this.$hoobs.bridge(data).then((bridge) => {
+                                    if (bridge) {
+                                        bridge.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
                                             resolve();
                                         });
                                     } else {
@@ -265,12 +265,12 @@
                             }));
                         } else {
                             waits.push(new Promise((resolve) => {
-                                this.$hoobs.instances.add(data.display, data.port, data.pin, data.username).then(() => {
+                                this.$hoobs.bridges.add(data.display, data.port, data.pin, data.username).then(() => {
                                     setTimeout(() => {
                                         Wait().then(() => {
-                                            this.$hoobs.instance(data.id).then((instance) => {
-                                                if (instance) {
-                                                    instance.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
+                                            this.$hoobs.bridge(data.id).then((bridge) => {
+                                                if (bridge) {
+                                                    bridge.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
                                                         resolve();
                                                     });
                                                 } else {
@@ -278,7 +278,7 @@
                                                 }
                                             });
                                         });
-                                    }, INSTANCE_CREATE_DELAY);
+                                    }, BRIDGE_CREATE_DELAY);
                                 });
                             }));
                         }
@@ -295,28 +295,28 @@
             },
 
             uninstall() {
-                this.$dialog.show("instances", {
+                this.$dialog.show("bridges", {
                     type: "uninstall",
                     plugin: this.plugin,
                     values: this.installed,
                     select: (id, remove) => {
-                        this.$dialog.close("instances");
+                        this.$dialog.close("bridges");
                         this.loading = true;
 
-                        this.$hoobs.instance(id).then((instance) => {
+                        this.$hoobs.bridge(id).then((bridge) => {
                             const waits = [];
 
-                            if (instance) {
+                            if (bridge) {
                                 waits.push(new Promise((resolve) => {
-                                    instance.plugins.uninstall(this.identifier).then(() => {
+                                    bridge.plugins.uninstall(this.identifier).then(() => {
                                         setTimeout(() => {
                                             if (remove) {
-                                                instance.plugins.list().then((plugins) => {
+                                                bridge.plugins.list().then((plugins) => {
                                                     if (plugins.length === 0) {
-                                                        instance.remove().then(() => {
+                                                        bridge.remove().then(() => {
                                                             setTimeout(() => {
                                                                 resolve();
-                                                            }, INSTANCE_CREATE_DELAY);
+                                                            }, BRIDGE_CREATE_DELAY);
                                                         });
                                                     } else {
                                                         resolve();
@@ -349,8 +349,8 @@
 
                 for (let i = 0; i < this.installed.length; i += 1) {
                     waits.push(new Promise((resolve) => {
-                        this.$hoobs.instance(this.installed[i].id).then((instance) => {
-                            instance.plugins.upgrade(`${this.identifier}@latest`).then(() => {
+                        this.$hoobs.bridge(this.installed[i].id).then((bridge) => {
+                            bridge.plugins.upgrade(`${this.identifier}@latest`).then(() => {
                                 resolve();
                             });
                         });
@@ -408,19 +408,19 @@
             },
 
             intersect() {
-                const instances = this.instances.map((item) => item.id);
+                const bridges = this.bridges.map((item) => item.id);
                 const installed = this.installed.map((item) => item.id);
-                const available = instances.filter((item) => item !== "library" && installed.indexOf(item) === -1);
+                const available = bridges.filter((item) => item !== "library" && installed.indexOf(item) === -1);
 
                 this.available = [];
 
                 for (let i = 0; i < available.length; i += 1) {
-                    const instance = this.instances.find((item) => item.id === available[i]);
+                    const bridge = this.bridges.find((item) => item.id === available[i]);
 
-                    if (instance) {
+                    if (bridge) {
                         this.available.push({
-                            id: instance.id,
-                            display: instance.display,
+                            id: bridge.id,
+                            display: bridge.display,
                         });
                     }
                 }

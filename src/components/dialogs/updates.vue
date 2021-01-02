@@ -118,8 +118,8 @@
                     const { ...plugin } = this.plugins[i];
 
                     waits.push(new Promise((resolve) => {
-                        this.$hoobs.instance(plugin.instance).then((instance) => {
-                            instance.plugins.upgrade(plugin.identifier).then(() => {
+                        this.$hoobs.bridge(plugin.bridge).then((bridge) => {
+                            bridge.plugins.upgrade(plugin.identifier).then(() => {
                                 resolve();
                             });
                         });

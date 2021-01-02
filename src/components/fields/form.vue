@@ -20,7 +20,7 @@
     <fieldset id="field">
         <legend v-if="title && title !== ''" class="legend">{{ title }}</legend>
         <div v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</div>
-        <schema v-for="(child, key) in schema.properties" :instance="instance" :identifier="identifier" :schema="child" :value="internalValue[key]" :key="key" v-on:input="updateValue($event, key)" />
+        <schema v-for="(child, key) in schema.properties" :bridge="bridge" :identifier="identifier" :schema="child" :value="internalValue[key]" :key="key" v-on:input="updateValue($event, key)" />
     </fieldset>
 </template>
 
@@ -37,7 +37,7 @@
             schema: Object,
             value: [Object, String, Number, Boolean, Array],
             title: String,
-            instance: String,
+            bridge: String,
             identifier: String,
         },
 

@@ -129,8 +129,8 @@
                     label: "permission_controller",
                     selected: false,
                 }, {
-                    name: "instances",
-                    label: "permission_instances",
+                    name: "bridges",
+                    label: "permission_bridges",
                     selected: false,
                 }, {
                     name: "terminal",
@@ -201,7 +201,7 @@
                         const permissions = {
                             accessories: false,
                             controller: false,
-                            instances: false,
+                            bridges: false,
                             terminal: false,
                             plugins: false,
                             users: false,
@@ -224,7 +224,7 @@
                         const permissions = {
                             accessories: false,
                             controller: false,
-                            instances: false,
+                            bridges: false,
                             terminal: false,
                             plugins: false,
                             users: false,

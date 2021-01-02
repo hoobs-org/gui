@@ -17,31 +17,31 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="instances.filter((item) => !item.running).length === 0" id="widget">
-        <div class="title">{{ $t("instances") }}</div>
-        <div class="value">{{ instances.filter((item) => item.running).length }} {{ $t("running") }}</div>
+    <div v-if="bridges.filter((item) => !item.running).length === 0" id="widget">
+        <div class="title">{{ $t("bridges") }}</div>
+        <div class="value">{{ bridges.filter((item) => item.running).length }} {{ $t("running") }}</div>
     </div>
-    <div v-else-if="instances.filter((item) => item.running).length === 0" id="widget" class="down">
-        <div class="title">{{ $t("instances") }}</div>
-        <div class="value">{{ instances.filter((item) => !item.running).length }} {{ $t("down") }}</div>
+    <div v-else-if="bridges.filter((item) => item.running).length === 0" id="widget" class="down">
+        <div class="title">{{ $t("bridges") }}</div>
+        <div class="value">{{ bridges.filter((item) => !item.running).length }} {{ $t("down") }}</div>
     </div>
     <div v-else id="widget" class="partial">
-        <div class="title">{{ $t("instances") }}</div>
+        <div class="title">{{ $t("bridges") }}</div>
         <div class="value">
-            {{ instances.filter((item) => item.running).length }} {{ $t("running") }}
+            {{ bridges.filter((item) => item.running).length }} {{ $t("running") }}
             <br />
-            {{ instances.filter((item) => !item.running).length }} {{ $t("down") }}
+            {{ bridges.filter((item) => !item.running).length }} {{ $t("down") }}
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "instances",
+        name: "bridges",
 
         computed: {
-            instances() {
-                return this.$store.state.instances;
+            bridges() {
+                return this.$store.state.bridges;
             },
         },
     };

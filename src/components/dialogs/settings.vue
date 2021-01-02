@@ -206,16 +206,16 @@
 
             purge() {
                 this.$confirm(this.$t("purge"), this.$t("purge_warning"), async () => {
-                    const instances = await this.$hoobs.instances.list();
+                    const bridges = await this.$hoobs.bridges.list();
 
-                    for (let i = 0; i < instances.length; i += 1) this.clear(instances[i].id);
+                    for (let i = 0; i < bridges.length; i += 1) this.clear(bridges[i].id);
                 });
             },
 
             async clear(id) {
-                const instance = await this.$hoobs.instance(id);
+                const bridge = await this.$hoobs.bridge(id);
 
-                await instance.purge();
+                await bridge.purge();
             },
 
             reset() {

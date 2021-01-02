@@ -35,7 +35,7 @@
             schema: Object,
             value: [Object, String, Number, Boolean, Array],
             title: String,
-            instance: String,
+            bridge: String,
             identifier: String,
         },
 
@@ -56,7 +56,7 @@
                     url: `${PLUGIN_URL}/${this.identifier}`,
                     value: this.value,
                     update: this.update,
-                    instance: this.instance,
+                    bridge: this.bridge,
                     identifier: this.identifier,
                 });
             },
@@ -71,7 +71,7 @@
                     dialog.window.$value = this.value;
                     dialog.window.$update = this.update;
                     dialog.window.$hoobs = this.$hoobs;
-                    dialog.window.$instance = this.instance;
+                    dialog.window.$bridge = this.bridge;
                     dialog.window.$identifier = this.identifier;
                 }, true);
             },

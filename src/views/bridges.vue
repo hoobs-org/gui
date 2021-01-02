@@ -17,35 +17,35 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="user.permissions.instances" id="instances">
+    <div v-if="user.permissions.bridges" id="bridges">
         <context>
-            <router-link v-if="id !== 'add'" to="/instances/add" class="button">
+            <router-link v-if="id !== 'add'" to="/bridges/add" class="button">
                 <div class="icon">add</div>
                 {{ $t("add") }}
             </router-link>
         </context>
         <div v-if="!loading" class="content">
-            <list v-if="instances.length > 0" value="id" display="display" :values="instances" :selected="id" controller="instances" />
+            <list v-if="bridges.length > 0" value="id" display="display" :values="bridges" :selected="id" controller="bridges" />
             <form v-if="id === 'add'" class="screen form">
                 <div class="wrapper">
                     <div class="row section">{{ $t("import") }}</div>
                     <div class="row">
-                        <input type="file" ref="file" v-on:change="upload()" accept=".instance" hidden />
+                        <input type="file" ref="file" v-on:change="upload()" accept=".bridge" hidden />
                         <div v-on:click="$refs.file.click()" class="button">{{ $t("upload_file") }}</div>
                         <div v-if="file" class="filename">{{ filename }}</div>
                     </div>
                     <div class="row section">{{ $t("details") }}</div>
                     <div class="row">
                         <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
-                        <text-field :title="$t('instance_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
+                        <text-field :title="$t('bridge_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
                     </div>
                     <div class="row">
-                        <port-field :title="$t('instance_port')" style="flex: 1; padding-right: 5px" v-model="port" />
+                        <port-field :title="$t('bridge_port')" style="flex: 1; padding-right: 5px" v-model="port" />
                         <div style="flex: 1; padding-left: 5px"></div>
                     </div>
                     <div class="row actions">
                         <div v-if="!loading" v-on:click="save(true)" class="button primary">{{ $t("save") }}</div>
-                        <router-link to="/instances" class="button">{{ $t("cancel") }}</router-link>
+                        <router-link to="/bridges" class="button">{{ $t("cancel") }}</router-link>
                     </div>
                 </div>
             </form>
@@ -66,41 +66,41 @@
                     </div>
                     <div class="row section">{{ $t("export") }}</div>
                     <div class="row">
-                        <div v-on:click="backup()" class="button">{{ $t("export_instance") }}</div>
+                        <div v-on:click="backup()" class="button">{{ $t("export_bridge") }}</div>
                     </div>
                     <div class="row section">{{ $t("details") }}</div>
                     <div class="row">
                         <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
-                        <text-field :title="$t('instance_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
+                        <text-field :title="$t('bridge_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
                     </div>
                     <div class="row">
-                        <div v-on:click="generate()" class="button">{{ $t("instance_generate_new_id") }}</div>
+                        <div v-on:click="generate()" class="button">{{ $t("bridge_generate_new_id") }}</div>
                     </div>
                     <div class="row section">{{ $t("service") }}</div>
                     <div class="row">
-                        <integer-field :title="$t('instance_autostart')" :description="$t('instance_autostart_description')" :min="-1" :max="300" v-model="autostart" />
+                        <integer-field :title="$t('bridge_autostart')" :description="$t('bridge_autostart_description')" :min="-1" :max="300" v-model="autostart" />
                     </div>
-                    <div class="row section" style="margin-bottom: 10px">{{ $t("instance_port_pool") }}</div>
-                    <p style="margin-top: 0">{{ $t("instance_port_pool_description") }}</p>
+                    <div class="row section" style="margin-bottom: 10px">{{ $t("bridge_port_pool") }}</div>
+                    <p style="margin-top: 0">{{ $t("bridge_port_pool_description") }}</p>
                     <div class="row">
-                        <port-field :title="$t('instance_port_pool_start')" style="flex: 1; padding-right: 5px" v-model="start" />
-                        <port-field :title="$t('instance_port_pool_end')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="end" />
+                        <port-field :title="$t('bridge_port_pool_start')" style="flex: 1; padding-right: 5px" v-model="start" />
+                        <port-field :title="$t('bridge_port_pool_end')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="end" />
                     </div>
                     <div class="row actions">
                         <div v-if="!loading" v-on:click="save()" class="button primary">{{ $t("save") }}</div>
                         <div v-on:click="remove()" class="button">{{ $t("remove") }}</div>
-                        <router-link to="/instances" class="button">{{ $t("cancel") }}</router-link>
+                        <router-link to="/bridges" class="button">{{ $t("cancel") }}</router-link>
                     </div>
                 </div>
             </form>
             <div v-else class="initial desktop">
-                <div v-if="instances.length > 0" class="message">
-                    {{ $t("instance_select_add") }}
-                    <router-link to="/instances/add">{{ $t("instance_add") }}</router-link>
+                <div v-if="bridges.length > 0" class="message">
+                    {{ $t("bridge_select_add") }}
+                    <router-link to="/bridges/add">{{ $t("bridge_add") }}</router-link>
                 </div>
                 <div v-else class="message">
-                    {{ $t("instance_initilize") }}
-                    <router-link to="/instances/add">{{ $t("instance_add") }}</router-link>
+                    {{ $t("bridge_initilize") }}
+                    <router-link to="/bridges/add">{{ $t("bridge_add") }}</router-link>
                 </div>
             </div>
         </div>
@@ -123,7 +123,7 @@
     const SOCKET_RECONNECT_DELAY = 500;
 
     export default {
-        name: "instances",
+        name: "bridges",
 
         props: {
             id: String,
@@ -144,7 +144,7 @@
             return {
                 loading: true,
                 theme: null,
-                instances: [],
+                bridges: [],
                 subject: null,
                 status: null,
                 file: null,
@@ -179,9 +179,9 @@
             async load(id) {
                 this.loading = true;
                 this.theme = await this.$hoobs.theme.get(this.$store.state.theme);
-                this.instances = await this.$hoobs.instances.list();
+                this.bridges = await this.$hoobs.bridges.list();
 
-                this.instances.sort((a, b) => {
+                this.bridges.sort((a, b) => {
                     if (a.display < b.display) return -1;
                     if (a.display > b.display) return 1;
 
@@ -201,7 +201,7 @@
                 this.end = null;
 
                 if (id && id !== "add" && id !== "api" && id !== "") {
-                    this.subject = await this.$hoobs.instance(id);
+                    this.subject = await this.$hoobs.bridge(id);
 
                     if (this.subject) {
                         this.status = await this.subject.status();
@@ -219,9 +219,9 @@
                     this.generate();
                     this.port = this.port || 50826;
 
-                    const instances = await this.$hoobs.instances.list();
+                    const bridges = await this.$hoobs.bridges.list();
 
-                    while (instances.findIndex((item) => parseInt(`${item.port}`, 10) === this.port) >= 0) {
+                    while (bridges.findIndex((item) => parseInt(`${item.port}`, 10) === this.port) >= 0) {
                         this.port += 1000;
                     }
                 }
@@ -255,23 +255,23 @@
             },
 
             async save(create) {
-                const validation = Validators.instance(create, await this.$hoobs.instances.list(), this.display, this.pin, this.port, this.username, this.autostart, this.start, this.end);
+                const validation = Validators.bridge(create, await this.$hoobs.bridges.list(), this.display, this.pin, this.port, this.username, this.autostart, this.start, this.end);
 
                 if (validation.valid) {
                     if (create) {
                         this.loading = true;
 
                         if (this.file) {
-                            await this.$hoobs.instances.import(this.file, this.display, this.port, this.pin, this.username);
+                            await this.$hoobs.bridges.import(this.file, this.display, this.port, this.pin, this.username);
                         } else {
-                            await this.$hoobs.instances.add(this.display, this.port, this.pin, this.username);
+                            await this.$hoobs.bridges.add(this.display, this.port, this.pin, this.username);
                         }
 
                         setTimeout(async () => {
                             await Wait();
 
-                            this.instances = await this.$hoobs.instances.list();
-                            this.$router.push({ path: `/instances/${this.instances.find((item) => item.id === Sanitize(this.display)).id}` });
+                            this.bridges = await this.$hoobs.bridges.list();
+                            this.$router.push({ path: `/bridges/${this.bridges.find((item) => item.id === Sanitize(this.display)).id}` });
                         }, SOCKET_RECONNECT_DELAY);
                     } else if (this.subject) {
                         this.loading = true;
@@ -299,7 +299,7 @@
 
             remove() {
                 if (this.subject) {
-                    this.$confirm(this.$t("remove"), this.$t("remove_instance_warning"), async () => {
+                    this.$confirm(this.$t("remove"), this.$t("remove_bridge_warning"), async () => {
                         this.loading = true;
 
                         await this.subject.remove();
@@ -307,7 +307,7 @@
                         setTimeout(async () => {
                             await Wait();
 
-                            this.$router.push({ path: "/instances" });
+                            this.$router.push({ path: "/bridges" });
                         }, SOCKET_RECONNECT_DELAY);
                     });
                 }
@@ -323,8 +323,8 @@
                     this.loading = false;
 
                     link.href = url;
-                    link.id = `instance_${(new Date()).getTime()}`;
-                    link.download = `${this.subject.id}.instance`;
+                    link.id = `bridge_${(new Date()).getTime()}`;
+                    link.download = `${this.subject.id}.bridge`;
                     link.click();
                 }
             },
@@ -340,7 +340,7 @@
 </script>
 
 <style lang="scss" scoped>
-    #instances {
+    #bridges {
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -403,7 +403,7 @@
     }
 
     @media (min-width: 300px) and (max-width: 815px) {
-        #instances {
+        #bridges {
             .content {
                 .screen {
                     max-width: unset;

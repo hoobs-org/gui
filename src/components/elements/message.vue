@@ -20,27 +20,27 @@
     <span id="message">
         <span v-if="value.level === 'debug'" class="content">
             <span class="dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
-            <span v-if="value.instance !== 'api'" v-on:click="navigation('instances', value.instance)" class="instance" :style="instance(value.display)">{{ value.display }}</span>
+            <span v-if="value.bridge !== 'api'" v-on:click="navigation('bridges', value.bridge)" class="bridge" :style="bridge(value.display)">{{ value.display }}</span>
             <span v-on:click="navigation('plugin', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
             <span>{{ value.message }}</span>
         </span>
         <span v-else-if="value.level === 'error'" class="content">
             <span class="dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
-            <span v-if="value.instance !== 'api'" v-on:click="navigation('instances', value.instance)" class="instance" :style="instance(value.display)">{{ value.display }}</span>
+            <span v-if="value.bridge !== 'api'" v-on:click="navigation('bridges', value.bridge)" class="bridge" :style="bridge(value.display)">{{ value.display }}</span>
             <span v-on:click="navigation('plugin', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
             <span class="error">{{ $t("error") }}</span>
             <span class="error-text">{{ value.message }}</span>
         </span>
         <span v-else-if="value.level === 'warn'" class="content">
             <span class="dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
-            <span v-if="value.instance !== 'api'" v-on:click="navigation('instances', value.instance)" class="instance" :style="instance(value.display)">{{ value.display }}</span>
+            <span v-if="value.bridge !== 'api'" v-on:click="navigation('bridges', value.bridge)" class="bridge" :style="bridge(value.display)">{{ value.display }}</span>
             <span v-on:click="navigation('plugin', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
             <span class="warning">{{ $t("warning") }}</span>
             <span class="warning-text">{{ value.message }}</span>
         </span>
         <span v-else-if="value.level === 'info'" class="content">
             <span class="dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
-            <span v-if="value.instance !== 'api'" v-on:click="navigation('instances', value.instance)" class="instance" :style="instance(value.display)">{{ value.display }}</span>
+            <span v-if="value.bridge !== 'api'" v-on:click="navigation('bridges', value.bridge)" class="bridge" :style="bridge(value.display)">{{ value.display }}</span>
             <span v-on:click="navigation('plugin', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
             <span class="text">{{ value.message }}</span>
         </span>
@@ -72,7 +72,7 @@
                 return `#${scheme.colors()[7]}`;
             },
 
-            instance(value) {
+            bridge(value) {
                 let hash = 0;
 
                 for (let i = 0; i < value.length; i += 1) hash = value.charCodeAt(i) + ((hash << 6) - hash);
@@ -150,7 +150,7 @@
             color: #c20101;
         }
 
-        .instance {
+        .bridge {
             cursor: pointer;
 
             &:hover {

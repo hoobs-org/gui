@@ -63,9 +63,9 @@
                 <span class="icon">people</span>
                 <span v-if="expanded" class="title desktop">{{ $t("users") }}</span>
             </router-link>
-            <router-link v-if="user.permissions.instances" :class="$route.name === 'instances' ? 'route active' : 'route'" to="/instances">
+            <router-link v-if="user.permissions.bridges" :class="$route.name === 'bridges' ? 'route active' : 'route'" to="/bridges">
                 <span class="icon">layers</span>
-                <span v-if="expanded" class="title desktop">{{ $t("instances") }}</span>
+                <span v-if="expanded" class="title desktop">{{ $t("bridges") }}</span>
             </router-link>
             <router-link v-if="user.permissions.plugins" :class="$route.name === 'plugins' || $route.name === 'plugin' ? 'route active' : 'route'" to="/plugins">
                 <span class="icon">extension</span>

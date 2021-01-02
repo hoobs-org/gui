@@ -28,8 +28,8 @@ export default new Menus([
         component: () => import(/* webpackChunkName: "menu:notifications" */ "@/components/notifications.vue"),
     },
     {
-        name: "instances",
-        component: () => import(/* webpackChunkName: "menu:instances" */ "@/components/menus/instances.vue"),
+        name: "bridges",
+        component: () => import(/* webpackChunkName: "menu:bridges" */ "@/components/menus/bridges.vue"),
     },
     {
         name: "plugins",

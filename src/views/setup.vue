@@ -60,7 +60,7 @@
                 username: "",
                 password: "",
                 challenge: "",
-                instance: "Default",
+                bridge: "Default",
                 port: 51826,
                 errors: [],
                 message: "",

@@ -24,8 +24,8 @@
             <div v-if="identifier && identifier !== 'api' && identifier !== 'advanced'" class="screen">
                 <div class="wrapper">
                     <div class="section">{{ plugin.display }}</div>
-                    <tabs :values="instances" v-on:change="exit" :value="instance" field="id" display="display" class="tabs" />
-                    <schema-form :instance="instance" :identifier="identifier" :schema="schema" v-model="working" v-on:input="() => { dirty = true }" />
+                    <tabs :values="bridges" v-on:change="exit" :value="bridge" field="id" display="display" class="tabs" />
+                    <schema-form :bridge="bridge" :identifier="identifier" :schema="schema" v-model="working" v-on:input="() => { dirty = true }" />
                     <div class="row actions">
                         <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
                         <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
@@ -33,10 +33,10 @@
                 </div>
             </div>
             <div v-else-if="identifier && identifier === 'advanced'" class="screen">
-                <tabs v-if="instances.length > 0" :values="instances" v-on:change="exit" :value="instance" field="id" display="display" class="tabs tight" />
-                <div v-if="instances.length > 0" ref="editor" class="editor"></div>
+                <tabs v-if="bridges.length > 0" :values="bridges" v-on:change="exit" :value="bridge" field="id" display="display" class="tabs tight" />
+                <div v-if="bridges.length > 0" ref="editor" class="editor"></div>
                 <div class="row actions">
-                    <div v-if="instances.length > 0" v-on:click="save" class="button primary">{{ $t("save") }}</div>
+                    <div v-if="bridges.length > 0" v-on:click="save" class="button primary">{{ $t("save") }}</div>
                     <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
                 </div>
             </div>
@@ -81,7 +81,7 @@
     import Tabs from "@/components/elements/tabs.vue";
     import Form from "@/components/form.vue";
 
-    const INSTANCE_RESTART_DELAY = 4000;
+    const BRIDGE_RESTART_DELAY = 4000;
     const MONACO_LOAD_DELAY = 10;
     const CONFIG_LOAD_DELAY = 100;
 
@@ -138,8 +138,8 @@
                 working: {},
                 plugins: [],
                 plugin: null,
-                instances: [],
-                instance: "",
+                bridges: [],
+                bridge: "",
                 editor: null,
             };
         },
@@ -191,7 +191,7 @@
 
             this.$action.on("personalize", "update", () => {
                 if (this.identifier === "advanced") {
-                    this.change(this.instance);
+                    this.change(this.bridge);
                 }
             });
 
@@ -213,11 +213,11 @@
 
                     setTimeout(() => {
                         this.dirty = false;
-                        this.change(this.instance);
-                    }, INSTANCE_RESTART_DELAY);
+                        this.change(this.bridge);
+                    }, BRIDGE_RESTART_DELAY);
                 } else if (this.identifier === "advanced") {
-                    const instance = await this.$hoobs.instance(this.instance);
-                    const plugins = await instance.plugins.list();
+                    const bridge = await this.$hoobs.bridge(this.bridge);
+                    const plugins = await bridge.plugins.list();
 
                     let { ...working } = this.working;
 
@@ -244,15 +244,15 @@
                         }
                     }
 
-                    await instance.config.update(working);
+                    await bridge.config.update(working);
 
                     setTimeout(() => {
                         this.dirty = false;
-                        this.change(this.instance);
-                    }, INSTANCE_RESTART_DELAY);
+                        this.change(this.bridge);
+                    }, BRIDGE_RESTART_DELAY);
                 } else {
-                    const instance = await this.$hoobs.instance(this.instance);
-                    const config = await instance.config.get();
+                    const bridge = await this.$hoobs.bridge(this.bridge);
+                    const config = await bridge.config.get();
                     const { ...working } = this.working;
 
                     let index = -1;
@@ -290,26 +290,26 @@
                             break;
                     }
 
-                    await instance.config.update(config);
+                    await bridge.config.update(config);
 
                     setTimeout(() => {
                         this.dirty = false;
-                        this.change(this.instance);
-                    }, INSTANCE_RESTART_DELAY);
+                        this.change(this.bridge);
+                    }, BRIDGE_RESTART_DELAY);
                 }
             },
 
-            exit(instance) {
+            exit(bridge) {
                 if (this.dirty) {
-                    this.$confirm(this.$t("ok"), this.$t("unsaved_changes_warning"), () => { this.change(instance); });
+                    this.$confirm(this.$t("ok"), this.$t("unsaved_changes_warning"), () => { this.change(bridge); });
                 } else {
-                    this.change(instance);
+                    this.change(bridge);
                 }
             },
 
-            async change(instance) {
+            async change(bridge) {
                 this.loading = true;
-                this.instance = instance;
+                this.bridge = bridge;
 
                 if (this.editor) {
                     this.editor.dispose();
@@ -344,7 +344,7 @@
                         background = background.split("").map((item) => `${item}${item}`).join("");
                     }
 
-                    this.working = await (await this.$hoobs.instance(instance)).config.get();
+                    this.working = await (await this.$hoobs.bridge(bridge)).config.get();
                     this.loading = false;
                     this.dirty = false;
 
@@ -388,7 +388,7 @@
                         });
                     }, MONACO_LOAD_DELAY);
                 } else {
-                    const config = await (await this.$hoobs.instance(instance)).config.get();
+                    const config = await (await this.$hoobs.bridge(bridge)).config.get();
 
                     const platforms = (config || {}).platforms || [];
                     const accessories = (config || {}).accessories || [];
@@ -415,12 +415,12 @@
             async switch(identifier) {
                 this.loading = true;
                 this.identifier = identifier;
-                this.instances = await this.$hoobs.instances.list();
+                this.bridges = await this.$hoobs.bridges.list();
                 this.schema = null;
                 this.plugin = null;
                 this.dirty = false;
 
-                this.instances.sort((a, b) => {
+                this.bridges.sort((a, b) => {
                     if (a.display < b.display) return -1;
                     if (a.display > b.display) return 1;
 
@@ -430,8 +430,8 @@
                 if (!this.identifier || this.identifier === "" || this.identifier === "api") {
                     this.change("");
                 } else if (this.identifier === "advanced") {
-                    if (this.instances.length > 0) {
-                        this.change(((this.instances || [])[0] || {}).id || "");
+                    if (this.bridges.length > 0) {
+                        this.change(((this.bridges || [])[0] || {}).id || "");
                     } else {
                         this.loading = false;
                     }
@@ -441,7 +441,7 @@
                     if (this.plugin && this.plugin.schema && this.plugin.schema.schema) {
                         this.type = this.plugin.schema.pluginType;
                         this.alias = this.plugin.alias || this.plugin.schema.pluginAlias;
-                        this.instances = this.instances.filter((instance) => this.plugin.instances.findIndex((item) => item.id === instance.id) >= 0);
+                        this.bridges = this.bridges.filter((bridge) => this.plugin.bridges.findIndex((item) => item.id === bridge.id) >= 0);
 
                         switch (this.type) {
                             case "accessory":
@@ -468,7 +468,7 @@
                         }
                     }
 
-                    this.change(((this.instances || [])[0] || {}).id || "");
+                    this.change(((this.bridges || [])[0] || {}).id || "");
                 }
             },
 
@@ -481,24 +481,24 @@
                     const plugin = plugins[i];
 
                     if (plugin && plugin.schema && plugin.schema.schema) {
-                        const { instance } = plugin;
+                        const { bridge } = plugin;
                         const { version } = plugin;
 
                         let index = this.plugins.findIndex((item) => item.identifier === plugin.identifier);
 
                         if (index === -1) {
                             index = this.plugins.length;
-                            plugin.instances = [];
+                            plugin.bridges = [];
                             plugin.display = this.$hoobs.repository.title(plugin.name);
 
-                            delete plugin.instance;
+                            delete plugin.bridge;
                             delete plugin.version;
 
                             this.plugins.push(plugin);
                         }
 
-                        this.plugins[index].instances.push({
-                            id: instance,
+                        this.plugins[index].bridges.push({
+                            id: bridge,
                             version,
                         });
                     }

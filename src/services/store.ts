@@ -26,11 +26,11 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         log: [],
-        instances: [],
+        bridges: [],
         config: {},
         dashboard: {
             items: [{
-                x: 0, y: 12, w: 1, h: 3, i: "9", component: "instances",
+                x: 0, y: 12, w: 1, h: 3, i: "9", component: "bridges",
             }, {
                 x: 0, y: 9, w: 1, h: 3, i: "8", component: "memory",
             }, {
@@ -90,22 +90,22 @@ export default new Vuex.Store({
         },
 
         "IO:MONITOR": (state: { [key: string]: any }, payload: any) => {
-            const keys = Object.keys(payload.data.instances);
-            const instances = [];
+            const keys = Object.keys(payload.data.bridges);
+            const bridges = [];
 
             for (let i = 0; i < keys.length; i += 1) {
-                const { ...instance } = payload.data.instances[keys[i]];
+                const { ...bridge } = payload.data.bridges[keys[i]];
 
-                instances.push({
+                bridges.push({
                     id: keys[i],
-                    display: instance.display,
-                    version: instance.version,
-                    running: instance.running,
-                    uptime: timespan(instance.uptime),
+                    display: bridge.display,
+                    version: bridge.version,
+                    running: bridge.running,
+                    uptime: timespan(bridge.uptime),
                 });
             }
 
-            state.instances = instances;
+            state.bridges = bridges;
             state.temp = payload.data.temp.main > -1 ? payload.data.temp.main : null;
 
             state.cpu.used = 100 - Math.round(payload.data.cpu.currentload_idle);
@@ -134,7 +134,7 @@ export default new Vuex.Store({
                 id: `${now}:${Math.random()}`,
                 time: now,
                 event: payload.event,
-                instance: payload.instance,
+                bridge: payload.bridge,
                 type: payload.data.type,
                 title: payload.data.title,
                 description: payload.data.description,
@@ -225,7 +225,7 @@ export default new Vuex.Store({
         key: "hoobs:state",
         storage: window.localStorage,
         reducer: (state: { [key: string]: any }) => ({
-            instances: state.instances,
+            bridges: state.bridges,
             dashboard: state.dashboard,
             cpu: state.cpu,
             memory: state.memory,

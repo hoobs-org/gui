@@ -22,8 +22,8 @@
             <h1>{{ $t("installed") }}</h1>
         </div>
         <div v-if="installed.length > 0" class="item vertical">
-            <div v-for="(item, index) in instances" :key="`installed:${index}`" class="value smaller">
-                <router-link :to="`/instances/${item.id}`" :style="instance(item.display)">{{ item.display }}</router-link>
+            <div v-for="(item, index) in bridges" :key="`installed:${index}`" class="value smaller">
+                <router-link :to="`/bridges/${item.id}`" :style="bridge(item.display)">{{ item.display }}</router-link>
                 {{ item.version }}
             </div>
         </div>
@@ -153,7 +153,7 @@
                 current: null,
                 homepage: null,
                 repository: null,
-                instances: [],
+                bridges: [],
                 support: null,
                 downloads: {},
             };
@@ -162,9 +162,9 @@
         mounted() {
             this.homepage = this.url(this.plugin.homepage);
             this.repository = this.url((this.plugin.repository || {}).url);
-            this.instances = this.installed;
+            this.bridges = this.installed;
 
-            this.instances.sort((a, b) => {
+            this.bridges.sort((a, b) => {
                 if (a.id < b.id) return -1;
                 if (a.id > b.id) return 1;
 
@@ -277,7 +277,7 @@
                 return `#${scheme.colors()[7]}`;
             },
 
-            instance(value) {
+            bridge(value) {
                 let hash = 0;
 
                 for (let i = 0; i < value.length; i += 1) hash = value.charCodeAt(i) + ((hash << 6) - hash);

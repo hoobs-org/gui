@@ -48,11 +48,11 @@ export default new Dialogs([
         component: () => import(/* webpackChunkName: "dialog:dashboard" */ "@/components/dialogs/dashboard.vue"),
     },
     {
-        name: "instances",
-        component: () => import(/* webpackChunkName: "dialog:instances" */ "@/components/dialogs/instances.vue"),
+        name: "bridges",
+        component: () => import(/* webpackChunkName: "dialog:bridges" */ "@/components/dialogs/bridges.vue"),
     },
     {
         name: "plugin",
-        component: () => import(/* webpackChunkName: "dialog:instances" */ "@/components/dialogs/plugin.vue"),
+        component: () => import(/* webpackChunkName: "dialog:bridges" */ "@/components/dialogs/plugin.vue"),
     },
 ]);

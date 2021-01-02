@@ -48,7 +48,7 @@
                 this.$refs.frame.contentWindow.$value = this.options.value;
                 this.$refs.frame.contentWindow.$update = this.options.update;
                 this.$refs.frame.contentWindow.$hoobs = this.$hoobs;
-                this.$refs.frame.contentWindow.$instance = this.options.instance;
+                this.$refs.frame.contentWindow.$bridge = this.options.bridge;
                 this.$refs.frame.contentWindow.$identifier = this.options.identifier;
             }, true);
         },

@@ -20,7 +20,7 @@
     <div v-if="user.permissions.plugins" id="plugins">
         <context />
         <div class="content">
-            <list value="id" display="display" :values="instances" :selected="id" initial="library" controller="plugins" />
+            <list value="id" display="display" :values="bridges" :selected="id" initial="library" controller="plugins" />
             <div v-if="id && id !== 'library'" class="screen">
                 <div class="nav mobile">
                     <router-link to="/plugins" class="back"><span class="icon">keyboard_arrow_left</span> {{ $t("back") }}</router-link>
@@ -112,7 +112,7 @@
                 query: "",
                 pagination: [],
                 installed: [],
-                instances: [],
+                bridges: [],
                 featured: [],
                 popular: [],
                 results: [],
@@ -133,16 +133,16 @@
         },
 
         async mounted() {
-            this.instances = await this.$hoobs.instances.list();
+            this.bridges = await this.$hoobs.bridges.list();
 
-            this.instances.sort((a, b) => {
+            this.bridges.sort((a, b) => {
                 if (a.display < b.display) return -1;
                 if (a.display > b.display) return 1;
 
                 return 0;
             });
 
-            this.instances.unshift({
+            this.bridges.unshift({
                 id: "library",
                 display: this.$t("library"),
             });
@@ -179,10 +179,10 @@
                     this.popular = await this.$hoobs.repository.popular();
 
                     if (id && id !== "") {
-                        const instance = await this.$hoobs.instance(id);
+                        const bridge = await this.$hoobs.bridge(id);
 
-                        if (instance) {
-                            this.installed = await instance.plugins.list();
+                        if (bridge) {
+                            this.installed = await bridge.plugins.list();
                         }
                     }
                 } else {
@@ -417,7 +417,7 @@
     }
 
     @media (min-width: 300px) and (max-width: 815px) {
-        #instances {
+        #bridges {
             .content {
                 .screen {
                     padding: 0 20px 10px 20px;

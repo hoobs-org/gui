@@ -20,7 +20,7 @@
     <div>
         <template v-for="(property, key) in schema.properties">
             <slot :name="key" :item="{ key: key, schema: property, value: items[key], update: updateValue }">
-                <schema :key="key" :instance="instance" :identifier="identifier" :schema="property" :value="items[key]" v-on:input="updateValue($event, key)" />
+                <schema :key="key" :bridge="bridge" :identifier="identifier" :schema="property" :value="items[key]" v-on:input="updateValue($event, key)" />
             </slot>
         </template>
     </div>
@@ -40,7 +40,7 @@
         props: {
             schema: Object,
             value: Object,
-            instance: String,
+            bridge: String,
             identifier: String,
         },
 

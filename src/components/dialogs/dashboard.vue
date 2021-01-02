@@ -28,7 +28,7 @@
                     <div class="row section">{{ $t("dashboard_items") }}</div>
                     <div class="grid">
                         <div v-for="(item, index) in available" :key="`item:${index}`">
-                            <checkbox :id="`item_${index}`" :title="item.label" v-model="item.selected" />
+                            <checkbox :id="`item_${index}`" :title="$t(item.label)" v-model="item.selected" />
                         </div>
                     </div>
                 </div>
@@ -78,8 +78,8 @@
                     label: "weather_combined",
                     selected: false,
                 }, {
-                    name: "instances",
-                    label: "instances",
+                    name: "bridges",
+                    label: "bridges",
                     selected: false,
                 }, {
                     name: "log",
@@ -152,9 +152,9 @@
                             x: 0, y: 0, w: 1, h: 3, i: "8", component: "memory",
                         };
 
-                    case "instances":
+                    case "bridges":
                         return {
-                            x: 0, y: 0, w: 1, h: 3, i: "9", component: "instances",
+                            x: 0, y: 0, w: 1, h: 3, i: "9", component: "bridges",
                         };
 
                     case "log":

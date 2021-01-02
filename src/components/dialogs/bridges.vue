@@ -18,45 +18,45 @@
 
 <template>
     <modal :title="title" :draggable="true" width="670px" height="670px">
-        <div id="instances">
+        <div id="bridges">
             <div class="content">
                 <form v-if="options.type === 'install'" class="form">
-                    <div class="row section" style="margin: 0;">{{ $t("instance_add") }}</div>
+                    <div class="row section" style="margin: 0;">{{ $t("bridge_add") }}</div>
                     <p>
-                        {{ $t("plugin_install_add_instance") }}
+                        {{ $t("plugin_install_add_bridge") }}
                     </p>
                     <div class="row">
                         <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
-                        <text-field :title="$t('instance_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
+                        <text-field :title="$t('bridge_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
                     </div>
                     <div class="row">
-                        <port-field :title="$t('instance_port')" style="flex: 1; padding-right: 5px" v-model="port" />
+                        <port-field :title="$t('bridge_port')" style="flex: 1; padding-right: 5px" v-model="port" />
                         <div style="flex: 1; padding-left: 5px"></div>
                     </div>
-                    <div v-if="instances.length > 0" class="row section" style="margin: 0;">{{ $t("instances") }}</div>
-                    <p v-if="instances.length > 0">
-                        {{ $t("plugin_install_instance") }}
+                    <div v-if="bridges.length > 0" class="row section" style="margin: 0;">{{ $t("bridges") }}</div>
+                    <p v-if="bridges.length > 0">
+                        {{ $t("plugin_install_bridge") }}
                     </p>
-                    <div v-if="instances.length > 0" class="grid">
-                        <div v-for="(instance, index) in instances" :key="`instance:${index}`" v-on:click="install(instance.id)" class="button full">{{ instance.display }}</div>
+                    <div v-if="bridges.length > 0" class="grid">
+                        <div v-for="(bridge, index) in bridges" :key="`bridge:${index}`" v-on:click="install(bridge.id)" class="button full">{{ bridge.display }}</div>
                     </div>
                 </form>
                 <form v-if="options.type === 'uninstall'" class="form">
                     <div class="row section">{{ $t("remove") }}</div>
                     <div class="row">
-                        <checkbox id="remove" :title="$t('instance_remove_empty')" v-model="remove" />
+                        <checkbox id="remove" :title="$t('bridge_remove_empty')" v-model="remove" />
                     </div>
-                    <div class="row section" style="margin: 0;">{{ $t("instances") }}</div>
+                    <div class="row section" style="margin: 0;">{{ $t("bridges") }}</div>
                     <p>
-                        {{ $t("plugin_uninstall_instance") }}
+                        {{ $t("plugin_uninstall_bridge") }}
                     </p>
                     <div class="grid">
-                        <div v-for="(instance, index) in instances" :key="`instance:${index}`" v-on:click="uninstall(instance.id)" class="button full">{{ instance.display }}</div>
+                        <div v-for="(bridge, index) in bridges" :key="`bridge:${index}`" v-on:click="uninstall(bridge.id)" class="button full">{{ bridge.display }}</div>
                     </div>
                 </form>
             </div>
             <div class="actions modal">
-                <div v-on:click="$dialog.close('instances')" class="button">{{ $t("cancel") }}</div>
+                <div v-on:click="$dialog.close('bridges')" class="button">{{ $t("cancel") }}</div>
                 <div v-if="options.type === 'install'" v-on:click="create()" class="button primary">{{ $t("plugin_install") }}</div>
             </div>
         </div>
@@ -69,7 +69,7 @@
     import { mac } from "../../services/formatters";
 
     export default {
-        name: "instances",
+        name: "bridges",
 
         props: {
             options: Object,
@@ -77,7 +77,7 @@
 
         data() {
             return {
-                instances: [],
+                bridges: [],
                 title: "",
                 display: "",
                 pin: "031-45-154",
@@ -88,19 +88,19 @@
         },
 
         async mounted() {
-            this.instances = this.options.values;
+            this.bridges = this.options.values;
 
-            this.instances.sort((a, b) => {
+            this.bridges.sort((a, b) => {
                 if (a.id < b.id) return -1;
                 if (a.id > b.id) return 1;
 
                 return 0;
             });
 
-            let instances = [];
+            let bridges = [];
             let count = 1;
 
-            const template = `${this.$hoobs.repository.title(this.options.plugin.name)} ${this.$t("instance")}`;
+            const template = `${this.$hoobs.repository.title(this.options.plugin.name)} ${this.$t("bridge")}`;
 
             switch (this.options.type) {
                 case "install":
@@ -110,13 +110,13 @@
                     this.port = 51826;
                     this.display = template;
 
-                    instances = await this.$hoobs.instances.list();
+                    bridges = await this.$hoobs.bridges.list();
 
-                    while (instances.findIndex((item) => parseInt(`${item.port}`, 10) === this.port) >= 0) {
+                    while (bridges.findIndex((item) => parseInt(`${item.port}`, 10) === this.port) >= 0) {
                         this.port += 1000;
                     }
 
-                    while (instances.findIndex((item) => item.id === Sanitize(this.display)) >= 0) {
+                    while (bridges.findIndex((item) => item.id === Sanitize(this.display)) >= 0) {
                         count += 1;
 
                         this.display = `${template} ${count}`;
@@ -129,14 +129,14 @@
                     break;
 
                 default:
-                    this.$dialog.close("instances");
+                    this.$dialog.close("bridges");
                     break;
             }
         },
 
         methods: {
             async create() {
-                const validation = Validators.instance(true, await this.$hoobs.instances.list(), this.display, this.pin, this.port, this.username);
+                const validation = Validators.bridge(true, await this.$hoobs.bridges.list(), this.display, this.pin, this.port, this.username);
 
                 if (validation.valid) {
                     this.options.select({
@@ -179,7 +179,7 @@
 </script>
 
 <style lang="scss" scoped>
-    #instances {
+    #bridges {
         flex: 1;
         display: flex;
         flex-direction: column;

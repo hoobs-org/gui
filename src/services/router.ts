@@ -60,10 +60,10 @@ const routes: Array<RouteConfig> = [
         props: true,
     },
     {
-        path: "/instances/:id?",
-        name: "instances",
+        path: "/bridges/:id?",
+        name: "bridges",
         meta: { layout: "authenticated" },
-        component: () => import(/* webpackChunkName: "view:instances" */ "../views/instances.vue"),
+        component: () => import(/* webpackChunkName: "view:bridges" */ "../views/bridges.vue"),
         props: true,
     },
     {
