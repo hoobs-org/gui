@@ -135,6 +135,13 @@
         async mounted() {
             this.instances = await this.$hoobs.instances.list();
 
+            this.instances.sort((a, b) => {
+                if (a.display < b.display) return -1;
+                if (a.display > b.display) return 1;
+
+                return 0;
+            });
+
             this.instances.unshift({
                 id: "library",
                 display: this.$t("library"),
