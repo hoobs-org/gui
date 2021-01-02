@@ -89,7 +89,7 @@ export default class Validators {
         const reserved = [
             "new",
             "add",
-            "api",
+            "hub",
             "bridge",
             "bridges",
             "library",

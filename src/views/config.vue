@@ -20,8 +20,8 @@
     <div v-if="user.permissions.config" id="config">
         <context />
         <div v-if="!loading" class="content">
-            <list value="identifier" display="display" :values="plugins" :selected="identifier" initial="api" controller="config" />
-            <div v-if="identifier && identifier !== 'api' && identifier !== 'advanced'" class="screen">
+            <list value="identifier" display="display" :values="plugins" :selected="identifier" initial="hub" controller="config" />
+            <div v-if="identifier && identifier !== 'hub' && identifier !== 'advanced'" class="screen">
                 <div class="wrapper">
                     <div class="section">{{ plugin.display }}</div>
                     <tabs :values="bridges" v-on:change="exit" :value="bridge" field="id" display="display" class="tabs" />
@@ -202,7 +202,7 @@
             async save() {
                 this.loading = true;
 
-                if (!this.identifier || this.identifier === "" || this.identifier === "api") {
+                if (!this.identifier || this.identifier === "" || this.identifier === "hub") {
                     const config = await this.$hoobs.config.get();
                     const { ...working } = this.working;
 
@@ -316,7 +316,7 @@
                     this.editor = null;
                 }
 
-                if (!this.identifier || this.identifier === "" || this.identifier === "api") {
+                if (!this.identifier || this.identifier === "" || this.identifier === "hub") {
                     this.working = (await this.$hoobs.config.get()).api || {};
 
                     this.working.inactive_logoff = this.working.inactive_logoff || 30;
@@ -427,7 +427,7 @@
                     return 0;
                 });
 
-                if (!this.identifier || this.identifier === "" || this.identifier === "api") {
+                if (!this.identifier || this.identifier === "" || this.identifier === "hub") {
                     this.change("");
                 } else if (this.identifier === "advanced") {
                     if (this.bridges.length > 0) {
@@ -512,7 +512,7 @@
                 });
 
                 this.plugins.unshift({
-                    identifier: "api",
+                    identifier: "hub",
                     display: this.$t("hub"),
                 });
 

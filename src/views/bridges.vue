@@ -200,7 +200,7 @@
                 this.start = null;
                 this.end = null;
 
-                if (id && id !== "add" && id !== "api" && id !== "") {
+                if (id && id !== "add" && id !== "hub" && id !== "") {
                     this.subject = await this.$hoobs.bridge(id);
 
                     if (this.subject) {

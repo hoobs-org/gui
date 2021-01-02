@@ -78,8 +78,8 @@
             const { bridges } = this.$store.state;
 
             this.bridges.push({
-                value: "api",
-                text: "API",
+                value: "hub",
+                text: "Hub",
                 selected: true,
             });
 
@@ -137,7 +137,7 @@
                     return false;
                 }
 
-                if (!((this.bridges.find((item) => item.value === (message.bridge || "api")) || {}).selected)) {
+                if (!((this.bridges.find((item) => item.value === (message.bridge || "hub")) || {}).selected)) {
                     return false;
                 }
 
@@ -156,7 +156,7 @@
                 for (let i = 0; i < log.length; i += 1) {
                     content += `${new Date(log[i].timestamp).toLocaleString()} `;
 
-                    if (log[i].id !== "" && log[i].id !== "api") {
+                    if (log[i].id !== "" && log[i].id !== "hub") {
                         content += `${log[i].display} `;
                     }
 
