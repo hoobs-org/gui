@@ -100,13 +100,15 @@
             let instances = [];
             let count = 1;
 
+            const template = `${this.$hoobs.repository.title(this.options.plugin.name)} ${this.$t("instance")}`;
+
             switch (this.options.type) {
                 case "install":
                     this.title = `${this.$t("plugin_install")} ${this.$hoobs.repository.title(this.options.plugin.name)}`;
 
                     this.generate();
                     this.port = 51826;
-                    this.display = this.$hoobs.repository.title(this.options.plugin.name);
+                    this.display = template;
 
                     instances = await this.$hoobs.instances.list();
 
@@ -117,7 +119,7 @@
                     while (instances.findIndex((item) => item.id === Sanitize(this.display)) >= 0) {
                         count += 1;
 
-                        this.display = `${this.$hoobs.repository.title(this.options.plugin.name)} ${count}`;
+                        this.display = `${template} ${count}`;
                     }
 
                     break;

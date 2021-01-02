@@ -74,6 +74,7 @@
         "information": "Information",
         "installed": "Installed",
         "installed_plugins": "Installed Plugins",
+        "instance": "Bridge",
         "instance_add": "Add Bridge",
         "instance_autostart": "Start Delay",
         "instance_autostart_description": "Delay the start of the bridge. (in seconds)",
