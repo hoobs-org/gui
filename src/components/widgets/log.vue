@@ -30,7 +30,7 @@
     const SCROLL_DELAY = 10;
 
     export default {
-        name: "log",
+        name: "log-widget",
 
         components: {
             "message": Message,

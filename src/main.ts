@@ -24,6 +24,7 @@ import App from "./app.vue";
 import converter from "./plugins/markdown";
 import graphing from "./plugins/graphing";
 import themes from "./plugins/themes";
+import mobile from "./plugins/mobile";
 import drag from "./plugins/drag";
 
 import actions from "./services/actions";
@@ -89,6 +90,7 @@ Vue.use(io);
 Vue.use(drag);
 Vue.use(hoobs);
 Vue.use(menus);
+Vue.use(mobile);
 Vue.use(dialogs);
 Vue.use(actions);
 Vue.use(markdown);

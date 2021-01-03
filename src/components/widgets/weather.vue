@@ -46,7 +46,7 @@
     import dates from "@/services/dates";
 
     export default {
-        name: "weather",
+        name: "weather-widget",
 
         data() {
             return {

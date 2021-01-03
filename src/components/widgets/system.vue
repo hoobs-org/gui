@@ -68,7 +68,7 @@
 
 <script>
     export default {
-        name: "system",
+        name: "system-widget",
 
         computed: {
             user() {

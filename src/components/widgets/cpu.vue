@@ -25,7 +25,7 @@
 
 <script>
     export default {
-        name: "cpu",
+        name: "cpu-widget",
 
         computed: {
             cpu() {

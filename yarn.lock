@@ -885,10 +885,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@hoobs/sdk@^4.2.2":
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/@hoobs/sdk/-/sdk-4.2.2.tgz#6f07bcd58809acfc3fe976fdb30ed2793d5f802b"
-  integrity sha512-pCvVeCwrjArrjbJyy2HVxL/UhFrBGE5gpnEggWG2MOlkkZBEYuXRXwsmEwVCpL/BDYpnQYhDegpijfMyQLAdYA==
+"@hoobs/sdk@^4.2.3":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/@hoobs/sdk/-/sdk-4.2.3.tgz#13487d3131cd429ec099f8c5ccee7176875a3217"
+  integrity sha512-9iVaCcKNHNMg2adwYfh+okiJ+ZKrYFqejjEv5fwM3PF9hPnpZ2OICupYLMDO9Yw1u1Pho6idR7OckTDxLj0BKQ==
   dependencies:
     axios "^0.21.0"
     sanitize-filename "^1.6.3"
@@ -2346,9 +2346,9 @@ aws4@^1.8.0:
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
 
 axios@^0.21.0:
-  version "0.21.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.0.tgz#26df088803a2350dff2c27f96fef99fe49442aca"
-  integrity sha512-fmkJBknJKoZwem3/IKSSLpkdNXZeBu5Q7GA/aRsr2btgrptmSCxi2oFjZHqGdK9DoTil9PIHlPIZw2EcRJXRvw==
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
+  integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
   dependencies:
     follow-redirects "^1.10.0"
 

@@ -25,7 +25,7 @@
 
 <script>
     export default {
-        name: "memory",
+        name: "memory-widget",
 
         computed: {
             memory() {

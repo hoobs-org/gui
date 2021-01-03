@@ -40,7 +40,7 @@
     import dates from "@/services/dates";
 
     export default {
-        name: "forecast",
+        name: "forecast-widget",
 
         data() {
             return {

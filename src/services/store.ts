@@ -30,17 +30,17 @@ export default new Vuex.Store({
         config: {},
         dashboard: {
             items: [{
-                x: 0, y: 12, w: 1, h: 3, i: "9", component: "bridges",
+                x: 0, y: 12, w: 1, h: 3, i: "9", component: "bridges-widget",
             }, {
-                x: 0, y: 9, w: 1, h: 3, i: "8", component: "memory",
+                x: 0, y: 9, w: 1, h: 3, i: "8", component: "memory-widget",
             }, {
-                x: 0, y: 6, w: 1, h: 3, i: "7", component: "cpu",
+                x: 0, y: 6, w: 1, h: 3, i: "7", component: "cpu-widget",
             }, {
-                x: 0, y: 0, w: 12, h: 6, i: "1", component: "activity",
+                x: 0, y: 0, w: 12, h: 6, i: "1", component: "activity-widget",
             }, {
-                x: 1, y: 6, w: 4, h: 9, i: "2", component: "weather",
+                x: 1, y: 6, w: 4, h: 9, i: "2", component: "weather-widget",
             }, {
-                x: 8, y: 6, w: 4, h: 16, i: "4", component: "system",
+                x: 8, y: 6, w: 4, h: 16, i: "4", component: "system-widget",
             }],
         },
         cpu: {

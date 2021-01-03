@@ -90,7 +90,8 @@
 
                 this.status = await this.$hoobs.status();
                 this.version = await this.$hoobs.version();
-                this.plugins = (await this.$hoobs.plugins()).filter((item) => !Semver.compare(item.version, item.latest, ">="));
+
+                this.plugins = ((await this.$hoobs.plugins()) || []).filter((item) => !Semver.compare(item.version, item.latest, ">="));
 
                 this.stack = !(this.status.upgraded && this.status.cli_upgraded && this.status.node_upgraded);
                 this.updated = !(this.stack || this.plugins.length > 0);

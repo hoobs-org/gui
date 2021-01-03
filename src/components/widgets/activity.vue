@@ -24,7 +24,7 @@
 
 <script>
     export default {
-        name: "activity",
+        name: "activity-widget",
 
         data() {
             return {

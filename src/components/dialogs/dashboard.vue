@@ -45,6 +45,8 @@
 </template>
 
 <script>
+    import { available, defaults } from "../../services/widgets";
+
     export default {
         name: "dashboard",
 
@@ -53,43 +55,7 @@
                 loading: true,
                 items: [],
                 backdrop: "",
-                available: [{
-                    name: "activity",
-                    label: "activity",
-                    selected: false,
-                }, {
-                    name: "current",
-                    label: "weather",
-                    selected: false,
-                }, {
-                    name: "cpu",
-                    label: "cpu",
-                    selected: false,
-                }, {
-                    name: "forecast",
-                    label: "weather_forecast",
-                    selected: false,
-                }, {
-                    name: "memory",
-                    label: "memory",
-                    selected: false,
-                }, {
-                    name: "weather",
-                    label: "weather_combined",
-                    selected: false,
-                }, {
-                    name: "bridges",
-                    label: "bridges",
-                    selected: false,
-                }, {
-                    name: "log",
-                    label: "log",
-                    selected: false,
-                }, {
-                    name: "system",
-                    label: "system_info",
-                    selected: false,
-                }],
+                available: [...available],
             };
         },
 
@@ -135,56 +101,8 @@
                 this.$dialog.close("dashboard");
             },
 
-            defaults(item) {
-                switch (item) {
-                    case "activity":
-                        return {
-                            x: 0, y: 0, w: 12, h: 6, i: "1", component: "activity",
-                        };
-
-                    case "cpu":
-                        return {
-                            x: 0, y: 0, w: 1, h: 3, i: "7", component: "cpu",
-                        };
-
-                    case "memory":
-                        return {
-                            x: 0, y: 0, w: 1, h: 3, i: "8", component: "memory",
-                        };
-
-                    case "bridges":
-                        return {
-                            x: 0, y: 0, w: 1, h: 3, i: "9", component: "bridges",
-                        };
-
-                    case "log":
-                        return {
-                            x: 0, y: 0, w: 5, h: 7, i: "10", component: "log",
-                        };
-
-                    case "system":
-                        return {
-                            x: 0, y: 0, w: 4, h: 16, i: "4", component: "system",
-                        };
-
-                    case "weather":
-                        return {
-                            x: 0, y: 0, w: 5, h: 8, i: "2", component: "weather",
-                        };
-
-                    case "forecast":
-                        return {
-                            x: 0, y: 0, w: 4, h: 4, i: "5", component: "forecast",
-                        };
-
-                    case "current":
-                        return {
-                            x: 0, y: 0, w: 2, h: 5, i: "6", component: "current",
-                        };
-
-                    default:
-                        return undefined;
-                }
+            defaults(name) {
+                return defaults(name);
             },
         },
     };

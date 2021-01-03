@@ -23,7 +23,7 @@
             <div v-else v-on:click.stop="toggle('locked')" class="icon desktop">lock_open</div>
             <div v-on:click.stop="$dialog.open('dashboard')" class="icon desktop">settings</div>
         </context>
-        <div class="content desktop">
+        <div v-if="!$mobile" class="content desktop">
             <grid-layout
                 :layout="items"
                 :col-num="12"
@@ -41,15 +41,15 @@
                 </grid-item>
             </grid-layout>
         </div>
-        <div class="content mobile">
+        <div v-else class="content mobile">
             <div class="widget">
-                <weather />
+                <weather-widget />
             </div>
             <div class="widget">
-                <bridges />
+                <bridges-widget />
             </div>
             <div class="widget">
-                <system />
+                <system-widget />
             </div>
         </div>
     </div>
@@ -57,6 +57,7 @@
 
 <script>
     import GridLayout from "vue-grid-layout";
+    import { widgets } from "../services/widgets";
 
     export default {
         name: "dashboard",
@@ -65,15 +66,7 @@
             "grid-layout": GridLayout.GridLayout,
             "grid-item": GridLayout.GridItem,
 
-            "activity": () => import(/* webpackChunkName: "dialog:activity" */ "@/components/widgets/activity.vue"),
-            "cpu": () => import(/* webpackChunkName: "dialog:cpu" */ "@/components/widgets/cpu.vue"),
-            "memory": () => import(/* webpackChunkName: "dialog:memory" */ "@/components/widgets/memory.vue"),
-            "bridges": () => import(/* webpackChunkName: "dialog:bridges" */ "@/components/widgets/bridges.vue"),
-            "system": () => import(/* webpackChunkName: "dialog:system" */ "@/components/widgets/system.vue"),
-            "log": () => import(/* webpackChunkName: "dialog:log" */ "@/components/widgets/log.vue"),
-            "weather": () => import(/* webpackChunkName: "dialog:weather" */ "@/components/widgets/weather.vue"),
-            "current": () => import(/* webpackChunkName: "dialog:current" */ "@/components/widgets/current.vue"),
-            "forecast": () => import(/* webpackChunkName: "dialog:forecast" */ "@/components/widgets/forecast.vue"),
+            ...widgets(),
         },
 
         data() {

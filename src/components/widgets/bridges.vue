@@ -37,7 +37,7 @@
 
 <script>
     export default {
-        name: "bridges",
+        name: "bridges-widget",
 
         computed: {
             bridges() {
