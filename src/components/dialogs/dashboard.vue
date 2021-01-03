@@ -45,7 +45,7 @@
 </template>
 
 <script>
-    import { available, defaults } from "../../services/widgets";
+    import { available, layout } from "../../services/widgets";
 
     export default {
         name: "dashboard",
@@ -84,7 +84,7 @@
                     const index = current.findIndex((item) => item.component === this.available[i].name);
 
                     if (this.available[i].selected && index === -1) {
-                        const widget = this.defaults(this.available[i].name);
+                        const widget = layout(this.available[i].name);
 
                         if (widget) {
                             current.unshift(widget);
@@ -99,10 +99,6 @@
 
                 this.$action.emit("dashboard", "update");
                 this.$dialog.close("dashboard");
-            },
-
-            defaults(name) {
-                return defaults(name);
             },
         },
     };
