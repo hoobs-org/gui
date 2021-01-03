@@ -26,11 +26,11 @@
             </div>
         </div>
         <div v-if="auth" class="seperator desktop"></div>
-        <div v-on:click="$dialog.show('about')" class="item">{{ $t("about") }}</div>
+        <div v-on:click="$dialog.open('about')" class="item">{{ $t("about") }}</div>
         <div v-on:click="help()" class="item">{{ $t("help") }}</div>
         <div v-if="auth" class="seperator desktop"></div>
-        <div v-if="user.permissions.controller" v-on:click="$dialog.show('settings')" class="item">{{ $t("settings") }}</div>
-        <div v-on:click="$dialog.show('personalize')" class="item">{{ $t("personalize") }}</div>
+        <div v-if="user.permissions.controller" v-on:click="$dialog.open('settings')" class="item">{{ $t("settings") }}</div>
+        <div v-on:click="$dialog.open('personalize')" class="item">{{ $t("personalize") }}</div>
         <div v-if="user.permissions.terminal" v-on:click="terminal()" class="item desktop">{{ $t("terminal") }}</div>
         <div v-if="auth" class="seperator desktop"></div>
         <div v-if="auth" v-on:click="logout()" class="item">{{ $t("logout") }}</div>

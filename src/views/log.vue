@@ -126,7 +126,7 @@
             },
 
             menu(name) {
-                this.$menu.show(name, {
+                this.$menu.open(name, {
                     opener: this.$refs[name],
                     values: this[name],
                 });

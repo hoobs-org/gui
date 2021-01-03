@@ -241,7 +241,7 @@
             },
 
             install(tag, all) {
-                this.$dialog.show("bridges", {
+                this.$dialog.open("bridges", {
                     type: "install",
                     plugin: this.plugin,
                     values: all ? [...this.available, ...this.installed] : this.available,
@@ -295,7 +295,7 @@
             },
 
             uninstall() {
-                this.$dialog.show("bridges", {
+                this.$dialog.open("bridges", {
                     type: "uninstall",
                     plugin: this.plugin,
                     values: this.installed,

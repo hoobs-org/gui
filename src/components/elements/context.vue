@@ -22,11 +22,11 @@
             <slot />
         </div>
         <div class="system">
-            <div v-on:click.stop="$menu.show('notifications')" class="icon">
+            <div v-on:click.stop="$menu.open('notifications')" class="icon">
                 notifications_none
                 <div v-if="notifications.length > 0" class="active">&bull;</div>
             </div>
-            <div v-on:click.stop="$menu.show('application')" class="icon">more_vert</div>
+            <div v-on:click.stop="$menu.open('application')" class="icon">more_vert</div>
         </div>
     </div>
 </template>

@@ -21,7 +21,7 @@
         <context>
             <div v-if="locked" v-on:click.stop="toggle('locked')" class="icon desktop">lock</div>
             <div v-else v-on:click.stop="toggle('locked')" class="icon desktop">lock_open</div>
-            <div v-on:click.stop="$dialog.show('dashboard')" class="icon desktop">settings</div>
+            <div v-on:click.stop="$dialog.open('dashboard')" class="icon desktop">settings</div>
         </context>
         <div class="content desktop">
             <grid-layout

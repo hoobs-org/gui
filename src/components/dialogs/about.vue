@@ -70,7 +70,7 @@
 
             upgrades() {
                 this.$dialog.close("about");
-                this.$dialog.show("updates");
+                this.$dialog.open("updates");
             },
         },
     };

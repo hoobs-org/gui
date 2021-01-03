@@ -52,7 +52,7 @@
             },
 
             dialog() {
-                this.$dialog.show("plugin", {
+                this.$dialog.open("plugin", {
                     url: `${PLUGIN_URL}/${this.identifier}`,
                     value: this.value,
                     update: this.update,

@@ -23,7 +23,7 @@ export default class Menus {
 
     declare private events: Vue;
 
-    declare private open: undefined | string;
+    declare private current: undefined | string;
 
     constructor(menus: any[]) {
         this.events = new Vue();
@@ -34,14 +34,14 @@ export default class Menus {
         this.events.$on(event, callback);
     }
 
-    show(name: string, options?: { [key: string]: any }): void {
-        if (this.open && this.open === name) {
+    open(name: string, options?: { [key: string]: any }): void {
+        if (this.current && this.current === name) {
             this.close();
         } else {
             const source = this.menus.findIndex((item) => item.name === name);
 
             if (source >= 0) {
-                this.open = name;
+                this.current = name;
                 this.menus[source].options = options;
                 this.events.$emit("open", this.menus[source]);
             }
@@ -53,7 +53,7 @@ export default class Menus {
             delete this.menus[i].options;
         }
 
-        this.open = undefined;
+        this.current = undefined;
         this.events.$emit("close");
     }
 

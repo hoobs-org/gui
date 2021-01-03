@@ -19,7 +19,7 @@
 import Vue, { VueConstructor } from "vue";
 
 export default class Dialogs {
-    declare private open: any[];
+    declare private current: any[];
 
     declare private dialogs: any[];
 
@@ -28,41 +28,41 @@ export default class Dialogs {
     constructor(dialogs: any[]) {
         this.events = new Vue();
         this.dialogs = dialogs;
-        this.open = [];
+        this.current = [];
     }
 
     on(event: string, callback: (value?: any) => void): void {
         this.events.$on(event, callback);
     }
 
-    show(name: string, options?: { [key: string]: any }): void {
+    open(name: string, options?: { [key: string]: any }): void {
         const source = this.dialogs.findIndex((item) => item.name === name);
 
         if (source >= 0) {
             this.dialogs[source].options = options;
 
-            this.open.push(this.dialogs[source]);
+            this.current.push(this.dialogs[source]);
             this.events.$emit("open", this.dialogs[source]);
-            this.events.$emit("state", this.open);
+            this.events.$emit("state", this.current);
         }
     }
 
     close(name: string): void {
         if (name) {
-            const open = this.open.findIndex((item) => item.name === name);
-            const source = this.open.findIndex((item) => item.name === name);
+            const current = this.current.findIndex((item) => item.name === name);
+            const source = this.current.findIndex((item) => item.name === name);
 
-            if (open >= 0 && source >= 0) {
+            if (current >= 0 && source >= 0) {
                 delete this.dialogs[source].options;
 
-                this.open.splice(open, 1);
+                this.current.splice(current, 1);
                 this.events.$emit("close", this.dialogs[source]);
-                this.events.$emit("state", this.open);
+                this.events.$emit("state", this.current);
             }
         } else {
-            while (this.open.length > 0) {
-                const open = this.open.pop();
-                const source = this.open.findIndex((item) => item.name === open.name);
+            while (this.current.length > 0) {
+                const current = this.current.pop();
+                const source = this.current.findIndex((item) => item.name === current.name);
 
                 if (source >= 0) {
                     delete this.dialogs[source].options;
@@ -71,7 +71,7 @@ export default class Dialogs {
                 }
             }
 
-            this.events.$emit("state", this.open);
+            this.events.$emit("state", this.current);
         }
     }
 
@@ -83,11 +83,11 @@ export default class Dialogs {
 
             methods: {
                 $alert: (message: string) => {
-                    this.show("alert", { message });
+                    this.open("alert", { message });
                 },
 
                 $confirm: (action: string, message: string, confirm: () => void, cancel?: () => void) => {
-                    this.show("confirm", {
+                    this.open("confirm", {
                         message,
                         action,
                         confirm,
