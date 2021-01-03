@@ -39,17 +39,17 @@ export function mouse(event: MouseEvent): void {
     window.data.mouseY = event.pageY - window.data.initialY;
 }
 
-export function repeat(): void {
+export function animate(): void {
     window.data.relativeX = window.data.mouseX;
     window.data.relativeY = window.data.mouseY;
     window.data.move.style.transform = `matrix(${window.data.matrix || "1, 0, 0, 1,"} ${window.data.matrixX + window.data.relativeX}, ${window.data.matrixY + window.data.relativeY})`;
 
-    window.data.posAnimation = requestAnimationFrame(repeat);
+    window.data.posAnimation = requestAnimationFrame(animate);
 }
 
 export function move(): void {
     window.data.move.classList.add(window.data.class.move);
-    window.data.posAnimation = requestAnimationFrame(repeat);
+    window.data.posAnimation = requestAnimationFrame(animate);
 
     document.removeEventListener("mousemove", move);
 }
