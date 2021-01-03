@@ -57,7 +57,6 @@
                     value: this.value,
                     update: this.update,
                     bridge: this.bridge,
-                    identifier: this.identifier,
                 });
             },
 
@@ -65,14 +64,19 @@
                 const left = (window.screen.width / 2) - (760 / 2);
                 const top = ((window.screen.height / 2) - (760 / 2)) / 2;
 
+                const fetch = () => this.value;
+                const update = (response) => this.update(response);
+
                 const dialog = window.open(`${PLUGIN_URL}/${this.identifier}`, "HOOBS", `toolbar=no,status=no,menubar=no,resizable=yes,width=760,height=760,top=${top},left=${left}`);
 
                 dialog.addEventListener("load", () => {
-                    dialog.window.$value = this.value;
-                    dialog.window.$update = this.update;
                     dialog.window.$hoobs = this.$hoobs;
                     dialog.window.$bridge = this.bridge;
-                    dialog.window.$identifier = this.identifier;
+
+                    Object.defineProperty(dialog.window, "$value", {
+                        get: () => fetch(),
+                        set: (response) => update(response),
+                    });
                 }, true);
             },
         },

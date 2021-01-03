@@ -44,12 +44,17 @@
         },
 
         mounted() {
+            const fetch = () => this.options.value;
+            const update = (response) => this.options.update(response);
+
             this.$refs.frame.addEventListener("load", () => {
-                this.$refs.frame.contentWindow.$value = this.options.value;
-                this.$refs.frame.contentWindow.$update = this.options.update;
                 this.$refs.frame.contentWindow.$hoobs = this.$hoobs;
-                this.$refs.frame.contentWindow.$bridge = this.options.bridge;
-                this.$refs.frame.contentWindow.$identifier = this.options.identifier;
+                this.$refs.frame.contentWindow.$bridge = this.bridge;
+
+                Object.defineProperty(this.$refs.frame.contentWindow, "$value", {
+                    get: () => fetch(),
+                    set: (response) => update(response),
+                });
             }, true);
         },
     };
