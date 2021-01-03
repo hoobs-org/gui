@@ -1,6 +1,7 @@
 /**************************************************************************************************
  * hoobs-gui                                                                                      *
  * Copyright (C) 2020 HOOBS                                                                       *
+ * Copyright (c) 2018 Collin Rickford                                                             *
  *                                                                                                *
  * This program is free software: you can redistribute it and/or modify                           *
  * it under the terms of the GNU General Public License as published by                           *
