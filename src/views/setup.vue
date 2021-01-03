@@ -16,7 +16,7 @@
  | along with this program.  If not, see <http://www.gnu.org/licenses/>.                          |
  -------------------------------------------------------------------------------------------------->
 <template>
-    <div id="setup">
+    <div :key="version" id="setup">
         <modal v-if="loading" :welcome="$t('welcome')" width="760px" height="670px">
             <div class="loading">
                 <spinner v-model="message" />
@@ -55,6 +55,7 @@
 
         data() {
             return {
+                version: 0,
                 loading: true,
                 name: "",
                 username: "",

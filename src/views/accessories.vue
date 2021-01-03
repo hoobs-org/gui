@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="user.permissions.accessories" id="accessories">
+    <div :key="version" v-if="user.permissions.accessories" id="accessories">
         <context />
     </div>
 </template>
@@ -30,6 +30,12 @@
             user() {
                 return this.$store.state.user;
             },
+        },
+
+        data() {
+            return {
+                version: 0,
+            };
         },
     };
 </script>

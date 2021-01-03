@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="user.permissions.terminal" id="terminal">
+    <div :key="version" v-if="user.permissions.terminal" id="terminal">
         <context>
             <div v-on:click="refresh()" class="icon">refresh</div>
         </context>
@@ -54,10 +54,11 @@
 
         data() {
             return {
+                version: 0,
                 loading: false,
                 term: null,
                 socket: null,
-                version: null,
+                hoobsd: null,
                 screen: null,
                 initilize: true,
                 opening: true,
@@ -92,7 +93,7 @@
             this.$action.on("personalize", "update");
 
             this.opening = true;
-            this.version = await this.$hoobs.version();
+            this.hoobsd = await this.$hoobs.version();
             this.socket = Socket();
 
             this.text = {
@@ -158,7 +159,7 @@
                         this.term.write(" / __  / /_/ / /_/ / /_/ /__/ / \r\n");
                         this.term.write("/_/ /_/\\____/\\____/_____/____/\r\n");
                         this.term.write("\r\n");
-                        this.term.write(`HOOBS ${this.version}\r\n`);
+                        this.term.write(`HOOBS ${this.hoobsd}\r\n`);
                         this.term.write("\r\n");
                         this.term.write(`${Chunk(this.$t("motd"), 40).join("\r\n")}\r\n`);
                         this.term.write("\r\n");

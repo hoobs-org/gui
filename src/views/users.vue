@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="user.permissions.users" id="users">
+    <div :key="version" v-if="user.permissions.users" id="users">
         <context>
             <router-link v-if="id !== 'add'" to="/users/add" class="button">
                 <div class="icon">add</div>
@@ -113,6 +113,7 @@
 
         data() {
             return {
+                version: 0,
                 loading: true,
                 users: [],
                 subject: {},

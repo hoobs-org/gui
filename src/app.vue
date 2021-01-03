@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="app" :theme="current">
+    <div id="app" :theme="theme">
         <component :is="$route.meta.layout">
             <router-view class="view" />
         </component>
@@ -37,7 +37,7 @@
         },
 
         computed: {
-            current() {
+            theme() {
                 return this.$store.state.theme;
             },
         },

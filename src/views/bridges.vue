@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="user.permissions.bridges" id="bridges">
+    <div :key="version" v-if="user.permissions.bridges" id="bridges">
         <context>
             <router-link v-if="id !== 'add'" to="/bridges/add" class="button">
                 <div class="icon">add</div>
@@ -142,6 +142,7 @@
 
         data() {
             return {
+                version: 0,
                 loading: true,
                 theme: null,
                 bridges: [],

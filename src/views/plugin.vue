@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="user.permissions.plugins" id="plugin">
+    <div :key="version" v-if="user.permissions.plugins" id="plugin">
         <context />
         <div class="content">
             <list class="desktop" value="id" display="display" :values="sections" :selected="from" initial="library" controller="plugins" :query="query" />
@@ -129,6 +129,7 @@
 
         data() {
             return {
+                version: 0,
                 loading: true,
                 tabs: [
                     {

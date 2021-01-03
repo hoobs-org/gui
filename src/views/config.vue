@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="user.permissions.config" id="config">
+    <div :key="version" v-if="user.permissions.config" id="config">
         <context />
         <div v-if="!loading" class="content">
             <list value="identifier" display="display" :values="plugins" :selected="identifier" initial="hub" controller="config" />
@@ -128,6 +128,7 @@
 
         data() {
             return {
+                version: 0,
                 intermediate: false,
                 loading: true,
                 dirty: false,

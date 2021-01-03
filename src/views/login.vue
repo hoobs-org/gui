@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="login">
+    <div :key="version" id="login">
         <modal :welcome="$t('login')" width="420px">
             <div v-if="errors.length > 0" class="errors">
                 <span v-for="(error, index) in errors" :key="`error:${index}`">{{ error }}</span>
@@ -56,6 +56,7 @@
 
         data() {
             return {
+                version: 0,
                 url: "/",
                 username: "",
                 password: "",

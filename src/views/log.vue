@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="log">
+    <div :key="version" id="log">
         <context>
             <div ref="bridges" v-on:click.stop="menu('bridges')" class="button">
                 <div class="icon">layers</div>
@@ -58,6 +58,7 @@
 
         data() {
             return {
+                version: 0,
                 debug: false,
                 bridges: [],
                 plugins: [],
