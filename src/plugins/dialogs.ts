@@ -36,13 +36,13 @@ export default class Dialogs {
     }
 
     open(name: string, options?: { [key: string]: any }): void {
-        const source = this.dialogs.findIndex((item) => item.name === name);
+        const dialog = this.dialogs.findIndex((item) => item.name === name);
 
-        if (source >= 0) {
-            this.dialogs[source].options = options;
+        if (dialog >= 0) {
+            this.dialogs[dialog].options = options;
 
-            this.current.push(this.dialogs[source]);
-            this.events.$emit("open", this.dialogs[source]);
+            this.current.push(this.dialogs[dialog]);
+            this.events.$emit("open", this.dialogs[dialog]);
             this.events.$emit("state", this.current);
         }
     }
@@ -50,24 +50,24 @@ export default class Dialogs {
     close(name: string): void {
         if (name) {
             const current = this.current.findIndex((item) => item.name === name);
-            const source = this.current.findIndex((item) => item.name === name);
+            const dialog = this.current.findIndex((item) => item.name === name);
 
-            if (current >= 0 && source >= 0) {
-                delete this.dialogs[source].options;
+            if (current >= 0 && dialog >= 0) {
+                delete this.dialogs[dialog].options;
 
                 this.current.splice(current, 1);
-                this.events.$emit("close", this.dialogs[source]);
+                this.events.$emit("close", this.dialogs[dialog]);
                 this.events.$emit("state", this.current);
             }
         } else {
             while (this.current.length > 0) {
                 const current = this.current.pop();
-                const source = this.current.findIndex((item) => item.name === current.name);
+                const dialog = this.current.findIndex((item) => item.name === current.name);
 
-                if (source >= 0) {
-                    delete this.dialogs[source].options;
+                if (dialog >= 0) {
+                    delete this.dialogs[dialog].options;
 
-                    this.events.$emit("close", this.dialogs[source]);
+                    this.events.$emit("close", this.dialogs[dialog]);
                 }
             }
 
