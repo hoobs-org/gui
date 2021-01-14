@@ -464,7 +464,11 @@
                                 break;
 
                             default:
-                                this.schema = this.plugin.schema.schema;
+                                this.schema = {
+                                    type: "object",
+                                    properties: this.plugin.schema.schema.properties || this.plugin.schema.schema,
+                                };
+
                                 break;
                         }
                     }

@@ -65,7 +65,7 @@
 <style lang="scss" scoped>
     #field {
         flex: 1;
-        padding: 0 10px 10px 10px;
+        padding: 0 10px 10px 20px;
         border: none;
         border-left: 4px var(--application-border) solid;
 
