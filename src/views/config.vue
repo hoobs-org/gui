@@ -455,7 +455,7 @@
                                             items: {
                                                 title: this.$t("accessory"),
                                                 type: "object",
-                                                properties: this.plugin.schema.schema.properties,
+                                                properties: this.plugin.schema.schema.properties || this.plugin.schema.schema,
                                             },
                                         },
                                     },
