@@ -132,7 +132,14 @@ export function field(schema: { [key: string]: any }) {
     if (schema.widget === "button") return component("field:button");
     if (schema.widget === "textarea") return component("field:textarea");
 
-    if (schema.oneOf !== undefined && Array.isArray(schema.oneOf)) return component("field:oneof");
+    if (schema.oneOf !== undefined && Array.isArray(schema.oneOf)) {
+        if (schema.widget === "radio") return component("field:oneof");
+        if (schema.widget === "select") return component("field:select");
+        if (schema.oneOf.length <= 3) return component("field:oneof");
+
+        return component("field:select");
+    }
+
     if (schema.enum !== undefined && Array.isArray(schema.enum)) return component("field:select");
 
     if (schema.type === "boolean") return component("field:checkbox");
@@ -255,3 +262,37 @@ export const draft = {
     },
     default: true,
 };
+
+export function decamel(value: string): string {
+    if (!value || value === "") return "";
+
+    let results = value;
+
+    results = results.replace(/ /gi, "_");
+    results = results.replace(/-/gi, "_");
+    results = results.replace(/,/gi, "");
+    results = results.replace(/'/gi, "");
+    results = results.replace(/"/gi, "");
+    results = results.replace(/!/gi, "");
+    results = results.replace(/\./gi, "");
+    results = results.replace(/\[/gi, "");
+    results = results.replace(/\]/gi, "");
+    results = results.replace(/\\/gi, "");
+    results = results.replace(/\//gi, "");
+    results = results.replace(/\^/gi, "");
+    results = results.replace(/\$/gi, "");
+    results = results.replace(/\|/gi, "");
+    results = results.replace(/\?/gi, "");
+    results = results.replace(/\*/gi, "");
+    results = results.replace(/\+/gi, "");
+    results = results.replace(/\(/gi, "");
+    results = results.replace(/\)/gi, "");
+
+    results = results.replace(/[-_]/gi, " ");
+    results = results.replace(/([A-Z])/g, (item) => ` ${item.charAt(0).toLowerCase()}${item.slice(1)}`);
+    results = results.trim();
+    results = results.replace(/\w\S*/g, (item) => `${item.charAt(0).toUpperCase()}${item.slice(1)}`);
+    results = results.trim();
+
+    return results;
+}

@@ -18,8 +18,8 @@
 
 <template>
     <div id="field" class="field">
-        <span class="title">{{ title }}</span>
-        <span v-if="description && description !== ''" class="description">{{ description }}</span>
+        <span class="title" v-html="title"></span>
+        <span v-if="description && description !== ''" class="description" v-html="description"></span>
         <textarea
             :id="id || uuid"
             :ref="uuid"

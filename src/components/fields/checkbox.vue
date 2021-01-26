@@ -26,7 +26,7 @@
             </div>
             <input type="checkbox" :id="id || uuid" :name="name" :value="value" :disabled="disabled" :required="required" :checked="state" />
         </div>
-        <label class="label" :for="id || uuid">{{ title }}</label>
+        <label class="label" :for="id || uuid" v-html="title"></label>
     </div>
 </template>
 

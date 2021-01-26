@@ -18,8 +18,8 @@
 
 <template>
     <div id="field">
-        <span class="title" v-if="title && title !== ''">{{ title }}</span>
-        <span v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</span>
+        <span class="title" v-if="title && title !== ''" v-html="title"></span>
+        <span v-if="schema.description && schema.description !== ''" class="description" v-html="schema.description"></span>
         <div v-for="(item, index) in schema.oneOf" class="item" :key="index">
             <radio id="light" :name="uuid" :title="item.title" v-model="working" :value="item.enum[0]" v-on:input="$emit('input', $event)" />
         </div>
@@ -54,7 +54,7 @@
     #field {
         display: flex;
         flex-direction: column;
-        padding: 0 10px 0 0;
+        padding: 0 0 20px 0;
 
         .title {
             font-size: 14px;

@@ -18,7 +18,7 @@
 
 <template>
     <div id="field">
-        <span v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</span>
+        <span v-if="schema.description && schema.description !== ''" class="description" v-html="schema.description"></span>
         <div class="action">
             <div class="button primary" v-on:click="action">{{ schema.title || "Undefined" }}</div>
         </div>

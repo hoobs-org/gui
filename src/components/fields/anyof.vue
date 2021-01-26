@@ -18,8 +18,8 @@
 
 <template>
     <div id="field">
-        <label class="title" v-if="title && title !== ''">{{ title }}</label>
-        <span v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</span>
+        <label class="title" v-if="title && title !== ''" v-html="title"></label>
+        <span v-if="schema.description && schema.description !== ''" class="description" v-html="schema.description"></span>
         <div v-for="(item, index) in schema.items.anyOf" class="item" :key="index">
             <checkbox :title="item.title" :checked="items.indexOf(item.enum[0]) !== -1" v-on:input="updateValue($event, index)" />
         </div>
@@ -64,7 +64,7 @@
     #field {
         display: flex;
         flex-direction: column;
-        padding: 0 10px 0 0;
+        padding: 0 0 20px 0;
 
         .title {
             font-size: 14px;

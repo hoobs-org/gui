@@ -17,9 +17,11 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <fieldset id="field">
-        <legend v-if="title && title !== ''" :class="schema.description && schema.description !== '' ? 'legend collapsed' : 'legend'">{{ title }}</legend>
-        <div v-if="schema.description && schema.description !== ''" class="description">{{ schema.description }}</div>
+    <div id="field">
+        <div class="position">
+            <legend v-if="title && title !== ''" :class="schema.description && schema.description !== '' ? 'legend collapsed' : 'legend'" v-html="title"></legend>
+        </div>
+        <div v-if="schema.description && schema.description !== ''" class="description" v-html="schema.description"></div>
         <div v-for="(item, index) in items" class="item" :key="index">
             <div class="field">
                 <schema
@@ -37,12 +39,12 @@
                 <div class="icon" v-if="items.length > 0" v-on:click="removeItem(index)" :key="`remove-${index}`">delete</div>
             </div>
         </div>
-        <div class="icon add" v-on:click="addItem()">add_circle</div>
-    </fieldset>
+        <div class="icon add" v-if="!schema.maxItems || items.length < schema.maxItems" v-on:click="addItem()">add_circle</div>
+    </div>
 </template>
 
 <script>
-    import { scaffold } from "../../services/schema";
+    import { scaffold, decamel } from "../../services/schema";
 
     export default {
         name: "list-field",
@@ -52,6 +54,7 @@
         },
 
         props: {
+            field: String,
             schema: Object,
             value: [Object, String, Number, Boolean, Array],
             title: String,
@@ -61,8 +64,13 @@
 
         data() {
             return {
-                items: (this.value !== undefined) ? this.value : scaffold(this.schema),
+                label: "",
+                items: (this.value !== undefined) ? this.value : [],
             };
+        },
+
+        mounted() {
+            this.label = this.title || decamel(this.field);
         },
 
         methods: {
@@ -90,14 +98,19 @@
 <style lang="scss" scoped>
     #field {
         flex: 1;
-        padding: 0 10px 10px 10px;
-        border: none;
-        border-left: 4px var(--application-border) solid;
+        padding: 0 10px 0 0;
+
+        .position {
+            margin: 0 0 7px 0;
+            user-select: none;
+            cursor: default;
+        }
 
         .legend {
             color: var(--application-highlight);
-            margin: 0 0 20px 0;
+            padding: 0 0 7px 0;
             font-size: 14px;
+            border-bottom: 1px var(--application-border) solid;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -109,7 +122,7 @@
 
         .description {
             font-size: 12px;
-            margin: 0 0 20px 0;
+            margin: 0;
             user-select: none;
 
             &:empty {
@@ -119,6 +132,7 @@
 
         .add {
             cursor: pointer;
+            margin: 10px 0 0 0;
             opacity: 0.7;
 
             &:hover {
@@ -130,6 +144,9 @@
             display: flex;
             flex-direction: row;
             align-items: flex-end;
+            padding: 0 10px 10px 10px;
+            margin: 10px 0 0 0;
+            border: 1px var(--application-border) solid;
 
             .field {
                 flex: 1;
@@ -140,7 +157,7 @@
                 display: flex;
                 flex-direction: row;
                 align-items: center;
-                margin: 0 0 20px 0;
+                margin: 0;
                 cursor: pointer;
                 opacity: 0.7;
 
