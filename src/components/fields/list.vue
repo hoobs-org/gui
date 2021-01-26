@@ -145,7 +145,7 @@
             display: flex;
             flex-direction: row;
             align-items: flex-end;
-            padding: 10px 10px 10px 30px;
+            padding: 20px 10px 10px 30px;
             margin: 10px 0 0 0;
             border: 1px var(--application-border) solid;
 
