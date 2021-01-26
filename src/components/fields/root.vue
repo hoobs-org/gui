@@ -17,18 +17,17 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <fieldset id="field">
-        <legend v-if="title && title !== ''" :class="schema.description && schema.description !== '' ? 'legend collapsed' : 'legend'" v-html="title"></legend>
-        <div v-if="schema.description && schema.description !== ''" class="description" v-html="schema.description"></div>
+    <div id="field">
         <div v-for="(item, index) in items" class="item" :key="index">
             <div class="field">
                 <schema
                     :bridge="bridge"
                     :identifier="identifier"
-                    :schema="schema.items"
                     :title="schema.title"
                     :description="schema.description"
                     :placeholder="schema.example"
+                    :field="index"
+                    :schema="schema.items"
                     :value="item"
                     v-on:input="updateValue($event, index)"
                 />
@@ -38,7 +37,7 @@
             </div>
         </div>
         <div class="icon add" v-on:click="addItem()">add_circle</div>
-    </fieldset>
+    </div>
 </template>
 
 <script>
@@ -52,6 +51,7 @@
         },
 
         props: {
+            field: String,
             schema: Object,
             value: [Object, String, Number, Boolean, Array],
             title: String,
@@ -90,21 +90,31 @@
 <style lang="scss" scoped>
     #field {
         flex: 1;
-        padding: 0 0 10px 10px;
-        border: none;
+        padding: 0 10px 0 0;
+
+        .position {
+            margin: 0 0 7px 0;
+            user-select: none;
+            cursor: default;
+        }
 
         .legend {
             color: var(--application-highlight);
-            margin: 0 0 20px 0;
+            padding: 0 0 7px 0;
             font-size: 14px;
+            border-bottom: 1px var(--application-border) solid;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+
+            &.collapsed {
+                margin: 0;
+            }
         }
 
         .description {
             font-size: 12px;
-            margin: 0 0 20px 0;
+            margin: 0;
             user-select: none;
 
             &:empty {
@@ -114,7 +124,7 @@
 
         .add {
             cursor: pointer;
-            margin: 0 0 0 -7px;
+            margin: 10px 0 0 0;
             opacity: 0.7;
 
             &:hover {
@@ -126,7 +136,9 @@
             display: flex;
             flex-direction: row;
             align-items: flex-end;
-            margin: 0 0 20px 0;
+            padding: 10px 10px 10px 30px;
+            margin: 10px 0 0 0;
+            border: 1px var(--application-border) solid;
 
             .field {
                 flex: 1;
@@ -137,7 +149,7 @@
                 display: flex;
                 flex-direction: row;
                 align-items: center;
-                margin: 0 0 30px 0;
+                margin: 0;
                 cursor: pointer;
                 opacity: 0.7;
 

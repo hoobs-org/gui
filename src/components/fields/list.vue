@@ -30,6 +30,7 @@
                     :title="schema.title"
                     :description="schema.description"
                     :placeholder="schema.example"
+                    :field="index"
                     :schema="schema.items"
                     :value="item"
                     v-on:input="updateValue($event, index)"
@@ -144,7 +145,7 @@
             display: flex;
             flex-direction: row;
             align-items: flex-end;
-            padding: 0 10px 10px 10px;
+            padding: 10px 10px 10px 30px;
             margin: 10px 0 0 0;
             border: 1px var(--application-border) solid;
 
