@@ -136,9 +136,21 @@
             display: flex;
             flex-direction: row;
             align-items: flex-end;
+            position: relative;
             padding: 20px 10px 10px 30px;
             margin: 10px 0 0 0;
-            border: 1px var(--application-border) solid;
+
+            &::after {
+                content: '';
+                width: 100%;
+                height: 100%;
+                background: var(--application-input-text);
+                opacity: 0.017;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: -1;
+            }
 
             .field {
                 flex: 1;
