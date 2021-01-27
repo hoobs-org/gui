@@ -97,6 +97,7 @@
                 flex-direction: column;
 
                 &.loading {
+                    padding: 20px;
                     flex-direction: row;
                     justify-content: flex-start;
                 }

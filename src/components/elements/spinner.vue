@@ -1,6 +1,7 @@
 <!-------------------------------------------------------------------------------------------------
  | hoobs-gui                                                                                      |
  | Copyright (C) 2020 HOOBS                                                                       |
+ | Copyright (C) 2021 Mike Kormendy                                                               |
  |                                                                                                |
  | This program is free software: you can redistribute it and/or modify                           |
  | it under the terms of the GNU General Public License as published by                           |
@@ -18,19 +19,18 @@
 
 <template>
     <div v-if="display" id="spinner">
-        <div class="inner">
-            <div class="grid">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-        </div>
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 283.46 283.46" xml:space="preserve">
+            <defs>
+                <marker class="circlecap" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto" markerUnits="strokeWidth" viewBox="0 0 20 20">
+                    <circle cx="5" cy="5" r="1.5" stroke-width="3" />
+                </marker>
+            </defs>
+            <path class="logopath" d="M262.46,134.8l-27.73-27.73c-2.21-2.21-3.48-5.27-3.48-8.38V47.87c0-6.54-5.32-11.86-11.86-11.86h-13.74 c-6.54,0-11.86,5.32-11.86,11.86v18.24L148.4,
+                                      22.18c-4.63-4.49-12.1-4.41-16.65,0.14L21.78,132.29c-4.63,4.62-4.66,12.13,0,16.79 l10.44,10.44c4.58,4.59,12.09,4.62,16.72,0.07l84.54-83.28c4.64-4.56,
+                                      12.14-4.53,16.73,0.07l82.83,82.85 c4.62,4.63,4.62,12.16,0,16.79l-10.18,10.18c-4.57,4.55-12.04,4.61-16.65,0.12l-58.15-56.49c-4.64-4.5-12.12-4.45-16.68,
+                                      0.14 l-55.85,56.11c-4.61,4.62-4.59,12.15,0.02,16.76l10.33,10.33c4.6,4.6,12.1,4.62,16.73,0.04l30.1-29.74 c4.6-4.54,12.06-4.55,16.66-0.02l29.92,
+                                      29.4c4.71,4.62,4.73,12.19,0.07,16.85l-35.73,35.73" marker-end="url(#circlecap)" marker-start="url(#circlecap)" />
+        </svg>
         <div class="message" v-html="value" />
     </div>
 </template>
@@ -60,51 +60,9 @@
 </script>
 
 <style lang="scss" scoped>
-    @-webkit-keyframes grid-beat {
-        0% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.35;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
-
-    @-moz-keyframes grid-beat {
-        0% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.35;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
-
-    @-o-keyframes grid-beat {
-        0% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.35;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
-
-    @keyframes grid-beat {
-        0% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.35;
-        }
-        100% {
-            opacity: 1;
+    @keyframes loading {
+        to {
+            stroke-dashoffset: 1166 * 1.1;
         }
     }
 
@@ -121,81 +79,22 @@
             opacity: 0.7;
         }
 
-        .inner {
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-content: center;
-            align-items: center;
+        svg {
+            width: 47px;
+            height: 47px;
 
-            .grid {
-                position: relative;
-                box-sizing: border-box;
-                display: block;
-                font-size: 0;
-                color: var(--application-highlight);
-                width: 36px;
-                height: 36px;
+            .logopath {
+                fill: none;
+                stroke: var(--application-highlight);
+                stroke-width: 15.225;
+                stroke-linecap: round;
+                stroke-dasharray: (1166 * .9) (1166 * .1);
+                stroke-dashoffset: (1166 * .1);
+                animation: loading 2s linear infinite;
+            }
 
-                > div {
-                    position: relative;
-                    box-sizing: border-box;
-                    display: inline-block;
-                    float: none;
-                    background-color: currentColor;
-                    border: 0 solid currentColor;
-                    width: 8px;
-                    height: 8px;
-                    margin: 2px;
-                    border-radius: 100%;
-                    animation-name: grid-beat;
-                    animation-iteration-count: infinite;
-
-                    &:nth-child(1) {
-                        animation-duration: 0.65s;
-                        animation-delay: 0.03s;
-                    }
-
-                    &:nth-child(2) {
-                        animation-duration: 1.02s;
-                        animation-delay: 0.09s;
-                    }
-
-                    &:nth-child(3) {
-                        animation-duration: 1.06s;
-                        animation-delay: -0.69s;
-                    }
-
-                    &:nth-child(4) {
-                        animation-duration: 1.5s;
-                        animation-delay: -0.41s;
-                    }
-
-                    &:nth-child(5) {
-                        animation-duration: 1.6s;
-                        animation-delay: 0.04s;
-                    }
-
-                    &:nth-child(6) {
-                        animation-duration: 0.84s;
-                        animation-delay: 0.07s;
-                    }
-
-                    &:nth-child(7) {
-                        animation-duration: 0.68s;
-                        animation-delay: -0.66s;
-                    }
-
-                    &:nth-child(8) {
-                        animation-duration: 0.93s;
-                        animation-delay: -0.76s;
-                    }
-
-                    &:nth-child(9) {
-                        animation-duration: 1.24s;
-                        animation-delay: -0.76s;
-                    }
-                }
+            .circlecap {
+                fill: var(--application-highlight);
             }
         }
     }
