@@ -18,7 +18,7 @@
 
 <template>
     <div :key="version" id="log">
-        <context>
+        <context v-if="!loading">
             <div ref="bridges" v-on:click.stop="menu('bridges')" class="button">
                 <div class="icon">layers</div>
                 {{ $t("bridges") }}
@@ -32,8 +32,12 @@
             <div class="seperator desktop"></div>
             <div v-on:click="download()" class="icon desktop">cloud_download</div>
         </context>
-        <div ref="messages" class="messages">
+        <context v-else />
+        <div v-if="!loading" ref="messages" class="messages">
             <message v-for="(message, index) in messages" :key="`message:${index}`" :value="message" />
+        </div>
+        <div v-else class="loading">
+            <spinner />
         </div>
     </div>
 </template>
@@ -58,6 +62,7 @@
 
         data() {
             return {
+                loading: true,
                 version: 0,
                 debug: false,
                 bridges: [],
@@ -115,6 +120,7 @@
             }, SCROLL_DELAY);
 
             this.$action.emit("log", "history");
+            this.loading = false;
         },
 
         updated() {
