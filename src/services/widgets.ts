@@ -122,14 +122,14 @@ export function layout(name: string): { [key: string]: any } | undefined {
 
 export function widgets(): { [key: string]: () => any } {
     return {
-        "activity-widget": () => import(/* webpackChunkName: "widget:activity" */ "@/components/widgets/activity.vue"),
-        "cpu-widget": () => import(/* webpackChunkName: "widget:cpu" */ "@/components/widgets/cpu.vue"),
-        "memory-widget": () => import(/* webpackChunkName: "widget:memory" */ "@/components/widgets/memory.vue"),
-        "bridges-widget": () => import(/* webpackChunkName: "widget:bridges" */ "@/components/widgets/bridges.vue"),
-        "system-widget": () => import(/* webpackChunkName: "widget:system" */ "@/components/widgets/system.vue"),
-        "log-widget": () => import(/* webpackChunkName: "widget:log" */ "@/components/widgets/log.vue"),
-        "weather-widget": () => import(/* webpackChunkName: "widget:weather" */ "@/components/widgets/weather.vue"),
-        "current-widget": () => import(/* webpackChunkName: "widget:current" */ "@/components/widgets/current.vue"),
-        "forecast-widget": () => import(/* webpackChunkName: "widget:forecast" */ "@/components/widgets/forecast.vue"),
+        "activity-widget": () => import(/* webpackChunkName: "widget-activity" */ "@/components/widgets/activity.vue"),
+        "cpu-widget": () => import(/* webpackChunkName: "widget-cpu" */ "@/components/widgets/cpu.vue"),
+        "memory-widget": () => import(/* webpackChunkName: "widget-memory" */ "@/components/widgets/memory.vue"),
+        "bridges-widget": () => import(/* webpackChunkName: "widget-bridges" */ "@/components/widgets/bridges.vue"),
+        "system-widget": () => import(/* webpackChunkName: "widget-system" */ "@/components/widgets/system.vue"),
+        "log-widget": () => import(/* webpackChunkName: "widget-log" */ "@/components/widgets/log.vue"),
+        "weather-widget": () => import(/* webpackChunkName: "widget-weather" */ "@/components/widgets/weather.vue"),
+        "current-widget": () => import(/* webpackChunkName: "widget-current" */ "@/components/widgets/current.vue"),
+        "forecast-widget": () => import(/* webpackChunkName: "widget-forecast" */ "@/components/widgets/forecast.vue"),
     };
 }

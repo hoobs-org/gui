@@ -31,6 +31,9 @@
                     <router-link to="/accessories" class="back"><span class="icon">keyboard_arrow_left</span> {{ $t("back") }}</router-link>
                 </div>
                 <div class="section">{{ display }}</div>
+                <div v-if="hasFeatures()" class="features"></div>
+                <div v-if="hasFeatures()" class="section">{{ $t("devices") }}</div>
+                <div class="devices"></div>
             </div>
             <div v-else-if="!intermediate && id === 'add'" class="screen">
                 <div class="wrapper">
@@ -88,6 +91,17 @@
                 intermediate: true,
                 characteristics: [],
                 accessories: [],
+                features: {
+                    hue: false,
+                    off: false,
+                    leak: false,
+                    light: false,
+                    doors: false,
+                    motion: false,
+                    occupancy: false,
+                    brightness: false,
+                    temperature: false,
+                },
                 display: "",
                 types: [],
                 rooms: [],
@@ -111,6 +125,20 @@
                 this.display = "";
                 this.rooms = await this.$hoobs.rooms.list();
 
+                this.features.off = false;
+
+                this.features.light = false;
+                this.features.brightness = false;
+
+                this.features.hue = false;
+
+                this.features.temperature = false;
+                this.features.occupancy = false;
+                this.features.motion = false;
+                this.features.leak = false;
+
+                this.features.doors = false;
+
                 for (let i = 0; i < this.rooms.length; i += 1) {
                     if (!this.rooms[i].name || this.rooms[i].name === "") this.rooms[i].name = this.$t(this.rooms[i].id);
                 }
@@ -127,11 +155,39 @@
                         this.accessories = room.accessories || [];
                         this.display = room.name || this.$t(room.id);
                         this.types = room.types || [];
+
+                        this.features.off = this.characteristics.indexOf("off") >= 0;
+
+                        this.features.light = this.types.indexOf("lightbulb") && this.characteristics.indexOf("on") >= 0;
+                        this.features.brightness = this.types.indexOf("lightbulb") && this.characteristics.indexOf("brightness") >= 0;
+
+                        this.features.hue = this.characteristics.indexOf("hue") >= 0;
+
+                        this.features.temperature = this.types.indexOf("temperature_sensor") >= 0;
+                        this.features.occupancy = this.types.indexOf("occupancy_sensor") >= 0;
+                        this.features.motion = this.types.indexOf("motion_sensor") >= 0;
+                        this.features.leak = this.types.indexOf("leak_sensor") >= 0;
+
+                        this.features.doors = this.types.indexOf("contact_sensor") >= 0 || this.types.indexOf("garage_door_opener") >= 0 || this.types.indexOf("door") >= 0;
                     }
                 }
 
                 this.loading = false;
                 this.intermediate = false;
+            },
+
+            hasFeatures() {
+                if (this.features.hue) return true;
+                if (this.features.off) return true;
+                if (this.features.leak) return true;
+                if (this.features.light) return true;
+                if (this.features.doors) return true;
+                if (this.features.motion) return true;
+                if (this.features.occupancy) return true;
+                if (this.features.brightness) return true;
+                if (this.features.temperature) return true;
+
+                return false;
             },
 
             async create() {

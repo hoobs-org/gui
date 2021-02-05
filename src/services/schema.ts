@@ -80,25 +80,25 @@ export function merge(first: any, second: any) {
 export function component(name: string) {
     switch (name) {
         case "custom:gsh":
-            return () => import(/* webpackChunkName: "custom:gsh" */ "@/partner/gsh.vue");
+            return () => import(/* webpackChunkName: "custom-gsh" */ "@/partner/gsh.vue");
 
         case "field:button":
-            return () => import(/* webpackChunkName: "field:button" */ "@/components/fields/button.vue");
+            return () => import(/* webpackChunkName: "field-button" */ "@/components/fields/button.vue");
 
         case "field:oneof":
-            return () => import(/* webpackChunkName: "field:oneof" */ "@/components/fields/oneof.vue");
+            return () => import(/* webpackChunkName: "field-oneof" */ "@/components/fields/oneof.vue");
 
         case "field:root":
-            return () => import(/* webpackChunkName: "field:root" */ "@/components/fields/root.vue");
+            return () => import(/* webpackChunkName: "field-root" */ "@/components/fields/root.vue");
 
         case "field:list":
-            return () => import(/* webpackChunkName: "field:list" */ "@/components/fields/list.vue");
+            return () => import(/* webpackChunkName: "field-list" */ "@/components/fields/list.vue");
 
         case "field:anyof":
-            return () => import(/* webpackChunkName: "field:anyof" */ "@/components/fields/anyof.vue");
+            return () => import(/* webpackChunkName: "field-anyof" */ "@/components/fields/anyof.vue");
 
         case "field:form":
-            return () => import(/* webpackChunkName: "field:form" */ "@/components/fields/form.vue");
+            return () => import(/* webpackChunkName: "field-form" */ "@/components/fields/form.vue");
 
         case "field:textarea":
             return "textarea-field";
