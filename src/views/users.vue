@@ -21,7 +21,7 @@
         <context>
             <router-link v-if="id !== 'add'" to="/users/add" class="button">
                 <div class="icon">add</div>
-                {{ $t("add") }}
+                {{ $t("add_user") }}
             </router-link>
         </context>
         <div v-if="!loading" class="content">

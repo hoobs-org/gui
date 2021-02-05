@@ -18,13 +18,62 @@
 
 <template>
     <div :key="version" v-if="user.permissions.accessories" id="accessories">
-        <context />
+        <context>
+            <router-link v-if="id !== 'add'" to="/accessories/add" class="button">
+                <div class="icon">add</div>
+                {{ $t("add_room") }}
+            </router-link>
+        </context>
+        <div v-if="!loading" class="content">
+            <list value="id" display="name" :values="rooms" :selected="id" :initial="rooms.length > 0 ? rooms[0].id : ''" controller="accessories" />
+            <div v-if="!intermediate && id !== 'add'" :class="!id ? 'screen desktop' : 'screen'">
+                <div class="nav mobile">
+                    <router-link to="/accessories" class="back"><span class="icon">keyboard_arrow_left</span> {{ $t("back") }}</router-link>
+                </div>
+                <div class="section">{{ display }}</div>
+            </div>
+            <div v-else-if="!intermediate && id === 'add'" class="screen">
+                <div class="wrapper">
+                    <div class="row section">{{ $t("details") }}</div>
+                    <div class="row">
+                        <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
+                    </div>
+                    <div class="row actions">
+                        <div v-if="!loading" v-on:click="create()" class="button primary">{{ $t("save") }}</div>
+                        <router-link to="/accessories" class="button">{{ $t("cancel") }}</router-link>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="loading">
+                <spinner />
+            </div>
+        </div>
+        <div v-else class="loading">
+            <spinner />
+        </div>
     </div>
 </template>
 
 <script>
+    import Sanitize from "@hoobs/sdk/lib/sanitize";
+    import { Wait } from "@hoobs/sdk/lib/wait";
+
+    import List from "@/components/elements/list.vue";
+
+    import Validators from "../services/validators";
+
+    const SOCKET_RECONNECT_DELAY = 500;
+
     export default {
         name: "accessories",
+
+        props: {
+            id: String,
+        },
+
+        components: {
+            "list": List,
+        },
 
         computed: {
             user() {
@@ -35,7 +84,151 @@
         data() {
             return {
                 version: 0,
+                loading: true,
+                intermediate: true,
+                characteristics: [],
+                accessories: [],
+                display: "",
+                types: [],
+                rooms: [],
             };
+        },
+
+        watch: {
+            id() {
+                this.load(this.id);
+            },
+        },
+
+        mounted() {
+            this.load(this.id);
+        },
+
+        methods: {
+            async load(id) {
+                this.intermediate = true;
+                this.accessories = [];
+                this.display = "";
+                this.rooms = await this.$hoobs.rooms.list();
+
+                for (let i = 0; i < this.rooms.length; i += 1) {
+                    if (!this.rooms[i].name || this.rooms[i].name === "") this.rooms[i].name = this.$t(this.rooms[i].id);
+                }
+
+                if (id !== "add") {
+                    let index = this.rooms.findIndex((item) => item.id === id);
+
+                    if (index === -1 && this.rooms.length > 0) index = 0;
+
+                    if (index >= 0) {
+                        const room = await this.$hoobs.room(this.rooms[index].id);
+
+                        this.characteristics = room.characteristics || [];
+                        this.accessories = room.accessories || [];
+                        this.display = room.name || this.$t(room.id);
+                        this.types = room.types || [];
+                    }
+                }
+
+                this.loading = false;
+                this.intermediate = false;
+            },
+
+            async create() {
+                const validation = Validators.room(this.display, this.rooms);
+
+                if (validation.valid) {
+                    await this.$hoobs.rooms.add(this.display);
+
+                    setTimeout(async () => {
+                        await Wait();
+
+                        this.rooms = await this.$hoobs.rooms.list();
+                        this.$router.push({ path: `/accessories/${this.rooms.find((item) => item.id === Sanitize(this.display)).id}` });
+                    }, SOCKET_RECONNECT_DELAY);
+                } else {
+                    this.$alert(this.$t(validation.error));
+                }
+            },
         },
     };
 </script>
+
+<style lang="scss" scoped>
+    #accessories {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        .content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+
+            .screen {
+                flex: 1;
+                display: flex;
+                margin: 0 20px 20px 10px;
+                padding: 20px;
+                color: var(--widget-text);
+                background: var(--widget-background);
+                backdrop-filter: var(--transparency);
+                -ms-overflow-style: none;
+                overflow: auto;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
+                .wrapper {
+                    max-width: 800px;
+                }
+
+                .section {
+                    display: flex;
+                    flex-direction: row;
+                    padding: 0 0 10px 0;
+                    border-bottom: var(--application-border) 1px solid;
+                    color: var(--application-highlight);
+                    margin: 0 0 20px 0;
+                    user-select: none;
+                }
+
+                .actions {
+                    margin: 10px 0 0 0;
+                }
+
+                .nav {
+                    display: flex;
+                    flex-direction: row;
+                    padding: 20px 0 10px 0;
+                    border-bottom: var(--application-border) 1px solid;
+                    margin: 0 0 20px 0;
+                    user-select: none;
+
+                    &:first-child {
+                        padding: 0 0 10px 0;
+                    }
+                }
+            }
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #accessories {
+            .content {
+                .screen {
+                    max-width: unset;
+                    background: transparent;
+                    backdrop-filter: unset;
+                    padding: 0 20px 10px 20px;
+                    margin: 0;
+
+                    .actions {
+                        flex-direction: row;
+                    }
+                }
+            }
+        }
+    }
+</style>

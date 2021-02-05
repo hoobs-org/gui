@@ -209,4 +209,40 @@ export default class Validators {
 
         return true;
     }
+
+    static room(value: any, rooms?: { [key: string]: any }[]): Validation {
+        if (!value) {
+            return {
+                error: "room_invalid_name",
+                valid: false,
+            };
+        }
+
+        const id = Sanitize(`${value}`);
+
+        if (!id || id === "") {
+            return {
+                error: "room_invalid_name",
+                valid: false,
+            };
+        }
+
+        if (id === "default" || id === "add") {
+            return {
+                error: "room_reserved_name",
+                valid: false,
+            };
+        }
+
+        if ((rooms || []).findIndex((item) => item.id === id) >= 0) {
+            return {
+                error: "room_exists",
+                valid: false,
+            };
+        }
+
+        return {
+            valid: true,
+        };
+    }
 }

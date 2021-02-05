@@ -418,10 +418,10 @@
     }
 
     @media (min-width: 300px) and (max-width: 815px) {
-        #bridges {
+        #plugins {
             .content {
                 .screen {
-                    padding: 0 20px 10px 20px;
+                    padding: 0 20px 10px 15px;
                     margin: 0;
                 }
             }

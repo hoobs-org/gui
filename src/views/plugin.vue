@@ -499,8 +499,12 @@
                     display: flex;
                     flex-direction: row;
                     align-items: flex-end;
-                    margin: 20px 10px 20px 20px;
+                    margin: 20px 10px 10px 20px;
                     user-select: none;
+
+                    .button {
+                        margin-bottom: 10px;
+                    }
 
                     .image {
                         margin: 0 10px 0 0;
@@ -641,6 +645,16 @@
                     backdrop-filter: unset;
                     padding: 0 20px 10px 20px;
                     margin: 0;
+
+                    .header {
+                        .actions {
+                            flex-wrap: wrap;
+                        }
+                    }
+
+                    .tabs {
+                        margin: 20px 0 0 0;
+                    }
 
                     .layout {
                         flex-direction: column;
