@@ -188,6 +188,10 @@
             .links {
                 flex-direction: row;
                 justify-content: space-between;
+
+                .icon {
+                    font-size: 32px;
+                }
             }
         }
     }

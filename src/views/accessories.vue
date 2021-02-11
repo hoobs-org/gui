@@ -33,7 +33,9 @@
                 <div class="section">{{ display }}</div>
                 <div v-if="hasFeatures()" class="features"></div>
                 <div v-if="hasFeatures()" class="section">{{ $t("devices") }}</div>
-                <div class="devices"></div>
+                <div class="devices">
+                    <div class="device"></div>
+                </div>
             </div>
             <div v-else-if="!intermediate && id === 'add'" class="screen">
                 <div class="wrapper">
@@ -250,6 +252,16 @@
                     user-select: none;
                 }
 
+                .devices {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    .device {
+                        margin: 0 0 20px 20px;
+                        width: 195px;
+                    }
+                }
+
                 .actions {
                     margin: 10px 0 0 0;
                 }
@@ -279,6 +291,15 @@
                     backdrop-filter: unset;
                     padding: 0 20px 10px 20px;
                     margin: 0;
+
+                    .devices {
+                        .device {
+                            width: 50%;
+                            margin: 0;
+                            padding: 14px;
+                            box-sizing: border-box;
+                        }
+                    }
 
                     .actions {
                         flex-direction: row;

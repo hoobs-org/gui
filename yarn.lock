@@ -885,10 +885,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@hoobs/sdk@^4.2.5":
-  version "4.2.5"
-  resolved "https://registry.yarnpkg.com/@hoobs/sdk/-/sdk-4.2.5.tgz#eaf9697b9cf45315df66ad6a705d83dee8f0c505"
-  integrity sha512-H0atxoh1h9wk1c3d+nGQfO6uY8KkbmRG+f7ypJ0yB8wJfnHSzhGBZIVQnXIkWS6eRlp75a7yIg6y+C43hUObag==
+"@hoobs/sdk@^4.2.6":
+  version "4.2.6"
+  resolved "https://registry.yarnpkg.com/@hoobs/sdk/-/sdk-4.2.6.tgz#52ec8448c5daa2a9f0579959d654d2b656f631d8"
+  integrity sha512-9B2sT26K52hYviqlF+xWDYngu5vZpXafNN3RVssLxPAkrehz5pHyYHSCJ/WvBogQ9gCERHfxGYySPe5HwcMvOg==
   dependencies:
     axios "^0.21.0"
     sanitize-filename "^1.6.3"
@@ -1054,6 +1054,19 @@
     cssnano "^4.0.0"
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
+
+"@irojs/iro-core@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@irojs/iro-core/-/iro-core-1.0.5.tgz#09ef436051131871555ec8b0486d30db4e9c23be"
+  integrity sha512-tGSYaSechLfF+40oBwsunsL9q2+bvcy1FCa6n/2OKDVgtn9a36XZX2DiJvsQX5u/6I62GCemSlvyAwlqOXQnwQ==
+
+"@jaames/iro@^5.3.1":
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/@jaames/iro/-/iro-5.3.1.tgz#b640f4a8bd392c9c1758aba99002ddda94bd6cdf"
+  integrity sha512-2mR6IeAYR4a7CWeFrVdvBRH84UdHXtTll/qbpeqfNsL9LROJBxGAK+8d5jXXcjmr+gTYK3AiYDSM1QKP2DkyuQ==
+  dependencies:
+    "@irojs/iro-core" "^1.0.5"
+    preact "^10.0.0"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -7763,6 +7776,11 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.27, postcss@^7.0.3
     chalk "^2.4.2"
     source-map "^0.6.1"
     supports-color "^6.1.0"
+
+preact@^10.0.0:
+  version "10.5.12"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.5.12.tgz#6a8ee8bf40a695c505df9abebacd924e4dd37704"
+  integrity sha512-r6siDkuD36oszwlCkcqDJCAKBQxGoeEGytw2DGMD5A/GGdu5Tymw+N2OBXwvOLxg6d1FeY8MgMV3cc5aVQo4Cg==
 
 prelude-ls@~1.1.2:
   version "1.1.2"
