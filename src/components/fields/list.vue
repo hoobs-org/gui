@@ -34,6 +34,7 @@
                     :schema="schema.items"
                     :value="item"
                     v-on:input="updateValue($event, index)"
+                    v-on:save="$emit('save', $event)"
                 />
             </div>
             <div class="action">

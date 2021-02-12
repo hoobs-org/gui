@@ -80,7 +80,20 @@
 
                 this.$emit("input", this.token);
                 this.$emit("change", this.token);
+                this.$emit("save");
             },
         },
     };
 </script>
+
+<style lang="scss" scoped>
+    #field {
+        display: flex;
+        flex-direction: column;
+        padding: 0 10px 10px 0;
+
+        .action {
+            padding: 0;
+        }
+    }
+</style>

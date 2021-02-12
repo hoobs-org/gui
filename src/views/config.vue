@@ -25,7 +25,7 @@
                 <div class="wrapper">
                     <div class="section">{{ plugin.display }}</div>
                     <tabs :values="bridges" v-on:change="exit" :value="bridge" field="id" display="display" class="tabs" />
-                    <schema-form :bridge="bridge" :identifier="identifier" :schema="schema" v-model="working" v-on:input="() => { dirty = true }" />
+                    <schema-form :bridge="bridge" :identifier="identifier" :schema="schema" v-model="working" v-on:input="() => { dirty = true }" v-on:save="save" />
                     <div class="row actions">
                         <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
                         <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
@@ -468,6 +468,9 @@
                                     type: "object",
                                     properties: this.plugin.schema.schema.properties || this.plugin.schema.schema,
                                 };
+
+                                if (this.identifier === "homebridge-ring" && this.schema.properties.refreshToken) this.schema.properties.refreshToken.widget = "ring";
+                                if (this.identifier === "homebridge-gsh" && this.schema.properties.token) this.schema.properties.token.widget = "gsh";
 
                                 break;
                         }

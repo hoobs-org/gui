@@ -27,7 +27,16 @@
         </div>
         <div v-if="schema.description && schema.description !== ''" class="description" v-html="schema.description"></div>
         <div v-if="!expandable || expanded" class="panel">
-            <schema v-for="(child, key) in schema.properties" :bridge="bridge" :identifier="identifier" :schema="child" :value="internalValue[key]" :key="key" v-on:input="updateValue($event, key)" />
+            <schema
+                v-for="(child, key) in schema.properties"
+                :bridge="bridge"
+                :identifier="identifier"
+                :schema="child"
+                :value="internalValue[key]"
+                :key="key"
+                v-on:input="updateValue($event, key)"
+                v-on:save="$emit('save', $event)"
+            />
         </div>
     </fieldset>
 </template>

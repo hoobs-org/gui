@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-on:click.stop id="dialog">
+    <div v-on:click.stop id="dialog" class="frame">
         <div v-if="draggable" v-drag="{ handle: '.handle' }" class="window modal" :style="`width: ${width}; height: ${height};`">
             <div class="subject handle">{{ title || "" }}</div>
             <slot />
@@ -53,92 +53,96 @@
 
 <style lang="scss">
     #dialog {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        box-sizing: border-box;
-        background: var(--modal-mask);
-        justify-content: space-around;
-        padding: 0 0 4% 0;
-        overflow: hidden;
-        z-index: 2000;
-
-        .subject {
-            color: var(--modal-highlight);
-            font-weight: bold;
-            font-size: 17px;
-            padding: 10px 10px 0 10px;
-            user-select: none;
-        }
-
-        .window {
+        &.frame {
+            position: absolute;
+            inset: 0;
             display: flex;
-            flex-direction: column;
-            padding: 10px;
-            color: #515151;
-            background: #fff;
-            border-top: 7px var(--modal-highlight) solid;
-            box-shadow: var(--elevation);
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            overflow: auto;
+            align-items: center;
+            box-sizing: border-box;
+            background: var(--modal-mask);
+            justify-content: space-around;
+            padding: 0 0 4% 0;
+            overflow: hidden;
+            z-index: 2000;
 
-            &::-webkit-scrollbar {
-                display: none;
-            }
-        }
-
-        .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            font-size: 14px;
-            margin: 0 10px 0 0;
-
-            &.message {
-                display: flex;
-                justify-content: space-around;
-                align-items: center;
-                text-align: center;
-                padding: 27px 10px 0 10px;
+            .subject {
+                color: var(--modal-highlight);
+                font-weight: bold;
+                font-size: 17px;
+                padding: 10px 10px 0 10px;
                 user-select: none;
             }
-        }
 
-        .actions {
-            margin: 10px 0 10px 10px;
-            display: flex;
-            justify-content: flex-end;
+            .window {
+                display: flex;
+                flex-direction: column;
+                padding: 10px;
+                color: #515151;
+                background: #fff;
+                border-top: 7px var(--modal-highlight) solid;
+                box-shadow: var(--elevation);
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+                overflow: auto;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
+
+            .content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                font-size: 14px;
+                margin: 0 10px 0 0;
+
+                &.message {
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+                    text-align: center;
+                    padding: 27px 10px 0 10px;
+                    user-select: none;
+                }
+            }
+
+            .actions {
+                margin: 10px 0 10px 10px;
+                display: flex;
+                justify-content: flex-end;
+            }
         }
     }
 
     @media (min-width: 300px) and (max-width: 815px) {
         #dialog {
-            background: var(--modal-form);
-            padding: 0;
+            &.frame {
+                background: var(--modal-form);
+                padding: 0;
 
-            .window {
-                flex: 1;
-                width: 100% !important;
-                height: 100% !important;
-                background: #fff;
-                box-sizing: border-box;
-                min-height: unset;
-                max-height: unset;
-                box-shadow: unset;
-            }
-
-            .content {
-                .form {
-                    background: unset;
-                    padding: 0;
+                .window {
+                    flex: 1;
+                    width: 100% !important;
+                    height: 100% !important;
+                    background: #fff;
+                    box-sizing: border-box;
+                    min-height: unset;
+                    max-height: unset;
+                    box-shadow: unset;
                 }
-            }
 
-            .actions {
-                .copyright {
-                    display: none;
+                .content {
+                    .form {
+                        background: unset;
+                        padding: 0;
+                    }
+                }
+
+                .actions {
+                    .copyright {
+                        display: none;
+                    }
                 }
             }
         }

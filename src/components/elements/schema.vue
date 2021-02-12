@@ -33,6 +33,7 @@
             :checked="value"
             :options="options"
             v-on:input="$emit('input', $event)"
+            v-on:save="$emit('save', $event)"
         />
     </div>
 </template>

@@ -83,24 +83,24 @@
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     #field {
         display: flex;
         flex-direction: column;
         padding: 0 10px 10px 0;
-    }
 
-    #field .description {
-        font-size: 12px;
-        margin: -7px 0 7px 0;
-        user-select: none;
-    }
+        .description {
+            font-size: 12px;
+            margin: -7px 0 7px 0;
+            user-select: none;
 
-    #field .description:empty {
-        display: none;
-    }
+            &:empty {
+                display: none;
+            }
+        }
 
-    #field .action {
-        padding: 0;
+        .action {
+            padding: 0;
+        }
     }
 </style>
