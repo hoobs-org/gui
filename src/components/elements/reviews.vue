@@ -21,7 +21,7 @@
         <div class="list">
             <div class="write">
                 <a :href="`https://plugins.hoobs.org/plugin/${identifier}`" target="_blank">
-                    <span class="icon">rate_review</span>
+                    <span class="mdi mdi-message-draw"></span>
                     {{ $t("write_review") }}
                 </a>
             </div>
@@ -153,7 +153,7 @@
                         text-decoration: none !important;
                     }
 
-                    .icon {
+                    .mdi {
                         margin: 0 7px 0 0;
                     }
                 }

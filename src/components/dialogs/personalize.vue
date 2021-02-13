@@ -37,11 +37,11 @@
                                 <div v-if="!updating" class="text" :style="`color: ${working.modal.text.default};`">{{ $t("text") }}</div>
                             </div>
                             <div class="display navigation" :style="`background: ${working.navigation.background};`">
-                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.highlight};`">dashboard</span>
-                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.text.default};`">highlight</span>
-                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.text.default};`">subject</span>
-                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.text.default};`">layers</span>
-                                <span v-if="!updating" class="icon" :style="`color: ${working.navigation.text.default};`">extension</span>
+                                <span v-if="!updating" class="mdi mdi-view-dashboard" :style="`color: ${working.navigation.highlight};`"></span>
+                                <span v-if="!updating" class="mdi mdi-lightbulb-on" :style="`color: ${working.navigation.text.default};`"></span>
+                                <span v-if="!updating" class="mdi mdi-text-box" :style="`color: ${working.navigation.text.default};`"></span>
+                                <span v-if="!updating" class="mdi mdi-layers" :style="`color: ${working.navigation.text.default};`"></span>
+                                <span v-if="!updating" class="mdi mdi-puzzle" :style="`color: ${working.navigation.text.default};`"></span>
                             </div>
                         </div>
                         <div class="backdrops">
@@ -61,7 +61,7 @@
                                 <backdrop image="red.jpg" v-model="backdrop" />
                                 <div v-on:click="$refs.backdrop.click();" class="add">
                                     <input type="file" ref="backdrop" v-on:change="upload()" accept="image/*" hidden />
-                                    <span class="icon">add</span>
+                                    <span class="mdi mdi-plus"></span>
                                 </div>
                             </div>
                         </div>
@@ -374,7 +374,7 @@
                     flex-direction: column;
                     align-items: center;
 
-                    .icon {
+                    .mdi {
                         font-size: 12px;
                         margin: 10px 0 0 0;
                         box-sizing: border-box;
@@ -412,7 +412,7 @@
                     border: var(--modal-highlight) 1px solid;
                 }
 
-                .icon {
+                .mdi {
                     color: var(--modal-border);
                 }
             }

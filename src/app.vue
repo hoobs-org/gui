@@ -70,17 +70,11 @@
         src: local("Montserrat Black"), local("Montserrat-Black"), url(./assets/montserrat-black.woff2) format("woff2");
         unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
     }
-
-    @font-face {
-        font-family: "Material Icons";
-        font-style: normal;
-        font-weight: 400;
-        src: url(./assets/material.eot);
-        src: local("Material Icons"), local("MaterialIcons-Regular"), url(./assets/material.woff2) format("woff2"), url(./assets/material.woff) format("woff"), url(./assets/material.ttf) format("truetype");
-    }
 </style>
 
 <style lang="scss">
+    @import "../node_modules/@mdi/font/css/materialdesignicons.css";
+
     html,
     body {
         width: 100%;
@@ -153,11 +147,10 @@
             color: var(--application-text) !important;
         }
 
-        .icon {
-            font-family: "Material Icons";
+        .mdi {
             font-weight: normal;
             font-style: normal;
-            font-size: 24px;
+            font-size: 22px;
             line-height: 1;
             letter-spacing: normal;
             text-transform: none;

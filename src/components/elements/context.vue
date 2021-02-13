@@ -22,11 +22,10 @@
             <slot />
         </div>
         <div class="system">
-            <div v-on:click.stop="$menu.open('notifications')" class="icon">
-                notifications_none
+            <div v-on:click.stop="$menu.open('notifications')" class="mdi mdi-bell-outline">
                 <div v-if="notifications.length > 0" class="active">&bull;</div>
             </div>
-            <div v-on:click.stop="$menu.open('application')" class="icon">more_vert</div>
+            <div v-on:click.stop="$menu.open('application')" class="mdi mdi-dots-vertical"></div>
         </div>
     </div>
 </template>
@@ -58,7 +57,7 @@
             align-content: center;
             padding: 2px 0 0 7px;
 
-            .icon {
+            .mdi {
                 font-size: 18px;
             }
         }
@@ -69,7 +68,7 @@
             align-content: center;
             padding: 2px 7px 0 0;
 
-            .icon {
+            .mdi {
                 font-size: 20px;
             }
         }
@@ -81,7 +80,7 @@
             margin: 10px 7px;
         }
 
-        .icon {
+        .mdi {
             width: 28px;
             height: 28px;
             display: flex;
@@ -117,7 +116,7 @@
             padding: 0;
             margin: 5px 5px 5px 0;
 
-            .icon {
+            .mdi {
                 margin: 0 -3px 0 0;
                 font-size: 18px;
             }

@@ -20,7 +20,7 @@
     <div v-on:click.stop id="notifications">
         <div class="title">
             {{ $t("notifications") }}
-            <div v-on:click="$menu.close()" class="icon">close</div>
+            <div v-on:click="$menu.close()" class="mdi mdi-close"></div>
         </div>
         <div v-if="notifications.length === 0" class="empty">{{ $t("notifications_empty") }}</div>
         <div v-else class="list">
@@ -76,7 +76,7 @@
             margin: 14px;
             padding: 0 0 7px 0;
 
-            .icon {
+            .mdi {
                 font-size: 17px;
                 color: var(--application-text);
                 user-select: none;
@@ -118,7 +118,7 @@
                 color: var(--modal-highlight);
                 border-bottom: var(--modal-border) 1px solid;
 
-                .icon {
+                .mdi {
                     color: var(--modal-text);
                 }
             }

@@ -19,9 +19,9 @@
 <template>
     <div :key="version" id="dashboard" :class="backdrop ? 'backdrop' : ''">
         <context>
-            <div v-if="locked" v-on:click.stop="toggle('locked')" class="icon desktop">lock</div>
-            <div v-else v-on:click.stop="toggle('locked')" class="icon desktop">lock_open</div>
-            <div v-on:click.stop="$dialog.open('dashboard')" class="icon desktop">settings</div>
+            <div v-if="locked" v-on:click.stop="toggle('locked')" class="mdi mdi-lock desktop"></div>
+            <div v-else v-on:click.stop="toggle('locked')" class="mdi mdi-lock-open desktop"></div>
+            <div v-on:click.stop="$dialog.open('dashboard')" class="mdi mdi-cog desktop"></div>
         </context>
         <div v-if="!$mobile" class="content desktop">
             <grid-layout

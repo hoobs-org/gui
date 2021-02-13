@@ -77,7 +77,7 @@
                 border: var(--modal-highlight) 1px solid;
             }
 
-            .icon {
+            .mdi {
                 color: var(--modal-border);
             }
         }

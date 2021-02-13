@@ -23,7 +23,7 @@
             <list value="id" display="display" :values="bridges" :selected="id" initial="library" controller="plugins" />
             <div v-if="id && id !== 'library'" class="screen">
                 <div class="nav mobile">
-                    <router-link to="/plugins" class="back"><span class="icon">keyboard_arrow_left</span> {{ $t("back") }}</router-link>
+                    <router-link to="/plugins" class="back"><span class="mdi mdi-chevron-left"></span> {{ $t("back") }}</router-link>
                 </div>
                 <div class="section first">{{ $t("installed_plugins") }}</div>
                 <div class="wrapper">
@@ -42,7 +42,7 @@
             </div>
             <div v-else :class="!id ? 'screen desktop' : 'screen'">
                 <div class="nav segmented mobile">
-                    <router-link to="/plugins" class="back"><span class="icon">keyboard_arrow_left</span> {{ $t("back") }}</router-link>
+                    <router-link to="/plugins" class="back"><span class="mdi mdi-chevron-left"></span> {{ $t("back") }}</router-link>
                 </div>
                 <form class="input" autocomplete="false" method="post" action="/login" v-on:submit.prevent="search()">
                     <input type="submit" class="hidden-submit" value="submit" />
@@ -293,8 +293,8 @@
                         border: 0 none;
                     }
 
-                    .icon {
-                        bottom: 7px;
+                    .mdi {
+                        bottom: 5px;
                     }
 
                     &:focus-within {

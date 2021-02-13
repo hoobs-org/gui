@@ -20,7 +20,7 @@
     <div :key="version" v-if="user.permissions.accessories" id="accessories">
         <context>
             <router-link v-if="id !== 'add'" to="/accessories/add" class="button">
-                <div class="icon">add</div>
+                <div class="mdi mdi-plus"></div>
                 {{ $t("add_room") }}
             </router-link>
         </context>
@@ -28,13 +28,14 @@
             <list value="id" display="name" :values="rooms" :selected="id" :initial="rooms.length > 0 ? rooms[0].id : ''" controller="accessories" />
             <div v-if="!intermediate && id !== 'add'" :class="!id ? 'screen desktop' : 'screen'">
                 <div class="nav mobile">
-                    <router-link to="/accessories" class="back"><span class="icon">keyboard_arrow_left</span> {{ $t("back") }}</router-link>
+                    <router-link to="/accessories" class="back"><span class="mdi mdi-chevron-left"></span> {{ $t("back") }}</router-link>
                 </div>
                 <div class="section">{{ display }}</div>
                 <div v-if="hasFeatures()" class="features"></div>
-                <div v-if="hasFeatures()" class="section">{{ $t("devices") }}</div>
                 <div class="devices">
-                    <div class="device"></div>
+                    <div v-for="(accessory, index) in accessories" :key="`accessory:${index}`" class="device">
+                        <component v-if="control(accessory.type)" :is="control(accessory.type)" :accessory="accessory" />
+                    </div>
                 </div>
             </div>
             <div v-else-if="!intermediate && id === 'add'" class="screen">
@@ -66,6 +67,7 @@
     import List from "@/components/elements/list.vue";
 
     import Validators from "../services/validators";
+    import { accessories, types } from "../services/accessories";
 
     const SOCKET_RECONNECT_DELAY = 500;
 
@@ -78,6 +80,8 @@
 
         components: {
             "list": List,
+
+            ...accessories(),
         },
 
         computed: {
@@ -121,6 +125,10 @@
         },
 
         methods: {
+            control(type) {
+                return types(type);
+            },
+
             async load(id) {
                 this.intermediate = true;
                 this.accessories = [];
@@ -257,8 +265,12 @@
                     flex-wrap: wrap;
 
                     .device {
-                        margin: 0 0 20px 20px;
-                        width: 195px;
+                        margin: 10px 10px 30px 30px;
+                        width: 155px;
+
+                        &:empty {
+                            display: none;
+                        }
                     }
                 }
 

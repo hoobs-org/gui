@@ -20,17 +20,17 @@
     <div :key="version" id="log">
         <context v-if="!loading">
             <div ref="bridges" v-on:click.stop="menu('bridges')" class="button">
-                <div class="icon">layers</div>
+                <div class="mdi mdi-layers"></div>
                 {{ $t("bridges") }}
             </div>
             <div ref="plugins" v-on:click.stop="menu('plugins')" class="button">
-                <div class="icon">extension</div>
+                <div class="mdi mdi-puzzle"></div>
                 {{ $t("plugins") }}
             </div>
-            <div v-if="debug" v-on:click="mode()" class="icon">bug_report</div>
-            <div v-else v-on:click="mode()" class="icon dim">bug_report</div>
+            <div v-if="debug" v-on:click="mode()" class="mdi mdi-bug-check"></div>
+            <div v-else v-on:click="mode()" class="mdi mdi-bug dim"></div>
             <div class="seperator desktop"></div>
-            <div v-on:click="download()" class="icon desktop">cloud_download</div>
+            <div v-on:click="download()" class="mdi mdi-download desktop"></div>
         </context>
         <context v-else />
         <div v-if="!loading" ref="messages" class="messages">

@@ -43,37 +43,37 @@
                 </svg>
             </div>
             <div v-on:click="toggle()" class="route desktop">
-                <span v-if="expanded" class="icon">chevron_left</span>
-                <span v-else class="icon">chevron_right</span>
+                <span v-if="expanded" class="mdi mdi-chevron-left"></span>
+                <span v-else class="mdi mdi-chevron-right"></span>
             </div>
             <div class="spacer desktop"></div>
             <router-link :class="$route.name === 'dashboard' ? 'route active' : 'route'" to="/">
-                <span class="icon">dashboard</span>
+                <span class="mdi mdi-view-dashboard"></span>
                 <span v-if="expanded" class="title desktop">{{ $t("dashboard") }}</span>
             </router-link>
             <router-link v-if="user.permissions.accessories" :class="$route.name === 'accessories' ? 'route active' : 'route'" to="/accessories">
-                <span class="icon">highlight</span>
+                <span class="mdi mdi-lightbulb-on"></span>
                 <span v-if="expanded" class="title desktop">{{ $t("accessories") }}</span>
             </router-link>
             <router-link :class="$route.name === 'log' ? 'route active' : 'route'" to="/log">
-                <span class="icon">subject</span>
+                <span class="mdi mdi-text-box"></span>
                 <span v-if="expanded" class="title desktop">{{ $t("log") }}</span>
             </router-link>
             <router-link v-if="auth && user.permissions.users" :class="$route.name === 'users' ? 'route active' : 'route'" to="/users">
-                <span class="icon">people</span>
+                <span class="mdi mdi-account-multiple"></span>
                 <span v-if="expanded" class="title desktop">{{ $t("users") }}</span>
             </router-link>
             <router-link v-if="user.permissions.bridges" :class="$route.name === 'bridges' ? 'route active' : 'route'" to="/bridges">
-                <span class="icon">layers</span>
+                <span class="mdi mdi-layers"></span>
                 <span v-if="expanded" class="title desktop">{{ $t("bridges") }}</span>
             </router-link>
             <router-link v-if="user.permissions.plugins" :class="$route.name === 'plugins' || $route.name === 'plugin' ? 'route active' : 'route'" to="/plugins">
-                <span class="icon">extension</span>
+                <span class="mdi mdi-puzzle"></span>
                 <span v-if="expanded" class="title desktop">{{ $t("plugins") }}</span>
             </router-link>
             <div class="fill desktop"></div>
             <router-link v-if="user.permissions.config" :class="$route.name === 'config' ? 'route active' : 'route'" to="/config">
-                <span class="icon">settings</span>
+                <span class="mdi mdi-cog"></span>
             </router-link>
         </div>
     </div>
@@ -189,7 +189,7 @@
                 flex-direction: row;
                 justify-content: space-between;
 
-                .icon {
+                .mdi {
                     font-size: 32px;
                 }
             }

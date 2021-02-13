@@ -91,7 +91,7 @@
         <div v-if="support" class="item">
             <div class="value">
                 <a :href="support" target="_blank">
-                    <span class="icon">help</span>
+                    <span class="mdi mdi-help-circle"></span>
                     {{ $t("plugin_issues") }}
                 </a>
             </div>
@@ -102,11 +102,11 @@
         <div class="item">
             <div class="value">
                 <a v-if="homepage" :href="homepage" target="_blank">
-                    <span class="icon">link</span>
+                    <span class="mdi mdi-link"></span>
                     {{ domain(homepage) }}
                 </a>
                 <a :href="`https://plugins.hoobs.org/plugin/${plugin.name}`" target="_blank">
-                    <span class="icon">link</span>
+                    <span class="mdi mdi-link"></span>
                     hoobs.org
                 </a>
             </div>
@@ -117,7 +117,7 @@
         <div v-if="repository" class="item">
             <div class="value">
                 <a :href="repository" target="_blank">
-                    <span class="icon">code</span>
+                    <span class="mdi mdi-code-tags"></span>
                     {{ domain(repository) }}
                 </a>
             </div>
@@ -338,7 +338,7 @@
                     align-items: center;
                     text-decoration: none !important;
 
-                    .icon {
+                    .mdi {
                         margin: 0 7px -1px 0;
                     }
                 }

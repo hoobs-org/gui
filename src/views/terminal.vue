@@ -19,7 +19,7 @@
 <template>
     <div :key="version" v-if="user.permissions.terminal" id="terminal">
         <context>
-            <div v-on:click="refresh()" class="icon">refresh</div>
+            <div v-on:click="refresh()" class="mdi mdi-refresh"></div>
         </context>
         <div class="measure" ref="measure">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
         <div v-if="!loading" class="flow" ref="flow">

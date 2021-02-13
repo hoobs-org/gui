@@ -19,13 +19,13 @@
 <template>
     <div id="notification">
         <div :class="`type ${message.type}`"></div>
-        <div v-if="message.icon" class="icon display" v-html="message.icon"></div>
+        <div v-if="message.icon" :class="`mdi mdi-${message.icon} display`"></div>
         <div v-else class="text-only"></div>
         <div class="details">
             <div class="title">{{ message.title }}</div>
             <div class="description">{{ message.description }}</div>
         </div>
-        <div v-on:click="dismiss(message.id)" class="icon close">close</div>
+        <div v-on:click="dismiss(message.id)" class="mdi mdi-close close"></div>
     </div>
 </template>
 

@@ -124,7 +124,7 @@
             justify-content: flex-end;
             z-index: 1100;
 
-            .icon {
+            .mdi {
                 width: 28px;
                 height: 28px;
                 display: flex;

@@ -6,23 +6,17 @@
             </div>
             <svg v-if="features.brightness && on" viewBox="0 0 100 100" v-on:click.stop="select" v-on:mousedown.prevent="start(true)" v-on:touchstart.prevent="start()">
                 <path class="range" :d="range" />
-                <path v-if="visable" class="marker" :style="`stroke: ${color};`" :d="marker" />
+                <path v-if="visable" class="marker" :d="marker" />
             </svg>
-            <div v-if="!features.picker" class="switch">
-                <div v-if="on" class="inner" v-on:click="toggle" :style="`background: ${color};`">
-                    <span :class="`mdi mdi-${accessory.icon && accessory.icon !== '' ? accessory.icon : 'lightbulb-on'}`"></span>
-                </div>
-                <div v-else class="inner" v-on:click="toggle">
-                    <span :class="`mdi mdi-${accessory.icon && accessory.icon !== '' ? accessory.icon : 'lightbulb-outline'}`"></span>
+            <div v-if="!features.rotation" class="switch">
+                <div class="inner" v-on:click="toggle">
+                    <span :class="`mdi mdi-${accessory.icon && accessory.icon !== '' ? accessory.icon : 'fan'}`"></span>
                 </div>
             </div>
-            <div v-if="features.hue && !features.picker && on" class="context">
-                <div class="inner" v-on:click="picker" :style="`background: ${color};`">
+            <div v-if="features.rotation && on" class="context">
+                <div class="inner">
                     <span class="mdi mdi-palette"></span>
                 </div>
-            </div>
-            <div v-if="features.picker" class="picker">
-                <div class="wheel" ref="wheel"></div>
             </div>
             <div class="settings">
                 <span class="mdi mdi-cog"></span>
@@ -33,8 +27,6 @@
 </template>
 
 <script>
-    import Iro from "@jaames/iro";
-
     const RADIUS = 41;
 
     const MID_X = 50;
@@ -44,7 +36,7 @@
     const MAX_RADIANS = -Math.PI / 3;
 
     export default {
-        name: "light-accessory",
+        name: "fan-accessory",
 
         props: {
             disabled: Boolean,
@@ -64,18 +56,6 @@
                 }
 
                 return result;
-            },
-
-            color() {
-                if (this.features.hue) {
-                    return new Iro.Color({
-                        h: this.hue,
-                        s: this.saturation,
-                        l: 50,
-                    }).hexString;
-                }
-
-                return "#fed800";
             },
 
             range() {
@@ -123,31 +103,31 @@
 
         data() {
             return {
+                key: "on",
                 on: false,
-                hue: 0,
-                wheel: null,
-                saturation: 0,
-                brightness: 0,
+                speed: 0,
+                rotation: 0,
                 features: {
-                    picker: false,
-                    brightness: false,
-                    hue: false,
+                    speed: false,
+                    rotation: false,
                 },
             };
         },
 
         mounted() {
-            const brightness = this.accessory.characteristics.find((item) => item.type === "brightness");
-            const saturation = this.accessory.characteristics.find((item) => item.type === "saturation");
-            const hue = this.accessory.characteristics.find((item) => item.type === "hue");
+            const speed = this.accessory.characteristics.find((item) => item.type === "brightness");
+            const rotation = this.accessory.characteristics.find((item) => item.type === "saturation");
 
-            this.on = (this.accessory.characteristics.find((item) => item.type === "on") || {}).value || false;
-            this.hue = (hue || {}).value || 0;
-            this.saturation = (saturation || {}).value || 0;
-            this.brightness = (brightness || {}).value || 100;
+            if (this.accessory.characteristics.find((item) => item.type === "on" && item.write)) this.key = "on";
+            if (this.accessory.characteristics.find((item) => item.type === "active" && item.write)) this.key = "active";
+            if (this.accessory.characteristics.find((item) => item.type === "target_fan_state" && item.write)) this.key = "target_fan_state";
 
-            if (brightness || hue) this.features.brightness = true;
-            if (hue) this.features.hue = true;
+            this.on = (this.accessory.characteristics.find((item) => item.type === this.key) || {}).value || false;
+            this.speed = (speed || {}).value || 0;
+            this.rotation = (rotation || {}).value || 0;
+
+            if (speed) this.features.speed = true;
+            if (rotation) this.features.rotation = true;
         },
 
         methods: {
@@ -155,65 +135,19 @@
                 return (((x - inMin) * (outMax - outMin)) / (inMax - inMin)) + outMin;
             },
 
-            picker() {
-                this.features.picker = true;
-
-                setTimeout(() => {
-                    this.wheel = new Iro.ColorPicker(this.$refs.wheel, {
-                        width: this.$refs.wheel.clientWidth,
-                        color: {
-                            h: this.hue,
-                            s: this.saturation,
-                            l: 50,
-                        },
-                        wheelLightness: false,
-                    });
-
-                    this.wheel.on("input:end", this.pick);
-                }, 10);
-            },
-
-            async pick(color) {
-                const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
-
-                this.hue = color.hsl.h;
-                this.saturation = color.hsl.s;
-
-                if (this.features.picker) {
-                    this.$refs.wheel.innerHTML = "";
-                    this.features.picker = false;
-                    this.wheel = null;
-                }
-
-                await accessory.set("hue", this.hue);
-                await accessory.set("saturation", this.saturation);
-            },
-
             async toggle() {
                 const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
                 const on = !this.on;
 
-                if (this.features.picker) {
-                    this.$refs.wheel.innerHTML = "";
-                    this.features.picker = false;
-                    this.wheel = null;
-                }
-
                 this.on = on;
 
-                await accessory.set("on", on);
+                await accessory.set(this.key, on);
             },
 
-            async commit() {
+            async commit(characteristic, value) {
                 const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
 
-                await accessory.set("brightness", Math.round(this.brightness));
-
-                if (this.features.picker) {
-                    this.$refs.wheel.innerHTML = "";
-                    this.features.picker = false;
-                    this.wheel = null;
-                }
+                await accessory.set(characteristic, value);
             },
 
             update(offsetX, offsetY) {
@@ -248,7 +182,7 @@
                     window.removeEventListener("mousemove", this.pointer);
                     window.removeEventListener("mouseup", this.leave);
 
-                    this.commit();
+                    this.commit("rotation_speed", Math.round(this.speed));
                 }
             },
 
@@ -257,7 +191,7 @@
                     window.removeEventListener("touchmove", this.touch);
                     window.removeEventListener("touchend", this.stop);
 
-                    this.commit();
+                    this.commit("rotation_speed", Math.round(this.speed));
                 }
             },
 
@@ -335,26 +269,6 @@
                 box-sizing: border-box;
                 background: var(--application-input-accent);
                 border-radius: 50%;
-            }
-        }
-
-        .picker {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            padding: 4%;
-            box-sizing: border-box;
-            border-radius: 50%;
-            top: 0;
-            left: 0;
-
-            .wheel {
-                width: 100%;
-                height: 100%;
-                position: relative;
-                box-sizing: border-box;
-                border-radius: 50%;
-                overflow: hidden;
             }
         }
 
@@ -477,7 +391,7 @@
         &.on {
             .switch {
                 .inner {
-                    background: #fed800;
+                    background: #04a3ff;
 
                     .mdi {
                         color: #fff;
@@ -488,7 +402,7 @@
 
             .context {
                 .inner {
-                    background: #fed800;
+                    background: #04a3ff;
 
                     .mdi {
                         color: #fff;
@@ -503,7 +417,7 @@
                 }
 
                 .marker {
-                    stroke: #fed800;
+                    stroke: #04a3ff;
                     opacity: 1;
                 }
             }

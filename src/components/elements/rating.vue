@@ -19,29 +19,29 @@
 <template>
     <div id="rating">
         <div class="star" :style="`width: ${size}px; height: ${size}px;`">
-            <div class="icon" :style="`font-size: ${size}px;`">star</div>
-            <div v-if="value >= 1" class="icon earned" :style="`font-size: ${size}px;`">star</div>
-            <div v-else-if="value > 0" class="icon earned" :style="`width: ${(value * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`">star</div>
+            <div class="mdi mdi-star" :style="`font-size: ${size}px;`"></div>
+            <div v-if="value >= 1" class="mdi mdi-star earned" :style="`font-size: ${size}px;`"></div>
+            <div v-else-if="value > 0" class="mdi mdi-star earned" :style="`width: ${(value * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`"></div>
         </div>
         <div class="star" :style="`width: ${size}px; height: ${size}px;`">
-            <div class="icon" :style="`font-size: ${size}px;`">star</div>
-            <div v-if="value >= 2" class="icon earned" :style="`font-size: ${size}px;`">star</div>
-            <div v-else-if="value > 1" class="icon earned" :style="`width: ${((value - 1) * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`">star</div>
+            <div class="mdi mdi-star" :style="`font-size: ${size}px;`"></div>
+            <div v-if="value >= 2" class="mdi mdi-star earned" :style="`font-size: ${size}px;`"></div>
+            <div v-else-if="value > 1" class="mdi mdi-star earned" :style="`width: ${((value - 1) * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`"></div>
         </div>
         <div class="star" :style="`width: ${size}px; height: ${size}px;`">
-            <div class="icon" :style="`font-size: ${size}px;`">star</div>
-            <div v-if="value >= 3" class="icon earned" :style="`font-size: ${size}px;`">star</div>
-            <div v-else-if="value > 2" class="icon earned" :style="`width: ${((value - 2) * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`">star</div>
+            <div class="mdi mdi-star" :style="`font-size: ${size}px;`"></div>
+            <div v-if="value >= 3" class="mdi mdi-star earned" :style="`font-size: ${size}px;`"></div>
+            <div v-else-if="value > 2" class="mdi mdi-star earned" :style="`width: ${((value - 2) * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`"></div>
         </div>
         <div class="star" :style="`width: ${size}px; height: ${size}px;`">
-            <div class="icon" :style="`font-size: ${size}px;`">star</div>
-            <div v-if="value >= 4" class="icon earned" :style="`font-size: ${size}px;`">star</div>
-            <div v-else-if="value > 3" class="icon earned" :style="`width: ${((value - 3) * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`">star</div>
+            <div class="mdi mdi-star" :style="`font-size: ${size}px;`"></div>
+            <div v-if="value >= 4" class="mdi mdi-star earned" :style="`font-size: ${size}px;`"></div>
+            <div v-else-if="value > 3" class="mdi mdi-star earned" :style="`width: ${((value - 3) * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`"></div>
         </div>
         <div class="star" :style="`width: ${size}px; height: ${size}px;`">
-            <div class="icon" :style="`font-size: ${size}px;`">star</div>
-            <div v-if="value >= 5" class="icon earned" :style="`font-size: ${size}px;`">star</div>
-            <div v-else-if="value > 4" class="icon earned" :style="`width: ${((value - 4) * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`">star</div>
+            <div class="mdi mdi-star" :style="`font-size: ${size}px;`"></div>
+            <div v-if="value >= 5" class="mdi mdi-star earned" :style="`font-size: ${size}px;`"></div>
+            <div v-else-if="value > 4" class="mdi mdi-star earned" :style="`width: ${((value - 4) * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`"></div>
         </div>
     </div>
 </template>
@@ -73,7 +73,7 @@
             position: relative;
             overflow: hidden;
 
-            .icon {
+            .mdi {
                 color: var(--application-input-accent);
             }
 

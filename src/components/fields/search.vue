@@ -35,7 +35,7 @@
             v-on:change="change"
             v-bind:required="required"
         />
-        <span v-on:click="search()" class="icon">search</span>
+        <span v-on:click="search()" class="mdi mdi-magnify"></span>
     </div>
 </template>
 
@@ -124,9 +124,9 @@
             }
         }
 
-        .icon {
+        .mdi {
             position: absolute;
-            bottom: 27px;
+            bottom: 26px;
             right: 7px;
             color: var(--modal-text);
             font-size: 18px;

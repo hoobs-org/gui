@@ -28,7 +28,7 @@
                 </div>
                 <div v-else class="results">
                     <div v-for="(location, index) in locations" :key="`location:${index}`" class="item" v-on:click="select(locations[index])">
-                        <span class="icon">my_location</span>
+                        <span class="mdi mdi-crosshairs-gps"></span>
                         <span class="title">{{ location.name }}, {{ (country.find((country) => country.value === location.country) || {}).text || location.country }}</span>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                         opacity: 0.7;
                     }
 
-                    .icon {
+                    .mdi {
                         margin: 0 7px 0 0;
                         font-size: 20px;
                         color: var(--modal-highlight);
@@ -132,7 +132,7 @@
                             opacity: 1;
                         }
 
-                        .icon {
+                        .mdi {
                             opacity: 1;
                         }
                     }
