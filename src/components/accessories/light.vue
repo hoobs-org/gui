@@ -302,6 +302,7 @@
         }
 
         .settings {
+            display: none;
             position: absolute;
             top: 0;
             right: 0;
@@ -506,6 +507,12 @@
                     stroke: #fed800;
                     opacity: 1;
                 }
+            }
+        }
+
+        &:hover {
+            .settings {
+                display: block;
             }
         }
     }

@@ -71,6 +71,7 @@
         }
 
         .settings {
+            display: none;
             position: absolute;
             top: 0;
             right: 0;
@@ -131,12 +132,10 @@
                 }
             }
         }
-    }
 
-    @media (min-width: 300px) and (max-width: 815px) {
-        #control {
-            .item {
-                margin: 0;
+        &:hover {
+            .settings {
+                display: block;
             }
         }
     }

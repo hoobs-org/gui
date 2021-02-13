@@ -63,6 +63,7 @@
         data() {
             return {
                 loading: true,
+                bottom: true,
                 version: 0,
                 debug: false,
                 bridges: [],
@@ -78,6 +79,12 @@
             this.$action.on("log", "bridges", (bridges) => {
                 this.bridges = bridges;
             });
+        },
+
+        beforeRouteLeave(_to, _from, next) {
+            this.$refs.messages.removeEventListener("scroll", this.position);
+
+            next();
         },
 
         async mounted() {
@@ -116,7 +123,9 @@
             }
 
             setTimeout(() => {
-                this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
+                this.$refs.messages.addEventListener("scroll", this.position);
+
+                if (this.bottom) this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
             }, SCROLL_DELAY);
 
             this.$action.emit("log", "history");
@@ -124,10 +133,16 @@
         },
 
         updated() {
-            this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
+            if (this.bottom) this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
         },
 
         methods: {
+            position() {
+                this.bottom = false;
+
+                if ((this.$refs.messages.clientHeight + this.$refs.messages.scrollTop) >= this.$refs.messages.scrollHeight) this.bottom = true;
+            },
+
             mode() {
                 this.debug = !this.debug;
             },
