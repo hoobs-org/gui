@@ -39,6 +39,18 @@
             this.on = (this.accessory.characteristics.find((item) => item.type === "on") || {}).value || false;
         },
 
+        created() {
+            this.$store.subscribe(async (mutation) => {
+                if (mutation.type === "IO:ACCESSORY:CHANGE") {
+                    const { accessory } = mutation.payload.data;
+
+                    if (accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                        this.on = (accessory.characteristics.find((item) => item.type === "on") || {}).value || false;
+                    }
+                }
+            });
+        },
+
         methods: {
             async toggle() {
                 const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);

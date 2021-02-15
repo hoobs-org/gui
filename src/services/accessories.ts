@@ -28,6 +28,9 @@ export function types(type: string): string | undefined {
         case "fan":
             return "fan-accessory";
 
+        case "garage_door_opener":
+            return "garage-accessory";
+
         default:
             return undefined;
     }
@@ -38,5 +41,6 @@ export function accessories(): { [key: string]: () => any } {
         "fan-accessory": () => import(/* webpackChunkName: "accessory-light" */ "@/components/accessories/fan.vue"),
         "light-accessory": () => import(/* webpackChunkName: "accessory-light" */ "@/components/accessories/light.vue"),
         "switch-accessory": () => import(/* webpackChunkName: "accessory-switch" */ "@/components/accessories/switch.vue"),
+        "garage-accessory": () => import(/* webpackChunkName: "accessory-switch" */ "@/components/accessories/garage.vue"),
     };
 }

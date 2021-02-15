@@ -136,6 +136,25 @@
             };
         },
 
+        created() {
+            this.$store.subscribe(async (mutation) => {
+                if (mutation.type === "IO:ACCESSORY:CHANGE") {
+                    const { accessory } = mutation.payload.data;
+
+                    if (accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                        const brightness = accessory.characteristics.find((item) => item.type === "brightness");
+                        const saturation = accessory.characteristics.find((item) => item.type === "saturation");
+                        const hue = accessory.characteristics.find((item) => item.type === "hue");
+
+                        this.on = (accessory.characteristics.find((item) => item.type === "on") || {}).value || false;
+                        this.hue = (hue || {}).value || 0;
+                        this.saturation = (saturation || {}).value || 0;
+                        this.brightness = (brightness || {}).value || 100;
+                    }
+                }
+            });
+        },
+
         mounted() {
             const brightness = this.accessory.characteristics.find((item) => item.type === "brightness");
             const saturation = this.accessory.characteristics.find((item) => item.type === "saturation");

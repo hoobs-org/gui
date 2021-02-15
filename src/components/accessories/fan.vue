@@ -114,6 +114,27 @@
             };
         },
 
+        created() {
+            this.$store.subscribe(async (mutation) => {
+                if (mutation.type === "IO:ACCESSORY:CHANGE") {
+                    const { accessory } = mutation.payload.data;
+
+                    if (accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                        const speed = accessory.characteristics.find((item) => item.type === "brightness");
+                        const rotation = accessory.characteristics.find((item) => item.type === "saturation");
+
+                        if (accessory.characteristics.find((item) => item.type === "on" && item.write)) this.key = "on";
+                        if (accessory.characteristics.find((item) => item.type === "active" && item.write)) this.key = "active";
+                        if (accessory.characteristics.find((item) => item.type === "target_fan_state" && item.write)) this.key = "target_fan_state";
+
+                        this.on = (accessory.characteristics.find((item) => item.type === this.key) || {}).value || false;
+                        this.speed = (speed || {}).value || 0;
+                        this.rotation = (rotation || {}).value || 0;
+                    }
+                }
+            });
+        },
+
         mounted() {
             const speed = this.accessory.characteristics.find((item) => item.type === "brightness");
             const rotation = this.accessory.characteristics.find((item) => item.type === "saturation");
