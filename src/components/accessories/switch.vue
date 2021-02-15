@@ -18,6 +18,11 @@
 </template>
 
 <script>
+    import Debounce from "lodash.debounce";
+
+    const UPDATE_DELAY = 150;
+    const LOCAL_DELAY = 1000;
+
     export default {
         name: "switch-accessory",
 
@@ -32,33 +37,42 @@
         data() {
             return {
                 on: false,
+                local: false,
+                subject: null,
+                updater: Debounce(() => {
+                    if (!this.local) {
+                        this.on = (this.subject.characteristics.find((item) => item.type === "on") || {}).value || false;
+                    }
+                }, UPDATE_DELAY),
             };
-        },
-
-        mounted() {
-            this.on = (this.accessory.characteristics.find((item) => item.type === "on") || {}).value || false;
         },
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ACCESSORY:CHANGE") {
-                    const { accessory } = mutation.payload.data;
-
-                    if (accessory.accessory_identifier === this.accessory.accessory_identifier) {
-                        this.on = (accessory.characteristics.find((item) => item.type === "on") || {}).value || false;
-                    }
+                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                    this.subject = mutation.payload.data.accessory;
+                    this.updater();
                 }
             });
         },
 
+        mounted() {
+            this.subject = this.accessory;
+            this.updater();
+        },
+
         methods: {
             async toggle() {
+                this.local = true;
+
                 const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
                 const on = !this.on;
 
                 this.on = on;
 
                 await accessory.set("on", on);
+
+                setTimeout(() => { this.local = false; }, LOCAL_DELAY);
             },
         },
     };

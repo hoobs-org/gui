@@ -34,6 +34,10 @@
 
 <script>
     import Iro from "@jaames/iro";
+    import Debounce from "lodash.debounce";
+
+    const UPDATE_DELAY = 150;
+    const LOCAL_DELAY = 1000;
 
     const RADIUS = 41;
 
@@ -133,40 +137,38 @@
                     brightness: false,
                     hue: false,
                 },
+                local: false,
+                subject: null,
+                updater: Debounce(() => {
+                    if (!this.local) {
+                        const brightness = this.subject.characteristics.find((item) => item.type === "brightness");
+                        const saturation = this.subject.characteristics.find((item) => item.type === "saturation");
+                        const hue = this.subject.characteristics.find((item) => item.type === "hue");
+
+                        this.on = (this.subject.characteristics.find((item) => item.type === "on") || {}).value || false;
+                        this.hue = (hue || {}).value || 0;
+                        this.saturation = (saturation || {}).value || 0;
+                        this.brightness = (brightness || {}).value || 100;
+
+                        if (brightness || hue) this.features.brightness = true;
+                        if (hue) this.features.hue = true;
+                    }
+                }, UPDATE_DELAY),
             };
         },
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ACCESSORY:CHANGE") {
-                    const { accessory } = mutation.payload.data;
-
-                    if (accessory.accessory_identifier === this.accessory.accessory_identifier) {
-                        const brightness = accessory.characteristics.find((item) => item.type === "brightness");
-                        const saturation = accessory.characteristics.find((item) => item.type === "saturation");
-                        const hue = accessory.characteristics.find((item) => item.type === "hue");
-
-                        this.on = (accessory.characteristics.find((item) => item.type === "on") || {}).value || false;
-                        this.hue = (hue || {}).value || 0;
-                        this.saturation = (saturation || {}).value || 0;
-                        this.brightness = (brightness || {}).value || 100;
-                    }
+                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                    this.subject = mutation.payload.data.accessory;
+                    this.updater();
                 }
             });
         },
 
         mounted() {
-            const brightness = this.accessory.characteristics.find((item) => item.type === "brightness");
-            const saturation = this.accessory.characteristics.find((item) => item.type === "saturation");
-            const hue = this.accessory.characteristics.find((item) => item.type === "hue");
-
-            this.on = (this.accessory.characteristics.find((item) => item.type === "on") || {}).value || false;
-            this.hue = (hue || {}).value || 0;
-            this.saturation = (saturation || {}).value || 0;
-            this.brightness = (brightness || {}).value || 100;
-
-            if (brightness || hue) this.features.brightness = true;
-            if (hue) this.features.hue = true;
+            this.subject = this.accessory;
+            this.updater();
         },
 
         methods: {
@@ -193,6 +195,8 @@
             },
 
             async pick(color) {
+                this.local = true;
+
                 const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
 
                 this.hue = color.hsl.h;
@@ -206,9 +210,13 @@
 
                 await accessory.set("hue", this.hue);
                 await accessory.set("saturation", this.saturation);
+
+                setTimeout(() => { this.local = false; }, LOCAL_DELAY);
             },
 
             async toggle() {
+                this.local = true;
+
                 const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
                 const on = !this.on;
 
@@ -221,9 +229,13 @@
                 this.on = on;
 
                 await accessory.set("on", on);
+
+                setTimeout(() => { this.local = false; }, LOCAL_DELAY);
             },
 
             async commit() {
+                this.local = true;
+
                 const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
 
                 await accessory.set("brightness", Math.round(this.brightness));
@@ -233,6 +245,8 @@
                     this.features.picker = false;
                     this.wheel = null;
                 }
+
+                setTimeout(() => { this.local = false; }, LOCAL_DELAY);
             },
 
             update(offsetX, offsetY) {

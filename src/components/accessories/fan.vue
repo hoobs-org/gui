@@ -27,6 +27,11 @@
 </template>
 
 <script>
+    import Debounce from "lodash.debounce";
+
+    const UPDATE_DELAY = 150;
+    const LOCAL_DELAY = 1000;
+
     const RADIUS = 41;
 
     const MID_X = 50;
@@ -111,44 +116,40 @@
                     speed: false,
                     rotation: false,
                 },
+                local: false,
+                subject: null,
+                updater: Debounce(() => {
+                    if (!this.local) {
+                        const speed = this.subject.characteristics.find((item) => item.type === "brightness");
+                        const rotation = this.subject.characteristics.find((item) => item.type === "saturation");
+
+                        if (this.subject.characteristics.find((item) => item.type === "on" && item.write)) this.key = "on";
+                        if (this.subject.characteristics.find((item) => item.type === "active" && item.write)) this.key = "active";
+                        if (this.subject.characteristics.find((item) => item.type === "target_fan_state" && item.write)) this.key = "target_fan_state";
+
+                        this.on = (this.subject.characteristics.find((item) => item.type === this.key) || {}).value || false;
+                        this.speed = (speed || {}).value || 0;
+                        this.rotation = (rotation || {}).value || 0;
+
+                        if (speed) this.features.speed = true;
+                        if (rotation) this.features.rotation = true;
+                    }
+                }, UPDATE_DELAY),
             };
         },
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ACCESSORY:CHANGE") {
-                    const { accessory } = mutation.payload.data;
-
-                    if (accessory.accessory_identifier === this.accessory.accessory_identifier) {
-                        const speed = accessory.characteristics.find((item) => item.type === "brightness");
-                        const rotation = accessory.characteristics.find((item) => item.type === "saturation");
-
-                        if (accessory.characteristics.find((item) => item.type === "on" && item.write)) this.key = "on";
-                        if (accessory.characteristics.find((item) => item.type === "active" && item.write)) this.key = "active";
-                        if (accessory.characteristics.find((item) => item.type === "target_fan_state" && item.write)) this.key = "target_fan_state";
-
-                        this.on = (accessory.characteristics.find((item) => item.type === this.key) || {}).value || false;
-                        this.speed = (speed || {}).value || 0;
-                        this.rotation = (rotation || {}).value || 0;
-                    }
+                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                    this.subject = mutation.payload.data.accessory;
+                    this.updater();
                 }
             });
         },
 
         mounted() {
-            const speed = this.accessory.characteristics.find((item) => item.type === "brightness");
-            const rotation = this.accessory.characteristics.find((item) => item.type === "saturation");
-
-            if (this.accessory.characteristics.find((item) => item.type === "on" && item.write)) this.key = "on";
-            if (this.accessory.characteristics.find((item) => item.type === "active" && item.write)) this.key = "active";
-            if (this.accessory.characteristics.find((item) => item.type === "target_fan_state" && item.write)) this.key = "target_fan_state";
-
-            this.on = (this.accessory.characteristics.find((item) => item.type === this.key) || {}).value || false;
-            this.speed = (speed || {}).value || 0;
-            this.rotation = (rotation || {}).value || 0;
-
-            if (speed) this.features.speed = true;
-            if (rotation) this.features.rotation = true;
+            this.subject = this.accessory;
+            this.updater();
         },
 
         methods: {
@@ -157,18 +158,26 @@
             },
 
             async toggle() {
+                this.local = true;
+
                 const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
                 const on = !this.on;
 
                 this.on = on;
 
                 await accessory.set(this.key, on);
+
+                setTimeout(() => { this.local = false; }, LOCAL_DELAY);
             },
 
             async commit(characteristic, value) {
+                this.local = true;
+
                 const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
 
                 await accessory.set(characteristic, value);
+
+                setTimeout(() => { this.local = false; }, LOCAL_DELAY);
             },
 
             update(offsetX, offsetY) {

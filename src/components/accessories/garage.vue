@@ -21,6 +21,7 @@
                             <polygon fill="#333333" points="19.3,58.7 19.3,77.1 19.3,87.3 29.5,77.1 70.5,77.1 80.7,87.3 80.7,77.1 80.7,58.7" style="cursor: pointer;" />
                         </g>
                     </svg>
+                    <div v-if="obstruction" class="mdi mdi-dog-side"></div>
                 </div>
             </div>
             <div class="settings">
@@ -32,6 +33,11 @@
 </template>
 
 <script>
+    import Debounce from "lodash.debounce";
+
+    const UPDATE_DELAY = 150;
+    const LOCAL_DELAY = 1000;
+
     export default {
         name: "garage-accessory",
 
@@ -46,33 +52,44 @@
         data() {
             return {
                 open: false,
+                obstruction: false,
+                local: false,
+                subject: null,
+                updater: Debounce(() => {
+                    if (!this.local) {
+                        this.open = (this.subject.characteristics.find((item) => item.type === "target_door_state") || {}).value || false;
+                        this.obstruction = (this.subject.characteristics.find((item) => item.type === "obstruction_detected") || {}).value || false;
+                    }
+                }, UPDATE_DELAY),
             };
-        },
-
-        mounted() {
-            this.open = (this.accessory.characteristics.find((item) => item.type === "target_door_state") || {}).value || false;
         },
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ACCESSORY:CHANGE") {
-                    const { accessory } = mutation.payload.data;
-
-                    if (accessory.accessory_identifier === this.accessory.accessory_identifier) {
-                        this.open = (accessory.characteristics.find((item) => item.type === "target_door_state") || {}).value || false;
-                    }
+                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                    this.subject = mutation.payload.data.accessory;
+                    this.updater();
                 }
             });
         },
 
+        mounted() {
+            this.subject = this.accessory;
+            this.updater();
+        },
+
         methods: {
             async toggle() {
+                this.local = true;
+
                 const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
                 const open = !this.open;
 
                 this.open = open;
 
                 await accessory.set("target_door_state", open);
+
+                setTimeout(() => { this.local = false; }, LOCAL_DELAY);
             },
         },
     };
@@ -130,6 +147,14 @@
                 position: relative;
                 box-sizing: border-box;
                 pointer-events: all;
+
+                .mdi {
+                    position: absolute;
+                    width: 100%;
+                    text-align: center;
+                    font-size: 300%;
+                    bottom: 5%;
+                }
             }
 
             svg {

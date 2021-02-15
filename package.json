@@ -43,6 +43,7 @@
         "emojer": "^1.1.5",
         "github-api-emojis": "^1.0.3",
         "identicon.js": "^2.3.3",
+        "lodash.debounce": "^4.0.8",
         "showdown": "^1.9.1",
         "showdown-highlight": "^2.1.5",
         "vue": "^2.6.12",
