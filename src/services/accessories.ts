@@ -31,6 +31,9 @@ export function types(type: string): string | undefined {
         case "lock":
             return "lock-accessory";
 
+        case "thermostat":
+            return "thermostat-accessory";
+
         case "garage_door_opener":
             return "garage-accessory";
 
@@ -46,5 +49,6 @@ export function accessories(): { [key: string]: () => any } {
         "light-accessory": () => import(/* webpackChunkName: "accessory-light" */ "@/components/accessories/light.vue"),
         "switch-accessory": () => import(/* webpackChunkName: "accessory-switch" */ "@/components/accessories/switch.vue"),
         "garage-accessory": () => import(/* webpackChunkName: "accessory-garage" */ "@/components/accessories/garage.vue"),
+        "thermostat-accessory": () => import(/* webpackChunkName: "accessory-thermostat" */ "@/components/accessories/thermostat.vue"),
     };
 }
