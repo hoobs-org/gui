@@ -20,13 +20,19 @@
     <div id="control">
         <div class="item">
             <div class="background">
-                <div class="sill">
-                    <div class="window">
-                        <div class="cover" :style="`height: ${position}%;`"></div>
-                        <div class="container">
-                            <div class="slider">
-                                <input id="field" type="range" min="0" max="100" step="1" v-model="position" />
-                            </div>
+                <div class="panel">
+                    <div class="actions">
+                        <div class="row">
+                            <div class="cell on" v-if="state === 0">{{ $t("home") }}</div>
+                            <div class="cell" v-else v-on:click="mode(0)">{{ $t("home") }}</div>
+                            <div class="cell on" v-if="state === 1">{{ $t("away") }}</div>
+                            <div class="cell" v-else v-on:click="mode(1)">{{ $t("away") }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell on" v-if="state === 2">{{ $t("night") }}</div>
+                            <div class="cell" v-else v-on:click="mode(2)">{{ $t("night") }}</div>
+                            <div class="cell on" v-if="state === 3">{{ $t("off") }}</div>
+                            <div class="cell" v-else v-on:click="mode(3)">{{ $t("off") }}</div>
                         </div>
                     </div>
                 </div>
@@ -46,7 +52,7 @@
     const LOCAL_DELAY = 1000;
 
     export default {
-        name: "blind-accessory",
+        name: "security-accessory",
 
         props: {
             disabled: Boolean,
@@ -58,27 +64,13 @@
 
         data() {
             return {
-                position: 0,
+                state: 0,
                 local: false,
                 subject: null,
                 updater: Debounce(() => {
-                    if (!this.local) this.position = (this.subject.characteristics.find((item) => item.type === "target_position") || {}).value || false;
-                }, UPDATE_DELAY),
-                commit: Debounce(async () => {
-                    this.local = true;
-
-                    const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
-                    await accessory.set("target_position", this.position);
-
-                    setTimeout(() => { this.local = false; }, LOCAL_DELAY);
+                    if (!this.local) this.state = (this.subject.characteristics.find((item) => item.type === "security_system_target_state") || {}).value || 0;
                 }, UPDATE_DELAY),
             };
-        },
-
-        watch: {
-            position() {
-                this.commit();
-            },
         },
 
         created() {
@@ -94,16 +86,24 @@
             this.subject = this.accessory;
             this.updater();
         },
+
+        methods: {
+            async mode(value) {
+                this.local = true;
+
+                const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+
+                this.state = value;
+
+                await accessory.set("security_system_target_state", value);
+
+                setTimeout(() => { this.local = false; }, LOCAL_DELAY);
+            },
+        },
     };
 </script>
 
 <style lang="scss" scoped>
-    @keyframes dash-frame {
-        100% {
-            stroke-dashoffset: 0;
-        }
-    }
-
     #control {
         width: 100%;
         display: flex;
@@ -149,108 +149,76 @@
             width: 100%;
             height: 100%;
             position: absolute;
-            box-sizing: border-box;
-            top: 0;
-            left: 0;
-        }
-
-        .sill {
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-            border-radius: 7px;
-            border: 2px var(--accessory-border) solid;
-            padding: 20px;
-        }
-
-        .window {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            background: var(--application-highlight);
-            border: 1px var(--accessory-border) solid;
-        }
-
-        .cover {
-            background: var(--accessory-input);
-            border-bottom: 1px var(--accessory-border) solid;
-            width: 100%;
-            position: absolute;
-            top: -1px;
-            left: 0;
-        }
-
-        .container {
-            width: 100%;
-            height: 100%;
             display: flex;
             align-items: center;
-            position: absolute;
             top: 0;
             left: 0;
+        }
 
-            .slider {
-                width: 100%;
-                height: 100%;
-                transform-origin: center;
-                transform: rotate(90deg);
+        .panel {
+            width: 100%;
+            height: 70%;
+            margin: 3% 0 0 0;
+            box-sizing: border-box;
+            padding: 11px 11px 10px 10px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 7px;
+            border: 2px var(--accessory-border) solid;
 
-                input[type=range] {
-                    -webkit-appearance: none;
-                    background: transparent;
-                    width: 100%;
-                    height: 100%;
-                    border: 0 none;
-                    margin: 0;
-                    padding: 0;
+            .actions {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
 
-                    &:focus {
-                        outline: none;
-                    }
+                .row {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: row;
 
-                    &::-webkit-slider-runnable-track {
-                        width: 100%;
-                        height: 0;
-                    }
-
-                    &::-webkit-slider-thumb {
+                    .cell {
+                        flex: 1;
+                        background: var(--accessory-background);
                         border: 1px var(--accessory-border) solid;
-                        border-radius: 50%;
-                        height: 22px;
-                        width: 22px;
-                        background: var(--accessory-highlight);
+                        border-radius: 0 0 3px 0;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: space-around;
+                        color: var(--accessory-text);
+                        font-size: 14px;
+                        overflow: hidden;
                         cursor: pointer;
-                        -webkit-appearance: none;
-                        margin-top: -14px;
+
+                        margin-right: -1px;
+                        margin-bottom: -1px;
+                        z-index: 1;
+
+                        &:first-child {
+                            margin-left: -1px;
+                            border-radius: 0 0 0 3px;
+                        }
+
+                        &.on {
+                            border: 1px var(--application-highlight) solid;
+                            background: var(--application-highlight);
+                            color: var(--accessory-highlight);
+                            z-index: 10;
+                        }
                     }
 
-                    &::-moz-range-track {
-                        width: 100%;
-                        height: 0;
-                    }
+                    &:first-child {
+                        .cell {
+                            margin-top: -1px;
+                            margin-right: -1px;
+                            margin-bottom: -1px;
+                            border-radius: 0 3px 0 0;
 
-                    &::-moz-range-thumb {
-                        border: 1px var(--accessory-border) solid;
-                        border-radius: 50%;
-                        height: 22px;
-                        width: 22px;
-                        background: var(--accessory-highlight);
-                        cursor: pointer;
-                    }
-
-                    &::-ms-track {
-                        width: 100%;
-                        height: 0;
-                        border-width: 0;
-                    }
-
-                    &::-ms-thumb {
-                        border: 1px var(--accessory-border) solid;
-                        border-radius: 50%;
-                        height: 22px;
-                        width: 22px;
-                        background: var(--accessory-highlight);
-                        cursor: pointer;
+                            &:first-child {
+                                margin-left: -1px;
+                                border-radius: 3px 0 0 0;
+                            }
+                        }
                     }
                 }
             }

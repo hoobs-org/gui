@@ -1,3 +1,21 @@
+<!-------------------------------------------------------------------------------------------------
+ | hoobs-gui                                                                                      |
+ | Copyright (C) 2020 HOOBS                                                                       |
+ |                                                                                                |
+ | This program is free software: you can redistribute it and/or modify                           |
+ | it under the terms of the GNU General Public License as published by                           |
+ | the Free Software Foundation, either version 3 of the License, or                              |
+ | (at your option) any later version.                                                            |
+ |                                                                                                |
+ | This program is distributed in the hope that it will be useful,                                |
+ | but WITHOUT ANY WARRANTY; without even the implied warranty of                                 |
+ | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                  |
+ | GNU General Public License for more details.                                                   |
+ |                                                                                                |
+ | You should have received a copy of the GNU General Public License                              |
+ | along with this program.  If not, see <http://www.gnu.org/licenses/>.                          |
+ -------------------------------------------------------------------------------------------------->
+
 <template>
     <div id="control" :class="on ? 'on' : 'off'">
         <div :class="style">
@@ -154,6 +172,23 @@
                         if (hue) this.features.hue = true;
                     }
                 }, UPDATE_DELAY),
+                commit: Debounce(async () => {
+                    if (!this.disabled && this.on) {
+                        this.local = true;
+
+                        const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+
+                        await accessory.set("brightness", Math.round(this.brightness));
+
+                        if (this.features.picker) {
+                            this.$refs.wheel.innerHTML = "";
+                            this.features.picker = false;
+                            this.wheel = null;
+                        }
+
+                        setTimeout(() => { this.local = false; }, LOCAL_DELAY);
+                    }
+                }, UPDATE_DELAY),
             };
         },
 
@@ -231,24 +266,6 @@
                 await accessory.set("on", on);
 
                 setTimeout(() => { this.local = false; }, LOCAL_DELAY);
-            },
-
-            async commit() {
-                if (!this.disabled && this.on) {
-                    this.local = true;
-
-                    const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
-
-                    await accessory.set("brightness", Math.round(this.brightness));
-
-                    if (this.features.picker) {
-                        this.$refs.wheel.innerHTML = "";
-                        this.features.picker = false;
-                        this.wheel = null;
-                    }
-
-                    setTimeout(() => { this.local = false; }, LOCAL_DELAY);
-                }
             },
 
             update(offsetX, offsetY) {

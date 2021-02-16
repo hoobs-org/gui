@@ -37,6 +37,9 @@ export function types(type: string): string | undefined {
         case "garage_door_opener":
             return "garage-accessory";
 
+        case "security_system":
+            return "security-accessory";
+
         case "window_covering":
             return "blind-accessory";
 
@@ -53,6 +56,7 @@ export function accessories(): { [key: string]: () => any } {
         "blind-accessory": () => import(/* webpackChunkName: "accessory-blind" */ "@/components/accessories/blind.vue"),
         "switch-accessory": () => import(/* webpackChunkName: "accessory-switch" */ "@/components/accessories/switch.vue"),
         "garage-accessory": () => import(/* webpackChunkName: "accessory-garage" */ "@/components/accessories/garage.vue"),
+        "security-accessory": () => import(/* webpackChunkName: "accessory-garage" */ "@/components/accessories/security.vue"),
         "thermostat-accessory": () => import(/* webpackChunkName: "accessory-thermostat" */ "@/components/accessories/thermostat.vue"),
     };
 }

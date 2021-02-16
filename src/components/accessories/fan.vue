@@ -1,3 +1,21 @@
+<!-------------------------------------------------------------------------------------------------
+ | hoobs-gui                                                                                      |
+ | Copyright (C) 2020 HOOBS                                                                       |
+ |                                                                                                |
+ | This program is free software: you can redistribute it and/or modify                           |
+ | it under the terms of the GNU General Public License as published by                           |
+ | the Free Software Foundation, either version 3 of the License, or                              |
+ | (at your option) any later version.                                                            |
+ |                                                                                                |
+ | This program is distributed in the hope that it will be useful,                                |
+ | but WITHOUT ANY WARRANTY; without even the implied warranty of                                 |
+ | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                  |
+ | GNU General Public License for more details.                                                   |
+ |                                                                                                |
+ | You should have received a copy of the GNU General Public License                              |
+ | along with this program.  If not, see <http://www.gnu.org/licenses/>.                          |
+ -------------------------------------------------------------------------------------------------->
+
 <template>
     <div id="control" :class="on ? 'on' : 'off'">
         <div :class="style">
@@ -135,6 +153,16 @@
                         if (rotation) this.features.rotation = true;
                     }
                 }, UPDATE_DELAY),
+                commit: Debounce(async () => {
+                    if (!this.disabled && this.on) {
+                        this.local = true;
+
+                        const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+                        await accessory.set("rotation_speed", Math.round(this.speed));
+
+                        setTimeout(() => { this.local = false; }, LOCAL_DELAY);
+                    }
+                }, UPDATE_DELAY),
             };
         },
 
@@ -166,15 +194,6 @@
                 this.on = on;
 
                 await accessory.set(this.key, on);
-
-                setTimeout(() => { this.local = false; }, LOCAL_DELAY);
-            },
-
-            async commit(characteristic, value) {
-                this.local = true;
-
-                const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
-                await accessory.set(characteristic, value);
 
                 setTimeout(() => { this.local = false; }, LOCAL_DELAY);
             },
@@ -211,7 +230,7 @@
                     window.removeEventListener("mousemove", this.pointer);
                     window.removeEventListener("mouseup", this.leave);
 
-                    this.commit("rotation_speed", Math.round(this.speed));
+                    this.commit();
                 }
             },
 
@@ -220,7 +239,7 @@
                     window.removeEventListener("touchmove", this.touch);
                     window.removeEventListener("touchend", this.stop);
 
-                    this.commit("rotation_speed", Math.round(this.speed));
+                    this.commit();
                 }
             },
 
