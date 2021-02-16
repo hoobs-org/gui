@@ -99,17 +99,24 @@
         .settings {
             display: none;
             position: absolute;
-            top: 0;
-            right: 0;
-            opacity: 0.3;
+            border-radius: 50%;
+            background: var(--widget-background);
+            justify-content: space-around;
+            align-items: center;
+            padding: 3px;
+            top: -6px;
+            right: -6px;
             cursor: pointer;
 
             .mdi {
                 font-size: 22px;
+                opacity: 0.3;
             }
 
             &:hover {
-                opacity: 1;
+                .mdi {
+                    opacity: 1;
+                }
             }
         }
 
@@ -160,7 +167,7 @@
 
         &:hover {
             .settings {
-                display: block;
+                display: flex;
             }
         }
     }
