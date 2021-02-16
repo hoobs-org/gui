@@ -84,6 +84,14 @@
             <div class="settings">
                 <span class="mdi mdi-cog"></span>
             </div>
+            <div v-if="features.battery" class="battery">
+                <div class="charge">
+                    <span :class="`mdi mdi-${charge}`"></span>
+                </div>
+                <div class="frame">
+                    <span class="mdi mdi-battery-outline"></span>
+                </div>
+            </div>
         </div>
         <div class="name">{{ accessory.name }}</div>
     </div>
@@ -106,13 +114,41 @@
             },
         },
 
+        computed: {
+            charge() {
+                if (!this.battery) return "battery-outline";
+                if (this.battery > 0 && this.battery < 10) return "battery-10";
+                if (this.battery > 10 && this.battery < 20) return "battery-20";
+                if (this.battery > 20 && this.battery < 30) return "battery-30";
+                if (this.battery > 30 && this.battery < 40) return "battery-40";
+                if (this.battery > 40 && this.battery < 50) return "battery-50";
+                if (this.battery > 50 && this.battery < 60) return "battery-60";
+                if (this.battery > 60 && this.battery < 70) return "battery-70";
+                if (this.battery > 70 && this.battery < 80) return "battery-80";
+                if (this.battery > 80 && this.battery < 90) return "battery-90";
+
+                return "battery";
+            },
+        },
+
         data() {
             return {
                 locked: true,
+                battery: 0,
+                features: {
+                    battery: false,
+                },
                 local: false,
                 subject: null,
                 updater: Debounce(() => {
-                    if (!this.local) this.locked = (this.subject.characteristics.find((item) => item.type === "lock_target_state") || {}).value || false;
+                    if (!this.local) {
+                        const battery = this.subject.characteristics.find((item) => item.type === "battery_level");
+
+                        this.locked = (this.subject.characteristics.find((item) => item.type === "lock_target_state") || {}).value || false;
+                        this.battery = (battery || {}).value || 0;
+
+                        if (battery) this.features.battery = true;
+                    }
                 }, UPDATE_DELAY),
             };
         },
@@ -164,6 +200,49 @@
         .name {
             text-align: center;
             padding: 14px 7px 7px 7px;
+        }
+
+        .battery {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--widget-background);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 3px;
+            top: -6px;
+            left: -6px;
+            cursor: pointer;
+
+            .mdi {
+                font-size: 22px;
+                transform-origin: center;
+                transform: rotate(90deg);
+            }
+
+            .charge {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: absolute;
+                color: #17eb50;
+                top: 0;
+                left: 0;
+            }
+
+            .frame {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: absolute;
+                color: var(--accessory-border);
+                top: 0;
+                left: 0;
+            }
         }
 
         .settings {

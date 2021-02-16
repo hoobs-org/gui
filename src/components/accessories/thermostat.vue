@@ -30,7 +30,7 @@
                 <div v-if="features.humidity" class="inner">
                     <div class="humidity">
                         <span :class="text">{{ readout }}&deg;</span>
-                        <span class="mdi mdi-water-outline sub">{{ humidity }}%</span>
+                        <span class="sub"><span class="mdi mdi-water-outline"></span>{{ humidity }}%</span>
                     </div>
                 </div>
                 <div v-else class="inner">
@@ -50,6 +50,14 @@
             </div>
             <div class="settings">
                 <span class="mdi mdi-cog"></span>
+            </div>
+            <div v-if="features.battery" class="battery">
+                <div class="charge">
+                    <span :class="`mdi mdi-${charge}`"></span>
+                </div>
+                <div class="frame">
+                    <span class="mdi mdi-battery-outline"></span>
+                </div>
             </div>
         </div>
         <div class="name">{{ accessory.name }}</div>
@@ -188,8 +196,10 @@
                 display: "celsius",
                 adjusting: false,
                 timeout: null,
+                battery: 0,
                 features: {
                     humidity: false,
+                    battery: false,
                 },
                 local: false,
                 subject: null,
@@ -199,11 +209,13 @@
                         const target = this.subject.characteristics.find((item) => item.type === "target_temperature") || {};
                         const state = this.subject.characteristics.find((item) => item.type === "target_heating_cooling_state") || {};
                         const humidity = this.subject.characteristics.find((item) => item.type === "current_relative_humidity") || {};
+                        const battery = this.subject.characteristics.find((item) => item.type === "battery_level");
 
                         this.display = (this.subject.characteristics.find((item) => item.type === "temperature_display_units") || {}).value || false ? "fahrenheit" : "celsius";
                         this.current = Math.round((current.unit || "celsius") !== "celsius" ? ((current.value || 50) - 32) / 1.8 : current.value || 0);
                         this.humidity = Math.round(humidity.value || 0);
                         this.target = Math.round((target.unit || "celsius") !== "celsius" ? ((target.value || 50) - 32) / 1.8 : target.value || 10);
+                        this.battery = (battery || {}).value || 0;
 
                         this.state = state.value || 0;
                         this.unit = target.unit || "celsius";
@@ -214,6 +226,7 @@
                         this.max.state = state.max_value || 1;
 
                         if (humidity) this.features.humidity = true;
+                        if (battery) this.features.battery = true;
                     }
                 }, UPDATE_DELAY),
                 commit: Debounce(async () => {
@@ -362,6 +375,49 @@
             padding: 14px 7px 7px 7px;
         }
 
+        .battery {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--widget-background);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 3px;
+            top: -6px;
+            left: -6px;
+            cursor: pointer;
+
+            .mdi {
+                font-size: 22px;
+                transform-origin: center;
+                transform: rotate(90deg);
+            }
+
+            .charge {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: absolute;
+                color: #17eb50;
+                top: 0;
+                left: 0;
+            }
+
+            .frame {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: absolute;
+                color: var(--accessory-border);
+                top: 0;
+                left: 0;
+            }
+        }
+
         .settings {
             display: none;
             position: absolute;
@@ -444,6 +500,7 @@
                 display: flex;
                 align-items: center;
                 flex-direction: column;
+                margin-top: -7px;
 
                 .temp {
                     font-size: 220%;
@@ -453,6 +510,11 @@
                 .sub {
                     color: var(--accessory-text);
                     font-size: 80%;
+
+                    .mdi {
+                        color: #00b9f1;
+                        font-size: 100%;
+                    }
                 }
             }
         }

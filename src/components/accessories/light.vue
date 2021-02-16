@@ -45,6 +45,14 @@
             <div class="settings">
                 <span class="mdi mdi-cog"></span>
             </div>
+            <div v-if="features.battery" class="battery">
+                <div class="charge">
+                    <span :class="`mdi mdi-${charge}`"></span>
+                </div>
+                <div class="frame">
+                    <span class="mdi mdi-battery-outline"></span>
+                </div>
+            </div>
         </div>
         <div class="name">{{ accessory.name }}</div>
     </div>
@@ -150,10 +158,12 @@
                 wheel: null,
                 saturation: 0,
                 brightness: 0,
+                battery: 0,
                 features: {
                     picker: false,
                     brightness: false,
                     hue: false,
+                    battery: false,
                 },
                 local: false,
                 subject: null,
@@ -162,14 +172,17 @@
                         const brightness = this.subject.characteristics.find((item) => item.type === "brightness");
                         const saturation = this.subject.characteristics.find((item) => item.type === "saturation");
                         const hue = this.subject.characteristics.find((item) => item.type === "hue");
+                        const battery = this.subject.characteristics.find((item) => item.type === "battery_level");
 
                         this.on = (this.subject.characteristics.find((item) => item.type === "on") || {}).value || false;
                         this.hue = (hue || {}).value || 0;
                         this.saturation = (saturation || {}).value || 0;
                         this.brightness = (brightness || {}).value || 100;
+                        this.battery = (battery || {}).value || 0;
 
                         if (brightness || hue) this.features.brightness = true;
                         if (hue) this.features.hue = true;
+                        if (battery) this.features.battery = true;
                     }
                 }, UPDATE_DELAY),
                 commit: Debounce(async () => {
@@ -353,6 +366,49 @@
         .name {
             text-align: center;
             padding: 14px 7px 7px 7px;
+        }
+
+        .battery {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--widget-background);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 3px;
+            top: -6px;
+            left: -6px;
+            cursor: pointer;
+
+            .mdi {
+                font-size: 22px;
+                transform-origin: center;
+                transform: rotate(90deg);
+            }
+
+            .charge {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: absolute;
+                color: #17eb50;
+                top: 0;
+                left: 0;
+            }
+
+            .frame {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: absolute;
+                color: var(--accessory-border);
+                top: 0;
+                left: 0;
+            }
         }
 
         .settings {

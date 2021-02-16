@@ -39,6 +39,14 @@
             <div class="settings">
                 <span class="mdi mdi-cog"></span>
             </div>
+            <div v-if="features.battery" class="battery">
+                <div class="charge">
+                    <span :class="`mdi mdi-${charge}`"></span>
+                </div>
+                <div class="frame">
+                    <span class="mdi mdi-battery-outline"></span>
+                </div>
+            </div>
         </div>
         <div class="name">{{ accessory.name }}</div>
     </div>
@@ -130,9 +138,11 @@
                 on: false,
                 speed: 0,
                 rotation: 0,
+                battery: 0,
                 features: {
                     speed: false,
                     rotation: false,
+                    battery: false,
                 },
                 local: false,
                 subject: null,
@@ -140,6 +150,7 @@
                     if (!this.local) {
                         const speed = this.subject.characteristics.find((item) => item.type === "brightness");
                         const rotation = this.subject.characteristics.find((item) => item.type === "saturation");
+                        const battery = this.subject.characteristics.find((item) => item.type === "battery_level");
 
                         if (this.subject.characteristics.find((item) => item.type === "on" && item.write)) this.key = "on";
                         if (this.subject.characteristics.find((item) => item.type === "active" && item.write)) this.key = "active";
@@ -148,9 +159,11 @@
                         this.on = (this.subject.characteristics.find((item) => item.type === this.key) || {}).value || false;
                         this.speed = (speed || {}).value || 0;
                         this.rotation = (rotation || {}).value || 0;
+                        this.battery = (battery || {}).value || 0;
 
                         if (speed) this.features.speed = true;
                         if (rotation) this.features.rotation = true;
+                        if (battery) this.features.battery = true;
                     }
                 }, UPDATE_DELAY),
                 commit: Debounce(async () => {
@@ -281,6 +294,49 @@
         .name {
             text-align: center;
             padding: 14px 7px 7px 7px;
+        }
+
+        .battery {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--widget-background);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 3px;
+            top: -6px;
+            left: -6px;
+            cursor: pointer;
+
+            .mdi {
+                font-size: 22px;
+                transform-origin: center;
+                transform: rotate(90deg);
+            }
+
+            .charge {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: absolute;
+                color: #17eb50;
+                top: 0;
+                left: 0;
+            }
+
+            .frame {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: absolute;
+                color: var(--accessory-border);
+                top: 0;
+                left: 0;
+            }
         }
 
         .settings {
