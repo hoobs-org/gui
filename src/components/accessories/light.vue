@@ -234,50 +234,54 @@
             },
 
             async commit() {
-                this.local = true;
+                if (!this.disabled && this.on) {
+                    this.local = true;
 
-                const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+                    const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
 
-                await accessory.set("brightness", Math.round(this.brightness));
+                    await accessory.set("brightness", Math.round(this.brightness));
 
-                if (this.features.picker) {
-                    this.$refs.wheel.innerHTML = "";
-                    this.features.picker = false;
-                    this.wheel = null;
+                    if (this.features.picker) {
+                        this.$refs.wheel.innerHTML = "";
+                        this.features.picker = false;
+                        this.wheel = null;
+                    }
+
+                    setTimeout(() => { this.local = false; }, LOCAL_DELAY);
                 }
-
-                setTimeout(() => { this.local = false; }, LOCAL_DELAY);
             },
 
             update(offsetX, offsetY) {
-                const angle = Math.atan2(this.$el.clientWidth / 2 - offsetY, offsetX - this.$el.clientWidth / 2);
-                const start = -Math.PI / 2 - Math.PI / 6;
+                if (!this.disabled && this.on) {
+                    const angle = Math.atan2(this.$el.clientWidth / 2 - offsetY, offsetX - this.$el.clientWidth / 2);
+                    const start = -Math.PI / 2 - Math.PI / 6;
 
-                if (angle > MAX_RADIANS) {
-                    this.brightness = this.map(angle, MIN_RADIANS, MAX_RADIANS, 0, 100);
-                } else if (angle < start) {
-                    this.brightness = this.map(angle + 2 * Math.PI, MIN_RADIANS, MAX_RADIANS, 0, 100);
-                } else {
-                    return;
+                    if (angle > MAX_RADIANS) {
+                        this.brightness = this.map(angle, MIN_RADIANS, MAX_RADIANS, 0, 100);
+                    } else if (angle < start) {
+                        this.brightness = this.map(angle + 2 * Math.PI, MIN_RADIANS, MAX_RADIANS, 0, 100);
+                    } else {
+                        return;
+                    }
+
+                    this.on = this.brightness > 0;
+                    this.$emit("input", Math.round(this.brightness));
                 }
-
-                this.on = this.brightness > 0;
-                this.$emit("input", Math.round(this.brightness));
             },
 
             select(event) {
-                if (!this.disabled) this.update(event.offsetX, event.offsetY);
+                if (!this.disabled && this.on) this.update(event.offsetX, event.offsetY);
             },
 
             start(mouse) {
-                if (!this.disabled) {
+                if (!this.disabled && this.on) {
                     window.addEventListener(mouse ? "mousemove" : "touchmove", mouse ? this.pointer : this.touch);
                     window.addEventListener(mouse ? "mouseup" : "touchend", mouse ? this.leave : this.stop);
                 }
             },
 
             leave() {
-                if (!this.disabled) {
+                if (!this.disabled && this.on) {
                     window.removeEventListener("mousemove", this.pointer);
                     window.removeEventListener("mouseup", this.leave);
 
@@ -286,7 +290,7 @@
             },
 
             stop() {
-                if (!this.disabled) {
+                if (!this.disabled && this.on) {
                     window.removeEventListener("touchmove", this.touch);
                     window.removeEventListener("touchend", this.stop);
 
@@ -295,11 +299,11 @@
             },
 
             pointer(event) {
-                if (!this.disabled) this.update(event.offsetX, event.offsetY);
+                if (!this.disabled && this.on) this.update(event.offsetX, event.offsetY);
             },
 
             touch(event) {
-                if (!this.disabled && event.touches.length === 1) {
+                if (!this.disabled && this.on && event.touches.length === 1) {
                     const rectangle = this.$el.getBoundingClientRect();
                     const touch = event.targetTouches.item(0);
 
@@ -357,7 +361,7 @@
             position: absolute;
             padding: 3%;
             box-sizing: border-box;
-            border: 2px var(--application-border) solid;
+            border: 2px var(--accessory-border) solid;
             border-radius: 50%;
             top: 0;
             left: 0;
@@ -367,7 +371,7 @@
                 height: 100%;
                 position: relative;
                 box-sizing: border-box;
-                background: var(--application-input-accent);
+                background: var(--accessory-background);
                 border-radius: 50%;
             }
         }
@@ -399,7 +403,7 @@
             padding: 3%;
             box-sizing: border-box;
             pointer-events: none;
-            border: 2px var(--application-border) solid;
+            border: 2px var(--accessory-border) solid;
             border-radius: 50%;
             top: 0;
             left: 0;
@@ -412,15 +416,14 @@
                 align-items: center;
                 position: relative;
                 box-sizing: border-box;
-                background: var(--application-input-accent);
+                background: var(--accessory-background);
                 pointer-events: all;
                 border-radius: 50%;
                 cursor: pointer;
 
                 .mdi {
-                    color: var(--application-input-text);
+                    color: var(--accessory-text);
                     font-size: 400%;
-                    opacity: 0.1;
                 }
             }
         }
@@ -445,15 +448,14 @@
                 padding: 70% 0 0 0;
                 position: relative;
                 box-sizing: border-box;
-                background: var(--application-input-accent);
+                background: var(--accessory-background);
                 pointer-events: all;
                 clip-path: inset(71% 0 0 0);
                 border-radius: 50%;
                 cursor: pointer;
 
                 .mdi {
-                    color: var(--application-input-text);
-                    opacity: 0.1;
+                    color: var(--accessory-text);
                 }
             }
         }
@@ -488,8 +490,7 @@
 
             .range {
                 fill: none;
-                stroke: var(--application-input-text);
-                opacity: 0;
+                stroke: var(--accessory-input);
                 stroke-width: 6%;
                 transition: stroke 0.1s ease-in;
                 cursor: pointer;
@@ -497,7 +498,7 @@
 
             .marker {
                 fill: none;
-                stroke: var(--button-light);
+                stroke: var(--accessory-input);
                 opacity: 0;
                 stroke-width: 7%;
                 stroke-dasharray: 0;
@@ -514,8 +515,7 @@
                     background: #fed800;
 
                     .mdi {
-                        color: #fff;
-                        opacity: 1;
+                        color: var(--accessory-highlight);
                     }
                 }
             }
@@ -525,17 +525,12 @@
                     background: #fed800;
 
                     .mdi {
-                        color: #fff;
-                        opacity: 1;
+                        color: var(--accessory-highlight);
                     }
                 }
             }
 
             svg {
-                .range {
-                    opacity: 0;
-                }
-
                 .marker {
                     stroke: #fed800;
                     opacity: 1;

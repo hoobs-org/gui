@@ -288,7 +288,7 @@
             position: absolute;
             padding: 3%;
             box-sizing: border-box;
-            border: 2px var(--application-border) solid;
+            border: 2px var(--accessory-border) solid;
             border-radius: 50%;
             top: 0;
             left: 0;
@@ -298,7 +298,7 @@
                 height: 100%;
                 position: relative;
                 box-sizing: border-box;
-                background: var(--application-input-accent);
+                background: var(--accessory-background);
                 border-radius: 50%;
             }
         }
@@ -310,7 +310,7 @@
             padding: 3%;
             box-sizing: border-box;
             pointer-events: none;
-            border: 2px var(--application-border) solid;
+            border: 2px var(--accessory-border) solid;
             border-radius: 50%;
             top: 0;
             left: 0;
@@ -323,15 +323,14 @@
                 align-items: center;
                 position: relative;
                 box-sizing: border-box;
-                background: var(--application-input-accent);
+                background: var(--accessory-background);
                 pointer-events: all;
                 border-radius: 50%;
                 cursor: pointer;
 
                 .mdi {
-                    color: var(--application-input-text);
+                    color: var(--accessory-text);
                     font-size: 400%;
-                    opacity: 0.1;
                 }
             }
         }
@@ -356,15 +355,14 @@
                 padding: 70% 0 0 0;
                 position: relative;
                 box-sizing: border-box;
-                background: var(--application-input-accent);
+                background: var(--accessory-background);
                 pointer-events: all;
                 clip-path: inset(71% 0 0 0);
                 border-radius: 50%;
                 cursor: pointer;
 
                 .mdi {
-                    color: var(--application-input-text);
-                    opacity: 0.1;
+                    color: var(--accessory-text);
                 }
             }
         }
@@ -399,8 +397,7 @@
 
             .range {
                 fill: none;
-                stroke: var(--application-input-text);
-                opacity: 0;
+                stroke: var(--accessory-input);
                 stroke-width: 6%;
                 transition: stroke 0.1s ease-in;
                 cursor: pointer;
@@ -408,7 +405,7 @@
 
             .marker {
                 fill: none;
-                stroke: var(--button-light);
+                stroke: var(--accessory-input);
                 opacity: 0;
                 stroke-width: 7%;
                 stroke-dasharray: 0;
@@ -425,8 +422,7 @@
                     background: #04a3ff;
 
                     .mdi {
-                        color: #fff;
-                        opacity: 1;
+                        color: var(--accessory-highlight);
                     }
                 }
             }
@@ -436,17 +432,12 @@
                     background: #04a3ff;
 
                     .mdi {
-                        color: #fff;
-                        opacity: 1;
+                        color: var(--accessory-highlight);
                     }
                 }
             }
 
             svg {
-                .range {
-                    opacity: 0;
-                }
-
                 .marker {
                     stroke: #04a3ff;
                     opacity: 1;

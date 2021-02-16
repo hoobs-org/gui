@@ -162,8 +162,8 @@
                 height: 100%;
 
                 .face {
-                    fill: var(--application-input-accent);
-                    stroke: var(--application-border);
+                    fill: var(--accessory-background);
+                    stroke: var(--accessory-border);
                     stroke-width: 0.5;
                 }
 

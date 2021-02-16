@@ -9,7 +9,13 @@
                 <path class="marker" :d="marker" />
             </svg>
             <div class="switch">
-                <div class="inner">
+                <div v-if="features.humidity" class="inner">
+                    <div class="humidity">
+                        <span :class="text">{{ readout }}&deg;</span>
+                        <span class="mdi mdi-water-outline sub">{{ humidity }}%</span>
+                    </div>
+                </div>
+                <div v-else class="inner">
                     <span :class="text">{{ readout }}&deg;</span>
                 </div>
             </div>
@@ -37,7 +43,7 @@
 
     const UPDATE_DELAY = 150;
     const LOCAL_DELAY = 1000;
-    const ADJUST_DELAY = 2000;
+    const ADJUST_DELAY = 4000;
 
     const RADIUS = 41;
 
@@ -160,9 +166,13 @@
                 state: 0,
                 target: 10,
                 current: 10,
+                humidity: 0,
                 display: "celsius",
                 adjusting: false,
                 timeout: null,
+                features: {
+                    humidity: false,
+                },
                 local: false,
                 subject: null,
                 updater: Debounce(() => {
@@ -170,9 +180,11 @@
                         const current = this.subject.characteristics.find((item) => item.type === "current_temperature") || {};
                         const target = this.subject.characteristics.find((item) => item.type === "target_temperature") || {};
                         const state = this.subject.characteristics.find((item) => item.type === "target_heating_cooling_state") || {};
+                        const humidity = this.subject.characteristics.find((item) => item.type === "current_relative_humidity") || {};
 
                         this.display = (this.subject.characteristics.find((item) => item.type === "temperature_display_units") || {}).value || false ? "fahrenheit" : "celsius";
                         this.current = Math.round((current.unit || "celsius") !== "celsius" ? ((current.value || 50) - 32) / 1.8 : current.value || 0);
+                        this.humidity = Math.round(humidity.value || 0);
                         this.target = Math.round((target.unit || "celsius") !== "celsius" ? ((target.value || 50) - 32) / 1.8 : target.value || 10);
 
                         this.state = state.value || 0;
@@ -182,6 +194,8 @@
                         this.max.temp = target.max_value || 38;
                         this.min.state = state.min_value || 0;
                         this.max.state = state.max_value || 1;
+
+                        if (humidity) this.features.humidity = true;
                     }
                 }, UPDATE_DELAY),
             };
@@ -221,46 +235,50 @@
             },
 
             async commit() {
-                this.local = true;
+                if (!this.disabled && this.state) {
+                    this.local = true;
 
-                const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
-                await accessory.set("target_temperature", Math.round(this.target));
+                    const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+                    await accessory.set("target_temperature", Math.round(this.target));
 
-                setTimeout(() => { this.local = false; }, LOCAL_DELAY);
+                    setTimeout(() => { this.local = false; }, LOCAL_DELAY);
+                }
             },
 
             update(offsetX, offsetY) {
-                if (this.timeout) clearTimeout(this.timeout);
+                if (!this.disabled && this.state) {
+                    if (this.timeout) clearTimeout(this.timeout);
 
-                this.adjusting = true;
+                    this.adjusting = true;
 
-                const angle = Math.atan2(this.$el.clientWidth / 2 - offsetY, offsetX - this.$el.clientWidth / 2);
-                const start = -Math.PI / 2 - Math.PI / 6;
+                    const angle = Math.atan2(this.$el.clientWidth / 2 - offsetY, offsetX - this.$el.clientWidth / 2);
+                    const start = -Math.PI / 2 - Math.PI / 6;
 
-                if (angle > MAX_RADIANS) {
-                    this.target = this.map(angle, MIN_RADIANS, MAX_RADIANS, this.min.temp, this.max.temp);
-                } else if (angle < start) {
-                    this.target = this.map(angle + 2 * Math.PI, MIN_RADIANS, MAX_RADIANS, this.min.temp, this.max.temp);
+                    if (angle > MAX_RADIANS) {
+                        this.target = this.map(angle, MIN_RADIANS, MAX_RADIANS, this.min.temp, this.max.temp);
+                    } else if (angle < start) {
+                        this.target = this.map(angle + 2 * Math.PI, MIN_RADIANS, MAX_RADIANS, this.min.temp, this.max.temp);
+                    }
+
+                    this.target = Math.round(this.target);
+                    this.$emit("input", this.target);
+                    this.timeout = setTimeout(() => { this.adjusting = false; }, ADJUST_DELAY);
                 }
-
-                this.target = Math.round(this.target);
-                this.$emit("input", this.target);
-                this.timeout = setTimeout(() => { this.adjusting = false; }, ADJUST_DELAY);
             },
 
             select(event) {
-                if (!this.disabled) this.update(event.offsetX, event.offsetY);
+                if (!this.disabled && this.state) this.update(event.offsetX, event.offsetY);
             },
 
             start(mouse) {
-                if (!this.disabled) {
+                if (!this.disabled && this.state) {
                     window.addEventListener(mouse ? "mousemove" : "touchmove", mouse ? this.pointer : this.touch);
                     window.addEventListener(mouse ? "mouseup" : "touchend", mouse ? this.leave : this.stop);
                 }
             },
 
             leave() {
-                if (!this.disabled) {
+                if (!this.disabled && this.state) {
                     window.removeEventListener("mousemove", this.pointer);
                     window.removeEventListener("mouseup", this.leave);
 
@@ -269,7 +287,7 @@
             },
 
             stop() {
-                if (!this.disabled) {
+                if (!this.disabled && this.state) {
                     window.removeEventListener("touchmove", this.touch);
                     window.removeEventListener("touchend", this.stop);
 
@@ -278,11 +296,11 @@
             },
 
             pointer(event) {
-                if (!this.disabled) this.update(event.offsetX, event.offsetY);
+                if (!this.disabled && this.state) this.update(event.offsetX, event.offsetY);
             },
 
             touch(event) {
-                if (!this.disabled && event.touches.length === 1) {
+                if (!this.disabled && this.state && event.touches.length === 1) {
                     const rectangle = this.$el.getBoundingClientRect();
                     const touch = event.targetTouches.item(0);
 
@@ -350,7 +368,7 @@
             position: absolute;
             padding: 3%;
             box-sizing: border-box;
-            border: 2px var(--application-border) solid;
+            border: 2px var(--accessory-border) solid;
             border-radius: 50%;
             top: 0;
             left: 0;
@@ -360,7 +378,7 @@
                 height: 100%;
                 position: relative;
                 box-sizing: border-box;
-                background: var(--application-input-accent);
+                background: var(--accessory-background);
                 border-radius: 50%;
             }
         }
@@ -386,28 +404,31 @@
                 clip-path: inset(0 0 32% 0);
                 align-items: center;
                 position: relative;
+                background: var(--accessory-input);
                 box-sizing: border-box;
                 pointer-events: all;
                 border-radius: 50%;
                 cursor: pointer;
 
-                &::after {
-                    content: '';
-                    width: 100%;
-                    height: 100%;
-                    background: var(--application-input-text);
-                    opacity: 0.18;
-                    position: absolute;
-                    border-radius: 50%;
-                    top: 0;
-                    left: 0;
-                    z-index: -1;
+                .temp {
+                    color: var(--accessory-text);
+                    font-size: 240%;
                 }
+            }
+
+            .humidity {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
 
                 .temp {
-                    color: var(--application-input-text);
-                    opacity: 0.4;
-                    font-size: 240%;
+                    font-size: 220%;
+                    line-height: 100%;
+                }
+
+                .sub {
+                    color: var(--accessory-text);
+                    font-size: 80%;
                 }
             }
         }
@@ -431,28 +452,15 @@
                 align-items: center;
                 padding: 70% 0 0 0;
                 position: relative;
+                background: var(--accessory-input);
                 box-sizing: border-box;
                 pointer-events: all;
                 clip-path: inset(71% 0 0 0);
                 border-radius: 50%;
                 cursor: pointer;
 
-                 &::after {
-                    content: '';
-                    width: 100%;
-                    height: 100%;
-                    background: var(--application-input-text);
-                    opacity: 0.18;
-                    position: absolute;
-                    border-radius: 50%;
-                    top: 0;
-                    left: 0;
-                    z-index: -1;
-                }
-
                 .mdi {
-                    color: var(--application-input-text);
-                    opacity: 0.4;
+                    color: var(--accessory-text);
                 }
 
                 .cliped {
@@ -489,16 +497,15 @@
 
             .range {
                 fill: none;
-                stroke: var(--application-input-text);
+                stroke: var(--accessory-input);
                 stroke-width: 6%;
-                opacity: 0.18;
                 transition: stroke 0.1s ease-in;
                 cursor: pointer;
             }
 
             .marker {
                 fill: none;
-                stroke: var(--application-input-text);
+                stroke: var(--accessory-input);
                 opacity: 0;
                 stroke-width: 6%;
                 stroke-dasharray: 0;

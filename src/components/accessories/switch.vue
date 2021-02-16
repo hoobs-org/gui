@@ -120,7 +120,7 @@
             padding: 3%;
             box-sizing: border-box;
             pointer-events: none;
-            border: 2px var(--application-border) solid;
+            border: 2px var(--accessory-border) solid;
             border-radius: 50%;
             top: 0;
             left: 0;
@@ -133,15 +133,14 @@
                 align-items: center;
                 position: relative;
                 box-sizing: border-box;
-                background: var(--application-input-accent);
+                background: var(--accessory-background);
                 pointer-events: all;
                 border-radius: 50%;
                 cursor: pointer;
 
                 .mdi {
-                    color: var(--application-input-text);
+                    color: var(--accessory-text);
                     font-size: 400%;
-                    opacity: 0.1;
                 }
             }
         }
@@ -152,7 +151,7 @@
                     background: var(--application-highlight);
 
                     .mdi {
-                        color: #fff;
+                        color: var(--accessory-highlight);
                         opacity: 1;
                     }
                 }
