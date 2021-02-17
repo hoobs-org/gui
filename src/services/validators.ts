@@ -90,6 +90,7 @@ export default class Validators {
             "new",
             "add",
             "hub",
+            "hidden",
             "bridge",
             "bridges",
             "library",
@@ -227,7 +228,7 @@ export default class Validators {
             };
         }
 
-        if (id === "default" || id === "add") {
+        if (id === "default" || id === "add" || id === "hidden") {
             return {
                 error: "room_reserved_name",
                 valid: false,

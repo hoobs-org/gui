@@ -63,6 +63,7 @@ export default new Vuex.Store({
         notifications: [],
         navigation: false,
         accessory: null,
+        room: null,
         theme: "dark",
     },
 
@@ -134,6 +135,10 @@ export default new Vuex.Store({
 
         "IO:ACCESSORY:CHANGE": (state: { [key: string]: any }, payload: any) => {
             state.accessory = payload.data;
+        },
+
+        "IO:ROOM:CHANGE": (state: { [key: string]: any }, payload: any) => {
+            state.room = payload.data;
         },
 
         "SESSION:SET": (state: { [key: string]: any }, token: string) => {

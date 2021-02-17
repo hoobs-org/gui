@@ -17,102 +17,102 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="control">
+    <div v-if="!hidden && !loading" id="control">
         <div class="item">
             <div class="background">
                 <div class="sensor">
                     <div v-if="main === 'leak' && leak" class="main leak">
-                        <span class="mdi mdi-pipe-leak"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'pipe-leak'}`"></span>
                         <div class="status">
                             {{ $t("leak_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'leak' && !leak" class="main">
-                        <span class="mdi mdi-pipe-leak"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'pipe-leak'}`"></span>
                         <div class="status">
                             {{ $t("no_leaks") }}
                         </div>
                     </div>
                     <div v-if="main === 'temperature'" class="main value">
-                        <span class="mdi mdi-thermometer"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'thermometer'}`"></span>
                         <div class="status">
                             {{ readout }}&deg;
                         </div>
                     </div>
                     <div v-if="main === 'humidity'" class="main value">
-                        <span class="mdi mdi-water-outline"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'water-outline'}`"></span>
                         <div class="status">
                             {{ humidity }}%;
                         </div>
                     </div>
                     <div v-if="main === 'smoke' && smoke" class="main alert">
-                        <span class="mdi mdi-fire"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'fire'}`"></span>
                         <div class="status">
                             {{ $t("smoke_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'smoke' && !smoke" class="main">
-                        <span class="mdi mdi-fire"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'fire'}`"></span>
                         <div class="status">
                             {{ $t("no_smoke") }}
                         </div>
                     </div>
                     <div v-if="main === 'carbon' && carbon" class="main alert">
-                        <span class="mdi mdi-smog"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'smog'}`"></span>
                         <div class="status">
                             {{ $t("carbon_monoxide_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'carbon' && !carbon" class="main">
-                        <span class="mdi mdi-smog"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'smog'}`"></span>
                         <div class="status">
                             {{ $t("no_carbon_monoxide") }}
                         </div>
                     </div>
                     <div v-if="main === 'contact' && contact" class="main">
-                        <span class="mdi mdi-dock-window"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'}`"></span>
                         <div class="status">
                             {{ $t("closed") }}
                         </div>
                     </div>
                     <div v-if="main === 'contact' && !contact" class="main on">
-                        <span class="mdi mdi-dock-window"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'}`"></span>
                         <div class="status">
                             {{ $t("open") }}
                         </div>
                     </div>
                     <div v-if="main === 'motion' && motion" class="main on">
-                        <span class="mdi mdi-motion-sensor"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'motion-sensor'}`"></span>
                         <div class="status">
                             {{ $t("motion_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'motion' && !motion" class="main">
-                        <span class="mdi mdi-motion-sensor"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'motion-sensor'}`"></span>
                         <div class="status">
                             {{ $t("no_motion") }}
                         </div>
                     </div>
                     <div v-if="main === 'obstruction' && obstruction" class="main on">
-                        <span class="mdi mdi-dog-side"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'dog-side'}`"></span>
                         <div class="status">
                             {{ $t("obstruction_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'obstruction' && !obstruction" class="main">
-                        <span class="mdi mdi-dog-side"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'dog-side'}`"></span>
                         <div class="status">
                             {{ $t("no_obstruction") }}
                         </div>
                     </div>
                     <div v-if="main === 'occupancy' && occupancy" class="main on">
-                        <span class="mdi mdi-crosshairs-gps"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'crosshairs-gps'}`"></span>
                         <div class="status">
                             {{ $t("presence_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'occupancy' && !occupancy" class="main">
-                        <span class="mdi mdi-crosshairs-gps"></span>
+                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'crosshairs-gps'}`"></span>
                         <div class="status">
                             {{ $t("no_presence") }}
                         </div>
@@ -135,7 +135,7 @@
                     </div>
                 </div>
             </div>
-            <div class="settings">
+            <div v-on:click="settings" class="settings">
                 <span class="mdi mdi-cog"></span>
             </div>
             <div v-if="features.battery" class="battery" :title="`${battery}%`">
@@ -147,7 +147,7 @@
                 </div>
             </div>
         </div>
-        <div class="name">{{ accessory.name }}</div>
+        <div class="name">{{ display }}</div>
     </div>
 </template>
 
@@ -196,8 +196,8 @@
             readout() {
                 const results = this.temperature;
 
-                if (this.display === "fahrenheit" && this.unit === "celsius") return Math.round((results * 1.8) + 32);
-                if (this.display === "celsius" && this.unit === "fahrenheit") return Math.round((results - 32) / 1.8);
+                if (this.output === "fahrenheit" && this.unit === "celsius") return Math.round((results * 1.8) + 32);
+                if (this.output === "celsius" && this.unit === "fahrenheit") return Math.round((results - 32) / 1.8);
 
                 return Math.round(results);
             },
@@ -205,11 +205,12 @@
 
         data() {
             return {
+                loading: true,
                 main: "",
                 leak: false,
                 temperature: 0,
                 unit: "celsius",
-                display: "celsius",
+                output: "celsius",
                 humidity: 0,
                 smoke: false,
                 carbon: false,
@@ -232,6 +233,8 @@
                 },
                 local: false,
                 subject: null,
+                display: "",
+                hidden: false,
                 updater: Debounce(async () => {
                     if (!this.local) {
                         const leak = this.subject.characteristics.find((item) => item.type === "leak_detected");
@@ -255,6 +258,8 @@
                         if (this.subject.main_sensor === "obstruction_detected") this.main = "obstruction";
                         if (this.subject.main_sensor === "occupancy_detected") this.main = "occupancy";
 
+                        this.display = this.subject.name;
+                        this.hidden = this.subject.hidden;
                         this.leak = (leak || {}).value || false;
                         this.temperature = (temperature || {}).value || 0;
                         this.unit = (temperature || {}).unit || "celsius";
@@ -278,7 +283,7 @@
                         if (occupancy) this.features.occupancy = true;
                         if (battery) this.features.battery = true;
 
-                        if (this.features.temperature) this.display = ((await this.$hoobs.config.get()).weather || {}).units || "celsius";
+                        if (this.features.temperature) this.output = ((await this.$hoobs.config.get()).weather || {}).units || "celsius";
                     }
                 }, UPDATE_DELAY),
             };
@@ -286,7 +291,7 @@
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.subject.accessory_identifier) {
                     this.subject = mutation.payload.data.accessory;
                     this.updater();
                 }
@@ -296,6 +301,16 @@
         async mounted() {
             this.subject = this.accessory;
             this.updater();
+            this.loading = false;
+        },
+
+        methods: {
+            settings() {
+                this.$dialog.open("accessory", {
+                    bridge: this.subject.bridge,
+                    id: this.subject.accessory_identifier,
+                });
+            },
         },
     };
 </script>

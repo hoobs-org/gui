@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="control">
+    <div v-if="!hidden && !loading" id="control">
         <div class="item">
             <div class="background">
                 <div class="panel">
@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="settings">
+            <div v-on:click="settings" class="settings">
                 <span class="mdi mdi-cog"></span>
             </div>
             <div v-if="features.battery" class="battery" :title="`${battery}%`">
@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <div class="name">{{ accessory.name }}</div>
+        <div class="name">{{ display }}</div>
     </div>
 </template>
 
@@ -89,6 +89,7 @@
 
         data() {
             return {
+                loading: true,
                 state: 0,
                 battery: 0,
                 features: {
@@ -96,10 +97,14 @@
                 },
                 local: false,
                 subject: null,
+                display: "",
+                hidden: false,
                 updater: Debounce(() => {
                     if (!this.local) {
                         const battery = this.subject.characteristics.find((item) => item.type === "battery_level");
 
+                        this.display = this.subject.name;
+                        this.hidden = this.subject.hidden;
                         this.state = (this.subject.characteristics.find((item) => item.type === "security_system_target_state") || {}).value || 0;
                         this.battery = (battery || {}).value || 0;
 
@@ -111,7 +116,7 @@
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.subject.accessory_identifier) {
                     this.subject = mutation.payload.data.accessory;
                     this.updater();
                 }
@@ -121,13 +126,21 @@
         mounted() {
             this.subject = this.accessory;
             this.updater();
+            this.loading = false;
         },
 
         methods: {
+            settings() {
+                this.$dialog.open("accessory", {
+                    bridge: this.subject.bridge,
+                    id: this.subject.accessory_identifier,
+                });
+            },
+
             async mode(value) {
                 this.local = true;
 
-                const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+                const accessory = await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier);
 
                 this.state = value;
 

@@ -17,17 +17,17 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="control" :class="on ? 'on' : 'off'">
+    <div v-if="!hidden && !loading" id="control" :class="on ? 'on' : 'off'">
         <div class="item">
             <div class="switch">
                 <div v-if="on" class="inner" v-on:click="toggle">
-                    <span :class="`mdi mdi-${accessory.icon && accessory.icon !== '' ? accessory.icon : 'toggle-switch'}`"></span>
+                    <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'toggle-switch'}`"></span>
                 </div>
                 <div v-else class="inner" v-on:click="toggle">
-                    <span :class="`mdi mdi-${accessory.icon && accessory.icon !== '' ? accessory.icon : 'toggle-switch-off'}`"></span>
+                    <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'toggle-switch-off'}`"></span>
                 </div>
             </div>
-            <div class="settings">
+            <div v-on:click="settings" class="settings">
                 <span class="mdi mdi-cog"></span>
             </div>
             <div v-if="features.battery" class="battery" :title="`${battery}%`">
@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <div class="name">{{ accessory.name }}</div>
+        <div class="name">{{ display }}</div>
     </div>
 </template>
 
@@ -79,6 +79,7 @@
 
         data() {
             return {
+                loading: true,
                 on: false,
                 battery: 0,
                 features: {
@@ -86,10 +87,14 @@
                 },
                 local: false,
                 subject: null,
+                display: "",
+                hidden: false,
                 updater: Debounce(() => {
                     if (!this.local) {
                         const battery = this.subject.characteristics.find((item) => item.type === "battery_level");
 
+                        this.display = this.subject.name;
+                        this.hidden = this.subject.hidden;
                         this.on = (this.subject.characteristics.find((item) => item.type === "on") || {}).value || false;
                         this.battery = (battery || {}).value || 0;
 
@@ -101,7 +106,7 @@
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.subject.accessory_identifier) {
                     this.subject = mutation.payload.data.accessory;
                     this.updater();
                 }
@@ -111,13 +116,21 @@
         mounted() {
             this.subject = this.accessory;
             this.updater();
+            this.loading = false;
         },
 
         methods: {
+            settings() {
+                this.$dialog.open("accessory", {
+                    bridge: this.subject.bridge,
+                    id: this.subject.accessory_identifier,
+                });
+            },
+
             async toggle() {
                 this.local = true;
 
-                const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+                const accessory = await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier);
                 const on = !this.on;
 
                 this.on = on;

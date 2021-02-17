@@ -126,6 +126,8 @@
         },
 
         async mounted() {
+            this.loading = true;
+
             this.auth = await this.$hoobs.auth.status() === "enabled";
             this.original = await this.$hoobs.theme.get(this.$store.state.theme);
             this.working = JSON.parse(JSON.stringify(this.original));
@@ -142,11 +144,11 @@
         },
 
         watch: {
-            highlight(updated, current) {
+            highlight(_updated, current) {
                 if (current && current !== "" && !this.loading && this.highlight !== "auto") this.adjust(this.highlight);
             },
 
-            async mode(updated, current) {
+            async mode(_updated, current) {
                 if (current && current !== "" && !this.loading && !this.updating) {
                     this.updating = true;
 
@@ -169,7 +171,7 @@
                 }
             },
 
-            async backdrop(updated, current) {
+            async backdrop(_updated, current) {
                 if (current && current !== "") {
                     this.working.backdrop = this.backdrop;
 

@@ -120,6 +120,12 @@
             },
         },
 
+        created() {
+            this.$store.subscribe(async (mutation) => {
+                if (mutation.type === "IO:ROOM:CHANGE" && mutation.payload.room.action !== "add" && mutation.payload.room.action !== "remove") this.load(this.id);
+            });
+        },
+
         mounted() {
             this.load(this.id);
         },

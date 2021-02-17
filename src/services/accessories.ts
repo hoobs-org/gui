@@ -44,6 +44,7 @@ export function types(accessory: { [key: string]: any }): string | undefined {
 
         case "window_covering":
             return "blind-accessory";
+
         case "sensor":
             if (!accessory.main_sensor) return undefined;
 

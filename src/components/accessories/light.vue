@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="control" :class="on ? 'on' : 'off'">
+    <div v-if="!hidden && !loading" id="control" :class="on ? 'on' : 'off'">
         <div :class="style">
             <div v-if="features.brightness && on" class="background">
                 <div class="inner"></div>
@@ -28,10 +28,10 @@
             </svg>
             <div v-if="!features.picker" class="switch">
                 <div v-if="on" class="inner" v-on:click="toggle" :style="`background: ${color};`">
-                    <span :class="`mdi mdi-${accessory.icon && accessory.icon !== '' ? accessory.icon : 'lightbulb-on'}`"></span>
+                    <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'lightbulb-on'}`"></span>
                 </div>
                 <div v-else class="inner" v-on:click="toggle">
-                    <span :class="`mdi mdi-${accessory.icon && accessory.icon !== '' ? accessory.icon : 'lightbulb-outline'}`"></span>
+                    <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'lightbulb-outline'}`"></span>
                 </div>
             </div>
             <div v-if="features.hue && !features.picker && on" class="context">
@@ -42,7 +42,7 @@
             <div v-if="features.picker" class="picker">
                 <div class="wheel" ref="wheel"></div>
             </div>
-            <div class="settings">
+            <div v-on:click="settings" class="settings">
                 <span class="mdi mdi-cog"></span>
             </div>
             <div v-if="features.battery" class="battery" :title="`${battery}%`">
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="name">{{ accessory.name }}</div>
+        <div class="name">{{ display }}</div>
     </div>
 </template>
 
@@ -168,6 +168,7 @@
 
         data() {
             return {
+                loading: true,
                 on: false,
                 hue: 0,
                 wheel: null,
@@ -182,6 +183,8 @@
                 },
                 local: false,
                 subject: null,
+                display: "",
+                hidden: false,
                 updater: Debounce(() => {
                     if (!this.local) {
                         const brightness = this.subject.characteristics.find((item) => item.type === "brightness");
@@ -189,6 +192,8 @@
                         const hue = this.subject.characteristics.find((item) => item.type === "hue");
                         const battery = this.subject.characteristics.find((item) => item.type === "battery_level");
 
+                        this.display = this.subject.name;
+                        this.hidden = this.subject.hidden;
                         this.on = (this.subject.characteristics.find((item) => item.type === "on") || {}).value || false;
                         this.hue = (hue || {}).value || 0;
                         this.saturation = (saturation || {}).value || 0;
@@ -204,7 +209,7 @@
                     if (!this.disabled && this.on) {
                         this.local = true;
 
-                        const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+                        const accessory = await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier);
 
                         await accessory.set("brightness", Math.round(this.brightness));
 
@@ -222,7 +227,7 @@
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.subject.accessory_identifier) {
                     this.subject = mutation.payload.data.accessory;
                     this.updater();
                 }
@@ -232,9 +237,17 @@
         mounted() {
             this.subject = this.accessory;
             this.updater();
+            this.loading = false;
         },
 
         methods: {
+            settings() {
+                this.$dialog.open("accessory", {
+                    bridge: this.subject.bridge,
+                    id: this.subject.accessory_identifier,
+                });
+            },
+
             map(x, inMin, inMax, outMin, outMax) {
                 return (((x - inMin) * (outMax - outMin)) / (inMax - inMin)) + outMin;
             },
@@ -260,7 +273,7 @@
             async pick(color) {
                 this.local = true;
 
-                const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+                const accessory = await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier);
 
                 this.hue = color.hsl.h;
                 this.saturation = color.hsl.s;
@@ -280,7 +293,7 @@
             async toggle() {
                 this.local = true;
 
-                const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+                const accessory = await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier);
                 const on = !this.on;
 
                 if (this.features.picker) {

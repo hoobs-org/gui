@@ -59,6 +59,7 @@ io.on("log", (data) => store.commit("IO:LOG", data));
 io.on("monitor", (data) => store.commit("IO:MONITOR", data));
 io.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
 io.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
+io.on("room_change", (data) => store.commit("IO:ROOM:CHANGE", data));
 
 io.on("reconnect", async () => {
     if ((await hoobs.sdk.auth.status()) === "uninitialized") {

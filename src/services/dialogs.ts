@@ -55,4 +55,8 @@ export default new Dialogs([
         name: "plugin",
         component: () => import(/* webpackChunkName: "dialog-bridges" */ "@/components/dialogs/plugin.vue"),
     },
+    {
+        name: "accessory",
+        component: () => import(/* webpackChunkName: "dialog-accessory" */ "@/components/dialogs/accessory.vue"),
+    },
 ]);

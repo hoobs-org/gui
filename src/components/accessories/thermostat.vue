@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="control">
+    <div v-if="!hidden && !loading" id="control">
         <div :class="style">
             <div class="background">
                 <div class="inner"></div>
@@ -48,7 +48,7 @@
                     <span v-else class="mdi off">{{ $t("off") }}</span>
                 </div>
             </div>
-            <div class="settings">
+            <div v-on:click="settings" class="settings">
                 <span class="mdi mdi-cog"></span>
             </div>
             <div v-if="features.battery" class="battery" :title="`${battery}%`">
@@ -60,7 +60,7 @@
                 </div>
             </div>
         </div>
-        <div class="name">{{ accessory.name }}</div>
+        <div class="name">{{ display }}</div>
     </div>
 </template>
 
@@ -156,8 +156,8 @@
             readout() {
                 const results = this.adjusting ? this.target : this.current;
 
-                if (this.display === "fahrenheit" && this.unit === "celsius") return Math.round((results * 1.8) + 32);
-                if (this.display === "celsius" && this.unit === "fahrenheit") return Math.round((results - 32) / 1.8);
+                if (this.output === "fahrenheit" && this.unit === "celsius") return Math.round((results * 1.8) + 32);
+                if (this.output === "celsius" && this.unit === "fahrenheit") return Math.round((results - 32) / 1.8);
 
                 return Math.round(results);
             },
@@ -195,6 +195,7 @@
 
         data() {
             return {
+                loading: true,
                 min: {
                     temp: 10,
                     state: 0,
@@ -208,7 +209,7 @@
                 target: 10,
                 current: 10,
                 humidity: 0,
-                display: "celsius",
+                output: "celsius",
                 adjusting: false,
                 timeout: null,
                 battery: 0,
@@ -218,6 +219,8 @@
                 },
                 local: false,
                 subject: null,
+                display: "",
+                hidden: false,
                 updater: Debounce(() => {
                     if (!this.local) {
                         const current = this.subject.characteristics.find((item) => item.type === "current_temperature") || {};
@@ -226,7 +229,9 @@
                         const humidity = this.subject.characteristics.find((item) => item.type === "current_relative_humidity") || {};
                         const battery = this.subject.characteristics.find((item) => item.type === "battery_level");
 
-                        this.display = (this.subject.characteristics.find((item) => item.type === "temperature_display_units") || {}).value || false ? "fahrenheit" : "celsius";
+                        this.display = this.subject.name;
+                        this.hidden = this.subject.hidden;
+                        this.output = (this.subject.characteristics.find((item) => item.type === "temperature_display_units") || {}).value || false ? "fahrenheit" : "celsius";
                         this.current = Math.round((current.unit || "celsius") !== "celsius" ? ((current.value || 50) - 32) / 1.8 : current.value || 0);
                         this.humidity = Math.round(humidity.value || 0);
                         this.target = Math.round((target.unit || "celsius") !== "celsius" ? ((target.value || 50) - 32) / 1.8 : target.value || 10);
@@ -248,7 +253,7 @@
                     if (!this.disabled && this.state) {
                         this.local = true;
 
-                        const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+                        const accessory = await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier);
                         await accessory.set("target_temperature", Math.round(this.target));
 
                         setTimeout(() => { this.local = false; }, LOCAL_DELAY);
@@ -259,7 +264,7 @@
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.subject.accessory_identifier) {
                     this.subject = mutation.payload.data.accessory;
                     this.updater();
                 }
@@ -269,9 +274,17 @@
         mounted() {
             this.subject = this.accessory;
             this.updater();
+            this.loading = false;
         },
 
         methods: {
+            settings() {
+                this.$dialog.open("accessory", {
+                    bridge: this.subject.bridge,
+                    id: this.subject.accessory_identifier,
+                });
+            },
+
             map(x, inMin, inMax, outMin, outMax) {
                 return (((x - inMin) * (outMax - outMin)) / (inMax - inMin)) + outMin;
             },
@@ -280,7 +293,7 @@
                 this.local = true;
 
                 let state = this.state + 1;
-                const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+                const accessory = await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier);
 
                 if (state > this.max.state) state = this.min.state;
                 await accessory.set("target_heating_cooling_state", state);

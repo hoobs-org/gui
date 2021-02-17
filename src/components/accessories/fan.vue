@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="control" :class="on ? 'on' : 'off'">
+    <div v-if="!hidden && !loading" id="control" :class="on ? 'on' : 'off'">
         <div :class="style">
             <div v-if="features.brightness && on" class="background">
                 <div class="inner"></div>
@@ -28,7 +28,7 @@
             </svg>
             <div v-if="!features.rotation" class="switch">
                 <div class="inner" v-on:click="toggle">
-                    <span :class="`mdi mdi-${accessory.icon && accessory.icon !== '' ? accessory.icon : 'fan'}`"></span>
+                    <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'fan'}`"></span>
                 </div>
             </div>
             <div v-if="features.rotation && on" class="context">
@@ -36,7 +36,7 @@
                     <span class="mdi mdi-palette"></span>
                 </div>
             </div>
-            <div class="settings">
+            <div v-on:click="settings" class="settings">
                 <span class="mdi mdi-cog"></span>
             </div>
             <div v-if="features.battery" class="battery" :title="`${battery}%`">
@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <div class="name">{{ accessory.name }}</div>
+        <div class="name">{{ display }}</div>
     </div>
 </template>
 
@@ -149,6 +149,7 @@
 
         data() {
             return {
+                loading: true,
                 key: "on",
                 on: false,
                 speed: 0,
@@ -161,6 +162,8 @@
                 },
                 local: false,
                 subject: null,
+                display: "",
+                hidden: false,
                 updater: Debounce(() => {
                     if (!this.local) {
                         const speed = this.subject.characteristics.find((item) => item.type === "brightness");
@@ -171,6 +174,8 @@
                         if (this.subject.characteristics.find((item) => item.type === "active" && item.write)) this.key = "active";
                         if (this.subject.characteristics.find((item) => item.type === "target_fan_state" && item.write)) this.key = "target_fan_state";
 
+                        this.display = this.subject.name;
+                        this.hidden = this.subject.hidden;
                         this.on = (this.subject.characteristics.find((item) => item.type === this.key) || {}).value || false;
                         this.speed = (speed || {}).value || 0;
                         this.rotation = (rotation || {}).value || 0;
@@ -185,7 +190,7 @@
                     if (!this.disabled && this.on) {
                         this.local = true;
 
-                        const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+                        const accessory = await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier);
                         await accessory.set("rotation_speed", Math.round(this.speed));
 
                         setTimeout(() => { this.local = false; }, LOCAL_DELAY);
@@ -196,7 +201,7 @@
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.accessory.accessory_identifier) {
+                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.subject.accessory_identifier) {
                     this.subject = mutation.payload.data.accessory;
                     this.updater();
                 }
@@ -206,9 +211,17 @@
         mounted() {
             this.subject = this.accessory;
             this.updater();
+            this.loading = false;
         },
 
         methods: {
+            settings() {
+                this.$dialog.open("accessory", {
+                    bridge: this.subject.bridge,
+                    id: this.subject.accessory_identifier,
+                });
+            },
+
             map(x, inMin, inMax, outMin, outMax) {
                 return (((x - inMin) * (outMax - outMin)) / (inMax - inMin)) + outMin;
             },
@@ -216,7 +229,7 @@
             async toggle() {
                 this.local = true;
 
-                const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
+                const accessory = await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier);
                 const on = !this.on;
 
                 this.on = on;
