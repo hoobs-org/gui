@@ -203,6 +203,9 @@
         }
 
         .battery {
+            width: 27px;
+            height: 27px;
+            box-sizing: border-box;
             position: absolute;
             border-radius: 50%;
             background: var(--widget-background);
@@ -210,12 +213,12 @@
             justify-content: space-around;
             align-items: center;
             padding: 3px;
-            top: -6px;
+            top: -8px;
             left: -6px;
-            cursor: pointer;
+            cursor: default;
 
             .mdi {
-                font-size: 22px;
+                font-size: 20px;
                 transform-origin: center;
                 transform: rotate(90deg);
             }
@@ -227,7 +230,7 @@
                 justify-content: space-around;
                 align-items: center;
                 position: absolute;
-                color: #17eb50;
+                color: var(--accessory-text);
                 top: 0;
                 left: 0;
             }

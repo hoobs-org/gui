@@ -34,7 +34,7 @@
                 <div v-if="hasFeatures()" class="features"></div>
                 <div class="devices">
                     <div v-for="(accessory, index) in accessories" :key="`accessory:${index}`" class="device">
-                        <component v-if="control(accessory.type)" :is="control(accessory.type)" :accessory="accessory" />
+                        <component v-if="control(accessory)" :is="control(accessory)" :accessory="accessory" />
                     </div>
                 </div>
             </div>
@@ -125,8 +125,8 @@
         },
 
         methods: {
-            control(type) {
-                return types(type);
+            control(accessory) {
+                return types(accessory);
             },
 
             async load(id) {

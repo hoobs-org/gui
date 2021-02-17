@@ -64,6 +64,23 @@
             },
         },
 
+        computed: {
+            charge() {
+                if (!this.battery) return "battery-outline";
+                if (this.battery > 0 && this.battery < 10) return "battery-10";
+                if (this.battery > 10 && this.battery < 20) return "battery-20";
+                if (this.battery > 20 && this.battery < 30) return "battery-30";
+                if (this.battery > 30 && this.battery < 40) return "battery-40";
+                if (this.battery > 40 && this.battery < 50) return "battery-50";
+                if (this.battery > 50 && this.battery < 60) return "battery-60";
+                if (this.battery > 60 && this.battery < 70) return "battery-70";
+                if (this.battery > 70 && this.battery < 80) return "battery-80";
+                if (this.battery > 80 && this.battery < 90) return "battery-90";
+
+                return "battery";
+            },
+        },
+
         data() {
             return {
                 position: 0,
@@ -141,6 +158,9 @@
         }
 
         .battery {
+            width: 27px;
+            height: 27px;
+            box-sizing: border-box;
             position: absolute;
             border-radius: 50%;
             background: var(--widget-background);
@@ -148,12 +168,12 @@
             justify-content: space-around;
             align-items: center;
             padding: 3px;
-            top: -6px;
+            top: -8px;
             left: -6px;
-            cursor: pointer;
+            cursor: default;
 
             .mdi {
-                font-size: 22px;
+                font-size: 20px;
                 transform-origin: center;
                 transform: rotate(90deg);
             }
@@ -165,7 +185,7 @@
                 justify-content: space-around;
                 align-items: center;
                 position: absolute;
-                color: #17eb50;
+                color: var(--accessory-text);
                 top: 0;
                 left: 0;
             }
