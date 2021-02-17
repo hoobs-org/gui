@@ -26,19 +26,7 @@
         </context>
         <div v-if="!loading" class="content">
             <list value="id" display="name" :values="rooms" :selected="id" :initial="rooms.length > 0 ? rooms[0].id : ''" controller="accessories" />
-            <div v-if="!intermediate && id !== 'add'" :class="!id ? 'screen desktop' : 'screen'">
-                <div class="nav mobile">
-                    <router-link to="/accessories" class="back"><span class="mdi mdi-chevron-left"></span> {{ $t("back") }}</router-link>
-                </div>
-                <div class="section">{{ display }}</div>
-                <div v-if="hasFeatures()" class="features"></div>
-                <div class="devices">
-                    <div v-for="(accessory, index) in accessories" :key="`accessory:${index}`" class="device">
-                        <component v-if="control(accessory)" :is="control(accessory)" :accessory="accessory" />
-                    </div>
-                </div>
-            </div>
-            <div v-else-if="!intermediate && id === 'add'" class="screen">
+            <div v-if="!intermediate && id === 'add'" class="screen">
                 <div class="wrapper">
                     <div class="row section">{{ $t("details") }}</div>
                     <div class="row">
@@ -47,6 +35,34 @@
                     <div class="row actions">
                         <div v-if="!loading" v-on:click="create()" class="button primary">{{ $t("save") }}</div>
                         <router-link to="/accessories" class="button">{{ $t("cancel") }}</router-link>
+                    </div>
+                </div>
+            </div>
+            <div v-else-if="!intermediate && id === 'edit'" class="screen">
+                <div class="wrapper">
+                    <div class="row section">{{ $t("details") }}</div>
+                    <div class="row">
+                        <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
+                    </div>
+                    <div class="row actions">
+                        <div v-if="!loading" v-on:click="update()" class="button primary">{{ $t("save") }}</div>
+                        <div v-if="!loading" v-on:click="remove()" class="button">{{ $t("remove") }}</div>
+                        <router-link :to="`/accessories/${room}`" class="button">{{ $t("cancel") }}</router-link>
+                    </div>
+                </div>
+            </div>
+            <div v-else-if="!intermediate" :class="!id ? 'screen desktop' : 'screen'">
+                <div class="nav mobile">
+                    <router-link to="/accessories" class="back"><span class="mdi mdi-chevron-left"></span> {{ $t("back") }}</router-link>
+                </div>
+                <div class="section">
+                    <span>{{ display }}</span>
+                    <router-link v-if="id !== 'default'" :to="`/accessories/edit/${id}`" class="mdi mdi-cog edit-room"></router-link>
+                </div>
+                <div v-if="hasFeatures()" class="features"></div>
+                <div class="devices">
+                    <div v-for="(accessory, index) in accessories" :key="`accessory:${index}`" class="device">
+                        <component v-if="control(accessory)" :is="control(accessory)" :accessory="accessory" />
                     </div>
                 </div>
             </div>
@@ -76,6 +92,7 @@
 
         props: {
             id: String,
+            room: String,
         },
 
         components: {
@@ -118,11 +135,15 @@
             id() {
                 this.load(this.id);
             },
+
+            room() {
+                this.load(this.id);
+            },
         },
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ROOM:CHANGE" && mutation.payload.room.action !== "add" && mutation.payload.room.action !== "remove") this.load(this.id);
+                if (mutation.type === "IO:ROOM:CHANGE" && mutation.payload.action !== "add" && mutation.payload.action !== "remove") this.load(this.id);
             });
         },
 
@@ -159,7 +180,15 @@
                     if (!this.rooms[i].name || this.rooms[i].name === "") this.rooms[i].name = this.$t(this.rooms[i].id);
                 }
 
-                if (id !== "add") {
+                if (id === "edit") {
+                    const index = this.rooms.findIndex((item) => item.id === this.room);
+
+                    if (index >= 0) {
+                        const room = await this.$hoobs.room(this.rooms[index].id);
+
+                        this.display = room.name || this.$t(room.id);
+                    }
+                } else if (id !== "add") {
                     let index = this.rooms.findIndex((item) => item.id === id);
 
                     if (index === -1 && this.rooms.length > 0) index = 0;
@@ -206,8 +235,26 @@
                 return false;
             },
 
+            async remove() {
+                this.$confirm(this.$t("remove"), this.$t("remove_remove_warning"), async () => {
+                    const room = await this.$hoobs.room(this.room);
+
+                    if (room.id === this.room) await room.remove();
+
+                    this.$router.push({ path: "/accessories" });
+                });
+            },
+
+            async update() {
+                const room = await this.$hoobs.room(this.room);
+
+                if (room.id === this.room) await room.set("name", this.display);
+
+                this.$router.push({ path: `/accessories/${this.room}` });
+            },
+
             async create() {
-                const validation = Validators.room(this.display, this.rooms);
+                const validation = Validators.room(true, this.display, this.rooms);
 
                 if (validation.valid) {
                     await this.$hoobs.rooms.add(this.display);
@@ -259,11 +306,25 @@
                 .section {
                     display: flex;
                     flex-direction: row;
+                    align-items: center;
                     padding: 0 0 10px 0;
+                    justify-content: space-between;
                     border-bottom: var(--application-border) 1px solid;
                     color: var(--application-highlight);
                     margin: 0 0 20px 0;
                     user-select: none;
+
+                    .mdi {
+                        color: var(--application-text) !important;
+                        text-decoration: none !important;
+                        font-size: 20px;
+                        opacity: 0.5;
+                        cursor: pointer;
+
+                        &:hover {
+                            opacity: 1;
+                        }
+                    }
                 }
 
                 .devices {

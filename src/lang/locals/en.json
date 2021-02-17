@@ -207,6 +207,7 @@
         "remember_me": "Remember Me",
         "remove": "Remove",
         "remove_bridge_warning": "Are you sure you want to remove this bridge?",
+        "remove_remove_warning": "Are you sure you want to remove this room?",
         "remove_user_warning": "Are you sure you want to remove this profile?",
         "repository": "Repository",
         "reset": "Reset",

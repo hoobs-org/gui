@@ -27,6 +27,18 @@ interface Validation {
     error?: string;
 }
 
+const reserved = [
+    "new",
+    "add",
+    "hub",
+    "edit",
+    "hidden",
+    "bridge",
+    "bridges",
+    "library",
+    "advanced",
+];
+
 export default class Validators {
     static user(create: boolean, users: UserRecord[], username: any, password?: any, challenge?: any): Validation {
         if (create) {
@@ -86,17 +98,6 @@ export default class Validators {
     }
 
     static bridge(create: boolean, bridges: BridgeRecord[], display: any, pin: any, port?: any, username?: any, autostart?: any, start?: any, end?: any): Validation {
-        const reserved = [
-            "new",
-            "add",
-            "hub",
-            "hidden",
-            "bridge",
-            "bridges",
-            "library",
-            "advanced",
-        ];
-
         if (create) {
             if (!display || display === "") {
                 return {
@@ -211,7 +212,7 @@ export default class Validators {
         return true;
     }
 
-    static room(value: any, rooms?: { [key: string]: any }[]): Validation {
+    static room(create: boolean, value: any, rooms?: { [key: string]: any }[]): Validation {
         if (!value) {
             return {
                 error: "room_invalid_name",
@@ -228,14 +229,14 @@ export default class Validators {
             };
         }
 
-        if (id === "default" || id === "add" || id === "hidden") {
+        if (reserved.indexOf(id) >= 0) {
             return {
                 error: "room_reserved_name",
                 valid: false,
             };
         }
 
-        if ((rooms || []).findIndex((item) => item.id === id) >= 0) {
+        if (create && (rooms || []).findIndex((item) => item.id === id) >= 0) {
             return {
                 error: "room_exists",
                 valid: false,

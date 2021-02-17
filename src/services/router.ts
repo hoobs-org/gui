@@ -41,7 +41,7 @@ const routes: Array<RouteConfig> = [
         component: () => import(/* webpackChunkName: "view-login" */ "../views/login.vue"),
     },
     {
-        path: "/accessories/:id?",
+        path: "/accessories/:id?/:room?",
         name: "accessories",
         meta: { layout: "authenticated" },
         component: () => import(/* webpackChunkName: "view-accessories" */ "../views/accessories.vue"),
