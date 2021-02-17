@@ -40,7 +40,7 @@
             <div class="settings">
                 <span class="mdi mdi-cog"></span>
             </div>
-            <div v-if="features.battery" class="battery">
+            <div v-if="features.battery" class="battery" :title="`${battery}%`">
                 <div class="charge">
                     <span :class="`mdi mdi-${charge}`"></span>
                 </div>
