@@ -98,8 +98,6 @@
                 overflow: auto;
                 -ms-overflow-style: none;
                 scrollbar-width: none;
-                display: flex;
-                flex-wrap: wrap;
 
                 &::-webkit-scrollbar {
                     display: none;
@@ -114,7 +112,7 @@
                 .icon {
                     width: 41px;
                     height: 41px;
-                    display: flex;
+                    display: inline-flex;
                     box-sizing: border-box;
                     flex-direction: row;
                     padding: 0;
