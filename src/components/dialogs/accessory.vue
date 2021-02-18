@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="this.accessory.name || $t('accessory')" :draggable="true" width="760px" height="660px">
+    <modal :title="(accessory || {}).name || $t('accessory')" :draggable="true" width="760px" height="660px">
         <div id="accessory">
             <div v-if="!loading" class="content">
                 <icons v-if="accessory && show.icons" :select="select" />
