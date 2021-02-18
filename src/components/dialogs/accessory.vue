@@ -21,6 +21,7 @@
         <div id="accessory">
             <div v-if="!loading" class="content">
                 <icons v-if="accessory && show.icons" :select="select" />
+                <rooms v-else-if="accessory && show.rooms" :select="assign" />
                 <div v-else-if="accessory" class="form">
                     <div class="row section">{{ $t("details") }}</div>
                     <div class="row">
@@ -36,13 +37,24 @@
                         </div>
                         <div v-on:click="() => { show.icons = true; }" class="button">{{ $t("change") }}</div>
                     </div>
+                    <div class="row section">{{ $t("room") }}</div>
+                    <div v-if="features.icon" class="row">{{ $t("current_room") }}</div>
+                    <div v-if="room" class="row current-room">
+                        <span>{{ title }}</span>
+                        <div v-on:click="() => { show.rooms = true; }" class="button">{{ $t("room_assign") }}</div>
+                        <div v-if="room !== 'default'" v-on:click="assign()" class="button">{{ $t("remove") }}</div>
+                    </div>
                 </div>
             </div>
             <div v-else class="loading">
                 <spinner />
             </div>
             <div v-if="!loading && show.icons" class="actions modal">
+                <div class="button" v-on:click="select(null)">{{ $t("default") }}</div>
                 <div class="button" v-on:click="() => { show.icons = false; }">{{ $t("cancel") }}</div>
+            </div>
+            <div v-else-if="!loading && show.rooms" class="actions modal">
+                <div class="button" v-on:click="() => { show.rooms = false; }">{{ $t("cancel") }}</div>
             </div>
             <div v-else class="actions modal">
                 <div v-on:click="$dialog.close('accessory')" class="button">{{ $t("cancel") }}</div>
@@ -54,13 +66,16 @@
 
 <script>
     import { Wait } from "@hoobs/sdk/lib/wait";
+
     import Icons from "@/components/dialogs/icons.vue";
+    import Rooms from "@/components/dialogs/rooms.vue";
 
     export default {
         name: "settings",
 
         components: {
             "icons": Icons,
+            "rooms": Rooms,
         },
 
         props: {
@@ -74,6 +89,8 @@
                 dashboard: [],
                 display: "",
                 hidden: false,
+                room: "",
+                title: "",
                 icon: {
                     selected: null,
                     default: null,
@@ -84,12 +101,22 @@
                 },
                 show: {
                     icons: false,
+                    rooms: false,
                 },
             };
         },
 
         async mounted() {
             await this.load();
+        },
+
+        watch: {
+            async room() {
+                const rooms = await this.$hoobs.rooms.list();
+                const room = rooms.find((item) => item.id === this.room) || {};
+
+                this.title = room.name || this.$t(room.id || "default");
+            },
         },
 
         methods: {
@@ -105,6 +132,7 @@
                 this.items = this.$store.state.dashboard.items;
                 this.display = this.accessory.name;
                 this.hidden = this.accessory.hidden;
+                this.room = this.accessory.room;
                 this.loading = false;
 
                 switch (this.accessory.type) {
@@ -151,15 +179,21 @@
                 this.show.icons = false;
             },
 
+            assign(room) {
+                this.room = room && room !== "" && room !== "default" ? room : "default";
+                this.show.rooms = false;
+            },
+
             async save() {
                 await Wait();
 
                 const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
 
-                await accessory.set("name", this.display);
-                await accessory.set("hidden", this.hidden);
+                if (this.display !== this.accessory.name) await accessory.set("name", this.display);
+                if (this.room !== this.accessory.room) await accessory.set("room", this.room);
+                if (this.features.icon) await accessory.set("icon", this.icon.selected);
 
-                if (this.features.icon && this.icon.selected) await accessory.set("icon", this.icon.selected);
+                await accessory.set("hidden", this.hidden);
 
                 this.$dialog.close("accessory");
             },
@@ -189,6 +223,17 @@
 
                 .title {
                     margin: 14px 0 0 0;
+                }
+
+                .current-room {
+                    margin: 10px 0;
+                    align-items: center;
+
+                    span {
+                        margin: 0 14px 0 0;
+                        color: var(--application-highlight);
+                        font-size: 27px;
+                    }
                 }
 
                 .icon {

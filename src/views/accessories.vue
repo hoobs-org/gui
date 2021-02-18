@@ -57,7 +57,7 @@
                 </div>
                 <div class="section">
                     <span>{{ display }}</span>
-                    <router-link v-if="id !== 'default'" :to="`/accessories/edit/${id}`" class="mdi mdi-cog edit-room"></router-link>
+                    <router-link v-if="id !== 'default'" :to="`/accessories/edit/${id || rooms[0].id}`" class="mdi mdi-cog edit-room"></router-link>
                 </div>
                 <div v-if="hasFeatures()" class="features"></div>
                 <div class="devices">
@@ -143,7 +143,10 @@
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ROOM:CHANGE" && mutation.payload.action !== "add" && mutation.payload.action !== "remove") this.load(this.id);
+                if (mutation.type === "IO:ROOM:CHANGE" && this.id !== "add" && this.id !== "edit") {
+                    if (mutation.payload.data.action === "update") this.load(this.id);
+                    if (mutation.payload.data.action === "add" || mutation.payload.data.action === "remove") this.rooms = await this.$hoobs.rooms.list();
+                }
             });
         },
 
@@ -237,6 +240,8 @@
 
             async remove() {
                 this.$confirm(this.$t("remove"), this.$t("remove_remove_warning"), async () => {
+                    this.intermediate = true;
+
                     const room = await this.$hoobs.room(this.room);
 
                     if (room.id === this.room) await room.remove();
@@ -246,6 +251,8 @@
             },
 
             async update() {
+                this.intermediate = true;
+
                 const room = await this.$hoobs.room(this.room);
 
                 if (room.id === this.room) await room.set("name", this.display);
@@ -254,6 +261,8 @@
             },
 
             async create() {
+                this.intermediate = true;
+
                 const validation = Validators.room(true, this.display, this.rooms);
 
                 if (validation.valid) {
@@ -266,6 +275,7 @@
                         this.$router.push({ path: `/accessories/${this.rooms.find((item) => item.id === Sanitize(this.display)).id}` });
                     }, SOCKET_RECONNECT_DELAY);
                 } else {
+                    this.intermediate = false;
                     this.$alert(this.$t(validation.error));
                 }
             },

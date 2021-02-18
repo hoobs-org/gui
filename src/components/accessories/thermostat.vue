@@ -671,4 +671,12 @@
             }
         }
     }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #control {
+            .settings {
+                display: flex;
+            }
+        }
+    }
 </style>

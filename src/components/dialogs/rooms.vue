@@ -18,29 +18,39 @@
 
 <template>
     <div id="icon" class="form">
-        <div class="row section">{{ $t("icon") }}</div>
-        <form class="row icons" autocomplete="false" method="post" action="/login" v-on:submit.prevent="search()">
-            <input type="submit" class="hidden-submit" value="submit" />
-            <div class="search">
-                <search-field id="query" ref="query" :title="$t('icon_search')" style="padding-right: 0;" v-model="query" :search="search" :autofocus="true" />
-                <div v-if="searching" class="loading">
-                    <spinner />
+        <div v-if="!loading" class="row section">{{ $t("add_room") }}</div>
+        <div v-if="!loading" class="row rooms">
+            <div class="static">
+                <div class="row">
+                    <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
                 </div>
-                <div v-else class="results">
-                    <div v-for="(icon, index) in icons" :key="`icon:${index}`" class="icon" v-on:click="select(icon)">
-                        <span :class="`mdi mdi-${icon}`"></span>
+                <div class="row">
+                    <div v-on:click="create" class="button">{{ $t("save") }}</div>
+                </div>
+                <div v-if="rooms.length > 0" class="row section">{{ $t("rooms") }}</div>
+                <div v-if="rooms.length > 0" class="list">
+                    <div class="grid">
+                        <div v-for="(room, index) in rooms" :key="`room:${index}`" v-on:click="select(room.id)" class="button full">{{ room.name }}</div>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
+        <div v-else class="loading">
+            <spinner />
+        </div>
     </div>
 </template>
 
 <script>
-    import catalog from "@/lang/icons.json";
+    import Sanitize from "@hoobs/sdk/lib/sanitize";
+    import { Wait } from "@hoobs/sdk/lib/wait";
+
+    import Validators from "../../services/validators";
+
+    const SOCKET_RECONNECT_DELAY = 500;
 
     export default {
-        name: "icons",
+        name: "rooms",
 
         props: {
             select: {
@@ -51,27 +61,37 @@
 
         data() {
             return {
-                query: "",
-                icons: [],
-                searching: false,
+                loading: true,
+                display: "",
+                rooms: [],
             };
         },
 
-        mounted() {
-            this.search();
+        async mounted() {
+            this.rooms = (await this.$hoobs.rooms.list()).filter((item) => item.id !== "default");
+            this.loading = false;
         },
 
         methods: {
-            search() {
-                if (!this.query || this.query === "") {
-                    this.icons = catalog;
+            async create() {
+                this.loading = true;
 
-                    return;
+                const validation = Validators.room(true, this.display, this.rooms);
+
+                if (validation.valid) {
+                    await this.$hoobs.rooms.add(this.display);
+
+                    setTimeout(async () => {
+                        await Wait();
+
+                        this.rooms = await this.$hoobs.rooms.list();
+                        this.loading = false;
+                        this.select(this.rooms.find((item) => item.id === Sanitize(this.display)).id);
+                    }, SOCKET_RECONNECT_DELAY);
+                } else {
+                    this.loading = false;
+                    this.$alert(this.$t(validation.error));
                 }
-
-                this.searching = true;
-                this.icons = catalog.filter((item) => item.indexOf(this.query.toLowerCase()) >= 0);
-                this.searching = false;
             },
         },
     };
@@ -81,19 +101,19 @@
     #icon {
         overflow: hidden !important;
 
-        .icons {
+        .rooms {
             margin: 0;
             flex: 1;
             overflow: hidden;
 
-            .search {
+            .static {
                 flex: 1;
                 overflow: hidden;
                 display: flex;
                 flex-direction: column;
             }
 
-            .results {
+            .list {
                 flex: 1;
                 overflow: auto;
                 -ms-overflow-style: none;
@@ -102,40 +122,13 @@
                 &::-webkit-scrollbar {
                     display: none;
                 }
-
-                &.loading {
-                    padding: 20px;
-                    flex-direction: row;
-                    justify-content: flex-start;
-                }
-
-                .icon {
-                    width: 41px;
-                    height: 41px;
-                    display: inline-flex;
-                    box-sizing: border-box;
-                    flex-direction: row;
-                    padding: 0;
-                    color: var(--modal-text);
-                    user-select: none;
-                    cursor: pointer;
-
-                    .mdi {
-                        margin: 0 7px 7px 0;
-                        font-size: 24px;
-                        padding: 4px;
-                        opacity: 0.7;
-                        border: 1px var(--application-border) solid;
-                    }
-
-                    &:hover {
-                        .mdi {
-                            opacity: 1;
-                            border: 1px var(--application-highlight) solid;
-                        }
-                    }
-                }
             }
+        }
+
+        .full {
+            flex: 1;
+            margin: 0 10px 10px 0;
+            justify-content: space-around;
         }
     }
 </style>
