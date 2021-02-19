@@ -524,6 +524,7 @@
                 .temp {
                     color: var(--accessory-text);
                     font-size: 240%;
+                    font-size: 1.15vw;
                 }
             }
 
@@ -534,13 +535,13 @@
                 margin-top: -7px;
 
                 .temp {
-                    font-size: 220%;
                     line-height: 100%;
                 }
 
                 .sub {
                     color: var(--accessory-text);
                     font-size: 80%;
+                    font-size: 0.5vw;
 
                     .mdi {
                         color: #00b9f1;
@@ -578,6 +579,7 @@
 
                 .mdi {
                     color: var(--accessory-text);
+                    font-size: 0.67vw;
                 }
 
                 .cliped {
@@ -600,6 +602,7 @@
 
                 .off {
                     font-size: 120%;
+                    font-size: 0.5vw;
                 }
             }
         }

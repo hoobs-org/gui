@@ -58,6 +58,7 @@
         padding: 14px;
         position: relative;
         cursor: default;
+        user-select: none;
 
         &.partial {
             border: 2px #feb600 solid;

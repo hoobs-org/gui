@@ -259,6 +259,7 @@
                 .mdi {
                     color: var(--accessory-text);
                     font-size: 400%;
+                    font-size: 2vw;
                 }
             }
         }

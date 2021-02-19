@@ -19,10 +19,10 @@
 <template>
     <div v-if="!hidden && !loading" id="control" :class="on ? 'on' : 'off'">
         <div :class="style">
-            <div v-if="features.brightness && on" class="background">
+            <div v-if="features.speed && on" class="background">
                 <div class="inner"></div>
             </div>
-            <svg v-if="features.brightness && on" viewBox="0 0 100 100" v-on:click.stop="select" v-on:mousedown.prevent="start(true)" v-on:touchstart.prevent="start()">
+            <svg v-if="features.speed && on" viewBox="0 0 100 100" v-on:click.stop="select" v-on:mousedown.prevent="start(true)" v-on:touchstart.prevent="start()">
                 <path class="range" :d="range" />
                 <path v-if="visable" class="marker" :d="marker" />
             </svg>
@@ -97,8 +97,8 @@
                 let result = "item";
 
                 if (this.on) {
-                    if (this.features.brightness) result = `${result} brightness`;
-                    if (this.features.hue) result = `${result} hue`;
+                    if (this.features.speed) result = `${result} speed`;
+                    if (this.features.rotation) result = `${result} rotation`;
                 }
 
                 return result;
@@ -113,7 +113,7 @@
             },
 
             visable() {
-                return (this.brightness >= 0 && this.brightness <= 100) && !this.disabled;
+                return (this.speed >= 0 && this.speed <= 100) && !this.disabled;
             },
 
             position() {
@@ -133,17 +133,17 @@
 
             active() {
                 return {
-                    x: MID_X + Math.cos(this.map(this.brightness, 0, 100, MIN_RADIANS, MAX_RADIANS)) * RADIUS,
-                    y: MID_Y - Math.sin(this.map(this.brightness, 0, 100, MIN_RADIANS, MAX_RADIANS)) * RADIUS,
+                    x: MID_X + Math.cos(this.map(this.speed, 0, 100, MIN_RADIANS, MAX_RADIANS)) * RADIUS,
+                    y: MID_Y - Math.sin(this.map(this.speed, 0, 100, MIN_RADIANS, MAX_RADIANS)) * RADIUS,
                 };
             },
 
             arc() {
-                return Math.abs(this.map(0, 0, 100, MIN_RADIANS, MAX_RADIANS) - this.map(this.brightness, 0, 100, MIN_RADIANS, MAX_RADIANS)) < Math.PI ? 0 : 1;
+                return Math.abs(this.map(0, 0, 100, MIN_RADIANS, MAX_RADIANS) - this.map(this.speed, 0, 100, MIN_RADIANS, MAX_RADIANS)) < Math.PI ? 0 : 1;
             },
 
             sweep() {
-                return this.map(this.brightness, 0, 100, MIN_RADIANS, MAX_RADIANS) > this.map(0, 0, 100, MIN_RADIANS, MAX_RADIANS) ? 0 : 1;
+                return this.map(this.speed, 0, 100, MIN_RADIANS, MAX_RADIANS) > this.map(0, 0, 100, MIN_RADIANS, MAX_RADIANS) ? 0 : 1;
             },
         },
 
@@ -166,7 +166,7 @@
                 hidden: false,
                 updater: Debounce(() => {
                     if (!this.local) {
-                        const speed = this.subject.characteristics.find((item) => item.type === "brightness");
+                        const speed = this.subject.characteristics.find((item) => item.type === "rotation_speed");
                         const rotation = this.subject.characteristics.find((item) => item.type === "saturation");
                         const battery = this.subject.characteristics.find((item) => item.type === "battery_level");
 
@@ -244,15 +244,15 @@
                 const start = -Math.PI / 2 - Math.PI / 6;
 
                 if (angle > MAX_RADIANS) {
-                    this.brightness = this.map(angle, MIN_RADIANS, MAX_RADIANS, 0, 100);
+                    this.speed = this.map(angle, MIN_RADIANS, MAX_RADIANS, 0, 100);
                 } else if (angle < start) {
-                    this.brightness = this.map(angle + 2 * Math.PI, MIN_RADIANS, MAX_RADIANS, 0, 100);
+                    this.speed = this.map(angle + 2 * Math.PI, MIN_RADIANS, MAX_RADIANS, 0, 100);
                 } else {
                     return;
                 }
 
-                this.on = this.brightness > 0;
-                this.$emit("input", Math.round(this.brightness));
+                this.on = this.speed > 0;
+                this.$emit("input", Math.round(this.speed));
             },
 
             select(event) {
@@ -443,6 +443,7 @@
                 .mdi {
                     color: var(--accessory-text);
                     font-size: 400%;
+                    font-size: 2vw;
                 }
             }
         }
@@ -475,18 +476,19 @@
 
                 .mdi {
                     color: var(--accessory-text);
+                    font-size: 0.7vw;
                 }
             }
         }
 
-        .brightness {
+        .speed {
             .switch {
                 padding: 15%;
                 border: 0 none;
             }
         }
 
-        .hue {
+        .rotation {
             .switch {
                 .inner {
                     padding: 0 0 32% 0;
@@ -494,6 +496,7 @@
 
                     .mdi {
                         font-size: 250%;
+                        font-size: 1.7vw;
                     }
                 }
             }

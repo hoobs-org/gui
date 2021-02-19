@@ -47,6 +47,7 @@
         padding: 14px;
         position: relative;
         cursor: default;
+        user-select: none;
 
         .title {
             font-size: 15px;

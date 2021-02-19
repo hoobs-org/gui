@@ -72,7 +72,7 @@ export function layout(name: string): { [key: string]: any } | undefined {
     switch (name) {
         case "accessory-widget":
             return {
-                x: 0, y: 0, w: 1, h: 7, i: "0", component: "accessory-widget",
+                x: 0, y: 0, w: 1, h: 6, i: "0", component: "accessory-widget",
             };
 
         case "activity-widget":

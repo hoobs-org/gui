@@ -282,6 +282,7 @@
                         justify-content: space-around;
                         color: var(--accessory-text);
                         font-size: 14px;
+                        font-size: 0.5vw;
                         overflow: hidden;
                         cursor: pointer;
 

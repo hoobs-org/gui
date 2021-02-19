@@ -37,7 +37,7 @@
                 v-on:layout-updated="save"
             >
                 <grid-item class="widget" v-for="(item, index) in items" :key="`widget:${index}`" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i">
-                    <component :is="item.component" :item="item" :index="index" />
+                    <component :is="item.component" :item="item" :index="index" :locked="locked" />
                 </grid-item>
             </grid-layout>
         </div>
@@ -123,6 +123,7 @@
                     }
 
                     this.$store.commit("DASHBOARD:LAYOUT", items);
+                    this.$action.emit("window", "resize");
                 }
             },
         },
