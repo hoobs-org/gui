@@ -86,9 +86,7 @@
                     if (this.available[i].selected && index === -1) {
                         const widget = layout(this.available[i].name);
 
-                        if (widget) {
-                            current.unshift(widget);
-                        }
+                        if (widget) current.unshift(widget);
                     } else if (!this.available[i].selected && index >= 0) {
                         current.splice(index, 1);
                     }

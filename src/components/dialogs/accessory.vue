@@ -57,6 +57,9 @@
                 <div class="button" v-on:click="() => { show.rooms = false; }">{{ $t("cancel") }}</div>
             </div>
             <div v-else class="actions modal">
+                <div v-if="widget" v-on:click="remove" class="button">{{ $t("remove_from_dashboard") }}</div>
+                <div v-else v-on:click="add" class="button">{{ $t("add_to_dashboard") }}</div>
+                <div style="flex: 1"></div>
                 <div v-on:click="$dialog.close('accessory')" class="button">{{ $t("cancel") }}</div>
                 <div v-on:click="save()" class="button primary">{{ $t("apply") }}</div>
             </div>
@@ -70,6 +73,8 @@
     import Icons from "@/components/dialogs/icons.vue";
     import Rooms from "@/components/dialogs/rooms.vue";
 
+    import { layout } from "../../services/widgets";
+
     export default {
         name: "settings",
 
@@ -82,11 +87,21 @@
             options: Object,
         },
 
+        computed: {
+            widget() {
+                if (this.accessory && this.items.find((item) => item.component === "accessory-widget" && item.bridge === this.accessory.bridge && item.id === this.accessory.accessory_identifier)) {
+                    return true;
+                }
+
+                return false;
+            },
+        },
+
         data() {
             return {
                 loading: true,
                 accessory: null,
-                dashboard: [],
+                items: [],
                 display: "",
                 hidden: false,
                 room: "",
@@ -104,6 +119,13 @@
                     rooms: false,
                 },
             };
+        },
+
+        created() {
+            this.$action.on("dashboard", "update", () => {
+                this.load();
+                this.render();
+            });
         },
 
         async mounted() {
@@ -127,9 +149,10 @@
                 await Wait();
 
                 const accessory = await this.$hoobs.accessory(this.options.bridge, this.options.id);
+                const { dashboard } = this.$store.state;
 
                 this.accessory = accessory;
-                this.items = this.$store.state.dashboard.items;
+                this.items = dashboard.items;
                 this.display = this.accessory.name;
                 this.hidden = this.accessory.hidden;
                 this.room = this.accessory.room;
@@ -196,6 +219,33 @@
                 await accessory.set("hidden", this.hidden);
 
                 this.$dialog.close("accessory");
+            },
+
+            add() {
+                const current = JSON.parse(JSON.stringify(this.items));
+                const widget = layout("accessory-widget");
+
+                widget.bridge = this.accessory.bridge;
+                widget.id = this.accessory.accessory_identifier;
+
+                if (widget) current.unshift(widget);
+
+                this.$store.commit("DASHBOARD:ITEMS", current);
+                this.$dialog.close("accessory");
+                this.$action.emit("dashboard", "update");
+                this.$router.push({ path: "/" });
+            },
+
+            remove() {
+                const current = JSON.parse(JSON.stringify(this.items));
+                const index = current.findIndex((item) => item.component === "accessory-widget" && item.bridge === this.accessory.bridge && item.id === this.accessory.accessory_identifier);
+
+                if (index >= 0) current.splice(index, 1);
+
+                this.$store.commit("DASHBOARD:ITEMS", current);
+                this.$dialog.close("accessory");
+                this.$action.emit("dashboard", "update");
+                this.$router.push({ path: "/" });
             },
         },
     };

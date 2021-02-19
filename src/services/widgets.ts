@@ -70,6 +70,11 @@ export const initial = [{
 
 export function layout(name: string): { [key: string]: any } | undefined {
     switch (name) {
+        case "accessory-widget":
+            return {
+                x: 0, y: 0, w: 1, h: 7, i: "0", component: "accessory-widget",
+            };
+
         case "activity-widget":
             return {
                 x: 0, y: 0, w: 12, h: 6, i: "1", component: "activity-widget",
@@ -122,6 +127,7 @@ export function layout(name: string): { [key: string]: any } | undefined {
 
 export function widgets(): { [key: string]: () => any } {
     return {
+        "accessory-widget": () => import(/* webpackChunkName: "widget-accessory" */ "@/components/widgets/accessory.vue"),
         "activity-widget": () => import(/* webpackChunkName: "widget-activity" */ "@/components/widgets/activity.vue"),
         "cpu-widget": () => import(/* webpackChunkName: "widget-cpu" */ "@/components/widgets/cpu.vue"),
         "memory-widget": () => import(/* webpackChunkName: "widget-memory" */ "@/components/widgets/memory.vue"),
