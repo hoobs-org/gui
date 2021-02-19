@@ -61,10 +61,19 @@
                 </div>
                 <div class="section">
                     <span>{{ display }}</span>
-                    <router-link v-if="id !== 'default'" :to="`/accessories/edit/${id || rooms[0].id}`" :title="$t('room_settings')" class="mdi mdi-cog edit-room"></router-link>
+                    <div style="flex: 1"></div>
+                    <div v-if="locked.accessories" v-on:click.stop="() => { locked.accessories = !locked.accessories}" :title="$t('sort_accessories')" class="mdi mdi-lock desktop"></div>
+                    <div v-else v-on:click.stop="() => { locked.accessories = !locked.accessories; load(id); }" :title="$t('sort_accessories')" class="mdi mdi-lock-open-variant desktop"></div>
+                    <router-link v-if="identifier !== 'default'" :to="`/accessories/edit/${id || rooms[0].id}`" :title="$t('room_settings')" class="mdi mdi-cog edit-room"></router-link>
                 </div>
                 <div v-if="hasFeatures()" class="features"></div>
-                <div class="devices">
+                <draggable :key="`version-${key}`" v-if="!locked.accessories" ghost-class="ghost" v-model="accessories" v-on:end="sort" class="devices">
+                    <div v-for="(accessory, index) in accessories" :key="`accessory:${index}`" class="device editing">
+                        <component v-if="control(accessory)" :is="control(accessory)" :accessory="accessory" />
+                        <div v-if="control(accessory)" class="device-cover"></div>
+                    </div>
+                </draggable>
+                <div v-else class="devices">
                     <div v-for="(accessory, index) in accessories" :key="`accessory:${index}`" class="device">
                         <component v-if="control(accessory)" :is="control(accessory)" :accessory="accessory" />
                     </div>
@@ -86,6 +95,8 @@
 
     import List from "@/components/elements/list.vue";
 
+    import Draggable from "vuedraggable";
+
     import Validators from "../services/validators";
     import { accessories, types } from "../services/accessories";
 
@@ -101,6 +112,7 @@
 
         components: {
             "list": List,
+            "draggable": Draggable,
 
             ...accessories(),
         },
@@ -119,6 +131,7 @@
 
         data() {
             return {
+                key: 1,
                 version: 0,
                 loading: true,
                 locked: {
@@ -139,6 +152,7 @@
                     brightness: false,
                     temperature: false,
                 },
+                identifier: "",
                 display: "",
                 types: [],
                 rooms: [],
@@ -195,6 +209,28 @@
                 await this.loadRooms();
             },
 
+            async sort() {
+                this.key += 1;
+
+                const updates = [];
+
+                for (let i = 0; i < this.accessories.length; i += 1) {
+                    if ((i + 1) !== this.accessories[i].sequence) {
+                        updates.push(new Promise((resolve) => {
+                            this.$hoobs.accessory(this.accessories[i].bridge, this.accessories[i].accessory_identifier).then((accessory) => {
+                                accessory.set("sequence", (i + 1)).finally(() => {
+                                    resolve();
+                                });
+                            }).catch(() => {
+                                resolve();
+                            });
+                        }));
+                    }
+                }
+
+                await Promise.all(updates);
+            },
+
             async load(id) {
                 this.intermediate = true;
                 this.accessories = [];
@@ -234,6 +270,7 @@
 
                         this.characteristics = room.characteristics || [];
                         this.accessories = room.accessories || [];
+                        this.identifier = room.id;
                         this.display = room.name || this.$t(room.id);
                         this.types = room.types || [];
 
@@ -360,7 +397,7 @@
                     align-items: center;
                     padding: 0 0 10px 0;
                     justify-content: space-between;
-                    border-bottom: var(--application-border) 1px solid;
+                    border-bottom: 1px var(--application-border) solid;
                     color: var(--application-highlight);
                     margin: 0 0 20px 0;
                     user-select: none;
@@ -369,6 +406,7 @@
                         color: var(--application-text) !important;
                         text-decoration: none !important;
                         font-size: 20px;
+                        margin: 0 0 0 7px;
                         opacity: 0.5;
                         cursor: pointer;
 
@@ -380,14 +418,37 @@
 
                 .devices {
                     display: flex;
-                    flex-wrap: wrap;
+                    flex-flow: row wrap;
+                    justify-content: flex-start;
 
                     .device {
-                        margin: 10px 10px 30px 30px;
+                        margin: 0 0 20px 20px;
+                        padding: 10px 10px 10px 10px;
+                        position: relative;
                         width: 155px;
+                        user-select: none;
 
                         &:empty {
                             display: none;
+                        }
+
+                        &.editing {
+                            background: var(--widget-background);
+
+                            &:hover {
+                                opacity: 1;
+                            }
+                        }
+
+                        .device-cover {
+                            width: 100%;
+                            height: 100%;
+                            position: absolute;
+                            border: 1px var(--application-border) solid;
+                            border-radius: 4px;
+                            top: 0;
+                            left: 0;
+                            z-index: 200;
                         }
                     }
                 }
@@ -400,7 +461,7 @@
                     display: flex;
                     flex-direction: row;
                     padding: 20px 0 10px 0;
-                    border-bottom: var(--application-border) 1px solid;
+                    border-bottom: 1px var(--application-border) solid;
                     margin: 0 0 20px 0;
                     user-select: none;
 
@@ -409,6 +470,10 @@
                     }
                 }
             }
+        }
+
+        .ghost {
+            border: 1px var(--application-highlight) solid;
         }
     }
 
