@@ -89,7 +89,7 @@
 
         computed: {
             widget() {
-                if (this.accessory && this.items.find((item) => item.component === "accessory-widget" && item.bridge === this.accessory.bridge && item.id === this.accessory.accessory_identifier)) {
+                if (this.accessory && this.items.find((item) => item.i === this.accessory.accessory_identifier)) {
                     return true;
                 }
 
@@ -227,6 +227,7 @@
 
                 widget.bridge = this.accessory.bridge;
                 widget.id = this.accessory.accessory_identifier;
+                widget.i = this.accessory.accessory_identifier;
 
                 if (widget) current.unshift(widget);
 
@@ -238,7 +239,7 @@
 
             remove() {
                 const current = JSON.parse(JSON.stringify(this.items));
-                const index = current.findIndex((item) => item.component === "accessory-widget" && item.bridge === this.accessory.bridge && item.id === this.accessory.accessory_identifier);
+                const index = current.findIndex((item) => item.component === "accessory-widget" && item.i === this.accessory.accessory_identifier);
 
                 if (index >= 0) current.splice(index, 1);
 
