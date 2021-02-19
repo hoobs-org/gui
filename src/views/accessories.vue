@@ -19,16 +19,17 @@
 <template>
     <div :key="version" v-if="user.permissions.accessories" id="accessories">
         <context>
-            <div v-if="locked" v-on:click.stop="toggle('locked')" class="mdi mdi-lock desktop"></div>
-            <div v-else v-on:click.stop="toggle('locked')" class="mdi mdi-lock-open-variant desktop"></div>
-            <div v-on:click.stop="$dialog.open('hidden')" class="mdi mdi-eye-off"></div>
+            <div v-if="locked.rooms" v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" class="mdi mdi-lock desktop"></div>
+            <div v-else v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" class="mdi mdi-lock-open-variant desktop"></div>
+            <div v-on:click.stop="$dialog.open('hidden')" :title="$t('hidden_accessories')" class="mdi mdi-eye-off desktop"></div>
+            <div class="seperator desktop"></div>
             <router-link v-if="id !== 'add'" to="/accessories/add" class="button">
                 <div class="mdi mdi-plus"></div>
                 {{ $t("add_room") }}
             </router-link>
         </context>
         <div v-if="!loading" class="content">
-            <list value="id" display="name" :values="rooms" :selected="id" :initial="rooms.length > 0 ? rooms[0].id : ''" controller="accessories" />
+            <list value="id" display="name" :values="filtered" :selected="id" :initial="rooms.length > 0 ? rooms[0].id : ''" :sort="!locked.rooms" v-on:update="layout" controller="accessories" />
             <div v-if="!intermediate && id === 'add'" class="screen">
                 <div class="wrapper">
                     <div class="row section">{{ $t("details") }}</div>
@@ -60,7 +61,7 @@
                 </div>
                 <div class="section">
                     <span>{{ display }}</span>
-                    <router-link v-if="id !== 'default'" :to="`/accessories/edit/${id || rooms[0].id}`" class="mdi mdi-cog edit-room"></router-link>
+                    <router-link v-if="id !== 'default'" :to="`/accessories/edit/${id || rooms[0].id}`" :title="$t('room_settings')" class="mdi mdi-cog edit-room"></router-link>
                 </div>
                 <div v-if="hasFeatures()" class="features"></div>
                 <div class="devices">
@@ -108,13 +109,22 @@
             user() {
                 return this.$store.state.user;
             },
+
+            filtered() {
+                if (this.locked.rooms) return this.rooms;
+
+                return this.rooms.filter((item) => item.id !== "default");
+            },
         },
 
         data() {
             return {
                 version: 0,
                 loading: true,
-                locked: true,
+                locked: {
+                    rooms: true,
+                    accessories: true,
+                },
                 intermediate: true,
                 characteristics: [],
                 accessories: [],
@@ -148,7 +158,8 @@
         created() {
             this.$store.subscribe(async (mutation) => {
                 if (mutation.type === "IO:ROOM:CHANGE" && this.id !== "add" && this.id !== "edit") {
-                    if (mutation.payload.data.action === "update") this.load(this.id);
+                    if (mutation.payload.data.action === "update" && mutation.payload.data.field === "sequence" && this.locked.rooms) this.loadRooms();
+                    if (mutation.payload.data.action === "update" && mutation.payload.data.field !== "sequence") this.load(this.id);
                     if (mutation.payload.data.action === "add" || mutation.payload.data.action === "remove") this.rooms = await this.$hoobs.rooms.list();
                 }
             });
@@ -159,19 +170,37 @@
         },
 
         methods: {
-            toggle(field) {
-                this[field] = !this[field];
-            },
-
             control(accessory) {
                 return types(accessory);
+            },
+
+            async layout(rooms) {
+                const updates = [];
+
+                for (let i = 0; i < rooms.length; i += 1) {
+                    if ((i + 1) !== rooms[i].sequence) {
+                        updates.push(new Promise((resolve) => {
+                            this.$hoobs.room(rooms[i].id).then((room) => {
+                                room.set("sequence", (i + 1)).finally(() => {
+                                    resolve();
+                                });
+                            }).catch(() => {
+                                resolve();
+                            });
+                        }));
+                    }
+                }
+
+                await Promise.all(updates);
+                await this.loadRooms();
             },
 
             async load(id) {
                 this.intermediate = true;
                 this.accessories = [];
                 this.display = "";
-                this.rooms = await this.$hoobs.rooms.list();
+
+                await this.loadRooms();
 
                 this.features.off = false;
 
@@ -186,10 +215,6 @@
                 this.features.leak = false;
 
                 this.features.doors = false;
-
-                for (let i = 0; i < this.rooms.length; i += 1) {
-                    if (!this.rooms[i].name || this.rooms[i].name === "") this.rooms[i].name = this.$t(this.rooms[i].id);
-                }
 
                 if (id === "edit") {
                     const index = this.rooms.findIndex((item) => item.id === this.room);
@@ -230,6 +255,14 @@
 
                 this.loading = false;
                 this.intermediate = false;
+            },
+
+            async loadRooms() {
+                this.rooms = await this.$hoobs.rooms.list();
+
+                for (let i = 0; i < this.rooms.length; i += 1) {
+                    if (!this.rooms[i].name || this.rooms[i].name === "") this.rooms[i].name = this.$t(this.rooms[i].id);
+                }
             },
 
             hasFeatures() {

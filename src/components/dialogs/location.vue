@@ -22,7 +22,7 @@
         <form class="row locations" autocomplete="false" method="post" action="/login" v-on:submit.prevent="search()">
             <input type="submit" class="hidden-submit" value="submit" />
             <div class="search">
-                <search-field id="query" ref="query" :title="$t('location_search')" :description="$t('location_description')" style="padding-right: 0;" v-model="query" :search="search" :autofocus="true" />
+                <search-field id="query" ref="query" :title="$t('location_search')" :description="$t('location_description')" style="padding-right: 0;" v-model="query" v-on:search="search" :autofocus="true" />
                 <div v-if="searching" class="loading">
                     <spinner />
                 </div>
@@ -43,13 +43,6 @@
     export default {
         name: "location",
 
-        props: {
-            select: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-        },
-
         data() {
             return {
                 query: "",
@@ -60,6 +53,10 @@
         },
 
         methods: {
+            select(location) {
+                this.$emit(location);
+            },
+
             async search() {
                 if (!this.query || this.query === "") {
                     this.locations = [];

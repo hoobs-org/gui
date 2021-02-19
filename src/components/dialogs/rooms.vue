@@ -52,13 +52,6 @@
     export default {
         name: "rooms",
 
-        props: {
-            select: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-        },
-
         data() {
             return {
                 loading: true,
@@ -73,6 +66,10 @@
         },
 
         methods: {
+            select(room) {
+                this.$emit("update", room);
+            },
+
             async create() {
                 this.loading = true;
 

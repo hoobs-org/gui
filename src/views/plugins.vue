@@ -47,7 +47,7 @@
                 <form class="input" autocomplete="false" method="post" action="/login" v-on:submit.prevent="search()">
                     <input type="submit" class="hidden-submit" value="submit" />
                     <div class="search">
-                        <search-field id="query" ref="query" style="padding-right: 0;" :placeholder="$t('search')" v-model="query" :search="search" />
+                        <search-field id="query" ref="query" style="padding-right: 0;" :placeholder="$t('search')" v-model="query" v-on:search="search" />
                     </div>
                 </form>
                 <div class="wrapper">

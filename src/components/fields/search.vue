@@ -31,7 +31,7 @@
             data-lpignore="true"
             :value="value"
             :placeholder="placeholder"
-            v-on:input="update()"
+            v-on:input="update"
             v-on:change="change"
             v-bind:required="required"
         />
@@ -62,10 +62,6 @@
                 type: Boolean,
                 default: false,
             },
-            search: {
-                type: Function,
-                default: () => { /* null */ },
-            },
             autofocus: {
                 type: Boolean,
                 default: false,
@@ -76,16 +72,6 @@
             return {
                 uuid: "",
             };
-        },
-
-        methods: {
-            update() {
-                this.$emit("input", this.$refs[this.uuid].value);
-            },
-
-            change() {
-                this.$emit("change", this.$refs[this.uuid].value);
-            },
         },
 
         mounted() {
@@ -100,6 +86,20 @@
                     if (this.$refs[this.uuid]) this.$refs[this.uuid].focus();
                 }, INPUT_FOCUS_DELAY);
             }
+        },
+
+        methods: {
+            update() {
+                this.$emit("input", this.$refs[this.uuid].value);
+            },
+
+            change() {
+                this.$emit("change", this.$refs[this.uuid].value);
+            },
+
+            search() {
+                this.$emit("search", this.$refs[this.uuid].value);
+            },
         },
     };
 </script>

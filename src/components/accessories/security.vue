@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div v-on:click="settings" class="settings">
-                <span class="mdi mdi-cog"></span>
+                <span class="mdi mdi-cog" :title="$t('accessory_settings')"></span>
             </div>
             <div v-if="features.battery" class="battery" :title="`${battery}%`">
                 <div class="charge">

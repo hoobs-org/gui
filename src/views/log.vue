@@ -27,10 +27,10 @@
                 <div class="mdi mdi-puzzle"></div>
                 {{ $t("plugins") }}
             </div>
-            <div v-if="debug" v-on:click="mode()" class="mdi mdi-bug-check"></div>
-            <div v-else v-on:click="mode()" class="mdi mdi-bug dim"></div>
+            <div v-if="debug" v-on:click="mode()" :title="$t('debug_log')" class="mdi mdi-bug-check"></div>
+            <div v-else v-on:click="mode()" :title="$t('debug_log')" class="mdi mdi-bug dim"></div>
             <div class="seperator desktop"></div>
-            <div v-on:click="download()" class="mdi mdi-download desktop"></div>
+            <div v-on:click="download()" :title="$t('download_log')" class="mdi mdi-download desktop"></div>
         </context>
         <context v-else />
         <div v-if="!loading" ref="messages" class="messages">

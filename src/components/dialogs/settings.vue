@@ -21,7 +21,7 @@
         <div id="settings">
             <div v-if="!loading" class="content">
                 <restore v-if="show.restore" />
-                <location v-if="show.location" :select="select" />
+                <location v-if="show.location" v-on:update="select" />
                 <div v-if="show.settings" class="form">
                     <div v-if="(product === 'box' || product === 'card') && mdns" class="row section">{{ $t("hostname") }}</div>
                     <div v-if="(product === 'box' || product === 'card') && mdns" class="row input-field">

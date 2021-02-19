@@ -20,8 +20,8 @@
     <modal :title="(accessory || {}).name || $t('accessory')" :draggable="true" width="760px" height="660px">
         <div id="accessory">
             <div v-if="!loading" class="content">
-                <icons v-if="accessory && show.icons" :select="select" />
-                <rooms v-else-if="accessory && show.rooms" :select="assign" />
+                <icons v-if="accessory && show.icons" v-on:update="select" />
+                <rooms v-else-if="accessory && show.rooms" v-on:update="assign" />
                 <div v-else-if="accessory" class="form">
                     <div class="row section">{{ $t("details") }}</div>
                     <div class="row">

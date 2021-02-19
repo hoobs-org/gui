@@ -17,7 +17,14 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="list" :class="selected && selected !== '' ? 'list open' : 'list'">
+    <draggable v-if="sort" id="list" :class="selected && selected !== '' ? 'list open' : 'list'" handle=".drag" ghost-class="ghost" v-model="working" v-on:end="save">
+        <div
+            v-for="(item, index) in working"
+            :key="`entry:${index}`"
+            :class="`${item[value]}` === (selected || initial) ? 'item open' : 'item'"
+        ><span class="drag mdi mdi-drag-horizontal"></span>{{ item[display] }}</div>
+    </draggable>
+    <div v-else id="list" :class="selected && selected !== '' ? 'list open' : 'list'">
         <router-link
             v-for="(item, index) in values"
             :key="`entry:${index}`"
@@ -28,8 +35,14 @@
 </template>
 
 <script>
+    import Draggable from "vuedraggable";
+
     export default {
         name: "list",
+
+        components: {
+            "draggable": Draggable,
+        },
 
         props: {
             values: Array,
@@ -37,8 +50,25 @@
             display: String,
             selected: String,
             controller: String,
+            sort: Boolean,
             initial: String,
             query: String,
+        },
+
+        data() {
+            return {
+                working: [],
+            };
+        },
+
+        watch: {
+            values() {
+                this.working = this.values;
+            },
+        },
+
+        mounted() {
+            this.working = this.values;
         },
 
         methods: {
@@ -49,6 +79,10 @@
                 if (query && query !== "") path = `${path}?${query}`;
 
                 return path;
+            },
+
+            save() {
+                this.$emit("update", this.working);
             },
         },
     };
@@ -95,6 +129,14 @@
                 color: var(--application-highlight-text) !important;
                 text-decoration: none !important;
             }
+
+            .drag {
+                margin: 0 7px 0 0;
+            }
+        }
+
+        .ghost {
+            background: var(--application-border);
         }
     }
 
