@@ -528,6 +528,34 @@
             .settings {
                 display: flex;
             }
+
+            .sensor {
+                .main {
+                    .mdi {
+                        font-size: 37px;
+                    }
+
+                    .status {
+                        font-size: 17px;
+                    }
+
+                    &.value {
+                        .mdi {
+                            font-size: 27px;
+                        }
+
+                        .status {
+                            font-size: 27px;
+                        }
+                    }
+                }
+
+                .extra {
+                    .mdi {
+                        font-size: 18px;
+                    }
+                }
+            }
         }
     }
 </style>

@@ -680,6 +680,32 @@
             .settings {
                 display: flex;
             }
+
+            .switch {
+                .inner {
+                    .temp {
+                        font-size: 200%;
+                    }
+                }
+
+                .humidity {
+                    .sub {
+                        font-size: 80%;
+                    }
+                }
+            }
+
+            .context {
+                .inner {
+                    .mdi {
+                        font-size: unset;
+                    }
+
+                    .off {
+                        font-size: 120%;
+                    }
+                }
+            }
         }
     }
 </style>

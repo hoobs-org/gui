@@ -664,6 +664,32 @@
             .settings {
                 display: flex;
             }
+
+            .switch {
+                .inner {
+                    .mdi {
+                        font-size: 400%;
+                    }
+                }
+            }
+
+            .context {
+                .inner {
+                    .mdi {
+                        font-size: unset;
+                    }
+                }
+            }
+
+            .hue {
+                .switch {
+                    .inner {
+                        .mdi {
+                            font-size: 250%;
+                        }
+                    }
+                }
+            }
         }
     }
 </style>

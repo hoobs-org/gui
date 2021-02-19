@@ -332,6 +332,16 @@
             .settings {
                 display: flex;
             }
+
+            .panel {
+                .actions {
+                    .row {
+                        .cell {
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
         }
     }
 </style>

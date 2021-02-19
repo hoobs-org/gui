@@ -572,6 +572,32 @@
             .settings {
                 display: flex;
             }
+
+            .switch {
+                .inner {
+                    .mdi {
+                        font-size: 400%;
+                    }
+                }
+            }
+
+            .context {
+                .inner {
+                    .mdi {
+                        font-size: unset;
+                    }
+                }
+            }
+
+            .rotation {
+                .switch {
+                    .inner {
+                        .mdi {
+                            font-size: 250%;
+                        }
+                    }
+                }
+            }
         }
     }
 </style>

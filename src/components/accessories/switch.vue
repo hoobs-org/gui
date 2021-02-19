@@ -289,6 +289,14 @@
             .settings {
                 display: flex;
             }
+
+            .switch {
+                .inner {
+                    .mdi {
+                        font-size: 400%;
+                    }
+                }
+            }
         }
     }
 </style>
