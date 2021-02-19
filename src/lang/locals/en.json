@@ -103,6 +103,7 @@
         "gui_path_description": "Disables this interface and will use the UI defined in this path (this is a path on the hub).",
         "help": "Help",
         "hidden": "Hidden",
+        "hidden_accessories": "Hidden Accessories",
         "home": "Home",
         "homepage": "Homepage",
         "hostname": "Hostname",

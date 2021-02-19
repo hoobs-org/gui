@@ -413,21 +413,8 @@
                     padding: 0 20px 10px 20px;
                     margin: 0;
 
-                    .row {
-                        flex-direction: column;
-                    }
-
                     .actions {
                         flex-direction: row;
-                    }
-
-                    .field {
-                        padding-right: 0;
-                        padding-left: 0;
-
-                        &:first-child {
-                            padding-right: 0;
-                        }
                     }
                 }
             }

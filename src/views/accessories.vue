@@ -19,6 +19,9 @@
 <template>
     <div :key="version" v-if="user.permissions.accessories" id="accessories">
         <context>
+            <div v-if="locked" v-on:click.stop="toggle('locked')" class="mdi mdi-lock desktop"></div>
+            <div v-else v-on:click.stop="toggle('locked')" class="mdi mdi-lock-open-variant desktop"></div>
+            <div v-on:click.stop="$dialog.open('hidden')" class="mdi mdi-eye-off"></div>
             <router-link v-if="id !== 'add'" to="/accessories/add" class="button">
                 <div class="mdi mdi-plus"></div>
                 {{ $t("add_room") }}
@@ -111,6 +114,7 @@
             return {
                 version: 0,
                 loading: true,
+                locked: true,
                 intermediate: true,
                 characteristics: [],
                 accessories: [],
@@ -155,6 +159,10 @@
         },
 
         methods: {
+            toggle(field) {
+                this[field] = !this[field];
+            },
+
             control(accessory) {
                 return types(accessory);
             },

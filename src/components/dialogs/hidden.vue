@@ -17,104 +17,78 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="rooms" class="form">
-        <div v-if="!loading" class="row section">{{ $t("add_room") }}</div>
-        <div v-if="!loading" class="row rooms">
-            <div class="static">
-                <div class="row">
-                    <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
-                </div>
-                <div class="row">
-                    <div v-on:click="create" class="button">{{ $t("save") }}</div>
-                </div>
-                <div v-if="rooms.length > 0" class="row section">{{ $t("rooms") }}</div>
-                <div v-if="rooms.length > 0" class="list">
+    <modal :title="$t('hidden_accessories')" :draggable="true" width="760px" height="660px">
+        <div id="hidden">
+            <div v-if="!loading" class="content">
+                <div class="form">
                     <div class="grid">
-                        <div v-for="(room, index) in rooms" :key="`room:${index}`" v-on:click="select(room.id)" class="button full">{{ room.name }}</div>
+                        <div v-for="(accessory, index) in accessories" :key="`hidden:${index}`" v-on:click="unhide(accessory)" class="button full">{{ accessory.name }}</div>
                     </div>
                 </div>
             </div>
+            <div v-else class="loading">
+                <spinner />
+            </div>
+            <div class="actions modal">
+                <div v-on:click="$dialog.close('hidden')" class="button">{{ $t("cancel") }}</div>
+            </div>
         </div>
-        <div v-else class="loading">
-            <spinner />
-        </div>
-    </div>
+    </modal>
 </template>
 
 <script>
-    import Sanitize from "@hoobs/sdk/lib/sanitize";
-    import { Wait } from "@hoobs/sdk/lib/wait";
-
-    import Validators from "../../services/validators";
-
-    const SOCKET_RECONNECT_DELAY = 500;
-
     export default {
-        name: "rooms",
-
-        props: {
-            select: {
-                type: Function,
-                default: () => { /* null */ },
-            },
-        },
+        name: "hidden",
 
         data() {
             return {
                 loading: true,
-                display: "",
-                rooms: [],
+                accessories: [],
             };
         },
 
+        created() {
+            this.$store.subscribe(async (mutation) => {
+                if (mutation.type === "IO:ACCESSORY:CHANGE") {
+                    this.load();
+                }
+            });
+        },
+
         async mounted() {
-            this.rooms = (await this.$hoobs.rooms.list()).filter((item) => item.id !== "default");
-            this.loading = false;
+            await this.load();
         },
 
         methods: {
-            async create() {
+            async load() {
                 this.loading = true;
+                this.accessories = await this.$hoobs.accessories(true);
+                this.loading = false;
+            },
 
-                const validation = Validators.room(true, this.display, this.rooms);
+            async unhide(subject) {
+                const accessory = await this.$hoobs.accessory(subject.bridge, subject.accessory_identifier);
 
-                if (validation.valid) {
-                    await this.$hoobs.rooms.add(this.display);
+                await accessory.set("hidden", false);
 
-                    setTimeout(async () => {
-                        await Wait();
-
-                        this.rooms = await this.$hoobs.rooms.list();
-                        this.loading = false;
-                        this.select(this.rooms.find((item) => item.id === Sanitize(this.display)).id);
-                    }, SOCKET_RECONNECT_DELAY);
-                } else {
-                    this.loading = false;
-                    this.$alert(this.$t(validation.error));
-                }
+                this.$dialog.close("hidden");
             },
         },
     };
 </script>
 
 <style lang="scss" scoped>
-    #rooms {
-        overflow: hidden !important;
+    #hidden {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        margin: 0 0 0 10px;
+        overflow: hidden;
 
-        .rooms {
-            margin: 0;
-            flex: 1;
+        .content {
             overflow: hidden;
 
-            .static {
-                flex: 1;
-                overflow: hidden;
-                display: flex;
-                flex-direction: column;
-            }
-
-            .list {
-                flex: 1;
+            .form {
                 overflow: auto;
                 -ms-overflow-style: none;
                 scrollbar-width: none;
@@ -133,7 +107,7 @@
     }
 
     @media (min-width: 300px) and (max-width: 815px) {
-        #rooms {
+        #hidden {
             .grid {
                 display: flex;
                 flex-direction: column;

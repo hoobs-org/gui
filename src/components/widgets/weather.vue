@@ -127,8 +127,8 @@
 
         .forecast {
             flex: 1;
-            display: flex;
-            flex-direction: row;
+            display: grid;
+            grid-template-columns: auto auto auto auto auto auto;
 
             .weather {
                 flex: 1;
@@ -170,6 +170,34 @@
 
                 .min {
                     opacity: 0.7;
+                }
+            }
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #widget {
+            .forecast {
+                .weather {
+                    height: 115px;
+                }
+
+                .display {
+                    font-size: 22px;
+                    line-height: 45px;
+                }
+
+                .temp {
+                    display: flex;
+                    flex-direction: column;
+
+                    .max {
+                        margin: 0 0 4px 0;
+                    }
+
+                    .min {
+                        margin: 0;
+                    }
                 }
             }
         }

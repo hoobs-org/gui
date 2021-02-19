@@ -182,6 +182,9 @@
         }
 
         input {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
             background: var(--application-input);
             color: var(--application-input-text);
             border: 1px var(--application-border) solid;

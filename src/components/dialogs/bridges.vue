@@ -191,4 +191,18 @@
             justify-content: space-around;
         }
     }
+
+    @media (min-width: 300px) and (max-width: 815px) {
+        #bridges {
+            .grid {
+                display: flex;
+                flex-direction: column;
+                grid-template-columns: unset;
+            }
+
+            .full {
+                margin: 0 0 10px 0;
+            }
+        }
+    }
 </style>
