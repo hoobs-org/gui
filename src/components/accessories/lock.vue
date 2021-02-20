@@ -302,14 +302,6 @@
                 position: relative;
                 box-sizing: border-box;
                 pointer-events: all;
-
-                .mdi {
-                    position: absolute;
-                    width: 100%;
-                    text-align: center;
-                    font-size: 300%;
-                    bottom: 5%;
-                }
             }
 
             svg {

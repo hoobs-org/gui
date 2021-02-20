@@ -26,8 +26,8 @@
         <div v-if="!$mobile" class="content desktop">
             <grid-layout
                 :layout="items"
-                :col-num="12"
-                :row-height="30"
+                :col-num="80"
+                :row-height="5"
                 :is-draggable="!locked"
                 :is-resizable="!locked"
                 :is-mirrored="false"

@@ -432,13 +432,13 @@
 
                 .mdi {
                     font-size: 37px;
-                    font-size: 1.5vw;
+                    font-size: 2vmax;
                     color: var(--accessory-text);
                 }
 
                 .status {
                     font-size: 17px;
-                    font-size: 0.5vw;
+                    font-size: 0.8vmax;
                     color: var(--accessory-text);
                     text-align: center;
                 }
@@ -446,12 +446,12 @@
                 &.value {
                     .mdi {
                         font-size: 27px;
-                        font-size: 1.2vw;
+                        font-size: 1.8vmax;
                     }
 
                     .status {
                         font-size: 27px;
-                        font-size: 1.2vw;
+                        font-size: 1.8vmax;
                         color: var(--application-highlight);
                     }
                 }
@@ -497,7 +497,7 @@
 
                 .mdi {
                     font-size: 18px;
-                    font-size: 0.65vw;
+                    font-size: 0.9vmax;
                     margin-left: 4px;
                     color: var(--accessory-text);
 

@@ -535,7 +535,7 @@
                 .mdi {
                     color: var(--accessory-text);
                     font-size: 400%;
-                    font-size: 2vw;
+                    font-size: 3vmax;
                 }
             }
         }
@@ -568,7 +568,7 @@
 
                 .mdi {
                     color: var(--accessory-text);
-                    font-size: 0.7vw;
+                    font-size: 1vmax;
                 }
             }
         }
@@ -588,7 +588,7 @@
 
                     .mdi {
                         font-size: 250%;
-                        font-size: 1.7vw;
+                        font-size: 1.7vmax;
                     }
                 }
             }
