@@ -439,8 +439,8 @@
                 } else {
                     this.plugin = this.plugins.find((item) => item.identifier === identifier);
 
-                    if (this.plugin && this.plugin.schema && this.plugin.schema.schema) {
-                        this.type = this.plugin.schema.pluginType;
+                    if (this.plugin && this.plugin.schema && this.plugin.schema.config) {
+                        this.type = this.plugin.schema.pluginType || (this.plugin.schema.accessory ? "accessory" : "platform");
                         this.alias = this.plugin.alias || this.plugin.schema.pluginAlias;
                         this.bridges = this.bridges.filter((bridge) => this.plugin.bridges.findIndex((item) => item.id === bridge.id) >= 0);
 
@@ -455,7 +455,7 @@
                                             items: {
                                                 title: this.$t("accessory"),
                                                 type: "object",
-                                                properties: this.plugin.schema.schema.properties || this.plugin.schema.schema,
+                                                properties: this.plugin.schema.config.properties || this.plugin.schema.config,
                                             },
                                         },
                                     },
@@ -466,7 +466,7 @@
                             default:
                                 this.schema = {
                                     type: "object",
-                                    properties: this.plugin.schema.schema.properties || this.plugin.schema.schema,
+                                    properties: this.plugin.schema.config.properties || this.plugin.schema.config,
                                 };
 
                                 if (this.identifier === "homebridge-ring" && this.schema.properties.refreshToken) this.schema.properties.refreshToken.widget = "ring";
@@ -488,7 +488,7 @@
                 for (let i = 0; i < plugins.length; i += 1) {
                     const plugin = plugins[i];
 
-                    if (plugin && plugin.schema && plugin.schema.schema) {
+                    if (plugin && plugin.schema && plugin.schema.config) {
                         const { bridge } = plugin;
                         const { version } = plugin;
 
