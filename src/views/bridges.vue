@@ -63,6 +63,7 @@
                         <div v-if="status.running" v-on:click="control('restart')" class="button">{{ $t("restart") }}</div>
                         <div v-if="!status.running" v-on:click="control('start')" class="button">{{ $t("start") }}</div>
                         <div v-if="status.running" v-on:click="control('stop')" class="button">{{ $t("stop") }}</div>
+                        <div v-on:click="cache" class="button">{{ $t("cache") }}</div>
                     </div>
                     <div class="row section">{{ $t("export") }}</div>
                     <div class="row">
@@ -177,6 +178,12 @@
         },
 
         methods: {
+            cache() {
+                this.$dialog.open("cache", {
+                    bridge: this.id,
+                });
+            },
+
             async load(id) {
                 this.loading = true;
                 this.theme = await this.$hoobs.theme.get(this.$store.state.theme);

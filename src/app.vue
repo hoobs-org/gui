@@ -73,7 +73,7 @@
 </style>
 
 <style lang="scss">
-    @import "../node_modules/@mdi/font/css/materialdesignicons.css";
+    @import "../node_modules/@mdi/font/css/materialdesignicons.min.css";
 
     html,
     body {

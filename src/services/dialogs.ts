@@ -63,4 +63,8 @@ export default new Dialogs([
         name: "hidden",
         component: () => import(/* webpackChunkName: "dialog-accessory" */ "@/components/dialogs/hidden.vue"),
     },
+    {
+        name: "cache",
+        component: () => import(/* webpackChunkName: "dialog-cache" */ "@/components/dialogs/cache.vue"),
+    },
 ]);
