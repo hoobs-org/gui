@@ -85,12 +85,14 @@
                 await this.load(this.options.bridge);
             },
 
-            async clear() {
-                this.loading = true;
+            clear() {
+                this.$confirm(this.$t("purge"), this.$t("purge_warning"), async () => {
+                    this.loading = true;
 
-                await this.bridge.purge();
+                    await this.bridge.purge();
 
-                this.close();
+                    this.close();
+                });
             },
 
             close() {
