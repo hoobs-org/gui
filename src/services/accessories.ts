@@ -46,7 +46,7 @@ export function types(accessory: { [key: string]: any }): string | undefined {
             return "blind-accessory";
 
         case "sensor":
-            if (!accessory.main_sensor) return undefined;
+            if (!accessory.main_sensor) return "unknown-accessory";
 
             sensors = accessory.characteristics.map((item: { [key: string]: any }) => item.type);
 
@@ -61,10 +61,10 @@ export function types(accessory: { [key: string]: any }): string | undefined {
             if (sensors.indexOf("obstruction_detected") >= 0) return "sensor-accessory";
             if (sensors.indexOf("occupancy_detected") >= 0) return "sensor-accessory";
 
-            return undefined;
+            return "unknown-accessory";
 
         default:
-            return undefined;
+            return "unknown-accessory";
     }
 }
 
@@ -79,5 +79,6 @@ export function accessories(): { [key: string]: () => any } {
         "garage-accessory": () => import(/* webpackChunkName: "accessory-garage" */ "@/components/accessories/garage.vue"),
         "security-accessory": () => import(/* webpackChunkName: "accessory-garage" */ "@/components/accessories/security.vue"),
         "thermostat-accessory": () => import(/* webpackChunkName: "accessory-thermostat" */ "@/components/accessories/thermostat.vue"),
+        "unknown-accessory": () => import(/* webpackChunkName: "accessory-thermostat" */ "@/components/accessories/unknown.vue"),
     };
 }
