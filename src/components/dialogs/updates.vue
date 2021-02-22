@@ -26,6 +26,10 @@
                         {{ $t("version_server") }}: {{ status.current }}
                         <span class="value">{{ $t("available") }}</span>
                     </div>
+                    <div v-if="!loading && !status.gui_upgraded" class="row">
+                        {{ $t("version_gui") }}: {{ status.gui_current }}
+                        <span class="value">{{ $t("available") }}</span>
+                    </div>
                     <div v-if="!loading && !status.cli_upgraded" class="row">
                         {{ $t("version_cli") }}: {{ status.cli_current }}
                         <span class="value">{{ $t("available") }}</span>
