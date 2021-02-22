@@ -132,6 +132,7 @@
                         }
 
                         this.subject = null;
+                        this.brightness = 0;
                         this.on = false;
 
                         for (let i = 0; i < this.room.accessories.length; i += 1) {
@@ -140,7 +141,8 @@
                                 const brightness = this.room.accessories[i].characteristics.find((item) => item.type === "brightness");
 
                                 this.on = this.on || (on || {}).value || false;
-                                this.brightness = Math.max(this.brightness, (brightness || {}).value || 0);
+
+                                if ((on || {}).value) this.brightness = Math.max(this.brightness, (brightness || {}).value || 0);
                             }
                         }
                     }
