@@ -48,10 +48,10 @@
                     <span v-else class="mdi off">{{ $t("off") }}</span>
                 </div>
             </div>
-            <div v-on:click="settings" class="settings">
+            <div v-if="!disabled" v-on:click="settings" class="settings">
                 <span class="mdi mdi-cog" :title="$t('accessory_settings')"></span>
             </div>
-            <div v-if="features.battery" class="battery" :title="`${battery}%`">
+            <div v-if="!disabled && features.battery" class="battery" :title="`${battery}%`">
                 <div class="charge">
                     <span :class="`mdi mdi-${charge}`"></span>
                 </div>
@@ -84,10 +84,7 @@
 
         props: {
             disabled: Boolean,
-            accessory: {
-                type: Object,
-                required: true,
-            },
+            accessory: Object,
         },
 
         computed: {
@@ -523,8 +520,7 @@
 
                 .temp {
                     color: var(--accessory-text);
-                    font-size: 240%;
-                    font-size: 1.5vmax;
+                    font-size: 180%;
                 }
             }
 
@@ -541,7 +537,6 @@
                 .sub {
                     color: var(--accessory-text);
                     font-size: 80%;
-                    font-size: 0.7vmax;
 
                     .mdi {
                         color: #00b9f1;
@@ -579,7 +574,6 @@
 
                 .mdi {
                     color: var(--accessory-text);
-                    font-size: 0.8vmax;
                 }
 
                 .cliped {
@@ -602,7 +596,6 @@
 
                 .off {
                     font-size: 120%;
-                    font-size: 0.7vmax;
                 }
             }
         }

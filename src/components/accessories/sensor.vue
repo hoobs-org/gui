@@ -135,10 +135,10 @@
                     </div>
                 </div>
             </div>
-            <div v-on:click="settings" class="settings">
+            <div v-if="!disabled" v-on:click="settings" class="settings">
                 <span class="mdi mdi-cog" :title="$t('accessory_settings')"></span>
             </div>
-            <div v-if="features.battery" class="battery" :title="`${battery}%`">
+            <div v-if="!disabled && features.battery" class="battery" :title="`${battery}%`">
                 <div class="charge">
                     <span :class="`mdi mdi-${charge}`"></span>
                 </div>
@@ -161,10 +161,7 @@
 
         props: {
             disabled: Boolean,
-            accessory: {
-                type: Object,
-                required: true,
-            },
+            accessory: Object,
         },
 
         computed: {
@@ -432,13 +429,11 @@
 
                 .mdi {
                     font-size: 37px;
-                    font-size: 2vmax;
                     color: var(--accessory-text);
                 }
 
                 .status {
                     font-size: 17px;
-                    font-size: 0.8vmax;
                     color: var(--accessory-text);
                     text-align: center;
                 }
@@ -446,12 +441,10 @@
                 &.value {
                     .mdi {
                         font-size: 27px;
-                        font-size: 1.8vmax;
                     }
 
                     .status {
                         font-size: 27px;
-                        font-size: 1.8vmax;
                         color: var(--application-highlight);
                     }
                 }
@@ -497,7 +490,6 @@
 
                 .mdi {
                     font-size: 18px;
-                    font-size: 0.9vmax;
                     margin-left: 4px;
                     color: var(--accessory-text);
 

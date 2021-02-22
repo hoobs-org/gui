@@ -19,11 +19,11 @@
 import Vue, { VueConstructor } from "vue";
 
 export default class Menus {
+    declare private current: undefined | string;
+
     declare private menus: any[];
 
     declare private events: Vue;
-
-    declare private current: undefined | string;
 
     constructor(menus: any[]) {
         this.events = new Vue();

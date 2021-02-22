@@ -68,7 +68,7 @@
                 </div>
                 <draggable :key="`version-${key}`" v-if="!locked.accessories" ghost-class="ghost" v-model="accessories" v-on:end="sort" class="devices">
                     <div v-for="(accessory, index) in accessories" :key="`accessory:${index}`" class="device editing">
-                        <component v-if="accessory.control" :is="accessory.control" :accessory="accessory" />
+                        <component v-if="accessory.control" :is="accessory.control" :accessory="accessory" :disabled="true" />
                         <div v-if="accessory.control" class="device-cover"></div>
                     </div>
                 </draggable>
@@ -83,7 +83,7 @@
                         <hue-accessory :id="id" />
                     </div>
                     <div v-for="(accessory, index) in accessories" :key="`accessory:${index}`" class="device">
-                        <component v-if="accessory.control" :is="accessory.control" :accessory="accessory" />
+                        <component v-if="accessory.control" :is="accessory.control" :accessory="accessory" :disabled="false" />
                     </div>
                 </div>
             </div>

@@ -50,7 +50,7 @@ export default class Dialogs {
     close(name: string): void {
         if (name) {
             const current = this.current.findIndex((item) => item.name === name);
-            const dialog = this.current.findIndex((item) => item.name === name);
+            const dialog = this.dialogs.findIndex((item) => item.name === name);
 
             if (current >= 0 && dialog >= 0) {
                 delete this.dialogs[dialog].options;

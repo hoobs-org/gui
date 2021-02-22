@@ -19,7 +19,7 @@
 <template>
     <div v-if="accessory" id="widget">
         <div ref="device" class="device">
-            <component v-if="control(accessory)" :is="control(accessory)" :accessory="accessory" />
+            <component v-if="control(accessory)" :is="control(accessory)" :accessory="accessory" :disabled="!locked" />
             <div v-if="control(accessory) && !locked" class="device-cover"></div>
         </div>
     </div>

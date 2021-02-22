@@ -59,10 +59,7 @@
         props: {
             id: String,
             disabled: Boolean,
-            features: {
-                type: Object,
-                required: true,
-            },
+            features: Object,
         },
 
         computed: {
@@ -83,7 +80,7 @@
             },
 
             visable() {
-                return (this.brightness >= 0 && this.brightness <= 100) && !this.disabled;
+                return (this.brightness >= 0 && this.brightness <= 100);
             },
 
             position() {
@@ -338,7 +335,6 @@
                 .mdi {
                     color: var(--accessory-text);
                     font-size: 400%;
-                    font-size: 3vmax;
                 }
             }
         }

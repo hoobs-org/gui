@@ -266,6 +266,7 @@
         "system_serial": "Serial",
         "system_sku": "SKU",
         "system_uuid": "UUID",
+        "system_virtual": "Virtual",
         "tags": "Tags",
         "temperature_units": "Temperature Units",
         "terminal": "Terminal",

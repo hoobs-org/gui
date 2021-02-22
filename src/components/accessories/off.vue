@@ -103,7 +103,6 @@
                 .mdi {
                     color: var(--accessory-text);
                     font-size: 400%;
-                    font-size: 3vmax;
                 }
             }
 

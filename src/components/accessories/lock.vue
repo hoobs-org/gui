@@ -81,10 +81,10 @@
                     </svg>
                 </div>
             </div>
-            <div v-on:click="settings" class="settings">
+            <div v-if="!disabled" v-on:click="settings" class="settings">
                 <span class="mdi mdi-cog" :title="$t('accessory_settings')"></span>
             </div>
-            <div v-if="features.battery" class="battery" :title="`${battery}%`">
+            <div v-if="!disabled && features.battery" class="battery" :title="`${battery}%`">
                 <div class="charge">
                     <span :class="`mdi mdi-${charge}`"></span>
                 </div>
@@ -108,10 +108,7 @@
 
         props: {
             disabled: Boolean,
-            accessory: {
-                type: Object,
-                required: true,
-            },
+            accessory: Object,
         },
 
         computed: {
