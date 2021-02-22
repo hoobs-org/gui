@@ -70,6 +70,8 @@ export function types(accessory: { [key: string]: any }): string | undefined {
 
 export function accessories(): { [key: string]: () => any } {
     return {
+        "off-accessory": () => import(/* webpackChunkName: "accessory-fan" */ "@/components/accessories/off.vue"),
+        "hue-accessory": () => import(/* webpackChunkName: "accessory-fan" */ "@/components/accessories/hue.vue"),
         "fan-accessory": () => import(/* webpackChunkName: "accessory-fan" */ "@/components/accessories/fan.vue"),
         "lock-accessory": () => import(/* webpackChunkName: "accessory-lock" */ "@/components/accessories/lock.vue"),
         "light-accessory": () => import(/* webpackChunkName: "accessory-light" */ "@/components/accessories/light.vue"),
@@ -79,6 +81,7 @@ export function accessories(): { [key: string]: () => any } {
         "garage-accessory": () => import(/* webpackChunkName: "accessory-garage" */ "@/components/accessories/garage.vue"),
         "security-accessory": () => import(/* webpackChunkName: "accessory-garage" */ "@/components/accessories/security.vue"),
         "thermostat-accessory": () => import(/* webpackChunkName: "accessory-thermostat" */ "@/components/accessories/thermostat.vue"),
+        "brightness-accessory": () => import(/* webpackChunkName: "accessory-garage" */ "@/components/accessories/brightness.vue"),
         "unknown-accessory": () => import(/* webpackChunkName: "accessory-thermostat" */ "@/components/accessories/unknown.vue"),
     };
 }

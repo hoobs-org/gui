@@ -66,16 +66,24 @@
                     <div v-else v-on:click.stop="() => { locked.accessories = !locked.accessories; load(id); }" :title="$t('sort_accessories')" class="mdi mdi-lock-open-variant desktop"></div>
                     <router-link v-if="identifier !== 'default'" :to="`/accessories/edit/${id || rooms[0].id}`" :title="$t('room_settings')" class="mdi mdi-cog edit-room"></router-link>
                 </div>
-                <div v-if="hasFeatures()" class="features"></div>
                 <draggable :key="`version-${key}`" v-if="!locked.accessories" ghost-class="ghost" v-model="accessories" v-on:end="sort" class="devices">
                     <div v-for="(accessory, index) in accessories" :key="`accessory:${index}`" class="device editing">
-                        <component v-if="control(accessory)" :is="control(accessory)" :accessory="accessory" />
-                        <div v-if="control(accessory)" class="device-cover"></div>
+                        <component v-if="accessory.control" :is="accessory.control" :accessory="accessory" />
+                        <div v-if="accessory.control" class="device-cover"></div>
                     </div>
                 </draggable>
                 <div v-else class="devices">
+                    <div v-if="features.off" class="device">
+                        <off-accessory :id="id" />
+                    </div>
+                    <div v-if="features.light || features.brightness" class="device">
+                        <brightness-accessory :id="id" :features="features" />
+                    </div>
+                    <div v-if="features.hue" class="device">
+                        <hue-accessory :id="id" />
+                    </div>
                     <div v-for="(accessory, index) in accessories" :key="`accessory:${index}`" class="device">
-                        <component v-if="control(accessory)" :is="control(accessory)" :accessory="accessory" />
+                        <component v-if="accessory.control" :is="accessory.control" :accessory="accessory" />
                     </div>
                 </div>
             </div>
@@ -94,7 +102,6 @@
     import { Wait } from "@hoobs/sdk/lib/wait";
 
     import List from "@/components/elements/list.vue";
-
     import Draggable from "vuedraggable";
 
     import Validators from "../services/validators";
@@ -144,13 +151,8 @@
                 features: {
                     hue: false,
                     off: false,
-                    leak: false,
                     light: false,
-                    doors: false,
-                    motion: false,
-                    occupancy: false,
                     brightness: false,
-                    temperature: false,
                 },
                 identifier: "",
                 display: "",
@@ -184,10 +186,6 @@
         },
 
         methods: {
-            control(accessory) {
-                return types(accessory);
-            },
-
             async layout(rooms) {
                 const updates = [];
 
@@ -242,15 +240,7 @@
 
                 this.features.light = false;
                 this.features.brightness = false;
-
                 this.features.hue = false;
-
-                this.features.temperature = false;
-                this.features.occupancy = false;
-                this.features.motion = false;
-                this.features.leak = false;
-
-                this.features.doors = false;
 
                 if (id === "edit") {
                     const index = this.rooms.findIndex((item) => item.id === this.room);
@@ -276,17 +266,13 @@
 
                         this.features.off = this.characteristics.indexOf("off") >= 0;
 
+                        for (let i = 0; i < this.accessories.length; i += 1) {
+                            this.accessories[i].control = types(this.accessories[i]);
+                        }
+
                         this.features.light = this.types.indexOf("lightbulb") && this.characteristics.indexOf("on") >= 0;
                         this.features.brightness = this.types.indexOf("lightbulb") && this.characteristics.indexOf("brightness") >= 0;
-
                         this.features.hue = this.characteristics.indexOf("hue") >= 0;
-
-                        this.features.temperature = this.types.indexOf("temperature_sensor") >= 0;
-                        this.features.occupancy = this.types.indexOf("occupancy_sensor") >= 0;
-                        this.features.motion = this.types.indexOf("motion_sensor") >= 0;
-                        this.features.leak = this.types.indexOf("leak_sensor") >= 0;
-
-                        this.features.doors = this.types.indexOf("contact_sensor") >= 0 || this.types.indexOf("garage_door_opener") >= 0 || this.types.indexOf("door") >= 0;
                     }
                 }
 
@@ -300,20 +286,6 @@
                 for (let i = 0; i < this.rooms.length; i += 1) {
                     if (!this.rooms[i].name || this.rooms[i].name === "") this.rooms[i].name = this.$t(this.rooms[i].id);
                 }
-            },
-
-            hasFeatures() {
-                if (this.features.hue) return true;
-                if (this.features.off) return true;
-                if (this.features.leak) return true;
-                if (this.features.light) return true;
-                if (this.features.doors) return true;
-                if (this.features.motion) return true;
-                if (this.features.occupancy) return true;
-                if (this.features.brightness) return true;
-                if (this.features.temperature) return true;
-
-                return false;
             },
 
             async remove() {
