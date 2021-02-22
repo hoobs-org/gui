@@ -179,7 +179,11 @@
 
         async mounted() {
             this.room = await this.$hoobs.room(this.id);
+            this.room.accessories = this.room.accessories || [];
+            this.room.accessories = this.room.accessories.filter((item) => item.type === "light");
+
             this.updater();
+
             this.loading = false;
         },
 
