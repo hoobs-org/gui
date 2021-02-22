@@ -62,9 +62,7 @@
                         const data = JSON.parse(event.data);
 
                         if (data.token) this.update(data.token);
-                    } catch (error) {
-                        console.error(error);
-                    }
+                    } catch (_error) { /* NULL */ }
                 }
             },
 

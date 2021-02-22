@@ -134,8 +134,6 @@
             async login() {
                 const response = await this.$hoobs.auth.link("ring", this.username, this.password, this.code);
 
-                console.log(response);
-
                 if (response.error) this.$alert(this.$t("invalid_username_password"));
 
                 if (response.status === 412) {

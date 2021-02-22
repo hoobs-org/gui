@@ -1,7 +1,7 @@
 const { resolve } = require("path");
 
 module.exports = {
-    outputDir: resolve(__dirname, "./lib"),
+    outputDir: resolve(__dirname, "./lib/hoobs"),
 
     chainWebpack: (config) => {
         config.plugin("html").tap((args) => {
