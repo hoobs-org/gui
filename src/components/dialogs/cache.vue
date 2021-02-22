@@ -69,7 +69,6 @@
                 this.bridge = await this.$hoobs.bridge(bridge);
 
                 if (this.bridge) this.cache = (await this.bridge.cache()).accessories || [];
-                if (!Array.isArray(this.cache)) this.cache = [];
 
                 this.loading = false;
             },
