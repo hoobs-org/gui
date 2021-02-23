@@ -97,6 +97,8 @@
     import Location from "@/components/dialogs/location.vue";
     import Countries from "@/lang/country-codes.json";
 
+    const REDIRECT_DELAY = 1000;
+
     export default {
         name: "settings",
 
@@ -236,8 +238,12 @@
                 const status = await this.$hoobs.status();
                 const weather = {};
 
+                let redirect = false;
+
                 if ((status.product === "box" || status.product === "card") && this.broadcast !== "" && this.broadcast !== status.broadcast) {
                     await this.$hoobs.hostname.update(this.broadcast);
+
+                    redirect = true;
                 }
 
                 if (this.location && this.location.id && this.location.id > 0) weather.location = this.location;
@@ -253,8 +259,12 @@
 
                 await Wait();
 
-                this.$dialog.close("settings");
-                this.$action.emit("settings", "update");
+                if (redirect) {
+                    setTimeout(() => { window.location.href = `http://${this.broadcast}.local`; }, REDIRECT_DELAY);
+                } else {
+                    this.$dialog.close("settings");
+                    this.$action.emit("settings", "update");
+                }
             },
 
             back() {

@@ -98,8 +98,8 @@ export default new Vuex.Store({
             state.bridges = bridges;
             state.temp = (payload.data.temp.main || -1) > -1 ? payload.data.temp.main : null;
 
-            state.cpu.used = 100 - Math.round(payload.data.cpu.currentLoadIdle || 0);
-            state.cpu.available = Math.round(payload.data.cpu.currentLoadIdle || 0);
+            state.cpu.used = 100 - Math.round(payload.data.cpu.currentLoadIdle || 100);
+            state.cpu.available = Math.round(payload.data.cpu.currentLoadIdle || 100);
 
             state.memory.load = Math.round((payload.data.memory.total || 0) > 0 ? ((payload.data.memory.active || 0) * 100) / (payload.data.memory.total || 0) : 0);
             state.memory.total = units(payload.data.memory.total || 0);
