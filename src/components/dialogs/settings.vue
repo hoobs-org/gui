@@ -265,7 +265,6 @@
 
             select(location) {
                 this.location = location;
-
                 this.back();
             },
         },

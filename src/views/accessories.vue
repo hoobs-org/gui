@@ -28,7 +28,7 @@
                 {{ $t("add_room") }}
             </router-link>
         </context>
-        <div v-if="!loading" class="content">
+        <div v-if="!loading && rooms.length > 0" class="content">
             <list value="id" display="name" :values="filtered" :selected="id" :initial="rooms.length > 0 ? rooms[0].id : ''" :sort="!locked.rooms" v-on:update="layout" controller="accessories" />
             <div v-if="!intermediate && id === 'add'" class="screen">
                 <div class="wrapper">
@@ -90,6 +90,9 @@
             <div v-else class="loading">
                 <spinner />
             </div>
+        </div>
+        <div v-else-if="!loading && rooms.length === 0" class="empty">
+            {{ $t("no_accessories") }}
         </div>
         <div v-else class="loading">
             <spinner />
@@ -442,6 +445,14 @@
                     }
                 }
             }
+        }
+
+        .empty {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 0 20% 0;
         }
 
         .ghost {

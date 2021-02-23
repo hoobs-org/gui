@@ -54,7 +54,7 @@
 
         methods: {
             select(location) {
-                this.$emit(location);
+                this.$emit("update", location);
             },
 
             async search() {
