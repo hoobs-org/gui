@@ -19,17 +19,17 @@
 <template>
     <div :key="version" v-if="user.permissions.accessories" id="accessories">
         <context>
-            <icon v-if="locked.rooms" v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" name="lock" class="icon desktop" />
-            <icon v-else v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" name="lock-open-variant" class="icon desktop" />
-            <icon v-on:click.stop="$dialog.open('hidden')" :title="$t('hidden_accessories')" name="eye-off" class="icon desktop" />
-            <div class="seperator desktop"></div>
-            <router-link v-if="id !== 'add'" to="/accessories/add" class="button">
+            <icon v-if="rooms.length > 0 && locked.rooms" v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" name="lock" class="icon desktop" />
+            <icon v-else-if="rooms.length > 0" v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" name="lock-open-variant" class="icon desktop" />
+            <icon v-if="rooms.length > 0" v-on:click.stop="$dialog.open('hidden')" :title="$t('hidden_accessories')" name="eye-off" class="icon desktop" />
+            <div v-if="rooms.length > 0" class="seperator desktop"></div>
+            <router-link v-if="rooms.length > 0 && id !== 'add'" to="/accessories/add" class="button">
                 <icon name="plus" class="icon" />
                 {{ $t("add_room") }}
             </router-link>
         </context>
         <div v-if="!loading && rooms.length > 0" class="content">
-            <list value="id" display="name" :values="filtered" :selected="id" :initial="rooms.length > 0 ? rooms[0].id : ''" :sort="!locked.rooms" v-on:update="layout" controller="accessories" />
+            <list value="id" display="name" :values="filtered" :selected="id" :initial="rooms[0].id" :sort="!locked.rooms" v-on:update="layout" controller="accessories" />
             <div v-if="!intermediate && id === 'add'" class="screen">
                 <div class="wrapper">
                     <div class="row section">{{ $t("details") }}</div>
