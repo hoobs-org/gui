@@ -124,15 +124,15 @@
             justify-content: flex-end;
             z-index: 1100;
 
-            .mdi {
+            .icon {
                 width: 28px;
-                height: 28px;
+                height: 20px;
+                padding: 4px 0;
                 display: flex;
                 justify-content: space-around;
                 align-items: center;
                 position: relative;
                 border-radius: 100%;
-                font-size: 20px;
                 margin: 5px 0;
                 cursor: pointer;
 

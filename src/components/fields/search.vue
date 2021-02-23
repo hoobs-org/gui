@@ -35,7 +35,7 @@
             v-on:change="change"
             v-bind:required="required"
         />
-        <span v-on:click="search()" class="mdi mdi-magnify"></span>
+        <icon v-on:click="search()" name="magnify" class="icon" />
     </div>
 </template>
 
@@ -124,12 +124,12 @@
             }
         }
 
-        .mdi {
+        .icon {
             position: absolute;
             bottom: 26px;
             right: 7px;
             color: var(--modal-text);
-            font-size: 18px;
+            height: 20px;
             opacity: 0.5;
             user-select: none;
             cursor: pointer;

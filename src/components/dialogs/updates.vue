@@ -48,7 +48,7 @@
                         <div v-if="plugins.length > 0" v-on:click="update()" class="button">{{ $t("update_plugins") }}</div>
                     </div>
                     <div v-if="!loading && updated" class="row updated">
-                        <span class="mdi mdi-update"></span>
+                        <icon name="update" class="icon" />
                         <div class="text">{{ $t("updated") }}</div>
                     </div>
                     <div v-if="loading" class="row loading">
@@ -158,9 +158,9 @@
         .updated {
             align-items: center;
 
-            .mdi {
+            .icon {
+                height: 37px;
                 color: var(--modal-highlight);
-                font-size: 37px;
             }
 
             .text {

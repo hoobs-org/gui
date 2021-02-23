@@ -19,7 +19,7 @@
 <template>
     <div v-on:click.stop id="menu">
         <div v-if="auth" class="profile">
-            <span class="mdi mdi-account-circle"></span>
+            <icon name="account-circle" class="icon" />
             <div class="details">
                 <span class="title">{{ $t("current_user") }}</span>
                 <span class="identity">{{ user.name || user.username }}</span>
@@ -34,7 +34,7 @@
         <div v-if="user.permissions.terminal" v-on:click="terminal()" class="item desktop">{{ $t("terminal") }}</div>
         <div v-if="auth" class="seperator desktop"></div>
         <div v-if="auth" v-on:click="logout()" class="item">{{ $t("logout") }}</div>
-        <div v-on:click="$menu.close()" class="mdi mdi-close close mobile"></div>
+        <icon v-on:click="$menu.close()" name="close" class="icon close mobile" />
     </div>
 </template>
 
@@ -144,10 +144,10 @@
             color: var(--text);
             user-select: none;
 
-            .mdi {
+            .icon {
                 color: var(--application-highlight);
                 margin: 0 14px 0 0;
-                font-size: 47px;
+                height: 47px;
             }
 
             .title {

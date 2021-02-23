@@ -19,12 +19,12 @@
 <template>
     <div :key="version" v-if="user.permissions.accessories" id="accessories">
         <context>
-            <div v-if="locked.rooms" v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" class="mdi mdi-lock desktop"></div>
-            <div v-else v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" class="mdi mdi-lock-open-variant desktop"></div>
-            <div v-on:click.stop="$dialog.open('hidden')" :title="$t('hidden_accessories')" class="mdi mdi-eye-off desktop"></div>
+            <icon v-if="locked.rooms" v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" name="lock" class="icon desktop" />
+            <icon v-else v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" name="lock-open-variant" class="icon desktop" />
+            <icon v-on:click.stop="$dialog.open('hidden')" :title="$t('hidden_accessories')" name="eye-off" class="icon desktop" />
             <div class="seperator desktop"></div>
             <router-link v-if="id !== 'add'" to="/accessories/add" class="button">
-                <div class="mdi mdi-plus"></div>
+                <icon name="plus" class="icon" />
                 {{ $t("add_room") }}
             </router-link>
         </context>
@@ -57,14 +57,14 @@
             </div>
             <div v-else-if="!intermediate" :class="!id ? 'screen desktop' : 'screen'">
                 <div class="nav mobile">
-                    <router-link to="/accessories" class="back"><span class="mdi mdi-chevron-left"></span> {{ $t("back") }}</router-link>
+                    <router-link to="/accessories" class="back"><icon name="chevron-left" class="icon" /> {{ $t("back") }}</router-link>
                 </div>
                 <div class="section">
                     <span>{{ display }}</span>
                     <div style="flex: 1"></div>
-                    <div v-if="locked.accessories" v-on:click.stop="() => { locked.accessories = !locked.accessories}" :title="$t('sort_accessories')" class="mdi mdi-lock desktop"></div>
-                    <div v-else v-on:click.stop="() => { locked.accessories = !locked.accessories; load(id); }" :title="$t('sort_accessories')" class="mdi mdi-lock-open-variant desktop"></div>
-                    <router-link v-if="identifier !== 'default'" :to="`/accessories/edit/${id || rooms[0].id}`" :title="$t('room_settings')" class="mdi mdi-cog edit-room"></router-link>
+                    <icon v-if="locked.accessories" v-on:click.stop="() => { locked.accessories = !locked.accessories}" :title="$t('sort_accessories')" name="lock" class="icon desktop" />
+                    <icon v-else v-on:click.stop="() => { locked.accessories = !locked.accessories; load(id); }" :title="$t('sort_accessories')" name="lock-open-variant" class="icon desktop" />
+                    <router-link v-if="identifier !== 'default'" :to="`/accessories/edit/${id || rooms[0].id}`" :title="$t('room_settings')" class="edit-room"><icon name="cog" class="icon" /></router-link>
                 </div>
                 <draggable :key="`version-${key}`" v-if="!locked.accessories" ghost-class="ghost" v-model="accessories" v-on:end="sort" class="devices">
                     <div v-for="(accessory, index) in accessories" :key="`accessory:${index}`" class="device editing">
@@ -374,10 +374,10 @@
                     margin: 0 0 20px 0;
                     user-select: none;
 
-                    .mdi {
+                    .icon {
+                        height: 18px;
                         color: var(--application-text) !important;
                         text-decoration: none !important;
-                        font-size: 20px;
                         margin: 0 0 0 7px;
                         opacity: 0.5;
                         cursor: pointer;

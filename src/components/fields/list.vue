@@ -38,10 +38,10 @@
                 />
             </div>
             <div class="action">
-                <div class="mdi mdi-delete" v-if="items.length > 0" v-on:click="removeItem(index)" :key="`remove-${index}`"></div>
+                <icon name="delete" v-if="items.length > 0" v-on:click="removeItem(index)" :key="`remove-${index}`" class="icon" />
             </div>
         </div>
-        <div class="mdi mdi-plus-circle add" v-if="!schema.maxItems || items.length < schema.maxItems" v-on:click="addItem()"></div>
+        <icon name="plus-circle" v-if="!schema.maxItems || items.length < schema.maxItems" v-on:click="addItem()" class="icon add" />
     </div>
 </template>
 

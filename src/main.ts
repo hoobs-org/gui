@@ -35,6 +35,7 @@ import store from "./services/store";
 import tasks from "./services/tasks";
 import lang from "./lang";
 
+import Icon from "./components/elements/icon.vue";
 import Modal from "./components/elements/modal.vue";
 import Radio from "./components/fields/radio.vue";
 import Context from "./components/elements/context.vue";
@@ -99,9 +100,10 @@ Vue.use(graphing);
 
 Vue.use(themes, { hoobs, store });
 
-Vue.component("context", Context);
+Vue.component("icon", Icon);
 Vue.component("modal", Modal);
 Vue.component("radio", Radio);
+Vue.component("context", Context);
 Vue.component("checkbox", Checkbox);
 Vue.component("text-field", TextField);
 Vue.component("textarea-field", TextareaField);

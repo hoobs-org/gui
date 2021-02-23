@@ -33,7 +33,7 @@
                     <div v-if="features.icon" class="row title">{{ $t("icon") }}</div>
                     <div v-if="features.icon" class="row">
                         <div class="icon">
-                            <span :class="`mdi mdi-${icon.selected || icon.default}`"></span>
+                            <icon :name="icon.selected || icon.default" class="selected" />
                         </div>
                         <div v-on:click="() => { show.icons = true; }" class="button">{{ $t("change") }}</div>
                     </div>
@@ -292,8 +292,8 @@
                     border: 1px var(--application-border) solid;
                     padding: 7px;
 
-                    .mdi {
-                        font-size: 42px;
+                    .selected {
+                        height: 42px;
                     }
                 }
             }

@@ -21,7 +21,7 @@
         <div v-for="(bridge, index) in selected" :key="`bridge:${index}`" class="item">
             <checkbox :id="`bridge_${index}`" :title="bridge.text" v-model="bridge.selected" />
         </div>
-        <div v-on:click="$menu.close()" class="mdi mdi-close close mobile"></div>
+        <icon v-on:click="$menu.close()" name="close" class="icon close mobile" />
     </div>
 </template>
 

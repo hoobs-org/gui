@@ -30,7 +30,7 @@
                 <div v-if="features.humidity" class="inner">
                     <div class="humidity">
                         <span :class="text">{{ readout }}&deg;</span>
-                        <span class="sub"><span class="mdi mdi-water-outline"></span>{{ humidity }}%</span>
+                        <span class="sub"><icon name="water-outline" class="icon" />{{ humidity }}%</span>
                     </div>
                 </div>
                 <div v-else class="inner">
@@ -39,24 +39,24 @@
             </div>
             <div class="context">
                 <div class="inner" v-on:click="mode">
-                    <span v-if="state === 1" class="mdi mdi-fire heat"></span>
-                    <span v-else-if="state === 2" class="mdi mdi-snowflake cool"></span>
-                    <div v-else-if="state === 3" class="mdi cliped">
-                        <div class="mdi mdi-snowflake top cool"></div>
-                        <div class="mdi mdi-fire bottom heat"></div>
+                    <icon v-if="state === 1" name="fire" class="icon heat" />
+                    <icon v-else-if="state === 2" name="snowflake" class="icon cool" />
+                    <div v-else-if="state === 3" class="cliped">
+                        <icon class="snowflake" name="icon top cool" />
+                        <icon class="fire" name="icon bottom heat" />
                     </div>
-                    <span v-else class="mdi off">{{ $t("off") }}</span>
+                    <span v-else class="off">{{ $t("off") }}</span>
                 </div>
             </div>
             <div v-if="!disabled" v-on:click="settings" class="settings">
-                <span class="mdi mdi-cog" :title="$t('accessory_settings')"></span>
+                <icon name="cog" class="icon" :title="$t('accessory_settings')" />
             </div>
             <div v-if="!disabled && features.battery" class="battery" :title="`${battery}%`">
                 <div class="charge">
-                    <span :class="`mdi mdi-${charge}`"></span>
+                    <icon :name="charge" class="icon" />
                 </div>
                 <div class="frame">
-                    <span class="mdi mdi-battery-outline"></span>
+                    <icon name="battery-outline" class="icon" />
                 </div>
             </div>
         </div>
@@ -415,8 +415,8 @@
             left: -6px;
             cursor: default;
 
-            .mdi {
-                font-size: 20px;
+            .icon {
+                height: 20px;
                 transform-origin: center;
                 transform: rotate(90deg);
             }
@@ -458,13 +458,13 @@
             right: -6px;
             cursor: pointer;
 
-            .mdi {
-                font-size: 22px;
+            .icon {
+                height: 22px;
                 opacity: 0.3;
             }
 
             &:hover {
-                .mdi {
+                .icon {
                     opacity: 1;
                 }
             }
@@ -520,7 +520,7 @@
 
                 .temp {
                     color: var(--accessory-text);
-                    font-size: 180%;
+                    font-size: 28px;
                 }
             }
 
@@ -535,12 +535,15 @@
                 }
 
                 .sub {
+                    display: flex;
+                    align-items: center;
                     color: var(--accessory-text);
-                    font-size: 80%;
+                    font-size: 14px;
 
-                    .mdi {
+                    .icon {
+                        height: 17px;
+                        margin-top: -3px;
                         color: #00b9f1;
-                        font-size: 100%;
                     }
                 }
             }
@@ -572,7 +575,7 @@
                 border-radius: 50%;
                 cursor: pointer;
 
-                .mdi {
+                .icon {
                     color: var(--accessory-text);
                 }
 
@@ -690,10 +693,6 @@
 
             .context {
                 .inner {
-                    .mdi {
-                        font-size: unset;
-                    }
-
                     .off {
                         font-size: 120%;
                     }

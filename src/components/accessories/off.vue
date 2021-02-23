@@ -21,7 +21,7 @@
         <div class="item">
             <div class="switch">
                 <div class="inner" v-on:click="off">
-                    <span class="mdi mdi-power"></span>
+                    <icon name="power" class="icon" />
                 </div>
             </div>
         </div>
@@ -100,9 +100,9 @@
                 border-radius: 50%;
                 cursor: pointer;
 
-                .mdi {
+                .icon {
+                    height: 50%;
                     color: var(--accessory-text);
-                    font-size: 400%;
                 }
             }
 
@@ -110,21 +110,9 @@
                 .inner {
                     background: var(--application-highlight);
 
-                    .mdi {
+                    .icon {
                         color: var(--accessory-highlight);
                         opacity: 1;
-                    }
-                }
-            }
-        }
-    }
-
-    @media (min-width: 300px) and (max-width: 815px) {
-        #control {
-            .switch {
-                .inner {
-                    .mdi {
-                        font-size: 400%;
                     }
                 }
             }

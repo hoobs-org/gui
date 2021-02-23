@@ -23,10 +23,7 @@
             <list class="desktop" value="id" display="display" :values="sections" :selected="from" initial="library" controller="plugins" :query="query" />
             <div v-if="!loading" class="screen">
                 <div class="nav mobile">
-                    <router-link :to="navigate('plugins', from, query)" class="back">
-                        <span class="mdi mdi-chevron-left"></span>
-                        {{ $t("back") }}
-                    </router-link>
+                    <router-link :to="navigate('plugins', from, query)" class="back"><icon name="chevron-left" class="icon" />{{ $t("back") }}</router-link>
                 </div>
                 <div class="header">
                     <div class="image">
@@ -57,14 +54,14 @@
                     <div v-if="section === 'versions'" class="section">
                         <div class="heading">{{ $t("tags") }}</div>
                         <div v-for="(tag, index) in releases.tags" :key="`tag:${index}`" class="version">
-                            <div v-on:click="install(tag.tag, true)" class="mdi mdi-download" :title="$t('plugin_install')"></div>
+                            <icon v-on:click="install(tag.tag, true)" name="download" class="icon" :title="$t('plugin_install')" />
                             <div v-on:click="install(tag.tag, true)" class="value">{{ tag.version }}</div>
                             <div class="fill"></div>
                             <div class="value">{{ tag.tag }}</div>
                         </div>
                         <div class="heading">{{ $t("releases") }}</div>
                         <div v-for="(release, index) in releases.versions" :key="`version:${index}`" class="version">
-                            <div v-on:click="install(release.version, true)" class="mdi mdi-download" :title="$t('plugin_install')"></div>
+                            <icon v-on:click="install(release.version, true)" name="download" class="icon" :title="$t('plugin_install')" />
                             <div v-on:click="install(release.version, true)" class="value" :title="$t('plugin_install')">{{ release.version }}</div>
                             <div class="fill"></div>
                             <div class="value">{{ $hoobs.dates.age(release.published) }}</div>
@@ -593,8 +590,8 @@
                                 }
                             }
 
-                            .mdi {
-                                font-size: 17px;
+                            .icon {
+                                height: 17px;
                                 padding: 0 7px 0 0;
                                 cursor: pointer;
                                 opacity: 0.7;

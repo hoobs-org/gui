@@ -19,13 +19,13 @@
 <template>
     <div id="notification">
         <div :class="`type ${message.type}`"></div>
-        <div v-if="message.icon" :class="`mdi mdi-${message.icon} display`"></div>
+        <icon v-if="message.icon" :name="message.icon" class="icon display" />
         <div v-else class="text-only"></div>
         <div class="details">
             <div class="title">{{ message.title }}</div>
             <div class="description">{{ message.description }}</div>
         </div>
-        <div v-on:click="dismiss(message.id)" class="mdi mdi-close close"></div>
+        <icon v-on:click="dismiss(message.id)" name="close" class="icon close" />
     </div>
 </template>
 
@@ -73,8 +73,8 @@
 
         .display {
             width: 60px;
-            height: 70px;
-            font-size: 37px;
+            height: 40px;
+            padding: 15px 0;
             display: flex;
             justify-content: space-around;
             align-items: center;

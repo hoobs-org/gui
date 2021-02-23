@@ -20,7 +20,7 @@
     <div :key="version" v-if="user.permissions.users" id="users">
         <context>
             <router-link v-if="id !== 'add'" to="/users/add" class="button">
-                <div class="mdi mdi-plus"></div>
+                <icon name="plus" class="icon" />
                 {{ $t("add_user") }}
             </router-link>
         </context>

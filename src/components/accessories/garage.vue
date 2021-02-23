@@ -39,18 +39,17 @@
                             <polygon fill="#333333" points="19.3,58.7 19.3,77.1 19.3,87.3 29.5,77.1 70.5,77.1 80.7,87.3 80.7,77.1 80.7,58.7" style="cursor: pointer;" />
                         </g>
                     </svg>
-                    <div v-if="obstruction" class="mdi mdi-dog-side"></div>
                 </div>
             </div>
             <div v-if="!disabled" v-on:click="settings" class="settings">
-                <span class="mdi mdi-cog" :title="$t('accessory_settings')"></span>
+                <icon name="cog" class="icon" :title="$t('accessory_settings')" />
             </div>
             <div v-if="!disabled && features.battery" class="battery" :title="`${battery}%`">
                 <div class="charge">
-                    <span :class="`mdi mdi-${charge}`"></span>
+                    <icon :name="charge" class="icon" />
                 </div>
                 <div class="frame">
-                    <span class="mdi mdi-battery-outline"></span>
+                    <icon name="battery-outline" class="icon" />
                 </div>
             </div>
         </div>
@@ -93,7 +92,6 @@
             return {
                 loading: true,
                 open: false,
-                obstruction: false,
                 battery: 0,
                 features: {
                     battery: false,
@@ -109,7 +107,6 @@
                         this.display = this.subject.name;
                         this.hidden = this.subject.hidden;
                         this.open = (this.subject.characteristics.find((item) => item.type === "target_door_state") || {}).value || false;
-                        this.obstruction = (this.subject.characteristics.find((item) => item.type === "obstruction_detected") || {}).value || false;
                         this.battery = (battery || {}).value || 0;
 
                         if (battery) this.features.battery = true;
@@ -190,8 +187,8 @@
             left: -6px;
             cursor: default;
 
-            .mdi {
-                font-size: 20px;
+            .icon {
+                height: 20px;
                 transform-origin: center;
                 transform: rotate(90deg);
             }
@@ -233,13 +230,13 @@
             right: -6px;
             cursor: pointer;
 
-            .mdi {
-                font-size: 22px;
+            .icon {
+                height: 22px;
                 opacity: 0.3;
             }
 
             &:hover {
-                .mdi {
+                .icon {
                     opacity: 1;
                 }
             }
@@ -262,14 +259,6 @@
                 position: relative;
                 box-sizing: border-box;
                 pointer-events: all;
-
-                .mdi {
-                    position: absolute;
-                    width: 100%;
-                    text-align: center;
-                    font-size: 300%;
-                    bottom: 5%;
-                }
             }
 
             svg {

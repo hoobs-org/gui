@@ -28,23 +28,23 @@
             </svg>
             <div v-if="!features.rotation" class="switch">
                 <div class="inner" v-on:click="toggle">
-                    <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'fan'}`"></span>
+                    <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'fan'" class="icon" />
                 </div>
             </div>
             <div v-if="features.rotation && on" class="context">
                 <div class="inner">
-                    <span class="mdi mdi-palette"></span>
+                    <icon name="refresh" class="icon" />
                 </div>
             </div>
             <div v-if="!disabled" v-on:click="settings" class="settings">
-                <span class="mdi mdi-cog" :title="$t('accessory_settings')"></span>
+                <icon name="cog" class="icon" :title="$t('accessory_settings')" />
             </div>
             <div v-if="!disabled && features.battery" class="battery" :title="`${battery}%`">
                 <div class="charge">
-                    <span :class="`mdi mdi-${charge}`"></span>
+                    <icon :name="charge" class="icon" />
                 </div>
                 <div class="frame">
-                    <span class="mdi mdi-battery-outline"></span>
+                    <icon name="battery-outline" class="icon" />
                 </div>
             </div>
         </div>
@@ -336,8 +336,8 @@
             left: -6px;
             cursor: default;
 
-            .mdi {
-                font-size: 20px;
+            .icon {
+                height: 20px;
                 transform-origin: center;
                 transform: rotate(90deg);
             }
@@ -379,13 +379,13 @@
             right: -6px;
             cursor: pointer;
 
-            .mdi {
-                font-size: 22px;
+            .icon {
+                height: 22px;
                 opacity: 0.3;
             }
 
             &:hover {
-                .mdi {
+                .icon {
                     opacity: 1;
                 }
             }
@@ -437,9 +437,9 @@
                 border-radius: 50%;
                 cursor: pointer;
 
-                .mdi {
+                .icon {
+                    height: 50%;
                     color: var(--accessory-text);
-                    font-size: 400%;
                 }
             }
         }
@@ -470,7 +470,8 @@
                 border-radius: 50%;
                 cursor: pointer;
 
-                .mdi {
+                .icon {
+                    height: 60%;
                     color: var(--accessory-text);
                 }
             }
@@ -489,8 +490,8 @@
                     padding: 0 0 32% 0;
                     clip-path: inset(0 0 32% 0);
 
-                    .mdi {
-                        font-size: 250%;
+                    .icon {
+                        height: 50%;
                     }
                 }
             }
@@ -530,7 +531,7 @@
                 .inner {
                     background: #04a3ff;
 
-                    .mdi {
+                    .icon {
                         color: var(--accessory-highlight);
                     }
                 }
@@ -540,7 +541,7 @@
                 .inner {
                     background: #04a3ff;
 
-                    .mdi {
+                    .icon {
                         color: var(--accessory-highlight);
                     }
                 }
@@ -565,32 +566,6 @@
         #control {
             .settings {
                 display: flex;
-            }
-
-            .switch {
-                .inner {
-                    .mdi {
-                        font-size: 400%;
-                    }
-                }
-            }
-
-            .context {
-                .inner {
-                    .mdi {
-                        font-size: unset;
-                    }
-                }
-            }
-
-            .rotation {
-                .switch {
-                    .inner {
-                        .mdi {
-                            font-size: 250%;
-                        }
-                    }
-                }
             }
         }
     }

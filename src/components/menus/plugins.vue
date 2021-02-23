@@ -21,7 +21,7 @@
         <div v-for="(plugin, index) in selected" :key="`plugin:${index}`" class="item">
             <checkbox :id="`plugin_${index}`" :title="plugin.text" v-model="plugin.selected" />
         </div>
-        <div v-on:click="$menu.close()" class="mdi mdi-close close mobile"></div>
+        <icon v-on:click="$menu.close()" name="close" class="icon close mobile" />
     </div>
 </template>
 

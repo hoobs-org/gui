@@ -27,8 +27,8 @@
                     <spinner />
                 </div>
                 <div v-else class="results">
-                    <div v-for="(icon, index) in icons" :key="`icon:${index}`" class="icon" v-on:click="select(icon)">
-                        <span :class="`mdi mdi-${icon}`"></span>
+                    <div v-for="(icon, index) in results" :key="`icon:${index}`" class="icon" v-on:click="select(icon)">
+                        <icon :name="icon" class="current" />
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-    import catalog from "@/lang/icons.json";
+    import { icons } from "../../services/icons";
 
     export default {
         name: "icons",
@@ -45,7 +45,7 @@
         data() {
             return {
                 query: "",
-                icons: [],
+                results: [],
                 searching: false,
             };
         },
@@ -61,13 +61,13 @@
 
             search() {
                 if (!this.query || this.query === "") {
-                    this.icons = catalog;
+                    this.results = icons();
 
                     return;
                 }
 
                 this.searching = true;
-                this.icons = catalog.filter((item) => item.indexOf(this.query.toLowerCase()) >= 0);
+                this.results = icons().filter((item) => item.indexOf(this.query.toLowerCase()) >= 0);
                 this.searching = false;
             },
         },
@@ -117,16 +117,15 @@
                     user-select: none;
                     cursor: pointer;
 
-                    .mdi {
+                    .current {
                         margin: 0 7px 7px 0;
-                        font-size: 24px;
                         padding: 4px;
                         opacity: 0.7;
                         border: 1px var(--application-border) solid;
                     }
 
                     &:hover {
-                        .mdi {
+                        .current {
                             opacity: 1;
                             border: 1px var(--application-highlight) solid;
                         }

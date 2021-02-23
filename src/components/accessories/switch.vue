@@ -21,21 +21,21 @@
         <div class="item">
             <div class="switch">
                 <div v-if="on" class="inner" v-on:click="toggle">
-                    <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'toggle-switch'}`"></span>
+                    <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'toggle-switch'" class="icon" />
                 </div>
                 <div v-else class="inner" v-on:click="toggle">
-                    <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'toggle-switch-off'}`"></span>
+                    <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'toggle-switch-off'" class="icon" />
                 </div>
             </div>
             <div v-if="!disabled" v-on:click="settings" class="settings">
-                <span class="mdi mdi-cog" :title="$t('accessory_settings')"></span>
+                <icon name="cog" class="icon" :title="$t('accessory_settings')" />
             </div>
             <div v-if="!disabled && features.battery" class="battery" :title="`${battery}%`">
                 <div class="charge">
-                    <span :class="`mdi mdi-${charge}`"></span>
+                    <icon :name="charge" class="icon" />
                 </div>
                 <div class="frame">
-                    <span class="mdi mdi-battery-outline"></span>
+                    <icon name="battery-outline" class="icon" />
                 </div>
             </div>
         </div>
@@ -173,8 +173,8 @@
             left: -6px;
             cursor: default;
 
-            .mdi {
-                font-size: 20px;
+            .icon {
+                height: 20px;
                 transform-origin: center;
                 transform: rotate(90deg);
             }
@@ -216,13 +216,13 @@
             right: -6px;
             cursor: pointer;
 
-            .mdi {
-                font-size: 22px;
+            .icon {
+                height: 22px;
                 opacity: 0.3;
             }
 
             &:hover {
-                .mdi {
+                .icon {
                     opacity: 1;
                 }
             }
@@ -253,9 +253,9 @@
                 border-radius: 50%;
                 cursor: pointer;
 
-                .mdi {
+                .icon {
+                    height: 50%;
                     color: var(--accessory-text);
-                    font-size: 400%;
                 }
             }
         }
@@ -265,7 +265,7 @@
                 .inner {
                     background: var(--application-highlight);
 
-                    .mdi {
+                    .icon {
                         color: var(--accessory-highlight);
                         opacity: 1;
                     }
@@ -284,14 +284,6 @@
         #control {
             .settings {
                 display: flex;
-            }
-
-            .switch {
-                .inner {
-                    .mdi {
-                        font-size: 400%;
-                    }
-                }
             }
         }
     }

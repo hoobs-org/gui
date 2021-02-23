@@ -28,10 +28,10 @@
             </svg>
             <div class="switch">
                 <div v-if="on" class="inner" v-on:click="toggle" style="background: #fed800;">
-                    <span class="mdi mdi-lightbulb-group"></span>
+                    <icon name="lightbulb-group" class="icon" />
                 </div>
                 <div v-else class="inner" v-on:click="toggle">
-                    <span class="mdi mdi-lightbulb-group"></span>
+                    <icon name="lightbulb-group" class="icon" />
                 </div>
             </div>
         </div>
@@ -334,9 +334,9 @@
                 border-radius: 50%;
                 cursor: pointer;
 
-                .mdi {
+                .icon {
+                    height: 50%;
                     color: var(--accessory-text);
-                    font-size: 400%;
                 }
             }
         }
@@ -382,7 +382,7 @@
                 .inner {
                     background: #fed800;
 
-                    .mdi {
+                    .icon {
                         color: var(--accessory-highlight);
                     }
                 }
@@ -392,22 +392,6 @@
                 .marker {
                     stroke: #fed800;
                     opacity: 1;
-                }
-            }
-        }
-    }
-
-    @media (min-width: 300px) and (max-width: 815px) {
-        #control {
-            .settings {
-                display: flex;
-            }
-
-            .switch {
-                .inner {
-                    .mdi {
-                        font-size: 400%;
-                    }
                 }
             }
         }

@@ -22,7 +22,7 @@
             <div v-if="!loading" class="content">
                 <div v-if="bridge && cache.length > 0" class="form">
                     <div v-for="(item, index) in cache" :key="`cache:${index}`" class="item">
-                        <span class="mdi mdi-delete" v-on:click="remove(item.UUID)"></span>
+                        <icon name="delete" v-on:click="remove(item.UUID)" class="icon" />
                         <span class="name">{{ item.displayName }}</span>
                         <span class="uuid">({{ item.UUID }})</span>
                     </div>
@@ -140,7 +140,7 @@
                         opacity: 1;
                     }
 
-                    .mdi {
+                    .icon {
                         margin: 0 7px 0 0;
                         opacity: 0.5;
                         cursor: pointer;

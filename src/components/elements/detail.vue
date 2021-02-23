@@ -91,7 +91,7 @@
         <div v-if="support" class="item">
             <div class="value">
                 <a :href="support" target="_blank">
-                    <span class="mdi mdi-help-circle"></span>
+                    <icon name="help-circle" class="icon" />
                     {{ $t("plugin_issues") }}
                 </a>
             </div>
@@ -102,11 +102,11 @@
         <div class="item">
             <div class="value">
                 <a v-if="homepage" :href="homepage" target="_blank">
-                    <span class="mdi mdi-link"></span>
+                    <icon name="link" class="icon" />
                     {{ domain(homepage) }}
                 </a>
                 <a :href="`https://plugins.hoobs.org/plugin/${plugin.name}`" target="_blank">
-                    <span class="mdi mdi-link"></span>
+                    <icon name="link" class="icon" />
                     hoobs.org
                 </a>
             </div>
@@ -117,7 +117,7 @@
         <div v-if="repository" class="item">
             <div class="value">
                 <a :href="repository" target="_blank">
-                    <span class="mdi mdi-code-tags"></span>
+                    <icon name="code-tags" class="icon" />
                     {{ domain(repository) }}
                 </a>
             </div>
@@ -338,8 +338,9 @@
                     align-items: center;
                     text-decoration: none !important;
 
-                    .mdi {
-                        margin: 0 7px -1px 0;
+                    .icon {
+                        height: 22px;
+                        margin: 0 7px 0 0;
                     }
                 }
 
@@ -353,6 +354,10 @@
 
                         &:hover {
                             text-decoration: underline !important;
+                        }
+
+                        .icon {
+                            height: 14px;
                         }
                     }
                 }

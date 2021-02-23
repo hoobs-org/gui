@@ -28,29 +28,29 @@
             </svg>
             <div v-if="!features.picker" class="switch">
                 <div v-if="on" class="inner" v-on:click="toggle" :style="`background: ${color};`">
-                    <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'lightbulb-on'}`"></span>
+                    <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'lightbulb-on'" class="icon" />
                 </div>
                 <div v-else class="inner" v-on:click="toggle">
-                    <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'lightbulb-outline'}`"></span>
+                    <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'lightbulb-outline'" class="icon" />
                 </div>
             </div>
             <div v-if="features.hue && !features.picker && on" class="context">
                 <div class="inner" v-on:click="picker" :style="`background: ${color};`">
-                    <span class="mdi mdi-palette"></span>
+                    <icon name="palette" class="icon" />
                 </div>
             </div>
             <div v-if="features.picker" class="picker">
                 <div class="wheel" ref="wheel"></div>
             </div>
             <div v-if="!disabled" v-on:click="settings" class="settings">
-                <span class="mdi mdi-cog" :title="$t('accessory_settings')"></span>
+                <icon name="cog" class="icon" :title="$t('accessory_settings')" />
             </div>
             <div v-if="!disabled && features.battery" class="battery" :title="`${battery}%`">
                 <div class="charge">
-                    <span :class="`mdi mdi-${charge}`"></span>
+                    <icon :name="charge" class="icon" />
                 </div>
                 <div class="frame">
-                    <span class="mdi mdi-battery-outline"></span>
+                    <icon name="battery-outline" class="icon" />
                 </div>
             </div>
         </div>
@@ -408,8 +408,8 @@
             left: -6px;
             cursor: default;
 
-            .mdi {
-                font-size: 20px;
+            .icon {
+                height: 20px;
                 transform-origin: center;
                 transform: rotate(90deg);
             }
@@ -451,13 +451,13 @@
             right: -6px;
             cursor: pointer;
 
-            .mdi {
-                font-size: 22px;
+            .icon {
+                height: 22px;
                 opacity: 0.3;
             }
 
             &:hover {
-                .mdi {
+                .icon {
                     opacity: 1;
                 }
             }
@@ -529,9 +529,9 @@
                 border-radius: 50%;
                 cursor: pointer;
 
-                .mdi {
+                .icon {
+                    height: 50%;
                     color: var(--accessory-text);
-                    font-size: 400%;
                 }
             }
         }
@@ -562,7 +562,8 @@
                 border-radius: 50%;
                 cursor: pointer;
 
-                .mdi {
+                .icon {
+                    height: 60%;
                     color: var(--accessory-text);
                 }
             }
@@ -581,8 +582,8 @@
                     padding: 0 0 32% 0;
                     clip-path: inset(0 0 32% 0);
 
-                    .mdi {
-                        font-size: 250%;
+                    .icon {
+                        height: 50%;
                     }
                 }
             }
@@ -622,7 +623,7 @@
                 .inner {
                     background: #fed800;
 
-                    .mdi {
+                    .icon {
                         color: var(--accessory-highlight);
                     }
                 }
@@ -632,7 +633,7 @@
                 .inner {
                     background: #fed800;
 
-                    .mdi {
+                    .icon {
                         color: var(--accessory-highlight);
                     }
                 }
@@ -657,32 +658,6 @@
         #control {
             .settings {
                 display: flex;
-            }
-
-            .switch {
-                .inner {
-                    .mdi {
-                        font-size: 400%;
-                    }
-                }
-            }
-
-            .context {
-                .inner {
-                    .mdi {
-                        font-size: unset;
-                    }
-                }
-            }
-
-            .hue {
-                .switch {
-                    .inner {
-                        .mdi {
-                            font-size: 250%;
-                        }
-                    }
-                }
             }
         }
     }

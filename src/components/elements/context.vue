@@ -22,10 +22,10 @@
             <slot />
         </div>
         <div class="system">
-            <div v-on:click.stop="$menu.open('notifications')" class="mdi mdi-bell-outline">
+            <icon v-on:click.stop="$menu.open('notifications')" name="bell-outline" class="icon">
                 <div v-if="notifications.length > 0" class="active">&bull;</div>
-            </div>
-            <div v-on:click.stop="$menu.open('application')" class="mdi mdi-dots-vertical"></div>
+            </icon>
+            <icon v-on:click.stop="$menu.open('application')" class="icon" name="dots-vertical" />
         </div>
     </div>
 </template>
@@ -57,8 +57,8 @@
             align-content: center;
             padding: 2px 0 0 7px;
 
-            .mdi {
-                font-size: 18px;
+            .icon {
+                height: 18px;
             }
         }
 
@@ -68,8 +68,8 @@
             align-content: center;
             padding: 2px 7px 0 0;
 
-            .mdi {
-                font-size: 20px;
+            .icon {
+                height: 20px;
             }
         }
 
@@ -80,15 +80,14 @@
             margin: 10px 7px;
         }
 
-        .mdi {
-            width: 28px;
-            height: 28px;
+        .icon {
+            padding: 5px;
+            height: 18px;
             display: flex;
             justify-content: space-around;
             align-items: center;
             position: relative;
             border-radius: 100%;
-            font-size: 18px;
             margin: 5px 0;
             cursor: pointer;
 
@@ -96,6 +95,7 @@
                 font-size: 32px;
                 position: absolute;
                 right: 4px;
+                top: 2px;
                 color: var(--application-error-text);
             }
 
@@ -116,9 +116,9 @@
             padding: 0;
             margin: 5px 5px 5px 0;
 
-            .mdi {
+            .icon {
                 margin: 0 -3px 0 0;
-                font-size: 18px;
+                height: 18px;
             }
 
             &:hover {

@@ -22,19 +22,19 @@
             <div class="background">
                 <div class="panel">
                     <div class="main">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'memory'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'memory'" class="icon" />
                     </div>
                 </div>
             </div>
             <div v-if="!disabled" v-on:click="settings" class="settings">
-                <span class="mdi mdi-cog" :title="$t('accessory_settings')"></span>
+                <icon name="cog" class="icon" :title="$t('accessory_settings')" />
             </div>
             <div v-if="!disabled && features.battery" class="battery" :title="`${battery}%`">
                 <div class="charge">
-                    <span :class="`mdi mdi-${charge}`"></span>
+                    <icon :name="charge" class="icon" />
                 </div>
                 <div class="frame">
-                    <span class="mdi mdi-battery-outline"></span>
+                    <icon name="battery-outline" class="icon" />
                 </div>
             </div>
         </div>
@@ -154,8 +154,8 @@
             left: 0;
             cursor: default;
 
-            .mdi {
-                font-size: 20px;
+            .icon {
+                height: 20px;
                 transform-origin: center;
                 transform: rotate(90deg);
             }
@@ -195,13 +195,13 @@
             right: 2px;
             cursor: pointer;
 
-            .mdi {
-                font-size: 22px;
+            .icon {
+                height: 22px;
                 opacity: 0.3;
             }
 
             &:hover {
-                .mdi {
+                .icon {
                     opacity: 1;
                 }
             }
@@ -238,8 +238,8 @@
                 padding: 7px;
                 cursor: default;
 
-                .mdi {
-                    font-size: 37px;
+                .icon {
+                    height: 37px;
                     color: var(--accessory-text);
                 }
             }
@@ -260,8 +260,8 @@
 
             .sensor {
                 .main {
-                    .mdi {
-                        font-size: 37px;
+                    .icon {
+                        height: 37px;
                     }
                 }
             }

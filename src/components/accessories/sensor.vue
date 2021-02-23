@@ -22,128 +22,128 @@
             <div class="background">
                 <div class="sensor">
                     <div v-if="main === 'leak' && leak" class="main leak">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'pipe-leak'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'pipe-leak'" class="icon" />
                         <div class="status">
                             {{ $t("leak_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'leak' && !leak" class="main">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'pipe-leak'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'pipe-leak'" class="icon" />
                         <div class="status">
                             {{ $t("no_leaks") }}
                         </div>
                     </div>
                     <div v-if="main === 'temperature'" class="main value">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'thermometer'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'thermometer'" class="icon" />
                         <div class="status">
                             {{ readout }}&deg;
                         </div>
                     </div>
                     <div v-if="main === 'humidity'" class="main value">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'water-outline'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'water-outline'" class="icon" />
                         <div class="status">
                             {{ humidity }}%;
                         </div>
                     </div>
                     <div v-if="main === 'smoke' && smoke" class="main alert">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'fire'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'fire'" class="icon" />
                         <div class="status">
                             {{ $t("smoke_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'smoke' && !smoke" class="main">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'fire'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'fire'" class="icon" />
                         <div class="status">
                             {{ $t("no_smoke") }}
                         </div>
                     </div>
                     <div v-if="main === 'carbon' && carbon" class="main alert">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'smog'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'smog'" class="icon" />
                         <div class="status">
                             {{ $t("carbon_monoxide_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'carbon' && !carbon" class="main">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'smog'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'smog'" class="icon" />
                         <div class="status">
                             {{ $t("no_carbon_monoxide") }}
                         </div>
                     </div>
                     <div v-if="main === 'contact' && contact" class="main">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'" class="icon" />
                         <div class="status">
                             {{ $t("closed") }}
                         </div>
                     </div>
                     <div v-if="main === 'contact' && !contact" class="main on">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'" class="icon" />
                         <div class="status">
                             {{ $t("open") }}
                         </div>
                     </div>
                     <div v-if="main === 'motion' && motion" class="main on">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'motion-sensor'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'motion-sensor'" class="icon" />
                         <div class="status">
                             {{ $t("motion_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'motion' && !motion" class="main">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'motion-sensor'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'motion-sensor'" class="icon" />
                         <div class="status">
                             {{ $t("no_motion") }}
                         </div>
                     </div>
                     <div v-if="main === 'obstruction' && obstruction" class="main on">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'dog-side'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'dog-side'" class="icon" />
                         <div class="status">
                             {{ $t("obstruction_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'obstruction' && !obstruction" class="main">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'dog-side'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'dog-side'" class="icon" />
                         <div class="status">
                             {{ $t("no_obstruction") }}
                         </div>
                     </div>
                     <div v-if="main === 'occupancy' && occupancy" class="main on">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'crosshairs-gps'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'crosshairs-gps'" class="icon" />
                         <div class="status">
                             {{ $t("presence_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'occupancy' && !occupancy" class="main">
-                        <span :class="`mdi mdi-${subject.icon && subject.icon !== '' ? subject.icon : 'crosshairs-gps'}`"></span>
+                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'crosshairs-gps'" class="icon" />
                         <div class="status">
                             {{ $t("no_presence") }}
                         </div>
                     </div>
                     <div v-if="extra" class="extra">
-                        <span v-if="main !== 'leak' && features.leak && leak" class="mdi mdi-pipe-leak leak" :title="$t('leak_detected')"></span>
-                        <span v-else-if="main !== 'leak' && features.leak" class="mdi mdi-pipe-leak" :title="$t('no_leaks')"></span>
-                        <span v-if="main !== 'smoke' && features.smoke && smoke" class="mdi fire alert" :title="$t('smoke_detected')"></span>
-                        <span v-else-if="main !== 'smoke' && features.smoke" class="mdi mdi-fire" :title="$t('no_smoke')"></span>
-                        <span v-if="main !== 'carbon' && features.carbon && carbon" class="mdi mdi-smog alert" :title="$t('carbon_monoxide_detected')"></span>
-                        <span v-else-if="main !== 'carbon' && features.carbon" class="mdi mdi-smog" :title="$t('no_carbon_monoxide')"></span>
-                        <span v-if="main !== 'contact' && features.contact && contact" class="mdi mdi-dock-window" :title="$t('closed')"></span>
-                        <span v-else-if="main !== 'contact' && features.contact" class="mdi mdi-dock-window on" :title="$t('open')"></span>
-                        <span v-if="main !== 'motion' && features.motion && motion" class="mdi mdi-motion-sensor on" :title="$t('motion_detected')"></span>
-                        <span v-else-if="main !== 'motion' && features.motion" class="mdi mdi-motion-sensor" :title="$t('no_motion')"></span>
-                        <span v-if="main !== 'obstruction' && features.obstruction && obstruction" class="mdi mdi-dog-side on" :title="$t('obstruction_detected')"></span>
-                        <span v-else-if="main !== 'obstruction' && features.obstruction" class="mdi mdi-dog-side" :title="$t('no_obstruction')"></span>
-                        <span v-if="main !== 'occupancy' && features.occupancy && occupancy" class="mdi mdi-crosshairs-gps on" :title="$t('presence_detected')"></span>
-                        <span v-else-if="main !== 'occupancy' && features.occupancy" class="mdi mdi-crosshairs-gps" :title="$t('no_presence')"></span>
+                        <icon v-if="main !== 'leak' && features.leak && leak" name="pipe-leak" :title="$t('leak_detected')" class="icon leak" />
+                        <icon v-else-if="main !== 'leak' && features.leak" name="pipe-leak" :title="$t('no_leaks')" class="icon" />
+                        <icon v-if="main !== 'smoke' && features.smoke && smoke" name="fire" :title="$t('smoke_detected')" class="icon alert" />
+                        <icon v-else-if="main !== 'smoke' && features.smoke" name="fire" :title="$t('no_smoke')" class="icon" />
+                        <icon v-if="main !== 'carbon' && features.carbon && carbon" name="smog" :title="$t('carbon_monoxide_detected')" class="icon alert" />
+                        <icon v-else-if="main !== 'carbon' && features.carbon" name="smog" :title="$t('no_carbon_monoxide')" class="icon" />
+                        <icon v-if="main !== 'contact' && features.contact && contact" name="dock-window" :title="$t('closed')" class="icon" />
+                        <icon v-else-if="main !== 'contact' && features.contact" name="dock-window" :title="$t('open')" class="icon on" />
+                        <icon v-if="main !== 'motion' && features.motion && motion" name="motion-sensor" :title="$t('motion_detected')" class="icon on" />
+                        <icon v-else-if="main !== 'motion' && features.motion" name="motion-sensor" :title="$t('no_motion')" class="icon" />
+                        <icon v-if="main !== 'obstruction' && features.obstruction && obstruction" name="dog-side" :title="$t('obstruction_detected')" class="icon on" />
+                        <icon v-else-if="main !== 'obstruction' && features.obstruction" name="dog-side" :title="$t('no_obstruction')" class="icon" />
+                        <icon v-if="main !== 'occupancy' && features.occupancy && occupancy" name="crosshairs-gps" :title="$t('presence_detected')" class="icon on" />
+                        <icon v-else-if="main !== 'occupancy' && features.occupancy" name="crosshairs-gps" :title="$t('no_presence')" class="icon" />
                     </div>
                 </div>
             </div>
             <div v-if="!disabled" v-on:click="settings" class="settings">
-                <span class="mdi mdi-cog" :title="$t('accessory_settings')"></span>
+                <icon name="cog" class="icon" :title="$t('accessory_settings')" />
             </div>
             <div v-if="!disabled && features.battery" class="battery" :title="`${battery}%`">
                 <div class="charge">
-                    <span :class="`mdi mdi-${charge}`"></span>
+                    <icon :name="charge" class="icon" />
                 </div>
                 <div class="frame">
-                    <span class="mdi mdi-battery-outline"></span>
+                    <icon name="battery-outline" class="icon" />
                 </div>
             </div>
         </div>
@@ -343,8 +343,8 @@
             left: 0;
             cursor: default;
 
-            .mdi {
-                font-size: 20px;
+            .icon {
+                height: 20px;
                 transform-origin: center;
                 transform: rotate(90deg);
             }
@@ -384,13 +384,13 @@
             right: 2px;
             cursor: pointer;
 
-            .mdi {
-                font-size: 22px;
+            .icon {
+                height: 22px;
                 opacity: 0.3;
             }
 
             &:hover {
-                .mdi {
+                .icon {
                     opacity: 1;
                 }
             }
@@ -427,8 +427,8 @@
                 padding: 7px;
                 cursor: default;
 
-                .mdi {
-                    font-size: 37px;
+                .icon {
+                    height: 37px;
                     color: var(--accessory-text);
                 }
 
@@ -439,8 +439,8 @@
                 }
 
                 &.value {
-                    .mdi {
-                        font-size: 27px;
+                    .icon {
+                        height: 27px;
                     }
 
                     .status {
@@ -450,7 +450,7 @@
                 }
 
                 &.on {
-                    .mdi {
+                    .icon {
                         color: var(--application-highlight);
                     }
 
@@ -460,7 +460,7 @@
                 }
 
                 &.leak {
-                    .mdi {
+                    .icon {
                         color: #00b9f1;
                     }
 
@@ -470,7 +470,7 @@
                 }
 
                 &.alert {
-                    .mdi {
+                    .icon {
                         color: #c51212;
                     }
 
@@ -488,8 +488,8 @@
                 justify-content: flex-end;
                 border-top: 1px var(--accessory-border) solid;
 
-                .mdi {
-                    font-size: 18px;
+                .icon {
+                    height: 18px;
                     margin-left: 4px;
                     color: var(--accessory-text);
 
@@ -523,8 +523,8 @@
 
             .sensor {
                 .main {
-                    .mdi {
-                        font-size: 37px;
+                    .icon {
+                        height: 37px;
                     }
 
                     .status {
@@ -532,8 +532,8 @@
                     }
 
                     &.value {
-                        .mdi {
-                            font-size: 27px;
+                        .icon {
+                            height: 27px;
                         }
 
                         .status {
@@ -543,8 +543,8 @@
                 }
 
                 .extra {
-                    .mdi {
-                        font-size: 18px;
+                    .icon {
+                        height: 18px;
                     }
                 }
             }

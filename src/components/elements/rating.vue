@@ -19,29 +19,29 @@
 <template>
     <div id="rating">
         <div class="star" :style="`width: ${size}px; height: ${size}px;`">
-            <div class="mdi mdi-star" :style="`font-size: ${size}px;`"></div>
-            <div v-if="value >= 1" class="mdi mdi-star earned" :style="`font-size: ${size}px;`"></div>
-            <div v-else-if="value > 0" class="mdi mdi-star earned" :style="`width: ${(value * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`"></div>
+            <icon name="star" class="icon" :style="`height: ${size}px;`" />
+            <icon v-if="value >= 1" name="star" class="icon earned" :style="`height: ${size}px;`" />
+            <icon v-else-if="value > 0" name="star" class="icon earned" :style="`width: ${(value * 100).toFixed(2)}%; height: ${size}px;`" />
         </div>
         <div class="star" :style="`width: ${size}px; height: ${size}px;`">
-            <div class="mdi mdi-star" :style="`font-size: ${size}px;`"></div>
-            <div v-if="value >= 2" class="mdi mdi-star earned" :style="`font-size: ${size}px;`"></div>
-            <div v-else-if="value > 1" class="mdi mdi-star earned" :style="`width: ${((value - 1) * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`"></div>
+            <icon name="star" class="icon" :style="`height: ${size}px;`" />
+            <icon v-if="value >= 2" name="star" class="icon earned" :style="`height: ${size}px;`" />
+            <icon v-else-if="value > 1" name="star" class="icon earned" :style="`width: ${((value - 1) * 100).toFixed(2)}%; height: ${size}px;`" />
         </div>
         <div class="star" :style="`width: ${size}px; height: ${size}px;`">
-            <div class="mdi mdi-star" :style="`font-size: ${size}px;`"></div>
-            <div v-if="value >= 3" class="mdi mdi-star earned" :style="`font-size: ${size}px;`"></div>
-            <div v-else-if="value > 2" class="mdi mdi-star earned" :style="`width: ${((value - 2) * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`"></div>
+            <icon name="star" class="icon" :style="`height: ${size}px;`" />
+            <icon v-if="value >= 3" name="star" class="icon earned" :style="`height: ${size}px;`" />
+            <icon v-else-if="value > 2" name="star" class="icon earned" :style="`width: ${((value - 2) * 100).toFixed(2)}%; height: ${size}px;`" />
         </div>
         <div class="star" :style="`width: ${size}px; height: ${size}px;`">
-            <div class="mdi mdi-star" :style="`font-size: ${size}px;`"></div>
-            <div v-if="value >= 4" class="mdi mdi-star earned" :style="`font-size: ${size}px;`"></div>
-            <div v-else-if="value > 3" class="mdi mdi-star earned" :style="`width: ${((value - 3) * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`"></div>
+            <icon name="star" class="icon" :style="`height: ${size}px;`" />
+            <icon v-if="value >= 4" name="star" class="icon earned" :style="`height: ${size}px;`" />
+            <icon v-else-if="value > 3" name="star" class="icon earned" :style="`width: ${((value - 3) * 100).toFixed(2)}%; height: ${size}px;`" />
         </div>
         <div class="star" :style="`width: ${size}px; height: ${size}px;`">
-            <div class="mdi mdi-star" :style="`font-size: ${size}px;`"></div>
-            <div v-if="value >= 5" class="mdi mdi-star earned" :style="`font-size: ${size}px;`"></div>
-            <div v-else-if="value > 4" class="mdi mdi-star earned" :style="`width: ${((value - 4) * 100).toFixed(2)}%; height: ${size}px; font-size: ${size}px;`"></div>
+            <icon name="star" class="icon" :style="`height: ${size}px;`" />
+            <icon v-if="value >= 5" name="star" class="icon earned" :style="`height: ${size}px;`" />
+            <icon v-else-if="value > 4" name="star" class="icon earned" :style="`width: ${((value - 4) * 100).toFixed(2)}%; height: ${size}px;`" />
         </div>
     </div>
 </template>
@@ -73,7 +73,7 @@
             position: relative;
             overflow: hidden;
 
-            .mdi {
+            .icon {
                 color: var(--application-input-accent);
             }
 

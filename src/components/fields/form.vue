@@ -21,8 +21,8 @@
         <div class="position">
             <legend v-if="expandable || (label && label !== '')" class="legend" v-on:click="toggle">
                 <span v-html="label"></span>
-                <div v-if="expandable && !expanded" class="mdi mdi-chevron-down"></div>
-                <div v-if="expandable && expanded" class="mdi mdi-chevron-up"></div>
+                <icon v-if="expandable && !expanded" name="chevron-down" class="icon" />
+                <icon v-if="expandable && expanded" name="chevron-up" class="icon" />
             </legend>
         </div>
         <div v-if="schema.description && schema.description !== ''" class="description" v-html="schema.description"></div>
@@ -127,14 +127,14 @@
                 flex: 1;
             }
 
-            .mdi {
+            .icon {
                 color: var(--application-text);
                 opacity: 0.7;
                 cursor: pointer;
             }
 
             &:hover {
-                .mdi {
+                .icon {
                     opacity: 1;
                 }
             }

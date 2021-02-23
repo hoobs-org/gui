@@ -22,7 +22,10 @@
             v-for="(item, index) in working"
             :key="`entry:${index}`"
             :class="`${item[value]}` === (selected || initial) ? 'item open' : 'item'"
-        ><span class="drag mdi mdi-drag-horizontal"></span>{{ item[display] }}</div>
+        >
+            <icon name="drag-horizontal" class="icon drag" />
+            {{ item[display] }}
+        </div>
     </draggable>
     <div v-else id="list" :class="selected && selected !== '' ? 'list open' : 'list'">
         <router-link
@@ -131,7 +134,7 @@
             }
 
             .drag {
-                margin: 0 7px 0 0;
+                margin: -2px 7px 0 0;
             }
         }
 

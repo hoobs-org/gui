@@ -73,8 +73,6 @@
 </style>
 
 <style lang="scss">
-    @import "../node_modules/@mdi/font/css/materialdesignicons.min.css";
-
     html,
     body {
         width: 100%;
@@ -147,7 +145,7 @@
             color: var(--application-text) !important;
         }
 
-        .mdi {
+        .icon {
             font-weight: normal;
             font-style: normal;
             font-size: 22px;
