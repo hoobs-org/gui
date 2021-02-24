@@ -200,9 +200,11 @@
                 this.$confirm(this.$t("reboot"), this.$t("reboot_warning"), async () => {
                     const system = await this.$hoobs.system();
 
+                    this.loading = true;
+
                     await system.reboot();
 
-                    this.loading = true;
+                    this.$action.emit("window", "reboot", 5000);
                 });
             },
 
@@ -227,6 +229,8 @@
                     this.loading = true;
 
                     await system.reset();
+
+                    this.$action.emit("window", "reboot", 5000);
                 });
             },
 

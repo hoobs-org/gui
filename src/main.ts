@@ -72,6 +72,10 @@ io.on("reconnect", async () => {
     }
 });
 
+actions.on("window", "reboot", (delay: number) => {
+    setTimeout(() => window.location.reload(), delay);
+});
+
 actions.on("log", "history", () => {
     hoobs.sdk.log().then((messages: any) => { store.commit("LOG:HISTORY", messages); });
 });

@@ -69,6 +69,8 @@
                     this.loading = true;
 
                     await this.$hoobs.restore.file(this.filename);
+
+                    this.$action.emit("window", "reboot", 5000);
                 }
             },
 
@@ -77,6 +79,8 @@
                     this.loading = true;
 
                     await this.$hoobs.restore.upload(this.$refs.backup.files[0]);
+
+                    this.$action.emit("window", "reboot", 5000);
                 }
             },
         },
