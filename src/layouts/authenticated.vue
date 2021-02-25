@@ -28,13 +28,11 @@
 </template>
 
 <script>
-    import Navigation from "@/components/navigation.vue";
-
     export default {
         name: "authenticated",
 
         components: {
-            "navigation": Navigation,
+            "navigation": () => import(/* webpackChunkName: "layout-navigation" */ "@/components/navigation.vue"),
         },
 
         computed: {

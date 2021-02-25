@@ -90,8 +90,6 @@
 </template>
 
 <script>
-    import List from "@/components/elements/list.vue";
-
     import Validators from "../services/validators";
 
     export default {
@@ -102,7 +100,7 @@
         },
 
         components: {
-            "list": List,
+            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
         },
 
         computed: {

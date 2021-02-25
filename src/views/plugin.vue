@@ -83,12 +83,6 @@
     import crypto from "crypto";
     import identicon from "identicon.js";
 
-    import Tabs from "@/components/elements/tabs.vue";
-    import List from "@/components/elements/list.vue";
-    import Detail from "@/components/elements/detail.vue";
-    import Rating from "@/components/elements/rating.vue";
-    import Reviews from "@/components/elements/reviews.vue";
-
     const SOCKET_RECONNECT_DELAY = 500;
     const BRIDGE_CREATE_DELAY = 4000;
 
@@ -96,11 +90,11 @@
         name: "plugin",
 
         components: {
-            "tabs": Tabs,
-            "list": List,
-            "detail": Detail,
-            "rating": Rating,
-            "reviews": Reviews,
+            "tabs": () => import(/* webpackChunkName: "layout-tabs" */ "@/components/elements/tabs.vue"),
+            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
+            "detail": () => import(/* webpackChunkName: "layout-detail" */ "@/components/elements/detail.vue"),
+            "rating": () => import(/* webpackChunkName: "layout-rating" */ "@/components/elements/rating.vue"),
+            "reviews": () => import(/* webpackChunkName: "layout-reviews" */ "@/components/elements/reviews.vue"),
         },
 
         props: {

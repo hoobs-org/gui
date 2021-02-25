@@ -78,13 +78,11 @@
 </template>
 
 <script>
-    import ModalFrame from "@/components/elements/frame.vue";
-
     export default {
         name: "ring",
 
         components: {
-            "modal-frame": ModalFrame,
+            "modal-frame": () => import(/* webpackChunkName: "layout-frame" */ "@/components/elements/frame.vue"),
         },
 
         props: {

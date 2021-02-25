@@ -44,7 +44,6 @@
 <script>
     import Sanitize from "@hoobs/sdk/lib/sanitize";
     import { Wait } from "@hoobs/sdk/lib/wait";
-
     import Validators from "../../services/validators";
 
     const SOCKET_RECONNECT_DELAY = 500;

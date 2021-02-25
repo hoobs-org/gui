@@ -77,10 +77,6 @@
 </template>
 
 <script>
-    import List from "@/components/elements/list.vue";
-    import Tabs from "@/components/elements/tabs.vue";
-    import Form from "@/components/form.vue";
-
     const BRIDGE_RESTART_DELAY = 4000;
     const MONACO_LOAD_DELAY = 10;
     const CONFIG_LOAD_DELAY = 100;
@@ -94,9 +90,9 @@
         },
 
         components: {
-            "list": List,
-            "tabs": Tabs,
-            "schema-form": Form,
+            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
+            "tabs": () => import(/* webpackChunkName: "layout-tabs" */ "@/components/elements/tabs.vue"),
+            "schema-form": () => import(/* webpackChunkName: "layout-schema" */ "@/components/form.vue"),
         },
 
         computed: {

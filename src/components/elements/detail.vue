@@ -132,7 +132,6 @@
 </template>
 
 <script>
-    import Chart from "vue-trend-chart";
     import ColorScheme from "color-scheme";
 
     export default {
@@ -144,7 +143,7 @@
         },
 
         components: {
-            "trend-chart": Chart,
+            "trend-chart": () => import(/* webpackChunkName: "layout-trend-chart" */ "vue-trend-chart"),
         },
 
         data() {

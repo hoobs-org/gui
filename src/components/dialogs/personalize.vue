@@ -96,8 +96,6 @@
 <script>
     import ColorScheme from "color-scheme";
     import ColorExtractor from "colorthief/dist/color-thief";
-    import Color from "@/components/elements/color.vue";
-    import Backdrop from "@/components/elements/backdrop.vue";
     import Colors from "@/services/colors";
 
     const THEMES_URL = process.env.VUE_APP_THEMES || "/themes";
@@ -106,8 +104,8 @@
         name: "personalize",
 
         components: {
-            "color": Color,
-            "backdrop": Backdrop,
+            "color": () => import(/* webpackChunkName: "layout-color" */ "@/components/elements/color.vue"),
+            "backdrop": () => import(/* webpackChunkName: "layout-backdrop" */ "@/components/elements/backdrop.vue"),
         },
 
         data() {

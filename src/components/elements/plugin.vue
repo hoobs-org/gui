@@ -35,7 +35,6 @@
 <script>
     import crypto from "crypto";
     import identicon from "identicon.js";
-    import Rating from "./rating.vue";
 
     export default {
         name: "plugin",
@@ -45,7 +44,7 @@
         },
 
         components: {
-            "rating": Rating,
+            "rating": () => import(/* webpackChunkName: "layout-rating" */ "@/components/elements/rating.vue"),
         },
 
         methods: {

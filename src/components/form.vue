@@ -36,14 +36,13 @@
 </template>
 
 <script>
-    import Schema from "@/components/elements/schema.vue";
     import { scaffold, prune } from "../services/schema";
 
     export default {
         name: "schema-form",
 
         components: {
-            "schema": Schema,
+            "schema": () => import(/* webpackChunkName: "layout-json" */ "@/components/elements/schema.vue"),
         },
 
         props: {

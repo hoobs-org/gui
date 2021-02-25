@@ -38,13 +38,11 @@
 </template>
 
 <script>
-    import Draggable from "vuedraggable";
-
     export default {
         name: "list",
 
         components: {
-            "draggable": Draggable,
+            "draggable": () => import(/* webpackChunkName: "layout-draggable" */ "vuedraggable"),
         },
 
         props: {

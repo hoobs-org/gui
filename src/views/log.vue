@@ -43,15 +43,13 @@
 </template>
 
 <script>
-    import Message from "@/components/elements/message.vue";
-
     const SCROLL_DELAY = 10;
 
     export default {
         name: "log",
 
         components: {
-            "message": Message,
+            "message": () => import(/* webpackChunkName: "layout-message" */ "@/components/elements/message.vue"),
         },
 
         computed: {

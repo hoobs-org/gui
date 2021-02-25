@@ -25,15 +25,12 @@
 </template>
 
 <script>
-    import Public from "@/layouts/public.vue";
-    import Authenticated from "@/layouts/authenticated.vue";
-
     export default {
         name: "app",
 
         components: {
-            "public": Public,
-            "authenticated": Authenticated,
+            "public": () => import(/* webpackChunkName: "layout-public" */ "@/layouts/public.vue"),
+            "authenticated": () => import(/* webpackChunkName: "layout-authenticated" */ "@/layouts/authenticated.vue"),
         },
 
         computed: {

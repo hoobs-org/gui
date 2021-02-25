@@ -69,18 +69,14 @@
 
 <script>
     import { Wait } from "@hoobs/sdk/lib/wait";
-
-    import Icons from "@/components/dialogs/icons.vue";
-    import Rooms from "@/components/dialogs/rooms.vue";
-
     import { layout } from "../../services/widgets";
 
     export default {
         name: "settings",
 
         components: {
-            "icons": Icons,
-            "rooms": Rooms,
+            "icons": () => import(/* webpackChunkName: "dialog-icons" */ "@/components/dialogs/icons.vue"),
+            "rooms": () => import(/* webpackChunkName: "dialog-rooms" */ "@/components/dialogs/rooms.vue"),
         },
 
         props: {

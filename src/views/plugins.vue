@@ -85,9 +85,6 @@
 </template>
 
 <script>
-    import List from "@/components/elements/list.vue";
-    import Plugin from "@/components/elements/plugin.vue";
-
     export default {
         name: "plugins",
 
@@ -96,8 +93,8 @@
         },
 
         components: {
-            "list": List,
-            "plugin": Plugin,
+            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
+            "plugin": () => import(/* webpackChunkName: "layout-plugin" */ "@/components/elements/plugin.vue"),
         },
 
         computed: {

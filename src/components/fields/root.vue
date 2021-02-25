@@ -47,7 +47,7 @@
         name: "root-field",
 
         components: {
-            "schema": () => import("@/components/elements/schema.vue"),
+            "schema": () => import(/* webpackChunkName: "layout-json" */ "@/components/elements/schema.vue"),
         },
 
         props: {

@@ -104,9 +104,6 @@
     import Sanitize from "@hoobs/sdk/lib/sanitize";
     import { Wait } from "@hoobs/sdk/lib/wait";
 
-    import List from "@/components/elements/list.vue";
-    import Draggable from "vuedraggable";
-
     import Validators from "../services/validators";
     import { accessories, types } from "../services/accessories";
 
@@ -121,8 +118,8 @@
         },
 
         components: {
-            "list": List,
-            "draggable": Draggable,
+            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
+            "draggable": () => import(/* webpackChunkName: "layout-draggable" */ "vuedraggable"),
 
             ...accessories(),
         },
@@ -381,7 +378,7 @@
                         height: 18px;
                         color: var(--application-text) !important;
                         text-decoration: none !important;
-                        margin: 0 0 0 7px;
+                        margin: 0 0 7px 7px;
                         opacity: 0.5;
                         cursor: pointer;
 

@@ -93,8 +93,6 @@
 
 <script>
     import { Wait } from "@hoobs/sdk/lib/wait";
-    import Restore from "@/components/dialogs/restore.vue";
-    import Location from "@/components/dialogs/location.vue";
     import Countries from "@/lang/country-codes.json";
 
     const REDIRECT_DELAY = 1000;
@@ -103,8 +101,8 @@
         name: "settings",
 
         components: {
-            "restore": Restore,
-            "location": Location,
+            "restore": () => import(/* webpackChunkName: "dialog-restore" */ "@/components/dialogs/restore.vue"),
+            "location": () => import(/* webpackChunkName: "dialog-location" */ "@/components/dialogs/location.vue"),
         },
 
         computed: {

@@ -38,13 +38,11 @@
 </template>
 
 <script>
-    import Review from "./review.vue";
-
     export default {
         name: "reviews",
 
         components: {
-            "review": Review,
+            "review": () => import(/* webpackChunkName: "layout-review" */ "@/components/elements/review.vue"),
         },
 
         props: {

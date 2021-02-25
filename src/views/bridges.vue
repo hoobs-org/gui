@@ -112,12 +112,8 @@
 </template>
 
 <script>
-    import QRCode from "@chenfengyuan/vue-qrcode";
     import Sanitize from "@hoobs/sdk/lib/sanitize";
     import { Wait } from "@hoobs/sdk/lib/wait";
-
-    import List from "@/components/elements/list.vue";
-
     import Validators from "../services/validators";
     import { mac } from "../services/formatters";
 
@@ -131,8 +127,8 @@
         },
 
         components: {
-            "qrcode": QRCode,
-            "list": List,
+            "qrcode": () => import(/* webpackChunkName: "layout-qrcide" */ "@chenfengyuan/vue-qrcode"),
+            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
         },
 
         computed: {
