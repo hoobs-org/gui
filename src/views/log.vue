@@ -82,7 +82,7 @@
         },
 
         beforeRouteLeave(_to, _from, next) {
-            this.$refs.messages.removeEventListener("scroll", this.position);
+            if (this.$refs.messages) this.$refs.messages.removeEventListener("scroll", this.position);
 
             next();
         },
