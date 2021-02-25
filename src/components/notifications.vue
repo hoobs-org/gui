@@ -111,6 +111,7 @@
         #notifications {
             width: 100%;
             background: var(--modal-form);
+            background: var(--application-background);
             box-shadow: unset;
             backdrop-filter: unset;
 
