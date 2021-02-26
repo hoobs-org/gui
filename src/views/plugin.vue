@@ -149,7 +149,7 @@
             };
         },
 
-        beforeRouteEnter(to, from, next) {
+        beforeRouteEnter(_to, from, next) {
             next((view) => {
                 const incoming = view;
                 const action = (from.path || "").split("/").pop();
@@ -181,6 +181,13 @@
                 this.releases = {};
 
                 this.bridges = await this.$hoobs.bridges.list();
+
+                this.bridges.sort((a, b) => {
+                    if (a.display < b.display) return -1;
+                    if (a.display > b.display) return 1;
+
+                    return 0;
+                });
 
                 this.sections = [{
                     id: "library",
@@ -278,7 +285,7 @@
                         Promise.all(waits).then(() => {
                             setTimeout(() => {
                                 Wait().then(() => {
-                                    this.load(this.identifier);
+                                    this.$router.push(`/config/${this.identifier}`);
                                 });
                             }, SOCKET_RECONNECT_DELAY);
                         });
