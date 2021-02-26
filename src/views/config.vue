@@ -470,6 +470,8 @@
 
                                 break;
                         }
+                    } else {
+                        this.$router.push("/config");
                     }
 
                     this.change(((this.bridges || [])[0] || {}).id || "");
