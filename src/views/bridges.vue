@@ -75,6 +75,10 @@
                         <text-field :title="$t('bridge_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
                     </div>
                     <div class="row">
+                        <text-field :title="$t('bridge_id')" style="flex: 1; padding-right: 5px" v-model="username" />
+                        <div style="flex: 1;"></div>
+                    </div>
+                    <div class="row">
                         <div v-on:click="generate()" class="button">{{ $t("bridge_generate_new_id") }}</div>
                     </div>
                     <div class="row section">{{ $t("service") }}</div>

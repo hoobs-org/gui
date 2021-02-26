@@ -36,6 +36,7 @@
         "bridge_create": "Creating Bridge",
         "bridge_edit": "Edit Bridge",
         "bridge_generate_new_id": "Generate New Identifier",
+        "bridge_id": "Bridge Identifier",
         "bridge_initilize": "No bridges defined",
         "bridge_name_required": "Bridge name is required.",
         "bridge_name_reserved": "Bridge name is reserved, please select another name.",
