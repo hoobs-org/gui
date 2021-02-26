@@ -69,6 +69,8 @@
 <script>
     import Semver from "compare-versions";
 
+    const REDIRECT_DELAY = 1000;
+
     export default {
         name: "updates",
 
@@ -108,8 +110,8 @@
                 this.updating = true;
 
                 this.$hoobs.system().then((system) => {
-                    system.update().then(() => {
-                        this.load();
+                    system.upgrade().then(() => {
+                        this.$action.emit("window", "reboot", 5000);
                     });
                 });
             },
