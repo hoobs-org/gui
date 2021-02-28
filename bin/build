@@ -66,13 +66,13 @@ Program.command("gui", { isDefault: true })
 
             writeFileSync(join(root, "dist/lib/hoobs", "package.json"), JSON.stringify(pack, null, 4));
 
-            execSync(`tar -zcf ../hoobs-gui-${pjson.version}.tar.gz .`, { cwd: join(root, "dist"), stdio: "inherit" });
+            execSync(`tar -zcf ../hoobs-gui-v${pjson.version}.tar.gz .`, { cwd: join(root, "dist"), stdio: "inherit" });
 
             if (existsSync(join(root, "dist"))) execSync(`${join(root, "node_modules", ".bin", "rimraf")} ${join(root, "dist")}`, { cwd: root, stdio: "inherit" });
             if (!existsSync(join(root, "../builds"))) mkdirSync(join(root, "../builds"));
-            if (existsSync(join(root, "../builds", `hoobs-gui-${pjson.version}.tar.gz`))) unlinkSync(join(root, "../builds", `hoobs-gui-${pjson.version}.tar.gz`));
+            if (existsSync(join(root, "../builds", `hoobs-gui-v${pjson.version}.tar.gz`))) unlinkSync(join(root, "../builds", `hoobs-gui-v${pjson.version}.tar.gz`));
 
-            moveSync(join(root, `hoobs-gui-${pjson.version}.tar.gz`), join(root, "../builds", `hoobs-gui-${pjson.version}.tar.gz`));
+            moveSync(join(root, `hoobs-gui-v${pjson.version}.tar.gz`), join(root, "../builds", `hoobs-gui-v${pjson.version}.tar.gz`));
         }
     });
 
