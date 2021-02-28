@@ -69,8 +69,6 @@
 <script>
     import Semver from "compare-versions";
 
-    const REDIRECT_DELAY = 1000;
-
     export default {
         name: "updates",
 
