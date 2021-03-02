@@ -217,29 +217,41 @@
                 this.$dialog.close("accessory");
             },
 
-            add() {
-                const current = JSON.parse(JSON.stringify(this.items));
+            async add() {
+                const config = await this.$hoobs.config.get();
+                const items = JSON.parse(JSON.stringify(this.items));
                 const widget = layout("accessory-widget");
+
+                config.dashboard = config.dashboard || {};
 
                 widget.bridge = this.accessory.bridge;
                 widget.id = this.accessory.accessory_identifier;
                 widget.i = this.accessory.accessory_identifier;
 
-                if (widget) current.unshift(widget);
+                if (widget) items.unshift(widget);
 
-                this.$store.commit("DASHBOARD:ITEMS", current);
+                config.dashboard.items = items;
+
+                await this.$hoobs.config.update(config);
+
                 this.$dialog.close("accessory");
                 this.$action.emit("dashboard", "update");
                 this.$router.push({ path: "/" });
             },
 
-            remove() {
-                const current = JSON.parse(JSON.stringify(this.items));
-                const index = current.findIndex((item) => item.component === "accessory-widget" && item.i === this.accessory.accessory_identifier);
+            async remove() {
+                const config = await this.$hoobs.config.get();
+                const items = JSON.parse(JSON.stringify(this.items));
+                const index = items.findIndex((item) => item.component === "accessory-widget" && item.i === this.accessory.accessory_identifier);
 
-                if (index >= 0) current.splice(index, 1);
+                config.dashboard = config.dashboard || {};
 
-                this.$store.commit("DASHBOARD:ITEMS", current);
+                if (index >= 0) items.splice(index, 1);
+
+                config.dashboard.items = items;
+
+                await this.$hoobs.config.update(config);
+
                 this.$dialog.close("accessory");
                 this.$action.emit("dashboard", "update");
                 this.$router.push({ path: "/" });

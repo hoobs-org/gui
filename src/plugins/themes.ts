@@ -38,11 +38,34 @@ export function path(theme: string): string {
     }
 }
 
-export function set(name: string, store?: Store<any>): void {
+export async function set(name: string, hoobs?: any | unknown, store?: Store<any>): Promise<void> {
     const style = document.getElementById("app-theme");
+
+    if (hoobs) {
+        const config = await hoobs.sdk.config.get();
+
+        config.theme = Sanitize(name);
+
+        await hoobs.sdk.config.update(config);
+    }
 
     if (style) style.setAttribute("href", path(Sanitize(name)));
     if (store) store.commit("THEME:SET", Sanitize(name));
+}
+
+export async function load(hoobs?: any | unknown, store?: Store<any>): Promise<void> {
+    const style = document.getElementById("app-theme");
+
+    let theme: { [key: string]: any } = {};
+
+    if (hoobs) {
+        const config = await hoobs.sdk.config.get();
+
+        theme = await hoobs.sdk.theme.get(config.theme || "dark");
+    }
+
+    if (style) style.setAttribute("href", path(theme.name || "dark"));
+    if (store) store.commit("THEME:SET", theme.name || "dark");
 }
 
 export default {
@@ -51,12 +74,17 @@ export default {
             computed: {
                 $theme() {
                     return {
+                        load() {
+                            load(options?.hoobs, options?.store);
+                        },
+
                         set(name: string) {
-                            set(name, options?.store);
+                            set(name, options?.hoobs, options?.store);
                         },
 
                         async get() {
-                            const theme = await options?.hoobs.sdk.theme.get(options?.store?.state.theme);
+                            const config = await options?.hoobs.sdk.config.get();
+                            const theme = await options?.hoobs.sdk.theme.get(config.theme || "dark");
 
                             return theme;
                         },

@@ -39,8 +39,8 @@
             },
         },
 
-        created() {
-            this.$theme.set(this.$store.state.theme);
+        async created() {
+            this.$theme.load();
 
             window.addEventListener("resize", () => {
                 this.$action.emit("window", "resize");

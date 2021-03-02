@@ -19,7 +19,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import Persistence from "vuex-persist";
-import { initial } from "./widgets";
 import { units, timespan } from "./formatters";
 
 Vue.use(Vuex);
@@ -29,9 +28,6 @@ export default new Vuex.Store({
         log: [],
         bridges: [],
         config: {},
-        dashboard: {
-            items: [...initial],
-        },
         cpu: {
             used: null,
             history: [
@@ -64,7 +60,7 @@ export default new Vuex.Store({
         navigation: false,
         accessory: null,
         room: null,
-        theme: "dark",
+        theme: null,
     },
 
     getters: {
@@ -201,18 +197,6 @@ export default new Vuex.Store({
         "THEME:SET": (state: { [key: string]: any }, theme: number) => {
             state.theme = theme;
         },
-
-        "DASHBOARD:LAYOUT": (state: { [key: string]: any }, data: { [key: string]: string | number | boolean }) => {
-            state.dashboard.items = data;
-        },
-
-        "DASHBOARD:ITEMS": (state: { [key: string]: any }, data: { [key: string]: string | number | boolean }) => {
-            state.dashboard.items = data;
-        },
-
-        "DASHBOARD:BACKDROP": (state: { [key: string]: any }, value: boolean) => {
-            state.dashboard.backdrop = value;
-        },
     },
 
     plugins: [new Persistence({
@@ -220,7 +204,6 @@ export default new Vuex.Store({
         storage: window.localStorage,
         reducer: (state: { [key: string]: any }) => ({
             bridges: state.bridges,
-            dashboard: state.dashboard,
             cpu: state.cpu,
             memory: state.memory,
             temp: state.temp,
@@ -228,7 +211,6 @@ export default new Vuex.Store({
             user: state.user,
             notifications: state.notifications,
             navigation: state.navigation,
-            theme: state.theme,
         }),
     }).plugin],
 });

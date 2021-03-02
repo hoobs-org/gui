@@ -45,7 +45,7 @@
 </template>
 
 <script>
-    import { available, layout } from "../../services/widgets";
+    import { initial, available, layout } from "../../services/widgets";
 
     export default {
         name: "dashboard",
@@ -60,7 +60,11 @@
         },
 
         async mounted() {
-            const { dashboard } = this.$store.state;
+            const config = await this.$hoobs.config.get();
+
+            const dashboard = config.dashboard || {
+                items: [...initial],
+            };
 
             this.items = dashboard.items;
             this.backdrop = dashboard.backdrop || false;
@@ -77,23 +81,28 @@
         },
 
         methods: {
-            save() {
-                const current = JSON.parse(JSON.stringify(this.items));
+            async save() {
+                const config = await this.$hoobs.config.get();
+                const items = JSON.parse(JSON.stringify(this.items));
 
                 for (let i = 0; i < this.available.length; i += 1) {
-                    const index = current.findIndex((item) => item.component === this.available[i].name);
+                    const index = items.findIndex((item) => item.component === this.available[i].name);
 
                     if (this.available[i].selected && index === -1) {
                         const widget = layout(this.available[i].name);
 
-                        if (widget) current.unshift(widget);
+                        if (widget) items.unshift(widget);
                     } else if (!this.available[i].selected && index >= 0) {
-                        current.splice(index, 1);
+                        items.splice(index, 1);
                     }
                 }
 
-                this.$store.commit("DASHBOARD:ITEMS", current);
-                this.$store.commit("DASHBOARD:BACKDROP", this.backdrop);
+                config.dashboard = {
+                    items,
+                    backdrop: this.backdrop,
+                };
+
+                await this.$hoobs.config.update(config);
 
                 this.$action.emit("dashboard", "update");
                 this.$dialog.close("dashboard");

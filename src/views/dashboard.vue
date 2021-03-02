@@ -19,8 +19,8 @@
 <template>
     <div :key="version" id="dashboard" :class="backdrop ? 'backdrop' : ''">
         <context>
-            <icon v-if="locked" v-on:click.stop="toggle('locked')" :title="$t('sort_dashboard')" name="lock" class="icon desktop" />
-            <icon v-else v-on:click.stop="toggle('locked')" :title="$t('sort_dashboard')" name="lock-open-variant" class="icon desktop" />
+            <icon v-if="locked" v-on:click.stop="toggle()" :title="$t('sort_dashboard')" name="lock" class="icon desktop" />
+            <icon v-else v-on:click.stop="toggle()" :title="$t('sort_dashboard')" name="lock-open-variant" class="icon desktop" />
             <icon v-on:click.stop="$dialog.open('dashboard')" :title="$t('dashboard_settings')" name="cog" class="icon desktop" />
         </context>
         <div v-if="!$mobile" class="content desktop">
@@ -34,7 +34,6 @@
                 :vertical-compact="true"
                 :margin="[10, 10]"
                 :use-css-transforms="true"
-                v-on:layout-updated="save"
             >
                 <grid-item class="widget" v-for="(item, index) in items" :key="`widget:${index}`" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i">
                     <component :is="item.component" :item="item" :index="index" :locked="locked" />
@@ -57,7 +56,7 @@
 
 <script>
     import GridLayout from "vue-grid-layout";
-    import { widgets } from "../services/widgets";
+    import { initial, widgets } from "../services/widgets";
 
     export default {
         name: "dashboard",
@@ -80,26 +79,36 @@
         },
 
         created() {
-            this.$action.on("settings", "update", () => {
-                this.load();
+            this.$action.on("settings", "update", async () => {
+                await this.load();
                 this.render();
             });
 
-            this.$action.on("dashboard", "update", () => {
-                this.load();
+            this.$action.on("dashboard", "update", async () => {
+                await this.load();
                 this.render();
             });
         },
 
-        mounted() {
-            this.load();
+        async mounted() {
+            await this.load();
+        },
+
+        async beforeRouteLeave(_to, _from, next) {
+            if (!this.locked) await this.save();
+
+            next();
         },
 
         methods: {
-            load() {
+            async load() {
                 this.loading = true;
 
-                const { dashboard } = this.$store.state;
+                const config = await this.$hoobs.config.get();
+
+                const dashboard = config.dashboard || {
+                    items: [...initial],
+                };
 
                 this.items = dashboard.items;
                 this.backdrop = dashboard.backdrop || false;
@@ -110,19 +119,27 @@
                 this.version += 1;
             },
 
-            toggle(field) {
-                this[field] = !this[field];
+            async toggle() {
+                if (!this.locked) await this.save();
+
+                this.locked = !this.locked;
             },
 
-            save() {
+            async save() {
                 if (!this.loading) {
+                    const config = await this.$hoobs.config.get();
                     const items = JSON.parse(JSON.stringify(this.items));
+
+                    config.dashboard = config.dashboard || {};
 
                     for (let i = 0; i < items.length; i += 1) {
                         delete items[i].moved;
                     }
 
-                    this.$store.commit("DASHBOARD:LAYOUT", items);
+                    config.dashboard.items = items;
+
+                    await this.$hoobs.config.update(config);
+
                     this.$action.emit("window", "resize");
                 }
             },
