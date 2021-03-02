@@ -202,7 +202,7 @@
 
                     await system.reboot();
 
-                    this.$action.emit("window", "reboot", 5000);
+                    this.$action.emit("window", "reboot", 30 * 1000);
                 });
             },
 
@@ -228,7 +228,7 @@
 
                     await system.reset();
 
-                    this.$action.emit("window", "reboot", 5000);
+                    this.$action.emit("window", "reboot", 30 * 1000);
                 });
             },
 

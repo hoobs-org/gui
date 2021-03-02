@@ -109,7 +109,7 @@
 
                 this.$hoobs.system().then((system) => {
                     system.upgrade().then(() => {
-                        this.$action.emit("window", "reboot", 5000);
+                        this.$action.emit("window", "reboot", 30 * 1000);
                     });
                 });
             },
