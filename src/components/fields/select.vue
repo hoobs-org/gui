@@ -75,7 +75,9 @@
 
         methods: {
             format(value) {
-                return decamel(`${value}`);
+                if (!value || value === "") return value;
+
+                return decamel(value);
             },
 
             update() {
