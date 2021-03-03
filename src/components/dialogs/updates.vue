@@ -97,7 +97,9 @@
 
                 this.plugins = ((await this.$hoobs.plugins()) || []).filter((item) => !Semver.compare(item.version, item.latest, ">="));
 
-                this.stack = !(this.status.upgraded && this.status.cli_upgraded && this.status.node_upgraded);
+                if (!this.status.gui_version) this.status.gui_upgraded = true;
+
+                this.stack = !(this.status.upgraded && this.status.cli_upgraded && this.status.node_upgraded && this.status.gui_upgraded);
                 this.updated = !(this.stack || this.plugins.length > 0);
 
                 this.loading = false;
