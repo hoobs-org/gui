@@ -31,7 +31,7 @@
                     </div>
                     <div class="row">
                         <port-field :title="$t('bridge_port')" style="flex: 1; padding-right: 5px" v-model="port" />
-                        <div style="flex: 1; padding-left: 5px"></div>
+                        <select-field :title="$t('bridge_advertiser')" style="flex: 1; padding-right: 0; padding-left: 5px" :options="advertisers" v-model="advertiser" />
                     </div>
                     <div v-if="bridges.length > 0" class="row section" style="margin: 0;">{{ $t("bridges") }}</div>
                     <p v-if="bridges.length > 0">
@@ -84,6 +84,14 @@
                 username: "",
                 port: 50826,
                 remove: true,
+                advertiser: "bonjour",
+                advertisers: [{
+                    value: "bonjour",
+                    text: this.$t("bridge_bonjour"),
+                }, {
+                    value: "ciao",
+                    text: this.$t("bridge_ciao"),
+                }],
             };
         },
 
@@ -145,6 +153,7 @@
                         port: this.port,
                         pin: this.pin,
                         username: this.username,
+                        advertiser: this.advertiser,
                     });
                 } else {
                     this.$alert(this.$t(validation.error));

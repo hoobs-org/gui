@@ -84,14 +84,14 @@
                 switch ((this.type || "string").toLowerCase()) {
                     case "bool":
                     case "boolean":
-                        this.$emit("input", (this.$refs.field.value || "").toLowerCase() === "true");
+                        this.$emit("input", (this.$refs[this.uuid].value || "").toLowerCase() === "true");
                         break;
 
                     case "float":
                     case "double":
                     case "decimal":
                     case "number":
-                        value = parseFloat(this.$refs.field.value);
+                        value = parseFloat(this.$refs[this.uuid].value);
 
                         if (Number.isNaN(value)) {
                             value = null;
@@ -102,7 +102,7 @@
 
                     case "int":
                     case "integer":
-                        value = parseInt(this.$refs.field.value, 10);
+                        value = parseInt(this.$refs[this.uuid].value, 10);
 
                         if (Number.isNaN(value)) {
                             value = null;
@@ -112,7 +112,7 @@
                         break;
 
                     default:
-                        this.$emit("input", this.$refs.field.value);
+                        this.$emit("input", this.$refs[this.uuid].value);
                         break;
                 }
             },
@@ -123,14 +123,14 @@
                 switch ((this.type || "string").toLowerCase()) {
                     case "bool":
                     case "boolean":
-                        this.$emit("change", (this.$refs.field.value || "").toLowerCase() === "true");
+                        this.$emit("change", (this.$refs[this.uuid].value || "").toLowerCase() === "true");
                         break;
 
                     case "float":
                     case "double":
                     case "decimal":
                     case "number":
-                        value = parseFloat(this.$refs.field.value);
+                        value = parseFloat(this.$refs[this.uuid].value);
 
                         if (Number.isNaN(value)) {
                             value = null;
@@ -141,7 +141,7 @@
 
                     case "int":
                     case "integer":
-                        value = parseInt(this.$refs.field.value, 10);
+                        value = parseInt(this.$refs[this.uuid].value, 10);
 
                         if (Number.isNaN(value)) {
                             value = null;
@@ -151,7 +151,7 @@
                         break;
 
                     default:
-                        this.$emit("change", this.$refs.field.value);
+                        this.$emit("change", this.$refs[this.uuid].value);
                         break;
                 }
             },

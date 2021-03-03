@@ -264,7 +264,7 @@
                             }));
                         } else {
                             waits.push(new Promise((resolve) => {
-                                this.$hoobs.bridges.add(data.display, data.port, data.pin, data.username).then(() => {
+                                this.$hoobs.bridges.add(data.display, data.port, data.pin, data.username, data.advertiser).then(() => {
                                     setTimeout(() => {
                                         Wait().then(() => {
                                             this.$hoobs.bridge(data.id).then((bridge) => {

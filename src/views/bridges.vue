@@ -41,7 +41,7 @@
                     </div>
                     <div class="row">
                         <port-field :title="$t('bridge_port')" style="flex: 1; padding-right: 5px" v-model="port" />
-                        <div style="flex: 1; padding-left: 5px"></div>
+                        <select-field :title="$t('bridge_advertiser')" style="flex: 1; padding-right: 0; padding-left: 5px" :options="advertisers" v-model="advertiser" />
                     </div>
                     <div class="row actions">
                         <div v-if="!loading" v-on:click="save(true)" class="button primary">{{ $t("save") }}</div>
@@ -76,7 +76,7 @@
                     </div>
                     <div class="row">
                         <text-field :title="$t('bridge_id')" style="flex: 1; padding-right: 5px" v-model="username" />
-                        <div style="flex: 1;"></div>
+                        <select-field :title="$t('bridge_advertiser')" style="flex: 1; padding-right: 0; padding-left: 5px" :options="advertisers" v-model="advertiser" />
                     </div>
                     <div class="row">
                         <div v-on:click="generate()" class="button">{{ $t("bridge_generate_new_id") }}</div>
@@ -158,6 +158,14 @@
                 autostart: 0,
                 start: null,
                 end: null,
+                advertiser: "bonjour",
+                advertisers: [{
+                    value: "bonjour",
+                    text: this.$t("bridge_bonjour"),
+                }, {
+                    value: "ciao",
+                    text: this.$t("bridge_ciao"),
+                }],
             };
         },
 
@@ -205,6 +213,7 @@
                 this.username = "";
                 this.port = 51826;
                 this.autostart = 0;
+                this.advertiser = "bonjour";
                 this.start = null;
                 this.end = null;
 
@@ -217,6 +226,7 @@
                         this.pin = this.subject.pin;
                         this.username = this.subject.username;
                         this.autostart = parseInt(this.subject.autostart, 10) || 0;
+                        this.advertiser = this.subject.advertiser || "bonjour";
 
                         if (this.subject.ports) {
                             this.start = this.subject.ports.start;
@@ -264,15 +274,15 @@
 
             async save(create) {
                 const validation = Validators.bridge(create, await this.$hoobs.bridges.list(), this.display, this.pin, this.port, this.username, this.autostart, this.start, this.end);
-
+                console.log(this.advertiser);
                 if (validation.valid) {
                     if (create) {
                         this.loading = true;
 
                         if (this.file) {
-                            await this.$hoobs.bridges.import(this.file, this.display, this.port, this.pin, this.username);
+                            await this.$hoobs.bridges.import(this.file, this.display, this.port, this.pin, this.username, this.advertiser);
                         } else {
-                            await this.$hoobs.bridges.add(this.display, this.port, this.pin, this.username);
+                            await this.$hoobs.bridges.add(this.display, this.port, this.pin, this.username, this.advertiser);
                         }
 
                         setTimeout(async () => {
@@ -284,7 +294,7 @@
                     } else if (this.subject) {
                         this.loading = true;
 
-                        await this.subject.update(this.display, this.autostart, this.pin, this.username);
+                        await this.subject.update(this.display, this.autostart, this.pin, this.username, this.advertiser);
 
                         if (this.start && this.end) {
                             await this.subject.ports(this.start, this.end);
