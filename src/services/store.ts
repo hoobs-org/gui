@@ -27,7 +27,7 @@ export default new Vuex.Store({
     state: {
         log: [],
         bridges: [],
-        config: {},
+        dashboard: {},
         cpu: {
             used: null,
             history: [
@@ -192,6 +192,10 @@ export default new Vuex.Store({
             } else {
                 state.auth = false;
             }
+        },
+
+        "DASHBOARD:LAYOUT": (state: { [key: string]: any }, value: { [key: string]: any }) => {
+            state.dashboard = value;
         },
 
         "THEME:SET": (state: { [key: string]: any }, theme: number) => {

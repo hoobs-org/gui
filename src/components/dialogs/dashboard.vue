@@ -60,11 +60,7 @@
         },
 
         async mounted() {
-            const config = await this.$hoobs.config.get();
-
-            const dashboard = config.dashboard || {
-                items: [...initial],
-            };
+            const { dashboard } = this.$store.state;
 
             this.items = dashboard.items;
             this.backdrop = dashboard.backdrop || false;
@@ -104,6 +100,7 @@
 
                 await this.$hoobs.config.update(config);
 
+                this.$store.commit("DASHBOARD:LAYOUT", config.dashboard);
                 this.$action.emit("dashboard", "update");
                 this.$dialog.close("dashboard");
             },

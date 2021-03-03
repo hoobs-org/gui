@@ -69,7 +69,7 @@
 
 <script>
     import { Wait } from "@hoobs/sdk/lib/wait";
-    import { layout } from "../../services/widgets";
+    import { initial, layout } from "../../services/widgets";
 
     export default {
         name: "settings",
@@ -221,8 +221,9 @@
                 const config = await this.$hoobs.config.get();
                 const items = JSON.parse(JSON.stringify(this.items));
                 const widget = layout("accessory-widget");
+                const { dashboard } = this.$store.state;
 
-                config.dashboard = config.dashboard || {};
+                config.dashboard = dashboard;
 
                 widget.bridge = this.accessory.bridge;
                 widget.id = this.accessory.accessory_identifier;
@@ -233,7 +234,9 @@
                 config.dashboard.items = items;
 
                 await this.$hoobs.config.update(config);
+                await Wait();
 
+                this.$store.commit("DASHBOARD:LAYOUT", config.dashboard);
                 this.$dialog.close("accessory");
                 this.$action.emit("dashboard", "update");
                 this.$router.push({ path: "/" });
@@ -243,15 +246,18 @@
                 const config = await this.$hoobs.config.get();
                 const items = JSON.parse(JSON.stringify(this.items));
                 const index = items.findIndex((item) => item.component === "accessory-widget" && item.i === this.accessory.accessory_identifier);
+                const { dashboard } = this.$store.state;
 
-                config.dashboard = config.dashboard || {};
+                config.dashboard = dashboard;
 
                 if (index >= 0) items.splice(index, 1);
 
                 config.dashboard.items = items;
 
                 await this.$hoobs.config.update(config);
+                await Wait();
 
+                this.$store.commit("DASHBOARD:LAYOUT", config.dashboard);
                 this.$dialog.close("accessory");
                 this.$action.emit("dashboard", "update");
                 this.$router.push({ path: "/" });

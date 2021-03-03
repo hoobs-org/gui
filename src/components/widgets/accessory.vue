@@ -52,18 +52,11 @@
         async mounted() {
             this.$action.on("window", "resize", this.resize);
             this.accessory = await this.$hoobs.accessory(this.item.bridge, this.item.id);
-            this.resize();
         },
 
         methods: {
             control(accessory) {
                 return types(accessory);
-            },
-
-            resize() {
-                setTimeout(() => {
-                    // if (this.$el) this.$refs.device.style.width = `${(this.$el.clientHeight < this.$el.clientWidth ? this.$el.clientHeight : this.$el.clientWidth) - 140}px`;
-                }, 10);
             },
         },
     };

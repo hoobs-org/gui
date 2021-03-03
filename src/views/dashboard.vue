@@ -56,7 +56,7 @@
 
 <script>
     import GridLayout from "vue-grid-layout";
-    import { initial, widgets } from "../services/widgets";
+    import { widgets } from "../services/widgets";
 
     export default {
         name: "dashboard",
@@ -79,13 +79,13 @@
         },
 
         created() {
-            this.$action.on("settings", "update", async () => {
-                await this.load();
+            this.$action.on("settings", "update", () => {
+                this.load();
                 this.render();
             });
 
-            this.$action.on("dashboard", "update", async () => {
-                await this.load();
+            this.$action.on("dashboard", "update", () => {
+                this.load();
                 this.render();
             });
         },
@@ -101,16 +101,12 @@
         },
 
         methods: {
-            async load() {
+            load() {
                 this.loading = true;
 
-                const config = await this.$hoobs.config.get();
+                const { dashboard } = this.$store.state;
 
-                const dashboard = config.dashboard || {
-                    items: [...initial],
-                };
-
-                this.items = dashboard.items;
+                this.items = dashboard.items || [];
                 this.backdrop = dashboard.backdrop || false;
                 this.loading = false;
             },
@@ -129,8 +125,9 @@
                 if (!this.loading) {
                     const config = await this.$hoobs.config.get();
                     const items = JSON.parse(JSON.stringify(this.items));
+                    const { dashboard } = this.$store.state;
 
-                    config.dashboard = config.dashboard || {};
+                    config.dashboard = dashboard;
 
                     for (let i = 0; i < items.length; i += 1) {
                         delete items[i].moved;
@@ -141,6 +138,7 @@
                     await this.$hoobs.config.update(config);
 
                     this.$action.emit("window", "resize");
+                    this.$store.commit("DASHBOARD:LAYOUT", config.dashboard);
                 }
             },
         },
