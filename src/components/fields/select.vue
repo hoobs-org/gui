@@ -18,8 +18,9 @@
 
 <template>
     <div id="field" class="field">
-        <span class="title" v-html="title"></span>
-        <span v-if="description && description !== ''" class="description" v-html="description"></span>
+        <span v-if="title" class="title" v-html="title"></span>
+        <span v-else class="title" v-html="description || format(field)"></span>
+        <span v-if="title && description && description !== ''" class="description" v-html="description"></span>
         <select :id="id || uuid" :ref="uuid" :name="name" :value="value" v-on:input="update" v-on:change="change" v-bind:required="required">
             <option v-for="option in options" v-bind:value="option.value" :key="option.value">{{ option.text }}</option>
         </select>
@@ -27,6 +28,8 @@
 </template>
 
 <script>
+    import { decamel } from "../../services/schema";
+
     const INPUT_FOCUS_DELAY = 10;
 
     export default {
@@ -38,6 +41,7 @@
                 default: undefined,
             },
             name: String,
+            field: [String, Number],
             title: String,
             description: String,
             value: [String, Number, Boolean, Object, Date],
@@ -70,6 +74,10 @@
         },
 
         methods: {
+            format(value) {
+                return decamel(`${value}`);
+            },
+
             update() {
                 let value = null;
 

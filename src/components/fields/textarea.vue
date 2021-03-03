@@ -18,8 +18,9 @@
 
 <template>
     <div id="field" class="field">
-        <span class="title" v-html="title"></span>
-        <span v-if="description && description !== ''" class="description" v-html="description"></span>
+        <span v-if="title" class="title" v-html="title"></span>
+        <span v-else class="title" v-html="description || format(field)"></span>
+        <span v-if="title && description && description !== ''" class="description" v-html="description"></span>
         <textarea
             :id="id || uuid"
             :ref="uuid"
@@ -37,6 +38,8 @@
 </template>
 
 <script>
+    import { decamel } from "../../services/schema";
+
     const INPUT_FOCUS_DELAY = 10;
 
     export default {
@@ -48,6 +51,7 @@
                 default: undefined,
             },
             name: String,
+            field: [String, Number],
             title: String,
             description: String,
             height: {
@@ -93,6 +97,10 @@
         },
 
         methods: {
+            format(value) {
+                return decamel(`${value}`);
+            },
+
             update() {
                 this.$emit("input", this.$refs[this.uuid].value);
             },

@@ -26,11 +26,13 @@
             </div>
             <input type="checkbox" :id="id || uuid" :name="name" :value="value" :disabled="disabled" :required="required" :checked="state" />
         </div>
-        <label class="label" :for="id || uuid" v-html="title"></label>
+        <label class="label" :for="id || uuid" v-html="title || description || format(field)"></label>
     </div>
 </template>
 
 <script>
+    import { decamel } from "../../services/schema";
+
     export default {
         name: "checkbox",
 
@@ -54,7 +56,9 @@
                 default: false,
             },
             name: String,
+            field: [String, Number],
             title: String,
+            description: String,
             required: Boolean,
             disabled: Boolean,
             size: Number,
@@ -81,6 +85,10 @@
         },
 
         methods: {
+            format(value) {
+                return decamel(`${value}`);
+            },
+
             toggle() {
                 if (this.disabled) return;
 
