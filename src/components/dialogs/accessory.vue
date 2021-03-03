@@ -37,6 +37,10 @@
                         </div>
                         <div v-on:click="() => { show.icons = true; }" class="button">{{ $t("change") }}</div>
                     </div>
+                    <div v-if="plugin" class="row section">{{ $t("plugin") }}</div>
+                    <div v-if="plugin" class="row">
+                        <div v-on:click="configure" class="button">{{ $t("configuration") }}</div>
+                    </div>
                     <div class="row section">{{ $t("room") }}</div>
                     <div v-if="features.icon" class="row">{{ $t("current_room") }}</div>
                     <div v-if="room" class="row current-room">
@@ -97,6 +101,7 @@
             return {
                 loading: true,
                 accessory: null,
+                plugin: null,
                 items: [],
                 display: "",
                 hidden: false,
@@ -152,6 +157,7 @@
                 };
 
                 this.accessory = accessory;
+                this.plugin = this.accessory.plugin;
                 this.items = config.dashboard.items;
                 this.display = this.accessory.name;
                 this.hidden = this.accessory.hidden;
@@ -190,6 +196,11 @@
                         this.icon.selected = this.accessory.icon;
                         break;
                 }
+            },
+
+            configure() {
+                this.$dialog.close("accessory");
+                this.$router.push({ path: `/config/${this.plugin}` });
             },
 
             select(icon) {
