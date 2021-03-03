@@ -56,7 +56,7 @@
 
 <script>
     import GridLayout from "vue-grid-layout";
-    import { widgets } from "../services/widgets";
+    import { initial, widgets } from "../services/widgets";
 
     export default {
         name: "dashboard",
@@ -101,13 +101,17 @@
         },
 
         methods: {
-            load() {
+            async load() {
                 this.loading = true;
 
-                const { dashboard } = this.$store.state;
+                const config = await this.$hoobs.config.get();
 
-                this.items = dashboard.items || [];
-                this.backdrop = dashboard.backdrop || false;
+                config.dashboard = config.dashboard || {
+                    items: [...initial],
+                };
+
+                this.items = config.dashboard.items || [];
+                this.backdrop = config.dashboard.backdrop || false;
                 this.loading = false;
             },
 
@@ -125,9 +129,8 @@
                 if (!this.loading) {
                     const config = await this.$hoobs.config.get();
                     const items = JSON.parse(JSON.stringify(this.items));
-                    const { dashboard } = this.$store.state;
 
-                    config.dashboard = dashboard;
+                    config.dashboard = config.dashboard || {};
 
                     for (let i = 0; i < items.length; i += 1) {
                         delete items[i].moved;
@@ -138,7 +141,6 @@
                     await this.$hoobs.config.update(config);
 
                     this.$action.emit("window", "resize");
-                    this.$store.commit("DASHBOARD:LAYOUT", config.dashboard);
                 }
             },
         },

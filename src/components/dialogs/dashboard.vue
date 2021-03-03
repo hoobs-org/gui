@@ -60,10 +60,14 @@
         },
 
         async mounted() {
-            const { dashboard } = this.$store.state;
+            const config = await this.$hoobs.config.get();
 
-            this.items = dashboard.items;
-            this.backdrop = dashboard.backdrop || false;
+            config.dashboard = config.dashboard || {
+                items: [...initial],
+            };
+
+            this.items = config.dashboard.items;
+            this.backdrop = config.dashboard.backdrop || false;
 
             for (let i = 0; i < this.items.length; i += 1) {
                 const index = this.available.findIndex((item) => item.name === this.items[i].component);
@@ -100,7 +104,6 @@
 
                 await this.$hoobs.config.update(config);
 
-                this.$store.commit("DASHBOARD:LAYOUT", config.dashboard);
                 this.$action.emit("dashboard", "update");
                 this.$dialog.close("dashboard");
             },

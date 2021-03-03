@@ -28,8 +28,6 @@
 </template>
 
 <script>
-    import { initial } from "../services/widgets";
-
     export default {
         name: "authenticated",
 
@@ -44,12 +42,7 @@
         },
 
         async created() {
-            const config = await this.$hoobs.config.get();
-
             this.$store.commit("AUTH:STATE", (await this.$hoobs.auth.status()));
-            this.$store.commit("DASHBOARD:LAYOUT", config.dashboard || { items: [...initial] });
-
-            this.$action.emit("dashboard", "update");
         },
     };
 </script>
