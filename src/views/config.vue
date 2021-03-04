@@ -203,14 +203,31 @@
                     const config = await this.$hoobs.config.get();
                     const { ...working } = this.working;
 
+                    let reload = false;
+                    let logout = false;
+
+                    if (config.api.disable_auth !== working.disable_auth) {
+                        reload = true;
+
+                        if (!config.api.disable_auth) {
+                            logout = true;
+                        }
+                    }
+
                     config.api = working;
                     config.api.origin = config.api.origin || "*";
 
                     this.$hoobs.config.update(config);
 
+                    if (logout) await this.$hoobs.auth.logout();
+
                     setTimeout(() => {
-                        this.dirty = false;
-                        this.change(this.bridge);
+                        if (reload) {
+                            window.location.reload();
+                        } else {
+                            this.dirty = false;
+                            this.change(this.bridge);
+                        }
                     }, BRIDGE_RESTART_DELAY);
                 } else if (this.identifier === "advanced") {
                     const bridge = await this.$hoobs.bridge(this.bridge);
