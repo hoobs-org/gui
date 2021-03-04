@@ -134,6 +134,7 @@
                         this.subject = null;
                         this.brightness = 0;
                         this.on = false;
+                        this.room.accessories = this.room.accessories || [];
 
                         for (let i = 0; i < this.room.accessories.length; i += 1) {
                             if (this.room.accessories[i].type === "light") {
