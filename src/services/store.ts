@@ -155,6 +155,26 @@ export default new Vuex.Store({
             }
         },
 
+        "SESSION:DISABLE": (state: { [key: string]: any }) => {
+            state.session = "";
+
+            state.user = {
+                id: 1,
+                name: "unavailable",
+                username: "unavailable",
+                permissions: {
+                    accessories: true,
+                    bridges: true,
+                    config: true,
+                    controller: true,
+                    plugins: true,
+                    reboot: true,
+                    terminal: true,
+                    users: false,
+                },
+            };
+        },
+
         "LOG:HISTORY": (state: { [key: string]: any }, messages: string) => {
             state.log = messages;
             state.log = state.log.slice(1).slice(-5000);

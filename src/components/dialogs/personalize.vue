@@ -21,8 +21,8 @@
         <div id="personalize">
             <div v-if="!loading" class="content">
                 <div class="form">
-                    <div v-if="auth" class="row title desktop">{{ $t("login_image") }}</div>
-                    <div v-if="auth" class="row desktop">
+                    <div class="row title desktop">{{ $t("login_image") }}</div>
+                    <div class="row desktop">
                         <div class="backdrop" :style="`background-color: ${working.application.background}; background-image: ${backdrop};`">
                             <div class="display dark" :style="`background: ${working.application.background}; box-shadow: ${working.elevation.default};`">
                                 <div v-if="!updating" class="title" :style="`color: ${working.application.highlight};`">{{ $t("title") }}</div>
@@ -74,7 +74,7 @@
                         <radio id="dark" name="mode" :title="$t('dark')" v-model="mode" value="dark" />
                     </div>
                     <div class="row title" style="margin-top: 20px;">{{ $t("color") }}</div>
-                    <div v-if="auth" class="row auto desktop">
+                    <div class="row auto desktop">
                         <checkbox id="auto" :title="$t('automatically_set')" v-model="auto" />
                     </div>
                     <div v-on:click="() => { auto = false; }" class="row colors">
@@ -112,7 +112,6 @@
             return {
                 loading: true,
                 updating: false,
-                auth: false,
                 auto: false,
                 colors: Colors,
                 backdrop: "",
@@ -126,7 +125,6 @@
         async mounted() {
             this.loading = true;
 
-            this.auth = await this.$hoobs.auth.status() === "enabled";
             this.original = await this.$hoobs.theme.get(this.$store.state.theme);
             this.working = JSON.parse(JSON.stringify(this.original));
 

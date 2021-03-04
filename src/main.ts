@@ -66,7 +66,11 @@ actions.on("log", "history", () => {
 });
 
 router.beforeEach(async (to, _from, next) => {
-    if (["/login", "/setup"].indexOf(to.path) === -1 && (await hoobs.sdk.auth.status()) === "uninitialized") {
+    const status = await hoobs.sdk.auth.status();
+
+    if (status === "disabled") store.commit("SESSION:DISABLE");
+
+    if (["/login", "/setup"].indexOf(to.path) === -1 && status === "uninitialized") {
         router.push({ path: "/setup" });
     } else if (["/login", "/setup"].indexOf(to.path) === -1 && !(await hoobs.sdk.auth.validate())) {
         router.push({ path: "/login", query: { url: to.path } });

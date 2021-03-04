@@ -125,7 +125,6 @@
         created() {
             this.$action.on("dashboard", "update", () => {
                 this.load();
-                this.render();
             });
         },
 
