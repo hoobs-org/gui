@@ -111,7 +111,7 @@
             display: flex;
             align-items: center;
             cursor: pointer;
-            padding: 20px 0;
+            padding: 14px 0;
             width: 100%;
 
             &:first-child {
@@ -153,6 +153,8 @@
             }
 
             .item {
+                padding: 20px 0;
+
                 &.open {
                     color: var(--application-text) !important;
 

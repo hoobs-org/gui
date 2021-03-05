@@ -70,7 +70,7 @@
 
             if (this.url.startsWith("/login")) this.url = "/";
 
-            setTimeout(() => { this.$refs.username.focus(); }, 10);
+            setTimeout(() => { this.$refs.username.focus(); }, 500);
         },
 
         methods: {
