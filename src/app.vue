@@ -139,6 +139,7 @@
             display: flex;
             flex-direction: row;
             align-items: center;
+            padding: 10px 0;
             color: var(--application-text) !important;
         }
 

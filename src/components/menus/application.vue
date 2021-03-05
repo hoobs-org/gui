@@ -31,7 +31,7 @@
         <div v-if="auth" class="seperator desktop"></div>
         <div v-if="user.permissions.controller" v-on:click="$dialog.open('settings')" class="item">{{ $t("settings") }}</div>
         <div v-on:click="$dialog.open('personalize')" class="item">{{ $t("personalize") }}</div>
-        <div v-if="user.permissions.terminal" v-on:click="terminal()" class="item desktop">{{ $t("terminal") }}</div>
+        <div v-if="!$mobile && user.permissions.terminal" v-on:click="terminal()" class="item desktop">{{ $t("terminal") }}</div>
         <div v-if="auth" class="seperator desktop"></div>
         <div v-if="auth" v-on:click="logout()" class="item">{{ $t("logout") }}</div>
         <icon v-on:click="$menu.close()" name="close" class="icon close mobile" />

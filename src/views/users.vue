@@ -333,7 +333,7 @@
                     max-width: unset;
                     background: transparent;
                     backdrop-filter: unset;
-                    padding: 0 20px 10px 20px;
+                    padding: 20px 20px 10px 20px;
                     margin: 0;
 
                     .row {

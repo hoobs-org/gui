@@ -467,6 +467,10 @@
                     padding: 0 20px 10px 20px;
                     margin: 0;
 
+                    .wrapper {
+                        padding: 20px 0 0 0;
+                    }
+
                     .devices {
                         .device {
                             width: 50%;
@@ -478,6 +482,22 @@
 
                     .actions {
                         flex-direction: row;
+                    }
+                }
+            }
+        }
+    }
+
+    @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
+        #accessories {
+            .content {
+                .screen {
+                    .devices {
+                        .device {
+                            width: 155px;
+                            margin: 0 0 20px 20px;
+                            padding: 10px 10px 10px 10px;
+                        }
                     }
                 }
             }

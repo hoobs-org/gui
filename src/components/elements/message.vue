@@ -125,6 +125,8 @@
         }
 
         .content {
+            white-space: nowrap;
+
             span {
                 margin: 0 7px 0 0;
 

@@ -111,7 +111,7 @@
             display: flex;
             align-items: center;
             cursor: pointer;
-            padding: 10px 0;
+            padding: 20px 0;
             width: 100%;
 
             &:first-child {

@@ -539,10 +539,12 @@
                     display: this.$t("hub"),
                 });
 
-                this.plugins.push({
-                    identifier: "advanced",
-                    display: this.$t("advanced"),
-                });
+                if (!this.$mobile) {
+                    this.plugins.push({
+                        identifier: "advanced",
+                        display: this.$t("advanced"),
+                    });
+                }
 
                 this.switch(identifier);
             },

@@ -19,11 +19,11 @@
 <template>
     <div :key="version" id="dashboard" :class="backdrop ? 'backdrop' : ''">
         <context>
-            <icon v-if="locked" v-on:click.stop="toggle()" :title="$t('sort_dashboard')" name="lock" class="icon desktop" />
-            <icon v-else v-on:click.stop="toggle()" :title="$t('sort_dashboard')" name="lock-open-variant" class="icon desktop" />
-            <icon v-on:click.stop="$dialog.open('dashboard')" :title="$t('dashboard_settings')" name="cog" class="icon desktop" />
+            <icon v-if="locked && !$mobile" v-on:click.stop="toggle()" :title="$t('sort_dashboard')" name="lock" class="icon desktop" />
+            <icon v-else-if="!$mobile" v-on:click.stop="toggle()" :title="$t('sort_dashboard')" name="lock-open-variant" class="icon desktop" />
+            <icon v-if="!$mobile" v-on:click.stop="$dialog.open('dashboard')" :title="$t('dashboard_settings')" name="cog" class="icon desktop" />
         </context>
-        <div v-if="!$mobile" class="content desktop">
+        <div v-if="!$mobile" class="content">
             <grid-layout
                 :layout="items"
                 :col-num="80"
@@ -40,7 +40,7 @@
                 </grid-item>
             </grid-layout>
         </div>
-        <div v-else class="content mobile">
+        <div v-else class="content">
             <div class="widget">
                 <weather-widget />
             </div>
