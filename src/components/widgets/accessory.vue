@@ -50,7 +50,6 @@
         },
 
         async mounted() {
-            this.$action.on("window", "resize", this.resize);
             this.accessory = await this.$hoobs.accessory(this.item.bridge, this.item.id);
         },
 

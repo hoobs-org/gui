@@ -139,8 +139,6 @@
                     config.dashboard.items = items;
 
                     await this.$hoobs.config.update(config);
-
-                    this.$action.emit("window", "resize");
                 }
             },
         },
