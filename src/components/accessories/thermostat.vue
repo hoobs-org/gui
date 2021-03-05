@@ -30,7 +30,7 @@
                 <div v-if="features.humidity" class="inner">
                     <div class="humidity">
                         <span :class="text">{{ readout }}&deg;</span>
-                        <span class="sub"><icon name="water-outline" class="icon" />{{ humidity }}%</span>
+                        <span class="sub">{{ humidity }}%</span>
                     </div>
                 </div>
                 <div v-else class="inner">
@@ -520,7 +520,7 @@
 
                 .temp {
                     color: var(--accessory-text);
-                    font-size: 28px;
+                    font-size: 150%;
                 }
             }
 
@@ -528,7 +528,6 @@
                 display: flex;
                 align-items: center;
                 flex-direction: column;
-                margin-top: -7px;
 
                 .temp {
                     line-height: 100%;
@@ -537,13 +536,12 @@
                 .sub {
                     display: flex;
                     align-items: center;
+                    align-content: center;
                     color: var(--accessory-text);
-                    font-size: 14px;
+                    font-size: 70%;
 
-                    .icon {
-                        height: 17px;
-                        margin-top: -3px;
-                        color: #00b9f1;
+                    svg {
+                        margin: -10px 0 0 0;
                     }
                 }
             }
@@ -576,6 +574,7 @@
                 cursor: pointer;
 
                 .icon {
+                    height: 70%;
                     color: var(--accessory-text);
                 }
 

@@ -1,6 +1,6 @@
 <template>
     <div id="icon" v-on:click="$emit('click', $event)">
-        <svg id="icon" viewBox="0 0 24 24">
+        <svg viewBox="0 0 24 24">
             <path fill="currentColor" :d="path" />
         </svg>
         <slot />
