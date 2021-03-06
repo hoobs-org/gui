@@ -55,6 +55,7 @@
                 type: Boolean,
                 default: false,
             },
+            default: Boolean,
             name: String,
             field: [String, Number],
             title: String,
@@ -120,6 +121,13 @@
                 this.uuid = `checkbox_${Math.random().toString(36).substring(2, 10)}`;
             } else {
                 this.uuid = this.id;
+            }
+
+            if (this.value === undefined && this.default !== undefined) {
+                this.view = this.default;
+
+                this.$emit("input", this.default, this.value);
+                this.$emit("change", this.default, this.value);
             }
 
             if (this.checked && !this.state) this.toggle();

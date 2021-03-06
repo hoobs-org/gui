@@ -485,6 +485,12 @@
                                 if (this.identifier === "homebridge-ring" && this.schema.properties.refreshToken) this.schema.properties.refreshToken.widget = "ring";
                                 if (this.identifier === "homebridge-gsh" && this.schema.properties.token) this.schema.properties.token.widget = "gsh";
 
+                                if (this.identifier === "homebridge-honeywell-home" && this.schema.properties.credentials.properties.refreshToken) {
+                                    delete this.schema.properties.credentials.properties.notice;
+
+                                    this.schema.properties.credentials.properties.refreshToken.widget = "honeywell";
+                                }
+
                                 break;
                         }
                     } else {

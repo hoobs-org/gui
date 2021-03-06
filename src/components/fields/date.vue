@@ -56,6 +56,7 @@
                 default: "",
             },
             value: String,
+            default: String,
             required: {
                 type: Boolean,
                 default: false,
@@ -77,6 +78,15 @@
                 this.uuid = `text_field_${Math.random().toString(36).substring(2, 10)}`;
             } else {
                 this.uuid = this.id;
+            }
+
+            if (this.value === undefined && this.default !== undefined) {
+                this.$emit("input", this.default, this.value);
+                this.$emit("change", this.default, this.value);
+
+                setTimeout(() => {
+                    if (this.$refs[this.uuid]) this.$refs[this.uuid].value = this.default;
+                }, INPUT_FOCUS_DELAY);
             }
 
             if (this.autofocus) {

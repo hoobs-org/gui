@@ -33,7 +33,7 @@
         </div>
     </div>
     <div v-else class="loading">
-        <spinner />
+        <spinner v-model="message" />
     </div>
 </template>
 
@@ -46,6 +46,7 @@
                 loading: false,
                 filename: "",
                 files: [],
+                message: "",
             };
         },
 
@@ -67,6 +68,7 @@
             async restore() {
                 if (this.filename !== "") {
                     this.loading = true;
+                    this.message = this.$t("restore_message");
 
                     await this.$hoobs.restore.file(this.filename);
 
@@ -77,6 +79,7 @@
             async upload() {
                 if (this.$refs.backup && this.$refs.backup.files[0]) {
                     this.loading = true;
+                    this.message = this.$t("restore_message");
 
                     await this.$hoobs.restore.upload(this.$refs.backup.files[0]);
 

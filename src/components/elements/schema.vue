@@ -30,8 +30,10 @@
             :field="field"
             :schema="schema"
             :value="value"
+            :default="schema.default"
             :checked="value"
             :options="options"
+            :items="items"
             v-on:input="$emit('input', $event)"
             v-on:save="$emit('save', $event)"
         />
@@ -50,6 +52,7 @@
             value: [Object, String, Number, Boolean, Array],
             bridge: String,
             identifier: String,
+            items: Object,
         },
 
         computed: {

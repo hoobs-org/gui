@@ -27,6 +27,7 @@
                     :field="key"
                     :schema="property"
                     :value="items[key]"
+                    :items="items"
                     v-on:input="updateValue($event, key)"
                     v-on:save="$emit('save', $event)"
                 />

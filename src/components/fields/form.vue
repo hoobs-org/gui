@@ -32,7 +32,8 @@
                 :bridge="bridge"
                 :identifier="identifier"
                 :schema="child"
-                :value="internalValue[key]"
+                :value="items[key]"
+                :items="items"
                 :key="key"
                 v-on:input="updateValue($event, key)"
                 v-on:save="$emit('save', $event)"
@@ -65,13 +66,13 @@
                 label: "",
                 expandable: false,
                 expanded: true,
-                internalValue: (this.value !== undefined) ? this.value : {},
+                items: (this.value !== undefined) ? this.value : {},
             };
         },
 
         watch: {
             value(value) {
-                this.internalValue = value;
+                this.items = value;
             },
         },
 
@@ -83,8 +84,8 @@
 
         methods: {
             updateValue(value, child) {
-                this.internalValue[child] = value;
-                this.$emit("input", this.internalValue);
+                this.items[child] = value;
+                this.$emit("input", this.items);
             },
 
             toggle() {

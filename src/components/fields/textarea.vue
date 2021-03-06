@@ -63,6 +63,7 @@
                 default: "",
             },
             value: String,
+            default: String,
             required: {
                 type: Boolean,
                 default: false,
@@ -87,6 +88,13 @@
                 this.uuid = `textarea_field_${Math.random().toString(36).substring(2, 10)}`;
             } else {
                 this.uuid = this.id;
+            }
+
+            if (this.value === undefined && this.default !== undefined) {
+                this.$emit("input", this.default, this.value);
+                this.$emit("change", this.default, this.value);
+
+                this.working = this.default;
             }
 
             if (this.autofocus) {

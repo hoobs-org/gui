@@ -29,10 +29,11 @@
                     :identifier="identifier"
                     :title="schema.title"
                     :description="schema.description"
-                    :placeholder="schema.example"
+                    :placeholder="schema.placeholder || schema.example"
                     :field="index"
                     :schema="schema.items"
                     :value="item"
+                    :items="items"
                     v-on:input="updateValue($event, index)"
                     v-on:save="$emit('save', $event)"
                 />

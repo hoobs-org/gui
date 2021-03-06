@@ -27,10 +27,11 @@
 
 <script>
     export default {
-        name: "gsh",
+        name: "honeywell",
 
         props: {
             value: [Object, String, Number, Boolean, Array],
+            items: Object,
         },
 
         data() {
@@ -53,16 +54,16 @@
                 const top = ((window.screen.height / 2) - (760 / 2)) / 2;
 
                 this.dialog = window.open(
-                    "https://homebridge-gsh.iot.oz.nu/link-account",
-                    "google-home",
+                    `https://homebridge-honeywell.iot.oz.nu?consumerKey=${encodeURIComponent(this.items.consumerKey)}&consumerSecret=${encodeURIComponent(this.items.consumerSecret)}`,
+                    "honeywell",
                     `toolbar=no,status=no,menubar=no,resizable=yes,width=760,height=760,top=${top},left=${left}`,
                 );
 
-                this.interval = setInterval(() => { this.dialog.postMessage("origin-check", "https://homebridge-gsh.iot.oz.nu"); }, 2000);
+                this.interval = setInterval(() => { this.dialog.postMessage("origin-check", "https://homebridge-honeywell.iot.oz.nu"); }, 2000);
             },
 
             message(event) {
-                if (event.origin === "https://homebridge-gsh.iot.oz.nu") {
+                if (event.origin === "https://homebridge-honeywell.iot.oz.nu") {
                     try {
                         const data = JSON.parse(event.data);
 

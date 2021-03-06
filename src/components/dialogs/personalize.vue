@@ -83,11 +83,11 @@
                 </div>
             </div>
             <div v-else class="loading">
-                <spinner />
+                <spinner v-model="message" />
             </div>
-            <div v-if="!loading" class="actions modal">
+            <div class="actions modal">
                 <div class="button" v-on:click="$dialog.close('personalize')">{{ $t("cancel") }}</div>
-                <div class="button primary" v-on:click="save()">{{ $t("apply") }}</div>
+                <div v-if="!loading" class="button primary" v-on:click="save()">{{ $t("apply") }}</div>
             </div>
         </div>
     </modal>
@@ -114,6 +114,7 @@
                 updating: false,
                 auto: false,
                 colors: Colors,
+                message: "",
                 backdrop: "",
                 highlight: "",
                 original: {},
@@ -306,7 +307,10 @@
             },
 
             async upload() {
+                this.loading = true;
+                this.message = this.$t("uploading_image");
                 this.backdrop = `url('${THEMES_URL}/${(await this.$hoobs.theme.backdrop(this.$refs.backdrop.files[0]))}')`;
+                this.loading = false;
             },
         },
     };

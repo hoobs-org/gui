@@ -85,6 +85,9 @@ export function component(name: string) {
         case "custom:gsh":
             return () => import(/* webpackChunkName: "custom-gsh" */ "@/partner/gsh.vue");
 
+        case "custom:honeywell":
+            return () => import(/* webpackChunkName: "custom-honeywell" */ "@/partner/honeywell.vue");
+
         case "field:button":
             return () => import(/* webpackChunkName: "field-button" */ "@/components/fields/button.vue");
 
@@ -132,6 +135,7 @@ export function component(name: string) {
 export function field(schema: { [key: string]: any }) {
     if (schema.widget === "ring") return component("custom:ring");
     if (schema.widget === "gsh") return component("custom:gsh");
+    if (schema.widget === "honeywell") return component("custom:honeywell");
 
     if (schema.widget === "button") return component("field:button");
     if (schema.widget === "textarea") return component("field:textarea");
