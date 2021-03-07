@@ -52,7 +52,7 @@
             value: [Object, String, Number, Boolean, Array],
             bridge: String,
             identifier: String,
-            items: Object,
+            items: [Object, Array],
         },
 
         computed: {

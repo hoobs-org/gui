@@ -19,7 +19,7 @@
 
 <template>
     <div v-if="display" id="spinner">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 283.46 283.46" xml:space="preserve">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" :style="`width: ${size}; height: ${size};`" viewBox="0 0 283.46 283.46" xml:space="preserve">
             <defs>
                 <marker class="circlecap" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto" markerUnits="strokeWidth" viewBox="0 0 20 20">
                     <circle cx="5" cy="5" r="1.5" stroke-width="3" />
@@ -36,13 +36,19 @@
 </template>
 
 <script>
-    const SPINNER_START_DELAY = 500;
-
     export default {
         name: "spinner",
 
         props: {
             value: String,
+            size: {
+                type: String,
+                default: "47px",
+            },
+            delay: {
+                type: Number,
+                default: 500,
+            },
         },
 
         data() {
@@ -54,7 +60,7 @@
         mounted() {
             setTimeout(() => {
                 this.display = true;
-            }, SPINNER_START_DELAY);
+            }, this.delay);
         },
     };
 </script>
@@ -77,12 +83,13 @@
             margin: 14px 0 0 0;
             font-size: 17px;
             opacity: 0.7;
+
+            &:empty {
+                display: none;
+            }
         }
 
         svg {
-            width: 47px;
-            height: 47px;
-
             .logopath {
                 fill: none;
                 stroke: var(--application-highlight);

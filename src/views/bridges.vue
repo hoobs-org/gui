@@ -60,9 +60,9 @@
                         <qrcode v-if="!loading" :value="status.setup_id" :options="{ width: 200, color: { dark: theme.widget.text.default, light: '#00000000' }}" />
                     </div>
                     <div class="row actions">
-                        <div v-if="status.running" v-on:click="control('restart')" class="button">{{ $t("restart") }}</div>
-                        <div v-if="!status.running" v-on:click="control('start')" class="button">{{ $t("start") }}</div>
-                        <div v-if="status.running" v-on:click="control('stop')" class="button">{{ $t("stop") }}</div>
+                        <div v-if="running" v-on:click="control('restart')" class="button">{{ $t("restart") }}</div>
+                        <div v-if="!running" v-on:click="control('start')" class="button">{{ $t("start") }}</div>
+                        <div v-if="running" v-on:click="control('stop')" class="button">{{ $t("stop") }}</div>
                         <div v-on:click="cache" class="button">{{ $t("purge_cache") }}</div>
                     </div>
                     <div class="row section">{{ $t("export") }}</div>
@@ -122,6 +122,7 @@
     import { mac } from "../services/formatters";
 
     const SOCKET_RECONNECT_DELAY = 500;
+    const RESTART_LOADING_SAFETY = 1 * 60 * 1000;
 
     export default {
         name: "bridges",
@@ -138,6 +139,10 @@
         computed: {
             user() {
                 return this.$store.state.user;
+            },
+
+            running() {
+                return (this.$store.state.bridges.find((item) => item.id === this.id) || {}).running || false;
             },
         },
 
@@ -158,6 +163,7 @@
                 autostart: 0,
                 start: null,
                 end: null,
+                timer: null,
                 advertiser: "bonjour",
                 advertisers: [{
                     value: "bonjour",
@@ -172,6 +178,13 @@
         watch: {
             id(value) {
                 this.load(value);
+            },
+
+            running() {
+                if (this.loading && this.timer) this.loading = false;
+                if (this.timer) clearTimeout(this.timer);
+
+                this.timer = null;
             },
         },
 
@@ -253,23 +266,32 @@
                 switch (action) {
                     case "start":
                         await this.subject.start();
+
+                        this.timer = setTimeout(() => {
+                            this.loading = false;
+                        }, RESTART_LOADING_SAFETY);
+
                         break;
 
                     case "stop":
                         await this.subject.stop();
+
+                        this.loading = false;
                         break;
 
                     case "restart":
                         await this.subject.restart();
+
+                        this.timer = setTimeout(() => {
+                            this.loading = false;
+                        }, RESTART_LOADING_SAFETY);
+
                         break;
 
                     default:
+                        this.loading = false;
                         break;
                 }
-
-                setTimeout(() => {
-                    this.load(this.id);
-                }, SOCKET_RECONNECT_DELAY);
             },
 
             async save(create) {
@@ -398,6 +420,11 @@
                     &:first-child {
                         padding-right: 5px;
                     }
+                }
+
+                .restarting {
+                    display: flex;
+                    align-items: center;
                 }
             }
 

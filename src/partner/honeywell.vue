@@ -31,7 +31,7 @@
 
         props: {
             value: [Object, String, Number, Boolean, Array],
-            items: Object,
+            items: [Object, Array],
         },
 
         data() {
