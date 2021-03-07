@@ -4,6 +4,9 @@ module.exports = {
     outputDir: resolve(__dirname, "./lib/hoobs"),
 
     configureWebpack: {
+        performance: {
+            hints: false,
+        },
         optimization: {
             runtimeChunk: "single",
             splitChunks: {
@@ -23,6 +26,8 @@ module.exports = {
     },
 
     chainWebpack: (config) => {
+        config.performance.maxEntrypointSize(400000).maxAssetSize(400000);
+
         config.plugin("html").tap((args) => {
             const payload = args;
 

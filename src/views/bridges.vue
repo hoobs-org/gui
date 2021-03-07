@@ -296,7 +296,7 @@
 
             async save(create) {
                 const validation = Validators.bridge(create, await this.$hoobs.bridges.list(), this.display, this.pin, this.port, this.username, this.autostart, this.start, this.end);
-                console.log(this.advertiser);
+
                 if (validation.valid) {
                     if (create) {
                         this.loading = true;
