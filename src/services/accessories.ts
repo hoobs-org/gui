@@ -19,7 +19,7 @@
 export function types(accessory: { [key: string]: any }): string | undefined {
     let sensors: [string];
 
-    switch (accessory.type) {
+    switch ((accessory || {}).type) {
         case "light":
             return "light-accessory";
 
@@ -82,6 +82,7 @@ export function accessories(): { [key: string]: () => any } {
         "security-accessory": () => import(/* webpackChunkName: "accessory-garage" */ "@/components/accessories/security.vue"),
         "thermostat-accessory": () => import(/* webpackChunkName: "accessory-thermostat" */ "@/components/accessories/thermostat.vue"),
         "brightness-accessory": () => import(/* webpackChunkName: "accessory-garage" */ "@/components/accessories/brightness.vue"),
+        "unavailable-accessory": () => import(/* webpackChunkName: "accessory-thermostat" */ "@/components/accessories/unavailable.vue"),
         "unknown-accessory": () => import(/* webpackChunkName: "accessory-thermostat" */ "@/components/accessories/unknown.vue"),
     };
 }

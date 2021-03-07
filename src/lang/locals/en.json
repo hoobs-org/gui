@@ -284,6 +284,7 @@
         "touch_path_description": "If you have a touchscreen attached to the hub, you can use this to set a custom touchscreen UI (this is a path on the hub).",
         "tuesday": "Tuesday",
         "tuesday_abbr": "Tue",
+        "unavaliable": "Unavaliable",
         "unkonwn": "Unkonwn",
         "unsaved_changes_warning": "You have unsaved changes, are you sure you want to leave?",
         "update_avaliable": "Update Available",

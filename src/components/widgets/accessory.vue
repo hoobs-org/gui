@@ -17,9 +17,10 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="accessory" id="widget">
+    <div id="widget">
         <div ref="device" class="device">
-            <component v-if="control(accessory)" :is="control(accessory)" :accessory="accessory" :disabled="!locked" />
+            <component v-if="available" :is="control(accessory)" :accessory="accessory" :disabled="!locked" />
+            <unavailable-accessory v-else :item="item" :disabled="!locked" />
             <div v-if="control(accessory) && !locked" class="device-cover"></div>
         </div>
     </div>
@@ -46,11 +47,14 @@
         data() {
             return {
                 accessory: null,
+                available: false,
             };
         },
 
         async mounted() {
             this.accessory = await this.$hoobs.accessory(this.item.bridge, this.item.id);
+
+            if (this.accessory.accessory_identifier) this.available = true;
         },
 
         methods: {
