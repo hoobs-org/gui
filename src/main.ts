@@ -18,6 +18,8 @@
 
 import hoobs from "@hoobs/sdk";
 
+import { Wait } from "@hoobs/sdk/lib/wait";
+
 import Vue from "vue";
 import App from "./app.vue";
 
@@ -47,7 +49,13 @@ io.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
 io.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
 io.on("room_change", (data) => store.commit("IO:ROOM:CHANGE", data));
 
+io.on("connect", async () => {
+    actions.emit("io", "connected");
+});
+
 io.on("reconnect", async () => {
+    actions.emit("io", "connected");
+
     if ((await hoobs.sdk.auth.status()) === "uninitialized") {
         window.location.href = "/";
     } else if (!(await hoobs.sdk.auth.validate())) {
@@ -57,10 +65,16 @@ io.on("reconnect", async () => {
     }
 });
 
-actions.on("window", "reboot", (delay: number) => {
-    setTimeout(() => {
+io.on("disconnect", async () => {
+    actions.emit("io", "disconnected");
+});
+
+actions.on("window", "reboot", () => {
+    setTimeout(async () => {
+        await Wait();
+
         window.location.href = "/";
-    }, delay);
+    }, 5000);
 });
 
 actions.on("log", "history", () => {

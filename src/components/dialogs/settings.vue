@@ -200,9 +200,10 @@
                     const system = await this.$hoobs.system();
 
                     this.loading = true;
-                    this.$action.emit("window", "reboot", 3 * 60 * 1000);
 
                     await system.reboot();
+
+                    this.$action.emit("window", "reboot");
                 });
             },
 
@@ -225,9 +226,10 @@
                     const system = await this.$hoobs.system();
 
                     this.loading = true;
-                    this.$action.emit("window", "reboot", 35 * 1000);
 
                     await system.reset();
+
+                    this.$action.emit("window", "reboot");
                 });
             },
 

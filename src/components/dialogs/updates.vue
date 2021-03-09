@@ -113,7 +113,7 @@
 
                 await system.upgrade();
 
-                this.$action.emit("window", "reboot", 35 * 1000);
+                this.$action.emit("window", "reboot");
             },
 
             update() {

@@ -18,16 +18,23 @@
 
 <template>
     <div v-on:click="$menu.close()" id="authenticated">
-        <navigation />
-        <div class="screen">
+        <navigation :class="(loading || dialogs > 0) ? 'disable' : 'enable'" />
+        <div v-if="!loading" :class="dialogs > 0 ? 'screen disable' : 'screen'">
             <slot />
             <menu-view />
+        </div>
+        <div v-else class="loading">
+            <spinner v-if="dialogs <= 0" />
         </div>
         <dialog-view />
     </div>
 </template>
 
 <script>
+    import { Wait } from "@hoobs/sdk/lib/wait";
+
+    const SOCKET_RECONNECT_DELAY = 500;
+
     export default {
         name: "authenticated",
 
@@ -41,8 +48,41 @@
             },
         },
 
+        data() {
+            return {
+                loading: true,
+                dialogs: 0,
+            };
+        },
+
         async created() {
             this.$store.commit("AUTH:STATE", (await this.$hoobs.auth.status()));
+
+            this.$action.on("io", "connected", () => {
+                setTimeout(async () => {
+                    await Wait();
+
+                    this.loading = false;
+                }, SOCKET_RECONNECT_DELAY);
+            });
+
+            this.$action.on("io", "disconnected", () => {
+                this.loading = true;
+            });
+
+            this.$dialog.on("open", () => {
+                this.dialogs += 1;
+            });
+
+            this.$dialog.on("close", () => {
+                this.dialogs -= 1;
+            });
+        },
+
+        async mounted() {
+            await Wait();
+
+            this.loading = false;
         },
     };
 </script>
@@ -56,6 +96,11 @@
         color: var(--application-text);
         background: var(--application-background);
         overflow: hidden;
+
+        .disable {
+            opacity: 0.5;
+            pointer-events: none;
+        }
 
         .screen {
             flex: 1;
