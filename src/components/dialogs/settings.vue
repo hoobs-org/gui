@@ -225,7 +225,7 @@
                     const system = await this.$hoobs.system();
 
                     this.loading = true;
-                    this.$action.emit("window", "reboot", 1 * 60 * 1000);
+                    this.$action.emit("window", "reboot", 35 * 1000);
 
                     await system.reset();
                 });

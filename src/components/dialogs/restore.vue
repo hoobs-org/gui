@@ -120,7 +120,7 @@
 
                     await this.$hoobs.restore.file(this.filename);
 
-                    this.$action.emit("window", "reboot", 1 * 60 * 1000);
+                    this.$action.emit("window", "reboot", 35 * 1000);
                 }
             },
 
@@ -169,7 +169,7 @@
 
                     await this.$hoobs.restore.upload(this.$refs.backup.files[0]);
 
-                    this.$action.emit("window", "reboot", 1 * 60 * 1000);
+                    this.$action.emit("window", "reboot", 35 * 1000);
                 }
             },
         },

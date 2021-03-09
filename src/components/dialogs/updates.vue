@@ -109,11 +109,11 @@
             async upgrade() {
                 this.updating = true;
 
-                this.$hoobs.system().then((system) => {
-                    system.upgrade().then(() => {
-                        this.$action.emit("window", "reboot", 30 * 1000);
-                    });
-                });
+                const system = await this.$hoobs.system();
+
+                await system.upgrade();
+
+                this.$action.emit("window", "reboot", 35 * 1000);
             },
 
             update() {
