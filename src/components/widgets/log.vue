@@ -42,12 +42,12 @@
 
         mounted() {
             setTimeout(() => {
-                this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
+                if (this.$refs.messages) this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
             }, SCROLL_DELAY);
         },
 
         updated() {
-            this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
+            if (this.$refs.messages) this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
         },
     };
 </script>

@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="!loading" id="control">
+    <div id="control">
         <div class="item">
             <div class="switch">
                 <div class="inner" v-on:click="off">
@@ -39,14 +39,12 @@
 
         data() {
             return {
-                loading: true,
                 room: null,
             };
         },
 
         async mounted() {
             this.room = await this.$hoobs.room(this.id);
-            this.loading = false;
         },
 
         methods: {

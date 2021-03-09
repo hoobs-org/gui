@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="!loading" id="control">
+    <div id="control">
         <div class="item">
             <div class="picker">
                 <div class="wheel" ref="wheel"></div>
@@ -42,7 +42,6 @@
 
         data() {
             return {
-                loading: true,
                 hue: 0,
                 wheel: null,
                 saturation: 0,
@@ -53,9 +52,6 @@
         },
 
         async mounted() {
-            this.room = await this.$hoobs.room(this.id);
-            this.loading = false;
-
             setTimeout(() => {
                 this.wheel = new Iro.ColorPicker(this.$refs.wheel, {
                     width: this.$refs.wheel.clientWidth,
@@ -69,6 +65,8 @@
 
                 this.wheel.on("input:end", this.pick);
             }, 10);
+
+            this.room = await this.$hoobs.room(this.id);
         },
 
         methods: {

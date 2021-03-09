@@ -20,7 +20,7 @@
     <modal :title="$t('settings')" :draggable="true" width="760px" height="775px">
         <div id="settings">
             <div v-if="!loading" class="content">
-                <restore v-if="show.restore" />
+                <restore v-if="show.restore" v-on:restore="() => { show.cancel = false; }" />
                 <location v-if="show.location" v-on:update="select" />
                 <div v-if="show.settings" class="form">
                     <div v-if="(product === 'box' || product === 'card') && mdns" class="row section">{{ $t("hostname") }}</div>
@@ -81,7 +81,7 @@
                 <spinner :value="message" />
             </div>
             <div v-if="!loading && (show.restore || show.location)" class="actions modal">
-                <div class="button" v-on:click="back()">{{ $t("cancel") }}</div>
+                <div v-if="show.cancel" class="button" v-on:click="back()">{{ $t("cancel") }}</div>
             </div>
             <div v-if="!loading && show.settings" class="actions modal">
                 <div v-on:click="$dialog.close('settings')" class="button">{{ $t("cancel") }}</div>
@@ -135,6 +135,7 @@
                     settings: true,
                     restore: false,
                     location: false,
+                    cancel: true,
                 },
                 mdns: false,
                 product: "",
@@ -199,7 +200,7 @@
                     const system = await this.$hoobs.system();
 
                     this.loading = true;
-                    this.$action.emit("window", "reboot", 30 * 1000);
+                    this.$action.emit("window", "reboot", 3 * 60 * 1000);
 
                     await system.reboot();
                 });
@@ -224,7 +225,7 @@
                     const system = await this.$hoobs.system();
 
                     this.loading = true;
-                    this.$action.emit("window", "reboot", 30 * 1000);
+                    this.$action.emit("window", "reboot", 1 * 60 * 1000);
 
                     await system.reset();
                 });
@@ -321,6 +322,17 @@
                 .value {
                     font-weight: bold;
                 }
+            }
+        }
+
+        .status {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+
+            .loading {
+                flex: 1;
             }
         }
     }

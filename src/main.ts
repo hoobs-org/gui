@@ -58,7 +58,9 @@ io.on("reconnect", async () => {
 });
 
 actions.on("window", "reboot", (delay: number) => {
-    setTimeout(() => window.location.reload(), delay);
+    setTimeout(() => {
+        window.location.href = "/";
+    }, delay);
 });
 
 actions.on("log", "history", () => {

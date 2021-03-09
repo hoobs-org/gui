@@ -400,10 +400,6 @@
                         width: 155px;
                         user-select: none;
 
-                        &:empty {
-                            display: none;
-                        }
-
                         &.editing {
                             background: var(--widget-background);
 

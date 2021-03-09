@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="!hidden && !loading" id="control" :class="on ? 'on' : 'off'">
+    <div v-if="!hidden" id="control" :class="on ? 'on' : 'off'">
         <div :class="style">
             <div v-if="features.brightness && on" class="background">
                 <div class="inner"></div>
@@ -165,7 +165,6 @@
 
         data() {
             return {
-                loading: true,
                 on: false,
                 hue: 0,
                 wheel: null,
@@ -234,7 +233,6 @@
         mounted() {
             this.subject = this.accessory;
             this.updater();
-            this.loading = false;
         },
 
         methods: {

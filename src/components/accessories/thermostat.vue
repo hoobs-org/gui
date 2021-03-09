@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="!hidden && !loading" id="control">
+    <div v-if="!hidden" id="control">
         <div :class="style">
             <div class="background">
                 <div class="inner"></div>
@@ -192,7 +192,6 @@
 
         data() {
             return {
-                loading: true,
                 min: {
                     temp: 10,
                     state: 0,
@@ -271,7 +270,6 @@
         mounted() {
             this.subject = this.accessory;
             this.updater();
-            this.loading = false;
         },
 
         methods: {

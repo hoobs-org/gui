@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="!hidden && !loading" id="control">
+    <div v-if="!hidden" id="control">
         <div class="item">
             <div class="door">
                 <div class="inner">
@@ -90,7 +90,6 @@
 
         data() {
             return {
-                loading: true,
                 open: false,
                 battery: 0,
                 features: {
@@ -127,7 +126,6 @@
         mounted() {
             this.subject = this.accessory;
             this.updater();
-            this.loading = false;
         },
 
         methods: {

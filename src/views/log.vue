@@ -123,7 +123,7 @@
             setTimeout(() => {
                 this.$refs.messages.addEventListener("scroll", this.position);
 
-                if (this.bottom) this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
+                if (this.bottom && this.$refs.messages) this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
             }, SCROLL_DELAY);
 
             this.$action.emit("log", "history");
@@ -131,7 +131,7 @@
         },
 
         updated() {
-            if (this.bottom) this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
+            if (this.bottom && this.$refs.messages) this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
         },
 
         methods: {

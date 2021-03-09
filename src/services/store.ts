@@ -71,7 +71,7 @@ export default new Vuex.Store({
     mutations: {
         "IO:LOG": (state: { [key: string]: any }, payload: any) => {
             state.log.push(payload);
-            state.log = state.log.slice(1).slice(-5000);
+            state.log = state.log.slice(Math.max(state.log.length - 5000, 0));
         },
 
         "IO:MONITOR": (state: { [key: string]: any }, payload: any) => {

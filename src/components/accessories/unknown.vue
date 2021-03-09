@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="!hidden && !loading" id="control">
+    <div v-if="!hidden" id="control">
         <div class="item">
             <div class="background">
                 <div class="panel">
@@ -74,7 +74,6 @@
 
         data() {
             return {
-                loading: true,
                 battery: 0,
                 features: {
                     battery: false,
@@ -109,7 +108,6 @@
         async mounted() {
             this.subject = this.accessory;
             this.updater();
-            this.loading = false;
         },
 
         methods: {

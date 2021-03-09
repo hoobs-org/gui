@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="!hidden && !loading" id="control" :class="on ? 'on' : 'off'">
+    <div v-if="!hidden" id="control" :class="on ? 'on' : 'off'">
         <div class="item">
             <div class="switch">
                 <div v-if="on" class="inner" v-on:click="toggle">
@@ -76,7 +76,6 @@
 
         data() {
             return {
-                loading: true,
                 on: false,
                 battery: 0,
                 features: {
@@ -113,7 +112,6 @@
         mounted() {
             this.subject = this.accessory;
             this.updater();
-            this.loading = false;
         },
 
         methods: {

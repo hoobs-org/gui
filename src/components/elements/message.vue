@@ -125,6 +125,8 @@
         }
 
         .content {
+            display: flex;
+            flex-direction: row;
             white-space: nowrap;
 
             span {

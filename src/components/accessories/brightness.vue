@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="!loading" id="control" :class="on ? 'on' : 'off'">
+    <div id="control" :class="on ? 'on' : 'off'">
         <div :class="style">
             <div v-if="features.brightness" class="background">
                 <div class="inner"></div>
@@ -116,7 +116,6 @@
 
         data() {
             return {
-                loading: true,
                 on: false,
                 brightness: 0,
                 local: false,
@@ -183,8 +182,6 @@
             this.room.accessories = this.room.accessories.filter((item) => item.type === "light");
 
             this.updater();
-
-            this.loading = false;
         },
 
         methods: {

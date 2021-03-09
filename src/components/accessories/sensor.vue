@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="!hidden && !loading" id="control">
+    <div v-if="!hidden" id="control">
         <div class="item">
             <div class="background">
                 <div class="sensor">
@@ -202,7 +202,6 @@
 
         data() {
             return {
-                loading: true,
                 main: "",
                 leak: false,
                 temperature: 0,
@@ -298,7 +297,6 @@
         async mounted() {
             this.subject = this.accessory;
             this.updater();
-            this.loading = false;
         },
 
         methods: {

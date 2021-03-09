@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="widget">
+    <div v-if="!loading" id="widget">
         <div ref="device" class="device">
             <component v-if="available" :is="control(accessory)" :accessory="accessory" :disabled="!locked" />
             <unavailable-accessory v-else :item="item" :disabled="!locked" />
@@ -46,6 +46,7 @@
 
         data() {
             return {
+                loading: true,
                 accessory: null,
                 available: false,
             };
@@ -55,6 +56,8 @@
             this.accessory = await this.$hoobs.accessory(this.item.bridge, this.item.id);
 
             if (this.accessory.accessory_identifier) this.available = true;
+
+            this.loading = false;
         },
 
         methods: {

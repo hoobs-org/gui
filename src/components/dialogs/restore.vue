@@ -32,8 +32,13 @@
             <div v-on:click="$refs.backup.click();" class="button">{{ $t("upload_file") }}</div>
         </div>
     </div>
-    <div v-else class="loading">
-        <spinner v-model="message" />
+    <div v-else class="status">
+        <div class="loading">
+            <spinner />
+        </div>
+        <div class="messages" style="height: 433px;">
+            <message v-for="(message, index) in messages" :key="`message:${index}`" :value="message" />
+        </div>
     </div>
 </template>
 
@@ -41,12 +46,17 @@
     export default {
         name: "restore",
 
+        components: {
+            "message": () => import(/* webpackChunkName: "layout-message" */ "@/components/elements/message.vue"),
+        },
+
         data() {
             return {
                 loading: false,
+                logging: true,
                 filename: "",
                 files: [],
-                message: "",
+                messages: [],
             };
         },
 
@@ -67,23 +77,99 @@
 
             async restore() {
                 if (this.filename !== "") {
+                    this.$emit("restore");
+                    this.logging = true;
                     this.loading = true;
-                    this.message = this.$t("restore_message");
+
+                    this.$store.subscribe(async (mutation) => {
+                        if (mutation.type === "IO:LOG" && this.logging) {
+                            this.messages.push(mutation.payload);
+                            this.messages = this.messages.slice(Math.max(this.messages.length - 25, 0));
+
+                            if ((mutation.payload.message || "").toLowerCase().indexOf("service restart") >= 0) {
+                                this.logging = false;
+
+                                this.messages.push({
+                                    level: "info",
+                                    bridge: "hub",
+                                    display: "hub",
+                                    timestamp: new Date().getTime(),
+                                    message: "restarting",
+                                }, {
+                                    level: "info",
+                                    bridge: "hub",
+                                    display: "hub",
+                                    timestamp: new Date().getTime(),
+                                    message: ".",
+                                });
+
+                                this.messages = this.messages.slice(Math.max(this.messages.length - 25, 0));
+
+                                setInterval(() => {
+                                    if (this.messages[this.messages.length - 1].message === ".................................") {
+                                        this.messages[this.messages.length - 1].message = ".";
+                                    } else {
+                                        this.messages[this.messages.length - 1].message += ".";
+                                    }
+                                }, 500);
+
+                                this.messages = this.messages.slice(Math.max(this.messages.length - 25, 0));
+                            }
+                        }
+                    });
 
                     await this.$hoobs.restore.file(this.filename);
 
-                    this.$action.emit("window", "reboot", 30 * 1000);
+                    this.$action.emit("window", "reboot", 1 * 60 * 1000);
                 }
             },
 
             async upload() {
                 if (this.$refs.backup && this.$refs.backup.files[0]) {
+                    this.$emit("restore");
+                    this.logging = true;
                     this.loading = true;
-                    this.message = this.$t("restore_message");
+
+                    this.$store.subscribe(async (mutation) => {
+                        if (mutation.type === "IO:LOG" && this.logging) {
+                            this.messages.push(mutation.payload);
+                            this.messages = this.messages.slice(Math.max(this.messages.length - 25, 0));
+
+                            if ((mutation.payload.message || "").toLowerCase().indexOf("service restart") >= 0) {
+                                this.logging = false;
+
+                                this.messages.push({
+                                    level: "info",
+                                    bridge: "hub",
+                                    display: "hub",
+                                    timestamp: new Date().getTime(),
+                                    message: "restarting",
+                                }, {
+                                    level: "info",
+                                    bridge: "hub",
+                                    display: "hub",
+                                    timestamp: new Date().getTime(),
+                                    message: ".",
+                                });
+
+                                this.messages = this.messages.slice(Math.max(this.messages.length - 25, 0));
+
+                                setInterval(() => {
+                                    if (this.messages[this.messages.length - 1].message === ".................................") {
+                                        this.messages[this.messages.length - 1].message = ".";
+                                    } else {
+                                        this.messages[this.messages.length - 1].message += ".";
+                                    }
+
+                                    this.messages = this.messages.slice(Math.max(this.messages.length - 25, 0));
+                                }, 500);
+                            }
+                        }
+                    });
 
                     await this.$hoobs.restore.upload(this.$refs.backup.files[0]);
 
-                    this.$action.emit("window", "reboot", 30 * 1000);
+                    this.$action.emit("window", "reboot", 1 * 60 * 1000);
                 }
             },
         },

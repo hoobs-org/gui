@@ -149,6 +149,7 @@
         "location_country": "Country",
         "location_description": "Search for a location to use for weather forecasts.",
         "location_search": "Location Search",
+        "location_setup_message": "Location not set. Open the settings to configure.",
         "log": "Log",
         "login": "Log In",
         "login_image": "Login Image",
