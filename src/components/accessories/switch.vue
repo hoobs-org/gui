@@ -21,10 +21,10 @@
         <div class="item">
             <div class="switch">
                 <div v-if="on" class="inner" v-on:click="toggle">
-                    <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'toggle-switch'" class="icon" />
+                    <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'toggle-switch'" class="icon" />
                 </div>
                 <div v-else class="inner" v-on:click="toggle">
-                    <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'toggle-switch-off'" class="icon" />
+                    <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'toggle-switch-off'" class="icon" />
                 </div>
             </div>
             <div v-if="!disabled" v-on:click="settings" class="settings">

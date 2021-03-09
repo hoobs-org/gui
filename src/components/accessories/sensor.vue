@@ -22,97 +22,97 @@
             <div class="background">
                 <div class="sensor">
                     <div v-if="main === 'leak' && leak" class="main leak">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'pipe-leak'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'pipe-leak'" class="icon" />
                         <div class="status">
                             {{ $t("leak_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'leak' && !leak" class="main">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'pipe-leak'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'pipe-leak'" class="icon" />
                         <div class="status">
                             {{ $t("no_leaks") }}
                         </div>
                     </div>
                     <div v-if="main === 'temperature'" class="main value">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'thermometer'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'thermometer'" class="icon" />
                         <div class="status">
                             {{ readout }}&deg;
                         </div>
                     </div>
                     <div v-if="main === 'humidity'" class="main value">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'water-outline'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'water-outline'" class="icon" />
                         <div class="status">
                             {{ humidity }}%;
                         </div>
                     </div>
                     <div v-if="main === 'smoke' && smoke" class="main alert">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'fire'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'fire'" class="icon" />
                         <div class="status">
                             {{ $t("smoke_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'smoke' && !smoke" class="main">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'fire'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'fire'" class="icon" />
                         <div class="status">
                             {{ $t("no_smoke") }}
                         </div>
                     </div>
                     <div v-if="main === 'carbon' && carbon" class="main alert">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'smog'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'smog'" class="icon" />
                         <div class="status">
                             {{ $t("carbon_monoxide_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'carbon' && !carbon" class="main">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'smog'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'smog'" class="icon" />
                         <div class="status">
                             {{ $t("no_carbon_monoxide") }}
                         </div>
                     </div>
                     <div v-if="main === 'contact' && contact" class="main">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'" class="icon" />
                         <div class="status">
                             {{ $t("closed") }}
                         </div>
                     </div>
                     <div v-if="main === 'contact' && !contact" class="main on">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'" class="icon" />
                         <div class="status">
                             {{ $t("open") }}
                         </div>
                     </div>
                     <div v-if="main === 'motion' && motion" class="main on">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'motion-sensor'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'motion-sensor'" class="icon" />
                         <div class="status">
                             {{ $t("motion_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'motion' && !motion" class="main">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'motion-sensor'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'motion-sensor'" class="icon" />
                         <div class="status">
                             {{ $t("no_motion") }}
                         </div>
                     </div>
                     <div v-if="main === 'obstruction' && obstruction" class="main on">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'dog-side'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'dog-side'" class="icon" />
                         <div class="status">
                             {{ $t("obstruction_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'obstruction' && !obstruction" class="main">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'dog-side'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'dog-side'" class="icon" />
                         <div class="status">
                             {{ $t("no_obstruction") }}
                         </div>
                     </div>
                     <div v-if="main === 'occupancy' && occupancy" class="main on">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'crosshairs-gps'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'crosshairs-gps'" class="icon" />
                         <div class="status">
                             {{ $t("presence_detected") }}
                         </div>
                     </div>
                     <div v-if="main === 'occupancy' && !occupancy" class="main">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'crosshairs-gps'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'crosshairs-gps'" class="icon" />
                         <div class="status">
                             {{ $t("no_presence") }}
                         </div>

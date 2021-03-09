@@ -28,7 +28,7 @@
             </svg>
             <div v-if="!features.rotation" class="switch">
                 <div class="inner" v-on:click="toggle">
-                    <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'fan'" class="icon" />
+                    <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'fan'" class="icon" />
                 </div>
             </div>
             <div v-if="features.rotation && on" class="context">

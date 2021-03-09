@@ -28,10 +28,10 @@
             </svg>
             <div v-if="!features.picker" class="switch">
                 <div v-if="on" class="inner" v-on:click="toggle" :style="`background: ${color};`">
-                    <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'lightbulb-on'" class="icon" />
+                    <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'lightbulb-on'" class="icon" />
                 </div>
                 <div v-else class="inner" v-on:click="toggle">
-                    <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'lightbulb-outline'" class="icon" />
+                    <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'lightbulb-outline'" class="icon" />
                 </div>
             </div>
             <div v-if="features.hue && !features.picker && on" class="context">

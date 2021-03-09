@@ -22,7 +22,7 @@
             <div class="background">
                 <div class="panel">
                     <div class="main">
-                        <icon :name="subject.icon && subject.icon !== '' ? subject.icon : 'memory'" class="icon" />
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'memory'" class="icon" />
                     </div>
                 </div>
             </div>
