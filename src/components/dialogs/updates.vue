@@ -160,7 +160,7 @@
 
                 await (await this.$hoobs.system()).upgrade();
 
-                this.$action.emit("window", "reboot");
+                this.$action.emit("window", "reboot", 30 * 1000);
             },
 
             update() {
