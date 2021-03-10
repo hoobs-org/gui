@@ -21,15 +21,15 @@
         <div id="bridges">
             <div class="content">
                 <form v-if="options.type === 'install'" class="form">
-                    <div class="row section" style="margin: 0;">{{ $t("bridge_add") }}</div>
-                    <p>
+                    <div :class="!current ? 'row section' : 'row section disable'" style="margin: 0;">{{ $t("bridge_add") }}</div>
+                    <p :class="!current ? '' : 'disable'">
                         {{ $t("plugin_install_add_bridge") }}
                     </p>
-                    <div class="row">
+                    <div :class="!current ? 'row' : 'row disable'">
                         <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
                         <text-field :title="$t('bridge_pin')" style="flex: 1; padding-right: 0; padding-left: 5px" v-model="pin" />
                     </div>
-                    <div class="row">
+                    <div :class="!current ? 'row' : 'row disable'">
                         <port-field :title="$t('bridge_port')" style="flex: 1; padding-right: 5px" v-model="port" />
                         <select-field :title="$t('bridge_advertiser')" style="flex: 1; padding-right: 0; padding-left: 5px" :options="advertisers" v-model="advertiser" />
                     </div>
@@ -37,8 +37,8 @@
                     <p v-if="bridges.length > 0">
                         {{ $t("plugin_install_bridge") }}
                     </p>
-                    <div v-if="bridges.length > 0" class="grid">
-                        <div v-for="(bridge, index) in bridges" :key="`bridge:${index}`" v-on:click="install(bridge.id)" class="button full">{{ bridge.display }}</div>
+                    <div v-if="bridges.length > 0">
+                        <radio v-for="(bridge, index) in bridges" :key="`bridge:${index}`" id="current" name="current" :title="bridge.display" v-model="current" :value="bridge.id" />
                     </div>
                 </form>
                 <form v-if="options.type === 'uninstall'" class="form">
@@ -50,14 +50,15 @@
                     <p>
                         {{ $t("plugin_uninstall_bridge") }}
                     </p>
-                    <div class="grid">
-                        <div v-for="(bridge, index) in bridges" :key="`bridge:${index}`" v-on:click="uninstall(bridge.id)" class="button full">{{ bridge.display }}</div>
+                    <div>
+                        <radio v-for="(bridge, index) in bridges" :key="`bridge:${index}`" id="current" name="current" :title="bridge.display" v-model="current" :value="bridge.id" />
                     </div>
                 </form>
             </div>
             <div class="actions modal">
                 <div v-on:click="$dialog.close('bridges')" class="button">{{ $t("cancel") }}</div>
-                <div v-if="options.type === 'install'" v-on:click="create()" class="button primary">{{ $t("plugin_install") }}</div>
+                <div v-if="options.type === 'install'" v-on:click="install()" class="button primary">{{ $t("plugin_install") }}</div>
+                <div v-if="options.type === 'uninstall'" v-on:click="uninstall()" class="button primary">{{ $t("plugin_uninstall") }}</div>
             </div>
         </div>
     </modal>
@@ -85,6 +86,7 @@
                 port: 50826,
                 remove: true,
                 advertiser: "bonjour",
+                current: null,
                 advertisers: [{
                     value: "bonjour",
                     text: this.$t("bridge_bonjour"),
@@ -96,6 +98,7 @@
         },
 
         async mounted() {
+            this.current = null;
             this.bridges = this.options.values;
 
             this.bridges.sort((a, b) => {
@@ -143,29 +146,29 @@
         },
 
         methods: {
-            async create() {
-                const validation = Validators.bridge(true, await this.$hoobs.bridges.list(), this.display, this.pin, this.port, this.username);
-
-                if (validation.valid) {
-                    this.options.select({
-                        id: Sanitize(this.display),
-                        display: this.display,
-                        port: this.port,
-                        pin: this.pin,
-                        username: this.username,
-                        advertiser: this.advertiser,
-                    });
+            async install() {
+                if (this.current) {
+                    this.options.select(this.current);
                 } else {
-                    this.$alert(this.$t(validation.error));
+                    const validation = Validators.bridge(true, await this.$hoobs.bridges.list(), this.display, this.pin, this.port, this.username);
+
+                    if (validation.valid) {
+                        this.options.select({
+                            id: Sanitize(this.display),
+                            display: this.display,
+                            port: this.port,
+                            pin: this.pin,
+                            username: this.username,
+                            advertiser: this.advertiser,
+                        });
+                    } else {
+                        this.$alert(this.$t(validation.error));
+                    }
                 }
             },
 
-            install(id) {
-                this.options.select(id);
-            },
-
-            uninstall(id) {
-                this.options.select(id, this.remove);
+            uninstall() {
+                this.options.select(this.current, this.remove);
             },
 
             validate(pin) {

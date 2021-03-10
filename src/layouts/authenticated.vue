@@ -100,6 +100,7 @@
         .disable {
             opacity: 0.5;
             pointer-events: none;
+            user-select: none;
         }
 
         .screen {
