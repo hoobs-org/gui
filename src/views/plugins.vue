@@ -33,6 +33,7 @@
                     <div v-else-if="!loading" class="empty">
                         <div class="message">
                             {{ $t("no_plugins_installed") }}
+                            <router-link to="/plugins">{{ $t("plugin_search") }}</router-link>
                         </div>
                     </div>
                     <div v-else class="loading">
