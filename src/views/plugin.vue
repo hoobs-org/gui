@@ -83,8 +83,8 @@
     import crypto from "crypto";
     import identicon from "identicon.js";
 
-    const SOCKET_RECONNECT_DELAY = 500;
-    const BRIDGE_CREATE_DELAY = 4000;
+    const SOCKET_RECONNECT_DELAY = 2 * 1000;
+    const BRIDGE_CREATE_DELAY = 8 * 1000;
 
     export default {
         name: "plugin",
