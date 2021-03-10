@@ -19,7 +19,7 @@
 <template>
     <modal :title="title" :draggable="true" width="670px" height="670px">
         <div id="bridges">
-            <div class="content">
+            <div v-if="!loading" class="content">
                 <form v-if="options.type === 'install'" class="form">
                     <div :class="!current ? 'row section' : 'row section disable'" style="margin: 0;">{{ $t("bridge_add") }}</div>
                     <p :class="!current ? '' : 'disable'">
@@ -55,10 +55,18 @@
                     </div>
                 </form>
             </div>
+            <div v-else class="status">
+                <div class="loading">
+                    <spinner :value="message" />
+                </div>
+                <div class="messages" style="height: 70%;">
+                    <message v-for="(message, index) in messages" :key="`message:${index}`" :value="message" />
+                </div>
+            </div>
             <div class="actions modal">
                 <div v-on:click="$dialog.close('bridges')" class="button">{{ $t("cancel") }}</div>
-                <div v-if="options.type === 'install'" v-on:click="install()" class="button primary">{{ $t("plugin_install") }}</div>
-                <div v-if="options.type === 'uninstall'" v-on:click="uninstall()" class="button primary">{{ $t("plugin_uninstall") }}</div>
+                <div v-if="!loading && options.type === 'install'" v-on:click="install()" class="button primary">{{ $t("plugin_install") }}</div>
+                <div v-if="!loading && options.type === 'uninstall'" v-on:click="uninstall()" class="button primary">{{ $t("plugin_uninstall") }}</div>
             </div>
         </div>
     </modal>
@@ -72,12 +80,17 @@
     export default {
         name: "bridges",
 
+        components: {
+            "message": () => import(/* webpackChunkName: "layout-message" */ "@/components/elements/message.vue"),
+        },
+
         props: {
             options: Object,
         },
 
         data() {
             return {
+                loading: true,
                 bridges: [],
                 title: "",
                 display: "",
@@ -87,6 +100,7 @@
                 remove: true,
                 advertiser: "bonjour",
                 current: null,
+                messages: [],
                 advertisers: [{
                     value: "bonjour",
                     text: this.$t("bridge_bonjour"),
@@ -98,6 +112,7 @@
         },
 
         async mounted() {
+            this.loading = true;
             this.current = null;
             this.bridges = this.options.values;
 
@@ -133,10 +148,12 @@
                         this.display = `${template} ${count}`;
                     }
 
+                    this.loading = false;
                     break;
 
                 case "uninstall":
                     this.title = `${this.$t("plugin_uninstall")} ${this.$hoobs.repository.title(this.options.plugin.name)}`;
+                    this.loading = false;
                     break;
 
                 default:
@@ -147,6 +164,15 @@
 
         methods: {
             async install() {
+                this.loading = true;
+
+                this.$store.subscribe(async (mutation) => {
+                    if (mutation.type === "IO:LOG") {
+                        this.messages.push(mutation.payload);
+                        this.messages = this.messages.slice(Math.max(this.messages.length - 23, 0));
+                    }
+                });
+
                 if (this.current) {
                     this.options.select(this.current);
                 } else {
@@ -168,6 +194,15 @@
             },
 
             uninstall() {
+                this.loading = true;
+
+                this.$store.subscribe(async (mutation) => {
+                    if (mutation.type === "IO:LOG") {
+                        this.messages.push(mutation.payload);
+                        this.messages = this.messages.slice(Math.max(this.messages.length - 23, 0));
+                    }
+                });
+
                 this.options.select(this.current, this.remove);
             },
 
@@ -201,6 +236,18 @@
             flex: 1;
             margin: 0 10px 10px 0;
             justify-content: space-around;
+        }
+
+        .status {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin: 0 14px 0 0;
+
+            .loading {
+                flex: 1;
+            }
         }
     }
 

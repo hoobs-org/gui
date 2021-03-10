@@ -245,16 +245,16 @@
                     plugin: this.plugin,
                     values: all ? [...this.available, ...this.installed] : this.available,
                     select: (data) => {
-                        this.$dialog.close("bridges");
-                        this.loading = true;
-
                         const waits = [];
+                        let success = false;
 
                         if (typeof data === "string") {
                             waits.push(new Promise((resolve) => {
                                 this.$hoobs.bridge(data).then((bridge) => {
                                     if (bridge) {
-                                        bridge.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
+                                        bridge.plugins.install(`${this.identifier}@${tag || "latest"}`).then((result) => {
+                                            success = result;
+
                                             resolve();
                                         });
                                     } else {
@@ -269,7 +269,9 @@
                                         Wait().then(() => {
                                             this.$hoobs.bridge(data.id).then((bridge) => {
                                                 if (bridge) {
-                                                    bridge.plugins.install(`${this.identifier}@${tag || "latest"}`).then(() => {
+                                                    bridge.plugins.install(`${this.identifier}@${tag || "latest"}`).then((result) => {
+                                                        success = result;
+
                                                         resolve();
                                                     });
                                                 } else {
@@ -285,7 +287,10 @@
                         Promise.all(waits).then(() => {
                             setTimeout(() => {
                                 Wait().then(() => {
-                                    this.$router.push(`/config/${this.identifier}`);
+                                    if (success) {
+                                        this.$dialog.close("bridges");
+                                        this.$router.push(`/config/${this.identifier}`);
+                                    }
                                 });
                             }, SOCKET_RECONNECT_DELAY);
                         });
@@ -299,17 +304,17 @@
                     plugin: this.plugin,
                     values: this.installed,
                     select: (id, remove) => {
-                        this.$dialog.close("bridges");
-                        this.loading = true;
-
                         this.$hoobs.bridge(id).then((bridge) => {
                             const waits = [];
+                            let success = false;
 
                             if (bridge) {
                                 waits.push(new Promise((resolve) => {
-                                    bridge.plugins.uninstall(this.identifier).then(() => {
+                                    bridge.plugins.uninstall(this.identifier).then((result) => {
+                                        success = result;
+
                                         setTimeout(() => {
-                                            if (remove) {
+                                            if (success && remove) {
                                                 bridge.plugins.list().then((plugins) => {
                                                     if (plugins.length === 0) {
                                                         bridge.remove().then(() => {
@@ -332,7 +337,10 @@
                             Promise.all(waits).then(() => {
                                 setTimeout(() => {
                                     Wait().then(() => {
-                                        this.load(this.identifier);
+                                        if (success) {
+                                            this.$dialog.close("bridges");
+                                            this.load(this.identifier);
+                                        }
                                     });
                                 }, SOCKET_RECONNECT_DELAY);
                             });

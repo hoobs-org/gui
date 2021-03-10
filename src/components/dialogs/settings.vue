@@ -421,6 +421,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            margin: 0 14px 0 0;
 
             .loading {
                 flex: 1;
