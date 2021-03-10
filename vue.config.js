@@ -13,14 +13,7 @@ module.exports = {
                 chunks: "all",
                 maxInitialRequests: Infinity,
                 minSize: 0,
-                cacheGroups: {
-                    vendor: {
-                        test: /[\\/]node_modules[\\/]/,
-                        name(module) {
-                            return `module.${(module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]).replace("@", "")}`;
-                        },
-                    },
-                },
+                maxSize: 2500,
             },
         },
     },
