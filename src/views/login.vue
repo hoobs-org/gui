@@ -22,7 +22,7 @@
             <div v-if="errors.length > 0" class="errors">
                 <span v-for="(error, index) in errors" :key="`error:${index}`">{{ error }}</span>
             </div>
-            <form class="modal" autocomplete="false" method="post" action="/login" v-on:submit.prevent="login()">
+            <form v-if="!loading" class="modal" autocomplete="false" method="post" action="/login" v-on:submit.prevent="login()">
                 <input type="submit" class="hidden-submit" value="submit" />
                 <div class="group">
                     <div class="upper">
@@ -38,13 +38,16 @@
                     <checkbox id="remember" :title="$t('remember_me')" v-model="remember" />
                 </div>
             </form>
+            <div v-else class="loading">
+                <spinner />
+            </div>
             <div class="actions modal">
                 <div class="copyright">
                     HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
                     <br />
                     Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
-                <div class="button primary" v-on:click="login()">{{ $t("login") }}</div>
+                <div v-if="!loading" class="button primary" v-on:click="login()">{{ $t("login") }}</div>
             </div>
         </modal>
     </div>
@@ -56,6 +59,7 @@
 
         data() {
             return {
+                loading: false,
                 version: 0,
                 url: "/",
                 username: "",
@@ -70,24 +74,39 @@
 
             if (this.url.startsWith("/login")) this.url = "/";
 
-            setTimeout(() => { this.$refs.username.focus(); }, 500);
+            setTimeout(() => {
+                if (this.$refs.username) this.$refs.username.focus();
+            }, 500);
         },
 
         methods: {
-            async login() {
+            login() {
                 this.errors = [];
 
                 if (this.username === "" || this.username.length < 3) this.errors.push(this.$t("invalid_username_password"));
 
                 if (this.errors.length === 0) {
-                    if (await this.$hoobs.auth.login(this.username.toLowerCase(), this.password, this.remember)) {
-                        this.$router.push({ path: this.url });
-                    } else {
-                        this.errors.push(this.$t("invalid_username_password"));
+                    this.loading = true;
+
+                    this.$hoobs.auth.login(this.username.toLowerCase(), this.password, this.remember).then((response) => {
+                        if (response) {
+                            this.$router.push({ path: this.url });
+                        } else {
+                            this.errors.push(this.$t("invalid_username_password"));
+
+                            this.username = "";
+                            this.password = "";
+
+                            this.loading = false;
+                        }
+                    }).catch((error) => {
+                        this.errors.push(error.message);
 
                         this.username = "";
                         this.password = "";
-                    }
+
+                        this.loading = false;
+                    });
                 }
             },
         },
@@ -108,6 +127,17 @@
         form {
             flex: 1;
             margin: 0 10px;
+            min-height: 153px;
+        }
+
+        .loading {
+            flex: 1;
+            margin: 0 10px;
+            min-height: 153px;
+        }
+
+        .actions {
+            min-height: 40px;
         }
 
         .group {

@@ -36,7 +36,7 @@
         <div class="loading">
             <spinner />
         </div>
-        <div class="messages" style="height: 433px;">
+        <div class="messages" style="height: 70%;">
             <message v-for="(message, index) in messages" :key="`message:${index}`" :value="message" />
         </div>
     </div>

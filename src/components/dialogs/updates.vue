@@ -55,8 +55,13 @@
                         <spinner />
                     </div>
                 </div>
-                <div v-else class="loading">
-                    <spinner />
+                <div v-else class="status">
+                    <div class="loading">
+                        <spinner />
+                    </div>
+                    <div class="messages" style="height: 50%;">
+                        <message v-for="(message, index) in messages" :key="`message:${index}`" :value="message" />
+                    </div>
                 </div>
             </div>
             <div class="actions modal">
@@ -72,15 +77,21 @@
     export default {
         name: "updates",
 
+        components: {
+            "message": () => import(/* webpackChunkName: "layout-message" */ "@/components/elements/message.vue"),
+        },
+
         data() {
             return {
                 loading: true,
+                logging: false,
                 status: {},
                 version: "",
                 plugins: [],
                 stack: false,
                 updated: false,
                 updating: false,
+                messages: [],
             };
         },
 
@@ -108,10 +119,46 @@
 
             async upgrade() {
                 this.updating = true;
+                this.logging = true;
 
-                const system = await this.$hoobs.system();
+                this.$store.subscribe(async (mutation) => {
+                    if (mutation.type === "IO:LOG" && this.logging) {
+                        this.messages.push(mutation.payload);
+                        this.messages = this.messages.slice(Math.max(this.messages.length - 12, 0));
 
-                await system.upgrade();
+                        if ((mutation.payload.message || "").toLowerCase().indexOf("service restart") >= 0) {
+                            this.logging = false;
+
+                            this.messages.push({
+                                level: "info",
+                                bridge: "hub",
+                                display: "hub",
+                                timestamp: new Date().getTime(),
+                                message: "restarting",
+                            }, {
+                                level: "info",
+                                bridge: "hub",
+                                display: "hub",
+                                timestamp: new Date().getTime(),
+                                message: ".",
+                            });
+
+                            this.messages = this.messages.slice(Math.max(this.messages.length - 12, 0));
+
+                            setInterval(() => {
+                                if (this.messages[this.messages.length - 1].message === ".................................") {
+                                    this.messages[this.messages.length - 1].message = ".";
+                                } else {
+                                    this.messages[this.messages.length - 1].message += ".";
+                                }
+                            }, 500);
+
+                            this.messages = this.messages.slice(Math.max(this.messages.length - 12, 0));
+                        }
+                    }
+                });
+
+                await (await this.$hoobs.system()).upgrade();
 
                 this.$action.emit("window", "reboot");
             },
@@ -168,6 +215,17 @@
             .text {
                 font-size: 22px;
                 margin: 0 0 0 14px;
+            }
+        }
+
+        .status {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+
+            .loading {
+                flex: 1;
             }
         }
     }

@@ -86,7 +86,7 @@
             },
 
             clear() {
-                this.$confirm(this.$t("purge"), this.$t("purge_warning"), async () => {
+                this.$confirm(this.$t("purge"), this.$t("purge_bridge_warning"), async () => {
                     this.loading = true;
 
                     await this.bridge.purge();

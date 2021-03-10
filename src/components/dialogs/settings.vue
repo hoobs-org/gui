@@ -77,8 +77,13 @@
                     </div>
                 </div>
             </div>
-            <div v-else class="loading">
-                <spinner :value="message" />
+            <div v-else class="status">
+                <div class="loading">
+                    <spinner :value="message" />
+                </div>
+                <div class="messages" style="height: 70%;">
+                    <message v-for="(message, index) in messages" :key="`message:${index}`" :value="message" />
+                </div>
             </div>
             <div v-if="!loading && (show.restore || show.location)" class="actions modal">
                 <div v-if="show.cancel" class="button" v-on:click="back()">{{ $t("cancel") }}</div>
@@ -103,6 +108,7 @@
         components: {
             "restore": () => import(/* webpackChunkName: "dialog-restore" */ "@/components/dialogs/restore.vue"),
             "location": () => import(/* webpackChunkName: "dialog-location" */ "@/components/dialogs/location.vue"),
+            "message": () => import(/* webpackChunkName: "layout-message" */ "@/components/elements/message.vue"),
         },
 
         computed: {
@@ -138,12 +144,14 @@
                     cancel: true,
                 },
                 mdns: false,
+                logger: null,
                 product: "",
                 broadcast: "",
                 location: {},
                 units: "celsius",
                 interval: 5,
                 country: Countries,
+                messages: [],
                 message: "",
             };
         },
@@ -178,10 +186,33 @@
             async backup() {
                 this.loading = true;
 
+                this.messages.push({
+                    level: "info",
+                    bridge: "hub",
+                    display: "hub",
+                    timestamp: new Date().getTime(),
+                    message: "generating backup",
+                }, {
+                    level: "info",
+                    bridge: "hub",
+                    display: "hub",
+                    timestamp: new Date().getTime(),
+                    message: ".",
+                });
+
+                setInterval(() => {
+                    if (this.messages[this.messages.length - 1].message === ".................................") {
+                        this.messages[this.messages.length - 1].message = ".";
+                    } else {
+                        this.messages[this.messages.length - 1].message += ".";
+                    }
+                }, 500);
+
                 const url = await this.$hoobs.backup.execute();
                 const link = document.createElement("a");
 
                 this.loading = false;
+                this.messages = [];
 
                 link.href = url;
                 link.id = `backup_${(new Date()).getTime()}`;
@@ -197,21 +228,51 @@
 
             reboot() {
                 this.$confirm(this.$t("reboot"), this.$t("reboot_warning"), async () => {
-                    const system = await this.$hoobs.system();
-
                     this.loading = true;
 
-                    await system.reboot();
+                    this.messages.push({
+                        level: "warn",
+                        bridge: "hub",
+                        display: "hub",
+                        timestamp: new Date().getTime(),
+                        message: "device reboot command received",
+                    }, {
+                        level: "info",
+                        bridge: "hub",
+                        display: "hub",
+                        timestamp: new Date().getTime(),
+                        message: "rebooting",
+                    }, {
+                        level: "info",
+                        bridge: "hub",
+                        display: "hub",
+                        timestamp: new Date().getTime(),
+                        message: ".",
+                    });
 
-                    this.$action.emit("window", "reboot");
+                    setInterval(() => {
+                        if (this.messages[this.messages.length - 1].message === ".................................") {
+                            this.messages[this.messages.length - 1].message = ".";
+                        } else {
+                            this.messages[this.messages.length - 1].message += ".";
+                        }
+                    }, 500);
+
+                    this.messages = this.messages.slice(Math.max(this.messages.length - 100, 0));
+
+                    await (await this.$hoobs.system()).reboot();
+
+                    this.$action.emit("window", "reboot", 5 * 1000);
                 });
             },
 
             purge() {
-                this.$confirm(this.$t("purge"), this.$t("purge_warning"), async () => {
-                    const bridges = await this.$hoobs.bridges.list();
+                this.$confirm(this.$t("purge"), this.$t("purge_hub_warning"), async () => {
+                    this.loading = true;
 
-                    for (let i = 0; i < bridges.length; i += 1) this.clear(bridges[i].id);
+                    await (await this.$hoobs.system()).purge();
+
+                    this.loading = false;
                 });
             },
 
@@ -223,13 +284,41 @@
 
             reset() {
                 this.$confirm(this.$t("reset"), this.$t("reset_warning"), async () => {
-                    const system = await this.$hoobs.system();
-
                     this.loading = true;
 
-                    await system.reset();
+                    this.messages.push({
+                        level: "warn",
+                        bridge: "hub",
+                        display: "hub",
+                        timestamp: new Date().getTime(),
+                        message: "service restart command received",
+                    }, {
+                        level: "info",
+                        bridge: "hub",
+                        display: "hub",
+                        timestamp: new Date().getTime(),
+                        message: "restarting",
+                    }, {
+                        level: "info",
+                        bridge: "hub",
+                        display: "hub",
+                        timestamp: new Date().getTime(),
+                        message: ".",
+                    });
 
-                    this.$action.emit("window", "reboot");
+                    setInterval(() => {
+                        if (this.messages[this.messages.length - 1].message === ".................................") {
+                            this.messages[this.messages.length - 1].message = ".";
+                        } else {
+                            this.messages[this.messages.length - 1].message += ".";
+                        }
+                    }, 500);
+
+                    this.messages = this.messages.slice(Math.max(this.messages.length - 100, 0));
+
+                    await (await this.$hoobs.system()).reset();
+
+                    this.$action.emit("window", "reboot", 5 * 1000);
                 });
             },
 
