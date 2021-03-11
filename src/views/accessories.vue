@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div v-else-if="!intermediate" :class="!id ? 'screen desktop' : 'screen'">
-                <div class="nav mobile">
+                <div class="nav portrait">
                     <router-link to="/accessories" class="back"><icon name="chevron-left" class="icon" /> {{ $t("back") }}</router-link>
                 </div>
                 <div class="section">
@@ -87,7 +87,7 @@
                     </div>
                 </div>
             </div>
-            <div v-else class="loading">
+            <div v-else-if="!$mobile || id" class="loading">
                 <spinner />
             </div>
         </div>
@@ -453,7 +453,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #accessories {
             .content {
                 .screen {
@@ -484,15 +484,32 @@
         }
     }
 
-    @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
-        #accessories {
-            .content {
-                .screen {
-                    .devices {
-                        .device {
-                            width: 155px;
-                            margin: 0 0 20px 20px;
-                            padding: 10px 10px 10px 10px;
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #accessories {
+                .content {
+                    .screen {
+                        max-width: unset;
+                        background: transparent;
+                        backdrop-filter: unset;
+                        padding: 0 20px 10px 20px;
+                        margin: 0;
+
+                        .wrapper {
+                            padding: 20px 0 0 0;
+                        }
+
+                        .devices {
+                            .device {
+                                width: 25%;
+                                margin: 0;
+                                padding: 14px;
+                                box-sizing: border-box;
+                            }
+                        }
+
+                        .actions {
+                            flex-direction: row;
                         }
                     }
                 }

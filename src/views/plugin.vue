@@ -22,7 +22,7 @@
         <div class="content">
             <list class="desktop" value="id" display="display" :values="sections" :selected="from" initial="library" controller="plugins" :query="query" />
             <div v-if="!loading" class="screen">
-                <div class="nav mobile">
+                <div class="nav portrait">
                     <router-link :to="navigate('plugins', from, query)" class="back"><icon name="chevron-left" class="icon" />{{ $t("back") }}</router-link>
                 </div>
                 <div class="header">
@@ -642,7 +642,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #plugin {
             .content {
                 .screen {
@@ -677,6 +677,50 @@
                         .details {
                             width: unset;
                             overflow: visible;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #plugin {
+                .content {
+                    .screen {
+                        max-width: unset;
+                        background: transparent;
+                        backdrop-filter: unset;
+                        padding: 0 20px 10px 20px;
+                        margin: 0;
+
+                        .header {
+                            .actions {
+                                flex-wrap: wrap;
+                            }
+                        }
+
+                        .tabs {
+                            margin: 20px 0 0 0;
+                        }
+
+                        .layout {
+                            flex-direction: column;
+                            overflow: auto;
+
+                            .section {
+                                flex: unset;
+                                padding: 0;
+                                max-width: unset;
+                                overflow: visible;
+                                overflow-wrap: break-word;
+                            }
+
+                            .details {
+                                width: unset;
+                                overflow: visible;
+                            }
                         }
                     }
                 }

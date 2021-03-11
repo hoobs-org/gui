@@ -182,7 +182,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #navigation {
             display: flex;
             flex-direction: column;
@@ -195,6 +195,26 @@
 
                 .icon {
                     height: 32px;
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #navigation {
+                display: flex;
+                flex-direction: column;
+                padding: 14px 20px 0 20px;
+                order: 1;
+
+                .links {
+                    flex-direction: row;
+                    justify-content: space-between;
+
+                    .icon {
+                        height: 32px;
+                    }
                 }
             }
         }

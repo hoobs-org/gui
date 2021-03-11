@@ -198,12 +198,24 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #authenticated {
             flex-direction: column;
 
             .form {
                 padding: 0;
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #authenticated {
+                flex-direction: column;
+
+                .form {
+                    padding: 0;
+                }
             }
         }
     }

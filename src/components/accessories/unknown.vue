@@ -250,7 +250,23 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
+        #control {
+            .settings {
+                display: flex;
+            }
+
+            .sensor {
+                .main {
+                    .icon {
+                        height: 37px;
+                    }
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
         #control {
             .settings {
                 display: flex;

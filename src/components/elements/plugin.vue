@@ -136,7 +136,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #plugin {
             width: 47%;
             height: 245px;
@@ -161,6 +161,38 @@
 
                 .description {
                     font-size: 12px;
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #plugin {
+                width: 47%;
+                height: 245px;
+                margin: 0 0 10px 10px;
+
+                .identity {
+                    width: 100%;
+                    height: 160px;
+
+                    img {
+                        width: 128px;
+                        height: 128px;
+                    }
+                }
+
+                .details {
+                    padding: 0 17px 17px 17px;
+
+                    .title {
+                        font-size: 16px;
+                    }
+
+                    .description {
+                        font-size: 12px;
+                    }
                 }
             }
         }

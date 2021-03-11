@@ -98,7 +98,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #menu {
             width: 100%;
             height: 100%;
@@ -116,6 +116,31 @@
 
                 &:first-child {
                     border-top: 0 none;
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #menu {
+                width: 100%;
+                height: 100%;
+                box-sizing: border-box;
+                min-width: unset;
+                background: var(--application-background);
+                color: var(--modal-text);
+                padding: 20px 0;
+                top: 0;
+                right: unset;
+                left: 0;
+
+                .item {
+                    color: var(--modal-text) !important;
+
+                    &:first-child {
+                        border-top: 0 none;
+                    }
                 }
             }
         }

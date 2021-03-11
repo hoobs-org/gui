@@ -668,7 +668,37 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
+        #control {
+            .settings {
+                display: flex;
+            }
+
+            .switch {
+                .inner {
+                    .temp {
+                        font-size: 200%;
+                    }
+                }
+
+                .humidity {
+                    .sub {
+                        font-size: 80%;
+                    }
+                }
+            }
+
+            .context {
+                .inner {
+                    .off {
+                        font-size: 120%;
+                    }
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
         #control {
             .settings {
                 display: flex;

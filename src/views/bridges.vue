@@ -447,7 +447,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #bridges {
             .content {
                 .screen {
@@ -459,6 +459,26 @@
 
                     .actions {
                         flex-direction: row;
+                    }
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #bridges {
+                .content {
+                    .screen {
+                        max-width: unset;
+                        background: transparent;
+                        backdrop-filter: unset;
+                        padding: 20px 20px 10px 20px;
+                        margin: 0;
+
+                        .actions {
+                            flex-direction: row;
+                        }
                     }
                 }
             }

@@ -167,7 +167,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #widget {
             .forecast {
                 .weather {
@@ -189,6 +189,36 @@
 
                     .min {
                         margin: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #widget {
+                .forecast {
+                    .weather {
+                        height: 115px;
+                    }
+
+                    .display {
+                        font-size: 22px;
+                        line-height: 45px;
+                    }
+
+                    .temp {
+                        display: flex;
+                        flex-direction: column;
+
+                        .max {
+                            margin: 0 0 4px 0;
+                        }
+
+                        .min {
+                            margin: 0;
+                        }
                     }
                 }
             }

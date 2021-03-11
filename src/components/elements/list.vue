@@ -141,7 +141,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #list {
             flex: 1;
             min-width: unset;
@@ -160,6 +160,37 @@
 
                     &:hover {
                         color: var(--application-highlight-text) !important;
+                    }
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        #list {
+            min-width: 150px;
+        }
+
+        @media only screen and (orientation:portrait) {
+            #list {
+                flex: 1;
+                min-width: unset;
+                background: unset;
+                backdrop-filter: unset;
+
+                &.open {
+                    display: none;
+                }
+
+                .item {
+                    padding: 20px 0;
+
+                    &.open {
+                        color: var(--application-text) !important;
+
+                        &:hover {
+                            color: var(--application-highlight-text) !important;
+                        }
                     }
                 }
             }

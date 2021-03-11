@@ -251,7 +251,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #bridges {
             .grid {
                 display: flex;
@@ -261,6 +261,22 @@
 
             .full {
                 margin: 0 0 10px 0;
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #bridges {
+                .grid {
+                    display: flex;
+                    flex-direction: column;
+                    grid-template-columns: unset;
+                }
+
+                .full {
+                    margin: 0 0 10px 0;
+                }
             }
         }
     }

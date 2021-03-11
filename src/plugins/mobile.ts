@@ -43,11 +43,13 @@ const secondary = new RegExp([
     "60|61|70|80|81|83|85|98)|w3c(-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-",
 ].join(""), "i");
 
+const tablet = new RegExp("(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))", "i");
+
 export default {
     install(vue: VueConstructor<Vue>): void {
         vue.mixin({
             computed: {
-                $mobile() {
+                $mobile(): boolean {
                     let check = false;
 
                     ((agent) => {
@@ -55,6 +57,20 @@ export default {
                     })(navigator.userAgent || navigator.vendor);
 
                     return check;
+                },
+
+                $platform(): string {
+                    let value = "desktop";
+
+                    ((agent) => {
+                        if (primaty.test(agent) || secondary.test(agent.substr(0, 4))) {
+                            value = "mobile";
+
+                            if (tablet.test(agent)) value = "tablet";
+                        }
+                    })(navigator.userAgent || navigator.vendor);
+
+                    return value;
                 },
             },
         });

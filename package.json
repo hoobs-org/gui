@@ -1,6 +1,6 @@
 {
     "name": "@hoobs/gui",
-    "version": "4.0.19",
+    "version": "4.0.20",
     "description": "Interface component for the certified HOOBS stack.",
     "license": "GPL-3.0",
     "keywords": [

@@ -640,7 +640,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #config {
             .content {
                 .screen {
@@ -656,6 +656,30 @@
 
                     .actions {
                         flex-direction: row;
+                    }
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #config {
+                .content {
+                    .screen {
+                        max-width: unset;
+                        background: transparent;
+                        backdrop-filter: unset;
+                        padding: 0 20px 10px 20px;
+                        margin: 0;
+
+                        .row {
+                            flex-direction: column;
+                        }
+
+                        .actions {
+                            flex-direction: row;
+                        }
                     }
                 }
             }

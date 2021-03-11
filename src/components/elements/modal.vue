@@ -173,7 +173,38 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
+        #dialog {
+            background: var(--modal-form);
+            padding: 0;
+
+            .window {
+                flex: 1;
+                width: 100% !important;
+                height: 100% !important;
+                background: var(--application-background);
+                box-sizing: border-box;
+                min-height: unset;
+                max-height: unset;
+                box-shadow: unset;
+            }
+
+            .content {
+                .form {
+                    background: unset;
+                    padding: 0;
+                }
+            }
+
+            .actions {
+                .copyright {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
         #dialog {
             background: var(--modal-form);
             padding: 0;

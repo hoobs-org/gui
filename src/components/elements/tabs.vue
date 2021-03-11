@@ -95,9 +95,17 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #tabs {
             margin: 20px 0 0 0;
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #tabs {
+                margin: 20px 0 0 0;
+            }
         }
     }
 </style>

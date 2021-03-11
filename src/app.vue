@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="app" :theme="theme">
+    <div id="app" :platform="$platform" :theme="theme">
         <component :is="$route.meta.layout">
             <router-view class="view" />
         </component>
@@ -341,13 +341,49 @@
         }
 
         .mobile {
+            display: none;
+        }
+
+        .portrait {
+            display: none;
+        }
+    }
+
+    [platform="desktop"] {
+        .mobile {
+            display: none !important;
+        }
+
+        .portrait {
             display: none !important;
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
-        #app {
+    [platform="mobile"] {
+        .mobile {
+            display: block !important;
+        }
+
+        .portrait {
+            display: block !important;
+        }
+
+        .desktop {
+            display: none !important;
+        }
+    }
+
+    [platform="tablet"] {
+        .portrait {
+            display: none !important;
+        }
+
+        @media only screen and (orientation:portrait) {
             .mobile {
+                display: block !important;
+            }
+
+            .portrait {
                 display: block !important;
             }
 

@@ -513,7 +513,43 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
+        #control {
+            .settings {
+                display: flex;
+            }
+
+            .sensor {
+                .main {
+                    .icon {
+                        height: 37px;
+                    }
+
+                    .status {
+                        font-size: 17px;
+                    }
+
+                    &.value {
+                        .icon {
+                            height: 27px;
+                        }
+
+                        .status {
+                            font-size: 27px;
+                        }
+                    }
+                }
+
+                .extra {
+                    .icon {
+                        height: 18px;
+                    }
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
         #control {
             .settings {
                 display: flex;

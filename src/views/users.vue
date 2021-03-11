@@ -326,7 +326,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #users {
             .content {
                 .screen {
@@ -355,6 +355,44 @@
 
                         &:first-child {
                             padding-right: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #users {
+                .content {
+                    .screen {
+                        max-width: unset;
+                        background: transparent;
+                        backdrop-filter: unset;
+                        padding: 20px 20px 10px 20px;
+                        margin: 0;
+
+                        .row {
+                            flex-direction: column;
+                        }
+
+                        .grid {
+                            display: flex;
+                            flex-direction: column;
+                        }
+
+                        .actions {
+                            flex-direction: row;
+                        }
+
+                        .field {
+                            padding-right: 0;
+                            padding-left: 0;
+
+                            &:first-child {
+                                padding-right: 0;
+                            }
                         }
                     }
                 }

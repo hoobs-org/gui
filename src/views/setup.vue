@@ -152,7 +152,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #setup {
             padding: 0;
             background: unset;
@@ -165,6 +165,25 @@
             form {
                 border: unset;
                 padding: unset;
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #setup {
+                padding: 0;
+                background: unset;
+                align-items: unset;
+
+                .errors {
+                    border-bottom: 0 none;
+                }
+
+                form {
+                    border: unset;
+                    padding: unset;
+                }
             }
         }
     }

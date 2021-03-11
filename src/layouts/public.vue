@@ -42,9 +42,17 @@
         overflow: hidden;
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #public {
             background-image: unset;
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #public {
+                background-image: unset;
+            }
         }
     }
 </style>

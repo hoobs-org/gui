@@ -105,7 +105,7 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #notifications {
             width: 100%;
             background: var(--modal-form);
@@ -119,6 +119,27 @@
 
                 .icon {
                     color: var(--modal-text);
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #notifications {
+                width: 100%;
+                background: var(--modal-form);
+                background: var(--application-background);
+                box-shadow: unset;
+                backdrop-filter: unset;
+
+                .title {
+                    color: var(--modal-highlight);
+                    border-bottom: var(--modal-border) 1px solid;
+
+                    .icon {
+                        color: var(--modal-text);
+                    }
                 }
             }
         }

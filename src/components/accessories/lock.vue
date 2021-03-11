@@ -338,7 +338,15 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
+        #control {
+            .settings {
+                display: flex;
+            }
+        }
+    }
+
+    [platform="tablet"] {
         #control {
             .settings {
                 display: flex;

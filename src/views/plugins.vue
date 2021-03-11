@@ -22,7 +22,7 @@
         <div class="content">
             <list value="id" display="display" :values="bridges" :selected="id" initial="library" controller="plugins" />
             <div v-if="id && id !== 'library'" class="screen">
-                <div class="nav mobile">
+                <div class="nav portrait">
                     <router-link to="/plugins" class="back"><icon name="chevron-left" class="icon" /> {{ $t("back") }}</router-link>
                 </div>
                 <div class="section first">{{ $t("installed_plugins") }}</div>
@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div v-else :class="!id ? 'screen desktop' : 'screen'">
-                <div class="nav segmented mobile">
+                <div class="nav segmented portrait">
                     <router-link to="/plugins" class="back"><icon name="chevron-left" class="icon" /> {{ $t("back") }}</router-link>
                 </div>
                 <form class="input" autocomplete="false" method="post" action="/login" v-on:submit.prevent="search()">
@@ -415,12 +415,25 @@
         }
     }
 
-    @media (min-width: 300px) and (max-width: 815px) {
+    [platform="mobile"] {
         #plugins {
             .content {
                 .screen {
                     padding: 0 20px 10px 15px;
                     margin: 0;
+                }
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #plugins {
+                .content {
+                    .screen {
+                        padding: 0 20px 10px 15px;
+                        margin: 0;
+                    }
                 }
             }
         }
