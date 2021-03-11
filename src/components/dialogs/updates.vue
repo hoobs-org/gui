@@ -120,6 +120,7 @@
             async upgrade() {
                 this.updating = true;
                 this.logging = true;
+                this.messages = [];
 
                 this.$store.subscribe(async (mutation) => {
                     if (mutation.type === "IO:LOG" && this.logging) {
@@ -165,6 +166,15 @@
 
             update() {
                 this.updating = true;
+                this.logging = true;
+                this.messages = [];
+
+                this.$store.subscribe(async (mutation) => {
+                    if (mutation.type === "IO:LOG" && this.logging) {
+                        this.messages.push(mutation.payload);
+                        this.messages = this.messages.slice(Math.max(this.messages.length - 12, 0));
+                    }
+                });
 
                 const waits = [];
 
@@ -181,6 +191,7 @@
                 }
 
                 Promise.all(waits).then(() => {
+                    this.logging = false;
                     this.load();
                 });
             },
