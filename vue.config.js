@@ -13,7 +13,7 @@ module.exports = {
                 chunks: "all",
                 maxInitialRequests: Infinity,
                 minSize: 0,
-                maxSize: 20000,
+                maxSize: 10000,
             },
         },
     },
