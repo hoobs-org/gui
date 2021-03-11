@@ -28,7 +28,7 @@
                         <text-field :description="$t('hostname_description')" v-model="hostname" />
                     </div>
                     <div v-if="(product === 'box' || product === 'card') && mdns" class="row title label">{{ $t("access_url") }}</div>
-                    <div v-if="(product === 'box' || product === 'card') && mdns" class="row title url">{{ `http://${broadcast}.local` }}</div>
+                    <div v-if="(product === 'box' || product === 'card') && mdns" class="row title url">{{ `http://${broadcast}` }}</div>
                     <div v-if="user.permissions.reboot" class="row section" style="margin-bottom: 7px;">{{ $t("backup_restore") }}</div>
                     <div v-if="user.permissions.reboot" class="row">
                         <div v-on:click="backup()" class="button">{{ $t("backup") }}</div>
@@ -352,7 +352,7 @@
                 await Wait();
 
                 if (redirect) {
-                    setTimeout(() => { window.location.href = `http://${this.broadcast}.local`; }, REDIRECT_DELAY);
+                    setTimeout(() => { window.location.href = `http://${this.broadcast}`; }, REDIRECT_DELAY);
                 } else {
                     this.$dialog.close("settings");
                     this.$action.emit("settings", "update");
