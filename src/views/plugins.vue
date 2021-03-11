@@ -132,7 +132,7 @@
         },
 
         async mounted() {
-            this.bridges = await this.$hoobs.bridges.list();
+            this.bridges = (await this.$hoobs.bridges.list()).filter((item) => item.type === "bridge");
 
             this.bridges.sort((a, b) => {
                 if (a.display < b.display) return -1;
