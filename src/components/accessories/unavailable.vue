@@ -19,11 +19,7 @@
 <template>
     <div id="control">
         <div class="item">
-            <div class="background">
-                <div class="panel">
-                    <div class="main"></div>
-                </div>
-            </div>
+            <div class="background"></div>
             <div v-if="!disabled" v-on:click="remove" class="remove">
                 <icon name="delete" class="icon" :title="$t('remove_from_dashboard')" />
             </div>
@@ -78,11 +74,12 @@
 
         .name {
             text-align: center;
-            padding: 14px 7px 7px 7px;
+            padding: 7px;
+            opacity: 0.40;
         }
 
         .remove {
-            display: flex;
+            display: none;
             position: absolute;
             justify-content: space-around;
             align-items: center;
@@ -103,32 +100,18 @@
             }
         }
 
+        &:hover {
+            .remove {
+                display: flex;
+            }
+        }
+
         .background {
             width: 100%;
             height: 100%;
             position: absolute;
-            display: flex;
-            align-items: center;
             top: 0;
             left: 0;
-        }
-
-        .panel {
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-            padding: 11px 11px 10px 10px;
-            display: flex;
-            flex-direction: column;
-            border-radius: 7px;
-            background: var(--accessory-background);
-            border: 1px var(--accessory-border) solid;
-
-            .main {
-                flex: 1;
-                margin: 0 auto;
-                cursor: default;
-            }
         }
     }
 </style>
