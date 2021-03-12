@@ -180,7 +180,7 @@
                 this.downloads = {};
                 this.releases = {};
 
-                this.bridges = await this.$hoobs.bridges.list();
+                this.bridges = (await this.$hoobs.bridges.list());
 
                 this.bridges.sort((a, b) => {
                     if (a.display < b.display) return -1;
@@ -203,28 +203,30 @@
                         const waits = [];
 
                         for (let i = 0; i < this.bridges.length; i += 1) {
-                            waits.push(new Promise((resolve) => {
-                                this.$hoobs.bridge(this.bridges[i].id).then((bridge) => {
-                                    if (bridge) {
-                                        bridge.plugins.list().then((results) => {
-                                            const plugin = results.find((item) => item.identifier === identifier);
+                            if (this.bridges[i].type === "bridge") {
+                                waits.push(new Promise((resolve) => {
+                                    this.$hoobs.bridge(this.bridges[i].id).then((bridge) => {
+                                        if (bridge) {
+                                            bridge.plugins.list().then((results) => {
+                                                const plugin = results.find((item) => item.identifier === identifier);
 
-                                            if (plugin) {
-                                                this.installed.push({
-                                                    id: this.bridges[i].id,
-                                                    display: this.bridges[i].display,
-                                                    version: plugin.version,
-                                                    updated: Semver.compare(plugin.version, plugin.latest, ">="),
-                                                });
-                                            }
+                                                if (plugin) {
+                                                    this.installed.push({
+                                                        id: this.bridges[i].id,
+                                                        display: this.bridges[i].display,
+                                                        version: plugin.version,
+                                                        updated: Semver.compare(plugin.version, plugin.latest, ">="),
+                                                    });
+                                                }
 
+                                                resolve();
+                                            });
+                                        } else {
                                             resolve();
-                                        });
-                                    } else {
-                                        resolve();
-                                    }
-                                });
-                            }));
+                                        }
+                                    });
+                                }));
+                            }
                         }
 
                         Promise.all(waits).then(() => {
@@ -415,7 +417,7 @@
             },
 
             intersect() {
-                const bridges = this.bridges.map((item) => item.id);
+                const bridges = this.bridges.filter((item) => item.type === "bridge").map((item) => item.id);
                 const installed = this.installed.map((item) => item.id);
                 const available = bridges.filter((item) => item !== "library" && installed.indexOf(item) === -1);
 

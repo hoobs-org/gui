@@ -26,7 +26,7 @@
     "scripts": {
         "build": "bin/build --lint",
         "lint": "vue-cli-service lint",
-        "serve": "vue-cli-service serve --mode development --port 49826"
+        "serve": "vue-cli-service serve --modern --mode development --port 49826"
     },
     "dependencies": {
         "@chenfengyuan/vue-qrcode": "^1.0.2",

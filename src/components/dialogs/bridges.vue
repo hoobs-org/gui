@@ -57,7 +57,7 @@
             </div>
             <div v-else class="status">
                 <div class="loading">
-                    <spinner :value="message" />
+                    <spinner />
                 </div>
                 <div class="messages" style="height: 70%;">
                     <message v-for="(message, index) in messages" :key="`message:${index}`" :value="message" />
@@ -194,16 +194,18 @@
             },
 
             uninstall() {
-                this.loading = true;
+                if (this.current) {
+                    this.loading = true;
 
-                this.$store.subscribe(async (mutation) => {
-                    if (mutation.type === "IO:LOG") {
-                        this.messages.push(mutation.payload);
-                        this.messages = this.messages.slice(Math.max(this.messages.length - 23, 0));
-                    }
-                });
+                    this.$store.subscribe(async (mutation) => {
+                        if (mutation.type === "IO:LOG") {
+                            this.messages.push(mutation.payload);
+                            this.messages = this.messages.slice(Math.max(this.messages.length - 23, 0));
+                        }
+                    });
 
-                this.options.select(this.current, this.remove);
+                    this.options.select(this.current, this.remove);
+                }
             },
 
             validate(pin) {
