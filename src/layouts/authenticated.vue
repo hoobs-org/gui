@@ -33,7 +33,7 @@
 <script>
     import { Wait } from "@hoobs/sdk/lib/wait";
 
-    const SOCKET_RECONNECT_DELAY = 500;
+    const SOCKET_RECONNECT_DELAY = 10 * 1000;
 
     export default {
         name: "authenticated",
@@ -50,6 +50,7 @@
 
         data() {
             return {
+                reload: false,
                 loading: true,
                 dialogs: 0,
             };
@@ -62,12 +63,20 @@
                 setTimeout(async () => {
                     await Wait();
 
-                    this.loading = false;
+                    if (this.reload) {
+                        window.location.reload();
+                    } else {
+                        this.loading = false;
+                    }
                 }, SOCKET_RECONNECT_DELAY);
             });
 
             this.$action.on("io", "disconnected", () => {
                 this.loading = true;
+            });
+
+            this.$action.on("io", "reload", () => {
+                this.reload = true;
             });
 
             this.$dialog.on("open", () => {

@@ -262,7 +262,13 @@
 
                     await (await this.$hoobs.system()).reboot();
 
-                    this.$action.emit("window", "reboot", 5 * 1000);
+                    this.$action.on("io", "disconnected", () => {
+                        this.$action.emit("io", "reload");
+
+                        setTimeout(() => {
+                            this.$dialog.close("settings");
+                        }, REDIRECT_DELAY);
+                    });
                 });
             },
 
@@ -318,7 +324,13 @@
 
                     await (await this.$hoobs.system()).reset();
 
-                    this.$action.emit("window", "reboot", 5 * 1000);
+                    this.$action.on("io", "disconnected", () => {
+                        this.$action.emit("io", "reload");
+
+                        setTimeout(() => {
+                            this.$dialog.close("settings");
+                        }, REDIRECT_DELAY);
+                    });
                 });
             },
 

@@ -43,6 +43,8 @@
 </template>
 
 <script>
+    const REDIRECT_DELAY = 1000;
+
     export default {
         name: "restore",
 
@@ -120,7 +122,13 @@
 
                     await this.$hoobs.restore.file(this.filename);
 
-                    this.$action.emit("window", "reboot", 5 * 1000);
+                    this.$action.on("io", "disconnected", () => {
+                        this.$action.emit("io", "reload");
+
+                        setTimeout(() => {
+                            this.$dialog.close("settings");
+                        }, REDIRECT_DELAY);
+                    });
                 }
             },
 
@@ -169,7 +177,13 @@
 
                     await this.$hoobs.restore.upload(this.$refs.backup.files[0]);
 
-                    this.$action.emit("window", "reboot", 5 * 1000);
+                    this.$action.on("io", "disconnected", () => {
+                        this.$action.emit("io", "reload");
+
+                        setTimeout(() => {
+                            this.$dialog.close("settings");
+                        }, REDIRECT_DELAY);
+                    });
                 }
             },
         },

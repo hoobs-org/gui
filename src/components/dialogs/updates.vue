@@ -74,6 +74,8 @@
 <script>
     import Semver from "compare-versions";
 
+    const REDIRECT_DELAY = 1000;
+
     export default {
         name: "updates",
 
@@ -161,7 +163,13 @@
 
                 await (await this.$hoobs.system()).upgrade();
 
-                this.$action.emit("window", "reboot", 30 * 1000);
+                this.$action.on("io", "disconnected", () => {
+                    this.$action.emit("io", "reload");
+
+                    setTimeout(() => {
+                        this.$dialog.close("updates");
+                    }, REDIRECT_DELAY);
+                });
             },
 
             update() {
