@@ -3,39 +3,32 @@
 This is the official HOOBS User Interface.
 
 ## Installing
-The HOOBS GUI is part of a software stack. To install and use this you will need to install hoobsd and the CLI first.
+The HOOBS GUI is part of a software stack. To use this you will need to install hoobsd.
 
-Install hoobsd. HOOBS recommends Yarn.
-
-```sh
-yarn global add --unsafe-perm @hoobs/hoobsd
-```
-
-Or using NPM.
+First add the HOOBS repository to your sources.
 
 ```sh
-npm install -g --unsafe-perm @hoobs/hoobsd
+wget -qO- https://support.hoobs.org/setup | sudo -E bash -
 ```
 
-To manage the HOOBS daemon, you will need to install the CLI.
+Then install hoobsd and the HOOBS GUI.
 
 ```sh
-yarn global add --unsafe-perm @hoobs/cli
+sudo apt install -y hoobsd hoobs-gui
 ```
 
-Or using NPM.
-
-```sh
-npm install -g --unsafe-perm @hoobs/cli
-```
-
-> The `--unsafe-perm` flag needs to be used so the install can add a symlink in `/usr/bin`.
-
-## Enabling the GUI
-To enable this GUI, you need to use the `extention` command in the CLI.
+If you have the HOOOBS CLI installed, you can simply run this command.
 
 ```
 sudo hoobs extention add gui
 ```
 
-This command will install and configure this GUI.
+## Service
+The GUI will not be available right away, you will need to restart the hoobsd service.
+
+```
+sudo hoobsd service restart
+```
+
+## Legal
+HOOBS and the HOOBS logo are registered trademarks of HOOBS Inc. Copyright (C) 2020 HOOBS Inc. All rights reserved.
