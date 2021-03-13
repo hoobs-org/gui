@@ -18,10 +18,10 @@
 
 <template>
     <div id="context">
-        <div class="page">
+        <div :class="override ? `page ${override}` : 'page'">
             <slot />
         </div>
-        <div class="system">
+        <div :class="override ? `system ${override}` : 'system'">
             <icon v-on:click.stop="$menu.open('notifications')" name="bell-outline" class="icon">
                 <div v-if="notifications.length > 0" class="active">&bull;</div>
             </icon>
@@ -34,6 +34,10 @@
     export default {
         name: "context",
 
+        props: {
+            override: String,
+        },
+
         computed: {
             notifications() {
                 return this.$store.state.notifications;
@@ -45,7 +49,6 @@
 <style lang="scss" scoped>
     #context {
         height: 38px;
-        background: var(--application-background);
         display: flex;
         flex-direction: row;
         align-content: center;
@@ -55,6 +58,7 @@
             display: flex;
             flex-direction: row;
             align-content: center;
+            background: var(--application-background);
             padding: 2px 0 0 7px;
 
             .icon {
@@ -66,6 +70,7 @@
             display: flex;
             flex-direction: row;
             align-content: center;
+            background: var(--application-background);
             padding: 2px 7px 0 0;
 
             .icon {
@@ -124,6 +129,25 @@
             &:hover {
                 color: var(--application-highlight-text) !important;
                 box-shadow: none !important;
+            }
+        }
+
+        .navigation {
+            background: var(--navigation-background);
+            color: var(--navigation-text);
+
+            .icon {
+                &:hover {
+                    color: var(--navigation-highlight-text);
+                }
+            }
+
+            .button {
+                color: var(--navigation-text) !important;
+
+                &:hover {
+                    color: var(--navigation-highlight-text) !important;
+                }
             }
         }
     }

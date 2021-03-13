@@ -47,12 +47,12 @@
     --menu-highlight: #f0f0f0;
     --menu-border: #e5e5e5;
 
-    --navigation-text: #a1a1a1;
+    --navigation-text: #999;
     --navigation-highlight-text: #fff;
     --navigation-active-text: #feb400;
-    --navigation-background: #262626;
+    --navigation-background: #141414;
     --navigation-highlight: #feb400;
-    --navigation-border: #5a5a5a;
+    --navigation-border: #4b4b4b;
 
     --accessory-text: #0000003d;
     --accessory-background: #e4e4e4;

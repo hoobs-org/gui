@@ -84,7 +84,7 @@ Program.command("gui", { isDefault: true })
             control += "Priority: optional\n";
             control += "Architecture: all\n";
             control += "Installed-Size: 51\n";
-            control += "Depends: hoobsd (>= 4.0.0)\n";
+            control += "Depends: hoobsd (>= 4.0.0), helm (>= 1.2.2)\n";
             control += "Maintainer: HOOBS Maintainers <info@hoobs.org>\n";
             control += "Homepage: https://hoobs.org\n";
             control += "Description: Interface component for the certified HOOBS stack.\n";
