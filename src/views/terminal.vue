@@ -18,27 +18,16 @@
 
 <template>
     <div :key="version" v-if="user.permissions.terminal" id="terminal">
-        <context>
+        <context override="navigation">
             <icon v-on:click="refresh()" name="refresh" class="icon" />
         </context>
-        <div class="measure" ref="measure">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
-        <div v-if="!loading" class="flow" ref="flow">
-            <div class="container" ref="container" style="display: block;">
-                <div ref="terminal" class="shell"></div>
-            </div>
+        <div class="terminal">
+            <iframe ref="terminal" frameborder="0" />
         </div>
     </div>
 </template>
 
 <script>
-    import { Terminal } from "xterm";
-    import { FitAddon } from "xterm-addon-fit";
-    import { WebLinksAddon } from "xterm-addon-web-links";
-    import Chunk from "@hoobs/sdk/lib/chunk";
-    import Socket from "@hoobs/sdk/lib/socket";
-
-    const TERMINAL_RESIZE_DELAY = 10;
-
     export default {
         name: "terminal",
 
@@ -69,126 +58,19 @@
             };
         },
 
-        beforeRouteLeave(_to, _from, next) {
-            this.$action.off("window", "resize");
-            this.$action.off("personalize", "update");
-
-            this.disconnect();
-
-            next();
-        },
-
         async mounted() {
-            this.$action.off("window", "resize");
-            this.$action.off("personalize", "update");
-            this.$action.on("window", "resize", this.resize);
-
-            this.$action.on("personalize", "update", () => {
-                this.loading = true;
-                this.disconnect();
-
-                window.location.reload();
-            });
-
-            this.$action.on("personalize", "update");
-
-            this.opening = true;
-            this.hoobsd = await this.$hoobs.version();
-            this.socket = Socket();
-
-            this.text = {
-                width: Math.floor((this.$refs.measure.clientWidth + 1) / 52),
-                height: Math.floor(this.$refs.measure.clientHeight + 1),
-            };
-
-            const theme = await this.$theme.get();
-
-            this.term = new Terminal({
-                cursorStyle: "bar",
-                cursorBlink: true,
-                fontSize: 14,
-                theme: {
-                    background: theme.application.background,
-                    foreground: theme.application.text.default,
-                    cursor: theme.application.text.default,
-                },
-            });
-
-            this.screen = new FitAddon();
-
-            this.term.loadAddon(this.screen);
-            this.term.loadAddon(new WebLinksAddon());
-
-            this.term.open(this.$refs.terminal);
-
             this.connect();
         },
 
         methods: {
-            refresh() {
-                this.term.clear();
-                this.term.focus();
-            },
-
             connect() {
-                this.socket.emit("shell_connect");
-
-                this.term.onData((data) => { this.socket.emit("shell_input", data); });
-                this.socket.on("shell_output", (data) => { this.term.write(data); });
-
-                if (this.opening) {
-                    this.motd();
-                    this.resize();
-
-                    this.opening = false;
-                }
-            },
-
-            disconnect() {
-                this.socket.emit("shell_disconnect");
-            },
-
-            motd() {
-                if (this.term) {
-                    this.term.clear();
-
-                    if (this.initilize) {
-                        this.term.write("    __  ______  ____  ____ _____\r\n");
-                        this.term.write("   / / / / __ \\/ __ \\/ __ ) ___/\r\n");
-                        this.term.write("  / /_/ / / / / / / / __  \\__ \\ \r\n");
-                        this.term.write(" / __  / /_/ / /_/ / /_/ /__/ / \r\n");
-                        this.term.write("/_/ /_/\\____/\\____/_____/____/\r\n");
-                        this.term.write("\r\n");
-                        this.term.write(`HOOBS ${this.hoobsd}\r\n`);
-                        this.term.write("\r\n");
-                        this.term.write(`${Chunk(this.$t("motd"), 40).join("\r\n")}\r\n`);
-                        this.term.write("\r\n");
-
-                        this.socket.emit("shell_input", "");
-                    } else {
-                        this.socket.emit("shell_clear");
-                    }
-                }
-
-                this.initilize = false;
-            },
-
-            resize() {
-                if (this.$refs.container) this.$refs.container.style.display = "none";
-
                 setTimeout(() => {
-                    if (this.term && this.$refs.flow) {
-                        const cols = Math.floor((this.$refs.flow.clientWidth + 1) / this.text.width) - 7;
-                        const rows = Math.floor((this.$refs.flow.clientHeight + 1) / this.text.height);
+                    this.$refs.terminal.src = `${window.location.protocol}//${window.location.hostname}:9090`;
+                }, 10);
+            },
 
-                        if (this.$refs.container) this.$refs.container.style.display = "block";
-                        if (this.screen) this.screen.fit();
-
-                        this.term.resize(cols, rows);
-                        this.socket.emit("shell_resize", `${cols}:${rows}`);
-                        this.term.focus();
-                    }
-                }, TERMINAL_RESIZE_DELAY);
+            refresh() {
+                if (this.$refs.terminal) this.$refs.terminal.src = `${window.location.protocol}//${window.location.hostname}:9090`;
             },
         },
     };
@@ -198,176 +80,19 @@
     #terminal {
         flex: 1;
         display: flex;
-        background: var(--application-background);
+        background: var(--navigation-background);
         flex-direction: column;
         position: relative;
 
-        .measure {
-            position: absolute;
-            top: 0;
-            left: 0;
-            visibility: hidden;
-            font-family: courier-new, courier, monospace;
-            font-size: 14px;
-            height: auto;
-            width: auto;
-            white-space: nowrap;
-        }
-
-        .flow {
+        .terminal {
             flex: 1;
             display: flex;
             flex-direction: column;
-            margin: 0 -5px 20px 20px;
 
-            .container {
+            iframe {
                 width: 100%;
                 height: 100%;
             }
         }
-    }
-</style>
-
-<style lang="scss">
-    .shell {
-        width: 100%;
-        height: 100%;
-    }
-
-    .xterm {
-        font-feature-settings: "liga" 0;
-        position: relative;
-        user-select: none;
-        -ms-user-select: none;
-        -webkit-user-select: none;
-        cursor: text;
-
-        &:focus {
-            outline: none;
-        }
-
-        .xterm-helpers {
-            position: absolute;
-            top: 0;
-            z-index: 10;
-        }
-
-        .xterm-helper-textarea {
-            position: absolute;
-            opacity: 0;
-            left: -9999em;
-            top: 0;
-            width: 0;
-            height: 0;
-            z-index: -10;
-            white-space: nowrap;
-            overflow: hidden;
-            resize: none;
-        }
-
-        .composition-view {
-            background: var(--application-background) !important;
-            color: #fff;
-            display: none;
-            position: absolute;
-            white-space: nowrap;
-            z-index: 1;
-        }
-
-        .composition-view.active {
-            display: block;
-        }
-
-        .xterm-viewport {
-            background-color: var(--application-background) !important;
-            position: absolute;
-            right: 0;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            overflow-y: auto;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            cursor: default;
-
-            &::-webkit-scrollbar {
-                display: none;
-            }
-        }
-
-        .xterm-screen {
-            position: relative;
-
-            canvas {
-                position: absolute;
-                left: 0;
-                top: 0;
-            }
-        }
-
-        .xterm-scroll-area {
-            visibility: hidden;
-        }
-
-        .xterm-accessibility {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            z-index: 100;
-            color: transparent;
-        }
-
-        .xterm-message {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            z-index: 100;
-            color: transparent;
-        }
-
-        .live-region {
-            position: absolute;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-        }
-    }
-
-    .xterm.focus {
-        outline: none;
-    }
-
-    .xterm-char-measure-element {
-        display: inline-block;
-        visibility: hidden;
-        position: absolute;
-        top: 0;
-        left: -9999em;
-        line-height: normal;
-    }
-
-    .xterm.enable-mouse-events {
-        cursor: default;
-    }
-
-    .xterm.xterm-cursor-pointer {
-        cursor: pointer;
-    }
-
-    .xterm.column-select.focus {
-        cursor: crosshair;
-    }
-
-    .xterm-dim {
-        opacity: 0.5;
-    }
-
-    .xterm-underline {
-        text-decoration: underline;
     }
 </style>
