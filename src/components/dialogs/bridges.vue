@@ -22,8 +22,8 @@
             <div v-if="!loading" class="content">
                 <form v-if="options.type === 'install'" class="form">
                     <div :class="!current ? 'row section' : 'row section disable'" style="margin: 0;">{{ $t("bridge_add") }}</div>
-                    <p :class="!current ? '' : 'disable'">
-                        {{ $t("plugin_install_add_bridge") }}
+                    <p>
+                        <radio id="current" name="current" :title="$t('plugin_install_add_bridge')" v-model="current" :value="null" />
                     </p>
                     <div :class="!current ? 'row' : 'row disable'">
                         <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
@@ -64,9 +64,9 @@
                 </div>
             </div>
             <div class="actions modal">
-                <div v-on:click="$dialog.close('bridges')" class="button">{{ $t("cancel") }}</div>
+                <div v-if="!loading" v-on:click="$dialog.close('bridges')" class="button">{{ $t("cancel") }}</div>
                 <div v-if="!loading && options.type === 'install'" v-on:click="install()" class="button primary">{{ $t("plugin_install") }}</div>
-                <div v-if="!loading && options.type === 'uninstall'" v-on:click="uninstall()" class="button primary">{{ $t("plugin_uninstall") }}</div>
+                <div v-if="!loading && current && options.type === 'uninstall'" v-on:click="uninstall()" class="button primary">{{ $t("plugin_uninstall") }}</div>
             </div>
         </div>
     </modal>
