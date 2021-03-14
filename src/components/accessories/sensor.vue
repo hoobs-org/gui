@@ -262,7 +262,7 @@
                         this.humidity = (humidity || {}).value || 0;
                         this.smoke = (smoke || {}).value || false;
                         this.carbon = (carbon || {}).value || false;
-                        this.contact = (contact || {}).value || true;
+                        this.contact = (contact || {}).value || false;
                         this.motion = (motion || {}).value || false;
                         this.obstruction = (obstruction || {}).value || false;
                         this.occupancy = (occupancy || {}).value || false;
