@@ -57,7 +57,7 @@
                         <p style="margin-top: 0">{{ $t("pairing_description") }}</p>
                     </div>
                     <div class="row qrcode">
-                        <qrcode v-if="!loading" :value="status.setup_id" :options="{ width: 200, color: { dark: theme.widget.text.default, light: '#00000000' }}" />
+                        <qrcode v-if="!loading && status.setup_id" :value="status.setup_id" :options="{ width: 200, color: { dark: theme.widget.text.default, light: '#00000000' }}" />
                     </div>
                     <div class="row actions">
                         <div v-if="running" v-on:click="control('restart')" class="button">{{ $t("restart") }}</div>
