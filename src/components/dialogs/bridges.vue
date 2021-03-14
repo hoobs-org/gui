@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div class="actions modal">
-                <div v-on:click="$dialog.close('bridges')" class="button">{{ $t("cancel") }}</div>
+                <div v-if="!loading" v-on:click="$dialog.close('bridges')" class="button">{{ $t("cancel") }}</div>
                 <div v-if="!loading && options.type === 'install'" v-on:click="install()" class="button primary">{{ $t("plugin_install") }}</div>
                 <div v-if="!loading && options.type === 'uninstall'" v-on:click="uninstall()" class="button primary">{{ $t("plugin_uninstall") }}</div>
             </div>

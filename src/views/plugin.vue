@@ -292,6 +292,9 @@
                                     if (success) {
                                         this.$dialog.close("bridges");
                                         this.$router.push(`/config/${this.identifier}`);
+                                    } else {
+                                        this.$dialog.close("bridges");
+                                        this.$alert(this.$t("plugin_install_failed"));
                                     }
                                 });
                             }, SOCKET_RECONNECT_DELAY);
@@ -342,6 +345,9 @@
                                         if (success) {
                                             this.$dialog.close("bridges");
                                             this.load(this.identifier);
+                                        } else {
+                                            this.$dialog.close("bridges");
+                                            this.$alert(this.$t("plugin_uninstall_failed"));
                                         }
                                     });
                                 }, SOCKET_RECONNECT_DELAY);
