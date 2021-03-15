@@ -98,6 +98,7 @@
 
         methods: {
             format(value) {
+                if (!Number.isNaN(parseInt(value, 10))) return "";
                 if (!value || value === "") return value;
 
                 return decamel(value);

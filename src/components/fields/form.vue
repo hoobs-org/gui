@@ -19,7 +19,7 @@
 <template>
     <fieldset id="field">
         <div class="position">
-            <legend v-if="expandable || (label && label !== '')" class="legend" v-on:click="toggle">
+            <legend v-if="expandable || (label && label !== '')" :class="expanded ? 'legend' : 'legend colapsed'" v-on:click="toggle">
                 <span v-html="label"></span>
                 <icon v-if="expandable && !expanded" name="chevron-down" class="icon" />
                 <icon v-if="expandable && expanded" name="chevron-up" class="icon" />
@@ -123,6 +123,10 @@
             align-items: center;
             white-space: nowrap;
             text-overflow: ellipsis;
+
+            &.colapsed {
+                margin: 0 0 10px 0;
+            }
 
             span {
                 flex: 1;

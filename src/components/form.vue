@@ -61,7 +61,7 @@
 
         watch: {
             schema() {
-                this.items = scaffold(this.schema);
+                this.items = this.value || scaffold(this.schema);
             },
         },
 
