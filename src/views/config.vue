@@ -25,7 +25,7 @@
                 <div class="wrapper">
                     <div class="section">{{ plugin.display }}</div>
                     <tabs :values="bridges" v-on:change="exit" :value="bridge" field="id" display="display" class="tabs" />
-                    <schema-form :bridge="bridge" :identifier="identifier" :schema="schema" v-model="working" v-on:input="() => { dirty = true }" v-on:save="save" />
+                    <schema-form :bridge="bridge" :identifier="identifier" :schema="schema" v-model="working" v-on:input="updated" v-on:save="save" />
                     <div class="row actions">
                         <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
                         <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
@@ -44,24 +44,24 @@
                 <div class="wrapper">
                     <div class="section">{{ $t("authentication") }}</div>
                     <div class="row">
-                        <integer-field :title="$t('inactive_logoff')" :description="$t('inactive_logoff_description')" :min="5" :max="300" v-model="working.inactive_logoff" v-on:input="() => { dirty = true }" />
+                        <integer-field :title="$t('inactive_logoff')" :description="$t('inactive_logoff_description')" :min="5" :max="300" v-model="working.inactive_logoff" v-on:input="updated" />
                     </div>
                     <div class="row">
-                        <checkbox id="disable_auth" :title="$t('disable_auth')" v-model="working.disable_auth" v-on:input="() => { dirty = true }" />
+                        <checkbox id="disable_auth" :title="$t('disable_auth')" v-model="working.disable_auth" v-on:input="updated" />
                     </div>
                     <div class="section extra">{{ $t("monitor") }}</div>
                     <div class="row">
-                        <integer-field :title="$t('update_interval')" :description="$t('update_interval_description')" :min="2" :max="300" v-model="working.polling_seconds" v-on:input="() => { dirty = true }" />
+                        <integer-field :title="$t('update_interval')" :description="$t('update_interval_description')" :min="2" :max="300" v-model="working.polling_seconds" v-on:input="updated" />
                     </div>
                     <div class="section">{{ $t("interface") }}</div>
                     <div class="row">
-                        <text-field :title="$t('cors_orgin')" :description="$t('cors_orgin_description')" v-model="working.origin" v-on:input="() => { dirty = true }" />
+                        <text-field :title="$t('cors_orgin')" :description="$t('cors_orgin_description')" v-model="working.origin" v-on:input="updated" />
                     </div>
                     <div class="row">
-                        <text-field :title="$t('gui_path')" :description="$t('gui_path_description')" v-model="working.gui_path" v-on:input="() => { dirty = true }" />
+                        <text-field :title="$t('gui_path')" :description="$t('gui_path_description')" v-model="working.gui_path" v-on:input="updated" />
                     </div>
                     <div class="row">
-                        <text-field :title="$t('touch_path')" :description="$t('touch_path_description')" v-model="working.touch_path" v-on:input="() => { dirty = true }" />
+                        <text-field :title="$t('touch_path')" :description="$t('touch_path_description')" v-model="working.touch_path" v-on:input="updated" />
                     </div>
                     <div class="row actions">
                         <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
@@ -79,7 +79,6 @@
 <script>
     const BRIDGE_RESTART_DELAY = 4000;
     const MONACO_LOAD_DELAY = 10;
-    const CONFIG_LOAD_DELAY = 100;
 
     export default {
         name: "config",
@@ -132,6 +131,7 @@
                 type: null,
                 alias: null,
                 schema: null,
+                saved: {},
                 working: {},
                 plugins: [],
                 plugin: null,
@@ -196,6 +196,10 @@
         },
 
         methods: {
+            updated(value) {
+                if (JSON.stringify(value) !== JSON.stringify(this.saved)) this.dirty = true;
+            },
+
             async save() {
                 this.loading = true;
 
@@ -331,7 +335,8 @@
                 }
 
                 if (!this.identifier || this.identifier === "" || this.identifier === "hub") {
-                    this.working = (await this.$hoobs.config.get()).api || {};
+                    this.saved = (await this.$hoobs.config.get()).api || {};
+                    this.working = { ...this.saved };
 
                     this.working.inactive_logoff = this.working.inactive_logoff || 30;
                     this.working.disable_auth = this.working.disable_auth || false;
@@ -340,10 +345,6 @@
 
                     this.loading = false;
                     this.dirty = false;
-
-                    setTimeout(() => {
-                        this.dirty = false;
-                    }, CONFIG_LOAD_DELAY);
                 } else if (this.identifier === "advanced") {
                     const theme = await this.$hoobs.theme.get(this.$store.state.theme);
 
@@ -358,7 +359,8 @@
                         background = background.split("").map((item) => `${item}${item}`).join("");
                     }
 
-                    this.working = await (await this.$hoobs.bridge(bridge)).config.get();
+                    this.saved = await (await this.$hoobs.bridge(bridge)).config.get();
+                    this.working = { ...this.saved };
                     this.loading = false;
                     this.dirty = false;
 
@@ -409,20 +411,17 @@
 
                     switch (this.type) {
                         case "accessory":
-                            this.working = { accessories: accessories.filter((item) => item.accessory === this.alias) || [] };
+                            this.saved = { accessories: accessories.filter((item) => item.accessory === this.alias) || [] };
                             break;
 
                         default:
-                            this.working = platforms.find((item) => item.platform === this.alias) || { platform: this.alias };
+                            this.saved = platforms.find((item) => item.platform === this.alias) || { platform: this.alias };
                             break;
                     }
 
+                    this.working = { ...this.saved };
                     this.loading = false;
                     this.dirty = false;
-
-                    setTimeout(() => {
-                        this.dirty = false;
-                    }, CONFIG_LOAD_DELAY);
                 }
             },
 

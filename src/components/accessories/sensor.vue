@@ -69,16 +69,16 @@
                             {{ $t("no_carbon_monoxide") }}
                         </div>
                     </div>
-                    <div v-if="main === 'contact' && contact" class="main">
-                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'" class="icon" />
-                        <div class="status">
-                            {{ $t("closed") }}
-                        </div>
-                    </div>
-                    <div v-if="main === 'contact' && !contact" class="main on">
+                    <div v-if="main === 'contact' && contact" class="main on">
                         <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'" class="icon" />
                         <div class="status">
                             {{ $t("open") }}
+                        </div>
+                    </div>
+                    <div v-if="main === 'contact' && !contact" class="main">
+                        <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'dock-window'" class="icon" />
+                        <div class="status">
+                            {{ $t("closed") }}
                         </div>
                     </div>
                     <div v-if="main === 'motion' && motion" class="main on">
@@ -124,8 +124,8 @@
                         <icon v-else-if="main !== 'smoke' && features.smoke" name="fire" :title="$t('no_smoke')" class="icon" />
                         <icon v-if="main !== 'carbon' && features.carbon && carbon" name="smog" :title="$t('carbon_monoxide_detected')" class="icon alert" />
                         <icon v-else-if="main !== 'carbon' && features.carbon" name="smog" :title="$t('no_carbon_monoxide')" class="icon" />
-                        <icon v-if="main !== 'contact' && features.contact && contact" name="dock-window" :title="$t('closed')" class="icon" />
-                        <icon v-else-if="main !== 'contact' && features.contact" name="dock-window" :title="$t('open')" class="icon on" />
+                        <icon v-if="main !== 'contact' && features.contact && contact" name="dock-window" :title="$t('open')" class="icon on" />
+                        <icon v-else-if="main !== 'contact' && features.contact" name="dock-window" :title="$t('closed')" class="icon" />
                         <icon v-if="main !== 'motion' && features.motion && motion" name="motion-sensor" :title="$t('motion_detected')" class="icon on" />
                         <icon v-else-if="main !== 'motion' && features.motion" name="motion-sensor" :title="$t('no_motion')" class="icon" />
                         <icon v-if="main !== 'obstruction' && features.obstruction && obstruction" name="dog-side" :title="$t('obstruction_detected')" class="icon on" />
