@@ -180,6 +180,7 @@
                 backdrop-filter: var(--transparency);
                 border-radius: 0;
                 box-sizing: border-box;
+                touch-action: none;
                 overflow: hidden;
             }
         }
