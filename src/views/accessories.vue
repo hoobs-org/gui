@@ -468,6 +468,8 @@
                     }
 
                     .devices {
+                        padding: 0 10px;
+
                         .device {
                             width: 50%;
                             margin: 0;
