@@ -459,7 +459,7 @@
                     }
                 }
 
-                if (this.plugin.readme) return this.$markdown(this.plugin.readme);
+                if (this.plugin.details && this.plugin.details !== "") return this.$markdown(this.plugin.details);
 
                 return this.$markdown(this.plugin.description);
             },
