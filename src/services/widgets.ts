@@ -107,12 +107,12 @@ export function layout(name: string): { [key: string]: any } | undefined {
 
         case "weather-widget":
             return {
-                x: 0, y: 0, w: 27, h: 54, i: "weather-widget", component: "weather-widget",
+                x: 0, y: 0, w: 27, h: 23, i: "weather-widget", component: "weather-widget",
             };
 
         case "forecast-widget":
             return {
-                x: 0, y: 0, w: 13, h: 24, i: "forecast-widget", component: "forecast-widget",
+                x: 0, y: 0, w: 27, h: 24, i: "forecast-widget", component: "forecast-widget",
             };
 
         case "current-widget":
