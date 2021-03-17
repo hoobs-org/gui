@@ -63,7 +63,7 @@ export const initial = [{
 }, {
     x: 0, y: 0, w: 80, h: 14, i: "activity-widget", component: "activity-widget",
 }, {
-    x: 6, y: 14, w: 23, h: 23, i: "weather-widget", component: "weather-widget",
+    x: 6, y: 14, w: 27, h: 23, i: "weather-widget", component: "weather-widget",
 }, {
     x: 61, y: 14, w: 19, h: 38, i: "system-widget", component: "system-widget",
 }];
