@@ -95,7 +95,6 @@
         "dashboard": "Dashboard",
         "dashboard_items": "Dashboard Items",
         "dashboard_background": "Show Background",
-        "dashboard_settings": "Dashboard Settings",
         "debug": "Debug",
         "default": "Default",
         "donate": "Donate",
@@ -246,7 +245,7 @@
         "room_exists": "This room already exists.",
         "room_invalid_name": "Room name is required.",
         "room_reserved_name": "Room name is reserved, please select another name.",
-        "room_settings": "Room Settings",
+        "room_settings": "Edit Room",
         "rooms": "Rooms",
         "running": "Running",
         "saturday": "Saturday",
@@ -362,6 +361,7 @@
         "wednesday": "Wednesday",
         "wednesday_abbr": "Wed",
         "welcome": "Welcome to HOOBS™",
+        "widgets": "Widgets",
         "write_review": "Write a Review"
     }
 }
