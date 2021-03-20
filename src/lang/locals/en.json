@@ -123,6 +123,7 @@
         "hostname": "Hostname",
         "hostname_description": "Set the console URL.",
         "hub": "Hub",
+        "hub_settings": "Hub Settings",
         "icon": "Icon",
         "icon_search": "Icon Search",
         "import": "Import",

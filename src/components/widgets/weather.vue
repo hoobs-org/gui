@@ -40,7 +40,7 @@
         <div class="setup">
             <div class="message">
                 <div class="warning">{{ $t("location_setup_message") }}</div>
-                <div v-on:click="$dialog.open('settings')" class="button">{{ $t("settings") }}</div>
+                <div v-on:click="$dialog.open('settings')" class="button">{{ $t("hub_settings") }}</div>
             </div>
         </div>
     </div>

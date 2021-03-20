@@ -66,6 +66,7 @@
                     <div class="row actions">
                         <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
                         <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
+                        <div v-on:click="$dialog.open('settings')" class="button">{{ $t("hub_settings") }}</div>
                     </div>
                 </div>
             </div>

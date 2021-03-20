@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <modal :title="$t('settings')" :draggable="true" width="760px" height="775px">
+    <modal :title="$t('hub_settings')" :draggable="true" width="760px" height="775px">
         <div id="settings">
             <div v-if="!loading" class="content">
                 <restore v-if="show.restore" v-on:restore="() => { show.cancel = false; }" />
