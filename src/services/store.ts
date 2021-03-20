@@ -19,6 +19,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import Persistence from "vuex-persist";
+import { Buffer } from "buffer/";
 import { units, timespan } from "./formatters";
 
 Vue.use(Vuex);
@@ -140,7 +141,7 @@ export default new Vuex.Store({
             state.session = token;
 
             if (token && token !== "") {
-                const user = JSON.parse(atob(token));
+                const user = JSON.parse(Buffer.from(token, "base64").toString("utf8"));
 
                 state.user = {
                     id: user.id,

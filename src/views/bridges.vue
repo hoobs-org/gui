@@ -63,7 +63,7 @@
                         <div v-if="running" v-on:click="control('restart')" class="button">{{ $t("restart") }}</div>
                         <div v-if="!running" v-on:click="control('start')" class="button">{{ $t("start") }}</div>
                         <div v-if="running" v-on:click="control('stop')" class="button">{{ $t("stop") }}</div>
-                        <div v-on:click="cache" class="button">{{ $t("purge_cache") }}</div>
+                        <div v-on:click="cache" class="button">{{ $t("cache") }}</div>
                     </div>
                     <div class="row section">{{ $t("export") }}</div>
                     <div class="row">
