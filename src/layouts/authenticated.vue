@@ -21,6 +21,9 @@
         <navigation :class="(loading || dialogs > 0) ? 'disable' : 'enable'" />
         <div v-if="!loading" :class="dialogs > 0 ? 'screen disable' : 'screen'">
             <slot />
+            <div v-if="snack" class="snack">
+                <notification :message="snack.notification" :snack="true" />
+            </div>
             <menu-view />
         </div>
         <div v-else class="loading">
@@ -40,11 +43,16 @@
 
         components: {
             "navigation": () => import(/* webpackChunkName: "layout-navigation" */ "@/components/navigation.vue"),
+            "notification": () => import(/* webpackChunkName: "layout-notification" */ "@/components/elements/notification.vue"),
         },
 
         computed: {
             notifications() {
                 return this.$store.state.notifications;
+            },
+
+            snack() {
+                return this.$store.state.latest;
             },
         },
 
@@ -205,6 +213,14 @@
                 }
             }
         }
+
+        .snack {
+            width: 370px;
+            position: absolute;
+            bottom: 7px;
+            right: 0;
+            background: #f0f;
+        }
     }
 
     [platform="mobile"] {
@@ -214,10 +230,20 @@
             .form {
                 padding: 0;
             }
+
+            .snack {
+                display: none;
+            }
         }
     }
 
     [platform="tablet"] {
+        #authenticated {
+            .snack {
+                display: none;
+            }
+        }
+
         @media only screen and (orientation:portrait) {
             #authenticated {
                 flex-direction: column;

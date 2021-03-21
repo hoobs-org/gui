@@ -182,6 +182,7 @@
         "off": "Off",
         "ok": "OK",
         "open": "Open",
+        "open_log": "View Logs",
         "open_source": "Open Source",
         "pairing": "Pairing",
         "pairing_description": "Scan this QR code to pair this bridge with the Home app.",

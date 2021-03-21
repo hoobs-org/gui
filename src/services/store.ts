@@ -57,6 +57,7 @@ export default new Vuex.Store({
         },
         auth: false,
         notifications: [],
+        latest: null,
         navigation: false,
         accessory: null,
         room: null,
@@ -116,7 +117,7 @@ export default new Vuex.Store({
         "IO:NOTIFICATION": (state: { [key: string]: any }, payload: any) => {
             const now = (new Date()).getTime();
 
-            state.notifications.unshift({
+            const notification = {
                 id: `${now}:${Math.random()}`,
                 time: now,
                 event: payload.event,
@@ -126,7 +127,18 @@ export default new Vuex.Store({
                 description: payload.data.description,
                 icon: payload.data.icon,
                 ttl: now + (1 * 60 * 60 * 1000),
-            });
+            };
+
+            if (state.latest) clearTimeout(state.latest.timer);
+
+            state.latest = {
+                timer: setTimeout(() => {
+                    state.latest = null;
+                }, 10 * 1000),
+                notification,
+            };
+
+            state.notifications.unshift(notification);
         },
 
         "IO:ACCESSORY:CHANGE": (state: { [key: string]: any }, payload: any) => {
@@ -194,6 +206,12 @@ export default new Vuex.Store({
 
         "NOTIFICATION:DISMISS": (state: { [key: string]: any }, id: string) => {
             state.notifications = state.notifications.filter((item: { [key: string]: any }) => (item.id || "") !== "" && (item.id || "") !== id);
+        },
+
+        "NOTIFICATION:DISMISS:LATEST": (state: { [key: string]: any }) => {
+            if (state.latest) clearTimeout(state.latest.timer);
+
+            state.latest = null;
         },
 
         "NOTIFICATION:DISMISS:OLD": (state: { [key: string]: any }) => {

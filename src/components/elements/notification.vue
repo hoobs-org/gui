@@ -17,13 +17,15 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="notification">
+    <div id="notification" :class="snack ? 'snack' : ''">
         <div :class="`type ${message.type}`"></div>
-        <icon v-if="message.icon" :name="message.icon" class="icon display" />
+        <icon v-if="message.type === 'error'" name="alert-octagon" class="icon display" />
+        <icon v-else-if="message.icon" :name="message.icon" class="icon display" />
         <div v-else class="text-only"></div>
         <div class="details">
             <div class="title">{{ message.title }}</div>
             <div class="description">{{ message.description }}</div>
+            <router-link v-if="message.type === 'error'" to="/log" class="logs">{{ $t("open_log") }}</router-link>
         </div>
         <icon v-on:click="dismiss(message.id)" name="close" class="icon close" />
     </div>
@@ -35,11 +37,16 @@
 
         props: {
             message: Object,
+            snack: Boolean,
         },
 
         methods: {
             dismiss(id) {
-                this.$store.commit("NOTIFICATION:DISMISS", id);
+                if (this.snack) {
+                    this.$store.commit("NOTIFICATION:DISMISS:LATEST");
+                } else {
+                    this.$store.commit("NOTIFICATION:DISMISS", id);
+                }
             },
         },
     };
@@ -52,6 +59,10 @@
         display: flex;
         background: var(--application-dark);
         user-select: none;
+
+        &.snack {
+            margin: 0;
+        }
 
         .type {
             width: 7px;
@@ -112,6 +123,11 @@
 
             .description {
                 font-size: 12px;
+            }
+
+            .logs {
+                font-size: 14px;
+                margin: 4px 0 0 0;
             }
         }
     }
