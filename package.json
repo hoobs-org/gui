@@ -1,6 +1,6 @@
 {
     "name": "@hoobs/gui",
-    "version": "4.0.32",
+    "version": "4.0.33",
     "description": "Interface component for the certified HOOBS stack.",
     "license": "GPL-3.0",
     "keywords": [
@@ -30,7 +30,7 @@
     },
     "dependencies": {
         "@chenfengyuan/vue-qrcode": "^1.0.2",
-        "@hoobs/sdk": "^4.2.21",
+        "@hoobs/sdk": "^4.2.22",
         "@interactjs/core": "^1.10.1",
         "@interactjs/utils": "^1.10.1",
         "@jaames/iro": "^5.3.1",
