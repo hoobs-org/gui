@@ -65,6 +65,8 @@
         },
 
         async created() {
+            this.io.connect();
+
             this.$store.commit("AUTH:STATE", (await this.$hoobs.auth.status()));
 
             this.$action.on("io", "connected", () => {
