@@ -63,18 +63,20 @@ actions.on("log", "history", () => {
     hoobs.sdk.log().then((messages: any) => { store.commit("LOG:HISTORY", messages); });
 });
 
-router.beforeEach(async (to, _from, next) => {
-    const status = await hoobs.sdk.auth.status();
+router.beforeEach((to, _from, next) => {
+    hoobs.sdk.auth.status().then((status) => {
+        if (status === "disabled") store.commit("SESSION:DISABLE");
 
-    if (status === "disabled") store.commit("SESSION:DISABLE");
+        if (["/login", "/setup"].indexOf(to.path) === -1 && status === "uninitialized") {
+            router.push({ path: "/setup" });
+        } else {
+            hoobs.sdk.auth.validate().then((valid) => {
+                if (["/login", "/setup"].indexOf(to.path) === -1 && !valid) router.push({ path: "/login", query: { url: to.path } });
+            });
+        }
+    });
 
-    if (["/login", "/setup"].indexOf(to.path) === -1 && status === "uninitialized") {
-        router.push({ path: "/setup" });
-    } else if (["/login", "/setup"].indexOf(to.path) === -1 && !(await hoobs.sdk.auth.validate())) {
-        router.push({ path: "/login", query: { url: to.path } });
-    } else {
-        next();
-    }
+    next();
 });
 
 Vue.config.productionTip = false;
