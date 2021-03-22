@@ -222,7 +222,6 @@
             position: absolute;
             bottom: 7px;
             right: 0;
-            background: #f0f;
         }
     }
 
