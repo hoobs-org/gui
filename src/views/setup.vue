@@ -37,8 +37,6 @@
             </form>
             <div class="actions modal">
                 <div class="copyright">
-                    HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
-                    <br />
                     Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
                 <div class="button" v-on:click="disable()">{{ $t("disable_login") }}</div>

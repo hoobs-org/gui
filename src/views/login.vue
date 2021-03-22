@@ -43,8 +43,6 @@
             </div>
             <div class="actions modal">
                 <div class="copyright">
-                    HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
-                    <br />
                     Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
                 <div v-if="!loading" class="button primary" v-on:click="login()">{{ $t("login") }}</div>
