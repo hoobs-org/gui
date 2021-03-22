@@ -885,10 +885,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@hoobs/sdk@^4.3.3":
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/@hoobs/sdk/-/sdk-4.3.3.tgz#330529ee6a1012f6eb0a69420793238cb615a8e3"
-  integrity sha512-z78xRVoPngjhjmMXD4o/LmeZ9VmOi7VXdL0+RH71ROoJaBXDWwXi3/i7LPacKAIKcG3V2itTsKhol06v63j5fw==
+"@hoobs/sdk@^4.3.4":
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/@hoobs/sdk/-/sdk-4.3.4.tgz#3526cd0757ccfc2863841cd621d642862b7f796b"
+  integrity sha512-svre+vE5XAZ2MHRakJe+V6oou7e0+PNzIdQkVvPB3FeXeZriZhTf0e61WsQ4CWyMEB1NNmL24M+aGBYAF26BFA==
   dependencies:
     axios "^0.21.1"
     sanitize-filename "^1.6.3"
