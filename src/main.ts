@@ -108,8 +108,6 @@ Vue.component("spinner", () => import(/* webpackChunkName: "common-spinner" */ "
 
 tasks(store);
 
-actions.emit("log", "history");
-
 new Vue({
     router,
     store,
