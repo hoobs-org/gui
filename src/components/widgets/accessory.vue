@@ -29,7 +29,7 @@
 <script>
     import { accessories, types } from "../../services/accessories";
 
-    const LOAD_RETRY_DELAY = 3 * 1000;
+    const LOAD_RETRY_DELAY = 5 * 1000;
 
     export default {
         name: "accessory-widget",

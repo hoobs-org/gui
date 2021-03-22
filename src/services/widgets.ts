@@ -21,12 +21,20 @@ export const available = [{
     label: "activity",
     selected: false,
 }, {
-    name: "current-widget",
-    label: "weather",
+    name: "system-widget",
+    label: "system_info",
     selected: false,
 }, {
     name: "cpu-widget",
     label: "cpu",
+    selected: false,
+}, {
+    name: "current-widget",
+    label: "weather",
+    selected: false,
+}, {
+    name: "temperature-widget",
+    label: "cpu_temperature",
     selected: false,
 }, {
     name: "forecast-widget",
@@ -48,10 +56,6 @@ export const available = [{
     name: "log-widget",
     label: "log",
     selected: false,
-}, {
-    name: "system-widget",
-    label: "system_info",
-    selected: false,
 }];
 
 export const initial = [{
@@ -63,7 +67,7 @@ export const initial = [{
 }, {
     x: 0, y: 0, w: 80, h: 14, i: "activity-widget", component: "activity-widget",
 }, {
-    x: 6, y: 14, w: 23, h: 23, i: "weather-widget", component: "weather-widget",
+    x: 6, y: 14, w: 27, h: 23, i: "weather-widget", component: "weather-widget",
 }, {
     x: 61, y: 14, w: 19, h: 38, i: "system-widget", component: "system-widget",
 }];
@@ -82,17 +86,22 @@ export function layout(name: string): { [key: string]: any } | undefined {
 
         case "cpu-widget":
             return {
-                x: 0, y: 0, w: 7, h: 18, i: "cpu-widget", component: "cpu-widget",
+                x: 0, y: 0, w: 6, h: 8, i: "cpu-widget", component: "cpu-widget",
+            };
+
+        case "temperature-widget":
+            return {
+                x: 0, y: 0, w: 6, h: 8, i: "temperature-widget", component: "temperature-widget",
             };
 
         case "memory-widget":
             return {
-                x: 0, y: 0, w: 7, h: 18, i: "memory-widget", component: "memory-widget",
+                x: 0, y: 0, w: 6, h: 8, i: "memory-widget", component: "memory-widget",
             };
 
         case "bridges-widget":
             return {
-                x: 0, y: 0, w: 7, h: 18, i: "bridges-widget", component: "bridges-widget",
+                x: 0, y: 0, w: 6, h: 8, i: "bridges-widget", component: "bridges-widget",
             };
 
         case "log-widget":
@@ -107,12 +116,12 @@ export function layout(name: string): { [key: string]: any } | undefined {
 
         case "weather-widget":
             return {
-                x: 0, y: 0, w: 27, h: 54, i: "weather-widget", component: "weather-widget",
+                x: 0, y: 0, w: 27, h: 23, i: "weather-widget", component: "weather-widget",
             };
 
         case "forecast-widget":
             return {
-                x: 0, y: 0, w: 13, h: 24, i: "forecast-widget", component: "forecast-widget",
+                x: 0, y: 0, w: 27, h: 24, i: "forecast-widget", component: "forecast-widget",
             };
 
         case "current-widget":
@@ -130,6 +139,7 @@ export function widgets(): { [key: string]: () => any } {
         "accessory-widget": () => import(/* webpackChunkName: "widget-accessory" */ "@/components/widgets/accessory.vue"),
         "activity-widget": () => import(/* webpackChunkName: "widget-activity" */ "@/components/widgets/activity.vue"),
         "cpu-widget": () => import(/* webpackChunkName: "widget-cpu" */ "@/components/widgets/cpu.vue"),
+        "temperature-widget": () => import(/* webpackChunkName: "widget-temperature" */ "@/components/widgets/temperature.vue"),
         "memory-widget": () => import(/* webpackChunkName: "widget-memory" */ "@/components/widgets/memory.vue"),
         "bridges-widget": () => import(/* webpackChunkName: "widget-bridges" */ "@/components/widgets/bridges.vue"),
         "system-widget": () => import(/* webpackChunkName: "widget-system" */ "@/components/widgets/system.vue"),

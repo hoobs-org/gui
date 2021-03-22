@@ -53,17 +53,17 @@
                 <div class="wrapper">
                     <div class="row title">{{ display }}</div>
                     <div class="row section">{{ $t("pairing") }}</div>
-                    <div v-if="!loading && status.setup_id" class="row">
+                    <div v-if="!loading && (status || {}).setup_id" class="row">
                         <p style="margin-top: 0">{{ $t("pairing_description") }}</p>
                     </div>
-                    <div v-if="!loading && status.setup_id" class="row qrcode">
-                        <qrcode :value="status.setup_id" :options="{ width: 200, color: { dark: theme.widget.text.default, light: '#00000000' }}" />
+                    <div v-if="!loading && (status || {}).setup_id" class="row qrcode">
+                        <qrcode :value="(status || {}).setup_id" :options="{ width: 200, color: { dark: theme.widget.text.default, light: '#00000000' }}" />
                     </div>
                     <div class="row actions">
                         <div v-if="running" v-on:click="control('restart')" class="button">{{ $t("restart") }}</div>
                         <div v-if="!running" v-on:click="control('start')" class="button">{{ $t("start") }}</div>
                         <div v-if="running" v-on:click="control('stop')" class="button">{{ $t("stop") }}</div>
-                        <div v-on:click="cache" class="button">{{ $t("purge_cache") }}</div>
+                        <div v-on:click="cache" class="button">{{ $t("cache") }}</div>
                     </div>
                     <div class="row section">{{ $t("export") }}</div>
                     <div class="row">
@@ -182,7 +182,7 @@
 
             running() {
                 if (this.loading && this.timer) this.loading = false;
-                if (!this.status.setup_id) this.load(this.id);
+                if (!(this.status || {}).setup_id) this.load(this.id);
                 if (this.timer) clearTimeout(this.timer);
 
                 this.timer = null;

@@ -446,17 +446,20 @@
             },
 
             readme() {
-                if (this.plugin.curated) return this.$markdown(this.plugin.curated);
-                if (this.plugin.readme) return this.$markdown(this.plugin.readme);
-                if (this.plugin.details) return this.$markdown(this.plugin.details);
+                const { latest } = (this.plugin.tags || {});
 
-                const keys = Object.keys(this.plugin.versions);
+                if (this.plugin.override_readme && this.plugin.curated && this.plugin.curated !== "") return this.$markdown(this.plugin.curated);
+                if (latest && this.plugin.versions[latest] && this.plugin.versions[latest].readme && this.plugin.versions[latest].readme !== "") return this.$markdown(this.plugin.versions[latest].readme);
+
+                const keys = Object.keys(this.plugin.versions).reverse();
 
                 for (let i = 0; i < keys.length; i += 1) {
-                    const { ...version } = this.plugin.versions[keys[i]];
-
-                    if (version.readme) return this.$markdown(version.readme);
+                    if ((!latest || Semver.compare(keys[i], latest, "<=")) && this.plugin.versions[keys[i]].readme && this.plugin.versions[keys[i]].readme !== "") {
+                        return this.$markdown(this.plugin.versions[keys[i]].readme);
+                    }
                 }
+
+                if (this.plugin.details && this.plugin.details !== "") return this.$markdown(this.plugin.details);
 
                 return this.$markdown(this.plugin.description);
             },

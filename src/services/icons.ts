@@ -954,6 +954,7 @@ import {
     mdiRefresh,
     mdiWrench,
     mdiEyeOff,
+    mdiWidgets,
 } from "@mdi/js";
 
 const tags: { [key: string]: string } = {
@@ -1894,6 +1895,7 @@ const tags: { [key: string]: string } = {
     refresh: mdiRefresh,
     wrench: mdiWrench,
     "eye-off": mdiEyeOff,
+    widgets: mdiWidgets,
 };
 
 export function icons(): string[] {

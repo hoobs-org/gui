@@ -19,14 +19,14 @@
 <template>
     <div :key="version" v-if="user.permissions.accessories" id="accessories">
         <context>
-            <icon v-if="rooms.length > 0 && locked.rooms" v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" name="lock" class="icon desktop" />
-            <icon v-else-if="rooms.length > 0" v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" name="lock-open-variant" class="icon desktop" />
-            <icon v-if="rooms.length > 0" v-on:click.stop="$dialog.open('hidden')" :title="$t('hidden_accessories')" name="eye-off" class="icon desktop" />
-            <div v-if="rooms.length > 0" class="seperator desktop"></div>
             <router-link v-if="rooms.length > 0 && id !== 'add'" to="/accessories/add" class="button">
                 <icon name="plus" class="icon" />
                 {{ $t("add_room") }}
             </router-link>
+            <div v-if="rooms.length > 0" class="seperator desktop"></div>
+            <icon v-if="rooms.length > 0" v-on:click.stop="$dialog.open('hidden')" :title="$t('hidden_accessories')" name="eye-off" class="icon desktop" />
+            <icon v-if="rooms.length > 0 && locked.rooms" v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" name="lock" class="icon desktop" />
+            <icon v-else-if="rooms.length > 0" v-on:click.stop="() => { locked.rooms = !locked.rooms}" :title="$t('sort_rooms')" name="lock-open-variant" class="icon desktop" />
         </context>
         <div v-if="!loading && rooms.length > 0" class="content">
             <list value="id" display="name" :values="filtered" :selected="id" :initial="rooms[0].id" :sort="!locked.rooms" v-on:update="layout" controller="accessories" />
@@ -64,7 +64,7 @@
                     <div style="flex: 1"></div>
                     <icon v-if="locked.accessories" v-on:click.stop="() => { locked.accessories = !locked.accessories}" :title="$t('sort_accessories')" name="lock" class="icon desktop" />
                     <icon v-else v-on:click.stop="() => { locked.accessories = !locked.accessories; load(id); }" :title="$t('sort_accessories')" name="lock-open-variant" class="icon desktop" />
-                    <router-link v-if="identifier !== 'default'" :to="`/accessories/edit/${id || rooms[0].id}`" :title="$t('room_settings')" class="edit-room"><icon name="cog" class="icon" /></router-link>
+                    <router-link v-if="identifier !== 'default'" :to="`/accessories/edit/${id || rooms[0].id}`" :title="$t('room_settings')" class="edit-room"><icon name="pencil" class="icon" /></router-link>
                 </div>
                 <draggable :key="`version-${key}`" v-if="!locked.accessories" ghost-class="ghost" v-model="accessories" v-on:end="sort" class="devices">
                     <div v-for="(accessory, index) in accessories" :key="`accessory:${index}`" class="device editing">
@@ -468,6 +468,8 @@
                     }
 
                     .devices {
+                        padding: 0 10px;
+
                         .device {
                             width: 50%;
                             margin: 0;

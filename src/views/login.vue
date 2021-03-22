@@ -43,8 +43,6 @@
             </div>
             <div class="actions modal">
                 <div class="copyright">
-                    HOOBS and the HOOBS logo are registered trademarks of HOOBS, Inc.
-                    <br />
                     Copyright &copy; {{ (new Date()).getFullYear() }} HOOBS, Inc. All rights reserved.
                 </div>
                 <div v-if="!loading" class="button primary" v-on:click="login()">{{ $t("login") }}</div>
@@ -148,20 +146,14 @@
                 border-right: 1px var(--modal-border) solid;
                 border-bottom: 1px var(--modal-border) solid;
                 border-left: 1px var(--modal-border) solid;
+                background: var(--modal-input);
 
                 &:focus-within {
-                    .label {
-                        background: var(--modal-input-accent);
-                    }
-
-                    input {
-                        background: var(--modal-input-accent);
-                    }
+                    background: var(--modal-input-accent);
                 }
 
                 .label {
                     padding: 10px 10px 0 10px;
-                    background: var(--modal-input);
                     font-size: 12px;
                     user-select: none;
                 }
@@ -188,21 +180,15 @@
                 border-right: 1px var(--modal-border) solid;
                 border-bottom: 1px var(--modal-border) solid;
                 border-left: 1px var(--modal-border) solid;
+                background: var(--modal-input);
 
                 &:focus-within {
-                    .label {
-                        background: var(--modal-input-accent);
-                    }
-
-                    input {
-                        background: var(--modal-input-accent);
-                    }
+                    background: var(--modal-input-accent);
                 }
 
                 .label {
                     padding: 10px 10px 0 10px;
                     border-top: 1px var(--modal-background) solid;
-                    background: var(--modal-input);
                     font-size: 12px;
                     user-select: none;
                 }
@@ -212,7 +198,7 @@
                 border: 0 none;
                 outline: 0 none;
                 padding: 5px 10px 10px 10px;
-                background: var(--modal-input);
+                background: transparent;
                 color: var(--modal-input-text);
                 font-size: 15px;
 

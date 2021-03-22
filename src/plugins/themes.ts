@@ -25,16 +25,18 @@ interface Options {
     hoobs: any;
 }
 
-const THEMES_URL = process.env.VUE_APP_THEMES || "/themes";
-
-export function path(theme: string): string {
+export function path(theme: string, hoobs?: any | unknown): string {
     switch (theme) {
         case "light":
         case "dark":
             return `/defaults/${theme}/theme.css`;
 
         default:
-            return `${THEMES_URL}/${theme}/theme.css`;
+            if (hoobs) {
+                return `${hoobs.sdk.config.host.get("themes")}/${theme}/theme.css`;
+            }
+
+            return "/defaults/dark/theme.css";
     }
 }
 
@@ -49,7 +51,7 @@ export async function set(name: string, hoobs?: any | unknown, store?: Store<any
         await hoobs.sdk.config.update(config);
     }
 
-    if (style) style.setAttribute("href", path(Sanitize(name)));
+    if (style) style.setAttribute("href", path(Sanitize(name), hoobs));
     if (store) store.commit("THEME:SET", Sanitize(name));
 }
 
@@ -64,7 +66,7 @@ export async function load(hoobs?: any | unknown, store?: Store<any>): Promise<v
         theme = await hoobs.sdk.theme.get(config.theme || "dark");
     }
 
-    if (style) style.setAttribute("href", path(theme.name || "dark"));
+    if (style) style.setAttribute("href", path(theme.name || "dark", hoobs));
     if (store) store.commit("THEME:SET", theme.name || "dark");
 }
 

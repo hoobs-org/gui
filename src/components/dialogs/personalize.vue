@@ -98,8 +98,6 @@
     import ColorExtractor from "colorthief/dist/color-thief";
     import Colors from "@/services/colors";
 
-    const THEMES_URL = process.env.VUE_APP_THEMES || "/themes";
-
     export default {
         name: "personalize",
 
@@ -309,7 +307,7 @@
             async upload() {
                 this.loading = true;
                 this.message = this.$t("uploading_image");
-                this.backdrop = `url('${THEMES_URL}/${(await this.$hoobs.theme.backdrop(this.$refs.backdrop.files[0]))}')`;
+                this.backdrop = `url('${this.$hoobs.config.host.get("themes")}/${(await this.$hoobs.theme.backdrop(this.$refs.backdrop.files[0]))}')`;
                 this.loading = false;
             },
         },

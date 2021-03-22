@@ -85,8 +85,10 @@
 
                     this.$store.subscribe(async (mutation) => {
                         if (mutation.type === "IO:LOG" && this.logging) {
-                            this.messages.push(mutation.payload);
-                            this.messages = this.messages.slice(Math.max(this.messages.length - 25, 0));
+                            if (!mutation.payload.bridge || mutation.payload.bridge === "hub" || mutation.payload.bridge === "") {
+                                this.messages.push(mutation.payload);
+                                this.messages = this.messages.slice(Math.max(this.messages.length - 25, 0));
+                            }
 
                             if ((mutation.payload.message || "").toLowerCase().indexOf("service restart") >= 0) {
                                 this.logging = false;
@@ -140,8 +142,10 @@
 
                     this.$store.subscribe(async (mutation) => {
                         if (mutation.type === "IO:LOG" && this.logging) {
-                            this.messages.push(mutation.payload);
-                            this.messages = this.messages.slice(Math.max(this.messages.length - 25, 0));
+                            if (!mutation.payload.bridge || mutation.payload.bridge === "hub" || mutation.payload.bridge === "") {
+                                this.messages.push(mutation.payload);
+                                this.messages = this.messages.slice(Math.max(this.messages.length - 25, 0));
+                            }
 
                             if ((mutation.payload.message || "").toLowerCase().indexOf("service restart") >= 0) {
                                 this.logging = false;

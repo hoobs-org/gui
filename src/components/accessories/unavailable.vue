@@ -24,7 +24,7 @@
                 <icon name="delete" class="icon" :title="$t('remove_from_dashboard')" />
             </div>
         </div>
-        <div class="name">{{ $t("unavaliable") }}</div>
+        <div class="name">{{ $t("unavailable") }}</div>
     </div>
 </template>
 

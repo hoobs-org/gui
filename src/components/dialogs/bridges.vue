@@ -167,7 +167,7 @@
                 this.loading = true;
 
                 this.$store.subscribe(async (mutation) => {
-                    if (mutation.type === "IO:LOG") {
+                    if (mutation.type === "IO:LOG" && (!mutation.payload.bridge || mutation.payload.bridge === "hub" || mutation.payload.bridge === "")) {
                         this.messages.push(mutation.payload);
                         this.messages = this.messages.slice(Math.max(this.messages.length - 23, 0));
                     }
@@ -198,7 +198,7 @@
                     this.loading = true;
 
                     this.$store.subscribe(async (mutation) => {
-                        if (mutation.type === "IO:LOG") {
+                        if (mutation.type === "IO:LOG" && (!mutation.payload.bridge || mutation.payload.bridge === "hub" || mutation.payload.bridge === "")) {
                             this.messages.push(mutation.payload);
                             this.messages = this.messages.slice(Math.max(this.messages.length - 23, 0));
                         }
