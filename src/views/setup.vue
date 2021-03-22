@@ -15,6 +15,7 @@
  | You should have received a copy of the GNU General Public License                              |
  | along with this program.  If not, see <http://www.gnu.org/licenses/>.                          |
  -------------------------------------------------------------------------------------------------->
+
 <template>
     <div :key="version" id="setup">
         <modal v-if="loading" :welcome="$t('welcome')" width="760px" height="670px">
