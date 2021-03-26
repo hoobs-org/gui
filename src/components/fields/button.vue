@@ -26,6 +26,7 @@
         <div v-else class="action">
             <div class="button primary" v-on:click="run">{{ schema.title || "Undefined" }}</div>
         </div>
+        <iframe ref="frame" :src="source" class="frame" frameborder="0"></iframe>
     </div>
 </template>
 
@@ -42,7 +43,22 @@
             identifier: String,
         },
 
+        data() {
+            return {
+                source: "about:blank",
+            };
+        },
+
         methods: {
+            loader() {
+                this.$refs.frame.contentWindow.$close = () => {
+                    this.$refs.frame.removeEventListener("load", this.loader);
+                    this.$action.emit("config", "update");
+
+                    this.source = "about:blank";
+                };
+            },
+
             update(value) {
                 this.$emit("input", value);
                 this.$emit("change", value);
@@ -60,17 +76,29 @@
                 const token = encodeURIComponent(btoa(JSON.stringify({
                     host: domain[0],
                     port: domain.length > 1 ? parseInt(domain[1], 10) : 80,
+                    bridge: this.bridge,
+                    plugin: this.identifier,
                     token: this.$hoobs.config.token.get(),
                 })));
 
                 switch (this.schema.action) {
+                    case "oauth":
+                        setTimeout(() => {
+                            this.$refs.frame.removeEventListener("load", this.loader);
+                            this.$refs.frame.addEventListener("load", this.loader, true);
+
+                            this.source = `${url}?token=${token}`;
+                        }, 100);
+
+                        break;
+
                     case "window":
                         this.$action.emit("window", "open", `${url}?token=${token}`);
                         break;
 
                     default:
                         this.$dialog.open("plugin", {
-                            url: `${url}?token=${token}`,
+                            url,
                             value: this.value,
                             items: this.items,
                             update: this.update,
@@ -102,6 +130,12 @@
 
         .action {
             padding: 0;
+        }
+
+        .frame {
+            width: 1px;
+            height: 1px;
+            visibility: hidden;
         }
     }
 </style>
