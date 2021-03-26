@@ -17,74 +17,41 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="field">
-        <span v-if="schema.description && schema.description !== ''" class="description" v-html="schema.description"></span>
-        <div class="action">
-            <div class="button primary" v-on:click="open">{{ schema.title || "Undefined" }}</div>
-        </div>
-    </div>
+    <iframe id="frame" ref="frame" :src="options.url" frameborder="0"></iframe>
 </template>
 
 <script>
     export default {
-        name: "button-field",
+        name: "popup",
 
         props: {
-            schema: Object,
-            value: [Object, String, Number, Boolean, Array],
-            title: String,
-            bridge: String,
-            identifier: String,
+            options: Object,
         },
 
-        methods: {
-            update(value) {
-                this.$emit("input", value);
-                this.$emit("change", value);
-            },
+        mounted() {
+            const fetch = () => this.options.value;
+            const update = (response) => this.options.update(response);
 
-            open() {
-                let dialog = "dialog";
+            setTimeout(() => {
+                this.$refs.frame.addEventListener("load", () => {
+                    this.$refs.frame.contentWindow.$hoobs = this.$hoobs;
+                    this.$refs.frame.contentWindow.$bridge = this.bridge;
+                    this.$refs.frame.contentWindow.$close = () => { this.$dialog.close("plugin"); };
 
-                switch (this.schema.action) {
-                    case "popup":
-                        dialog = "popup";
-                        break;
-
-                    default:
-                        dialog = "dialog";
-                        break;
-                }
-
-                this.$dialog.open(dialog, {
-                    url: `${this.$hoobs.config.host.get("ui")}/plugin/${encodeURIComponent(this.identifier)}/`,
-                    value: this.value,
-                    update: this.update,
-                    bridge: this.bridge,
-                });
-            },
+                    Object.defineProperty(this.$refs.frame.contentWindow, "$value", {
+                        get: () => fetch(),
+                        set: (response) => update(response),
+                    });
+                }, true);
+            }, 10);
         },
     };
 </script>
 
 <style lang="scss" scoped>
-    #field {
-        display: flex;
-        flex-direction: column;
-        padding: 0 10px 10px 0;
-
-        .description {
-            font-size: 12px;
-            margin: -7px 0 7px 0;
-            user-select: none;
-
-            &:empty {
-                display: none;
-            }
-        }
-
-        .action {
-            padding: 0;
-        }
+    #frame {
+        width: 1px;
+        height: 1px;
+        visibility: hidden;
     }
 </style>
