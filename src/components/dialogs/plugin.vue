@@ -20,7 +20,7 @@
     <modal-frame :draggable="true" width="760px" height="760px">
         <div id="plugin">
             <div class="content">
-                <iframe ref="frame" :src="options.url" class="frame" frameborder="0"></iframe>
+                <iframe ref="frame" :src="source" class="frame" frameborder="0"></iframe>
                 <icon class="icon" name="close" v-on:click="$dialog.close('plugin')" />
             </div>
         </div>
@@ -37,6 +37,12 @@
 
         props: {
             options: Object,
+        },
+
+        data() {
+            return {
+                source: "about:blank",
+            };
         },
 
         mounted() {
@@ -58,7 +64,9 @@
                         set: (response) => update(response),
                     });
                 }, true);
-            }, 10);
+
+                this.source = this.options.url;
+            }, 100);
         },
     };
 </script>
