@@ -21,10 +21,10 @@
         <span v-if="schema.description && schema.description !== ''" class="description" v-html="schema.description"></span>
         <div v-if="schema.title && schema.populated_title" class="action">
             <div v-if="value" class="button" v-on:click="clear">{{ schema.populated_title }}</div>
-            <div v-else class="button primary" v-on:click="open">{{ schema.title }}</div>
+            <div v-else class="button primary" v-on:click="run">{{ schema.title }}</div>
         </div>
         <div v-else class="action">
-            <div class="button primary" v-on:click="open">{{ schema.title || "Undefined" }}</div>
+            <div class="button primary" v-on:click="run">{{ schema.title || "Undefined" }}</div>
         </div>
     </div>
 </template>
@@ -53,8 +53,8 @@
                 this.$emit("change", undefined);
             },
 
-            open() {
-                let dialog = "dialog";
+            run() {
+                let dialog = "plugin";
 
                 switch (this.schema.action) {
                     case "popup":
@@ -62,7 +62,7 @@
                         break;
 
                     default:
-                        dialog = "dialog";
+                        dialog = "plugin";
                         break;
                 }
 
