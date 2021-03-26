@@ -38,7 +38,7 @@ import lang from "./lang";
 const io = hoobs.sdk.io();
 const markdown = converter();
 
-hoobs.sdk.config.token.get(() => (store.state.session || ""));
+hoobs.sdk.config.token.get(() => store.state.session);
 hoobs.sdk.config.token.set((token: string) => { store.commit("SESSION:SET", token); });
 
 io.on("log", (data) => store.commit("IO:LOG", data));
