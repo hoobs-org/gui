@@ -98,7 +98,7 @@
 
                     default:
                         this.$dialog.open("plugin", {
-                            url,
+                            url: `${url}?token=${token}`,
                             value: this.value,
                             items: this.items,
                             update: this.update,
