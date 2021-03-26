@@ -21,7 +21,7 @@
         <span v-if="schema.description && schema.description !== ''" class="description" v-html="schema.description"></span>
         <div v-if="schema.title && schema.populated_title" class="action">
             <div v-if="value" class="button" v-on:click="clear">{{ schema.populated_title }}</div>
-            <div v-else class="button primary" v-on:click="run">{{ schema.title }}</div>
+            <div v-else class="button primary" v-on:click="open">{{ schema.title }}</div>
         </div>
         <div v-else class="action">
             <div class="button primary" v-on:click="run">{{ schema.title || "Undefined" }}</div>
@@ -53,26 +53,32 @@
                 this.$emit("change", undefined);
             },
 
-            run() {
-                let dialog = "plugin";
+            open() {
+                const url = `${this.$hoobs.config.host.get("ui")}/plugin/${encodeURIComponent(this.identifier)}/`;
+                const domain = (this.$hoobs.config.get.host().split("/")[2]).split(":");
+
+                const token = encodeURIComponent(btoa(JSON.stringify({
+                    host: domain[0],
+                    port: domain.length > 1 ? parseInt(domain[1], 10) : 80,
+                    token: this.$hoobs.config.token.get(),
+                })));
 
                 switch (this.schema.action) {
-                    case "popup":
-                        dialog = "popup";
+                    case "window":
+                        this.$action.emit("window", "open", `${url}?token=${token}`);
                         break;
 
                     default:
-                        dialog = "plugin";
+                        this.$dialog.open("plugin", {
+                            url: `${url}?token=${token}`,
+                            value: this.value,
+                            items: this.items,
+                            update: this.update,
+                            bridge: this.bridge,
+                        });
+
                         break;
                 }
-
-                this.$dialog.open(dialog, {
-                    url: `${this.$hoobs.config.host.get("ui")}/plugin/${encodeURIComponent(this.identifier)}/`,
-                    value: this.value,
-                    items: this.items,
-                    update: this.update,
-                    bridge: this.bridge,
-                });
             },
         },
     };

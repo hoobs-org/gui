@@ -184,8 +184,14 @@
 
         mounted() {
             this.$action.off("window", "resize");
+            this.$action.off("config", "update");
             this.$action.off("personalize", "update");
+
             this.$action.on("window", "resize", this.resize);
+
+            this.$action.on("config", "update", () => {
+                this.change(this.bridge);
+            });
 
             this.$action.on("personalize", "update", () => {
                 if (this.identifier === "advanced") {
