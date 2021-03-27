@@ -24,7 +24,7 @@
             <div v-else class="button primary" v-on:click="open">{{ schema.title }}</div>
         </div>
         <div v-else class="action">
-            <div class="button primary" v-on:click="run">{{ schema.title || "Undefined" }}</div>
+            <div class="button primary" v-on:click="open">{{ schema.title || "Undefined" }}</div>
         </div>
         <iframe ref="frame" :src="source" class="frame" frameborder="0"></iframe>
     </div>
@@ -71,7 +71,7 @@
 
             open() {
                 const url = `${this.$hoobs.config.host.get("ui")}/plugin/${encodeURIComponent(this.identifier)}/`;
-                const domain = (this.$hoobs.config.host.get().split("/")[2]).split(":");
+                const domain = ((window.location.href.split("/")[2]) || "").split(":");
 
                 const token = encodeURIComponent(btoa(JSON.stringify({
                     host: domain[0],
