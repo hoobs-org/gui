@@ -83,6 +83,8 @@
 
                 switch (this.schema.action) {
                     case "oauth":
+                        this.$emit("save");
+
                         setTimeout(() => {
                             this.$refs.frame.removeEventListener("load", this.loader);
                             this.$refs.frame.addEventListener("load", this.loader, true);
@@ -93,6 +95,7 @@
                         break;
 
                     case "window":
+                        this.$emit("save");
                         this.$action.emit("window", "open", `${url}?token=${token}`);
                         break;
 
