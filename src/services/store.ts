@@ -50,6 +50,7 @@ export default new Vuex.Store({
                 [16, 0], [17, 0], [18, 0], [19, 0],
             ],
         },
+        heap: 0,
         temp: null,
         session: "",
         user: {
@@ -89,6 +90,7 @@ export default new Vuex.Store({
                     version: bridge.version,
                     running: bridge.running,
                     uptime: timespan(bridge.uptime),
+                    heap: bridge.heap,
                 });
             }
 
@@ -112,6 +114,7 @@ export default new Vuex.Store({
 
             state.cpu.history[state.cpu.history.length - 1] = [state.cpu.history.length - 1, state.cpu.used];
             state.memory.history[state.memory.history.length - 1] = [state.memory.history.length - 1, state.memory.load];
+            state.heap = payload.data.heap;
         },
 
         "IO:NOTIFICATION": (state: { [key: string]: any }, payload: any) => {
