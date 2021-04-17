@@ -263,7 +263,7 @@ export const draft = {
 };
 
 export function decamel(value: string): string {
-    if (!value || value === "") return "";
+    if (!value || value === "" || !Number.isNaN(parseFloat(value))) return "";
 
     let results = value;
 
