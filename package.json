@@ -42,6 +42,7 @@
         "compare-versions": "^3.6.0",
         "core-js": "^3.8.1",
         "emojer": "^1.1.5",
+        "file-saver": "^2.0.5",
         "github-api-emojis": "^1.0.3",
         "identicon.js": "^2.3.3",
         "lodash.debounce": "^4.0.8",
