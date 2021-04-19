@@ -268,7 +268,7 @@
             justify-content: space-around;
             border-radius: 7px;
             border: 1px var(--accessory-border) solid;
-            background-color: var(--accessory-background);
+            background-color: #000;
             background-repeat: no-repeat;
             background-size: cover;
 
