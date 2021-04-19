@@ -20,9 +20,12 @@
     <div v-if="!hidden" id="control">
         <div class="item">
             <div class="background">
-                <div v-on:click="stream" class="panel" :style="style">
+                <div class="panel" :style="style">
                     <spinner v-if="!snapshot" />
-                    <div v-else class="timelapse">{{ span }}</div>
+                    <div v-if="snapshot && !live" class="timelapse">{{ span }}</div>
+                    <div v-if="snapshot && live" class="timelapse">{{ $t("live") }}</div>
+                    <icon v-if="!live" v-on:click="stream" name="toggle-switch-off" class="icon" />
+                    <icon v-if="live" v-on:click="stop" name="toggle-switch" class="icon" />
                 </div>
             </div>
             <div v-if="!disabled" v-on:click.stop="settings" class="settings">
@@ -37,7 +40,7 @@
                 </div>
             </div>
         </div>
-        <div class="name">{{ display }}</div>
+        <div v-if="!dashboard" class="name">{{ display }}</div>
     </div>
 </template>
 
@@ -53,6 +56,7 @@
         props: {
             disabled: Boolean,
             accessory: Object,
+            dashboard: Boolean,
         },
 
         computed: {
@@ -123,6 +127,7 @@
                 battery: 0,
                 features: {
                     battery: false,
+                    stream: false,
                 },
                 local: false,
                 subject: null,
@@ -130,6 +135,8 @@
                 hidden: false,
                 snapshot: null,
                 timelapse: 0,
+                live: false,
+                source: null,
                 timers: {
                     snapshot: null,
                     timelapse: null,
@@ -143,6 +150,7 @@
                         this.battery = (battery || {}).value || 0;
 
                         if (battery) this.features.battery = true;
+                        if (this.subject.supports_streaming) this.features.stream = true;
 
                         this.cycle(true, true);
                     }
@@ -153,7 +161,6 @@
         created() {
             this.$store.subscribe(async (mutation) => {
                 if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.subject.accessory_identifier) {
-                    this.subject = mutation.payload.data.accessory;
                     this.updater();
                 }
 
@@ -165,8 +172,10 @@
         },
 
         async mounted() {
-            this.subject = this.accessory;
+            this.subject = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
             this.snapshot = this.$store.state.snapshots[this.accessory.accessory_identifier];
+
+            if (this.subject) await this.subject.stream.stop();
 
             this.lapse();
             this.updater();
@@ -191,7 +200,7 @@
                     clearTimeout(this.timers.snapshot);
                 } else {
                     this.timelapse += 1;
-                    this.timers.timelapse = setTimeout(() => this.lapse(), 1000);
+                    this.timers.timelapse = setTimeout(() => this.lapse(), 500);
                 }
             },
 
@@ -199,8 +208,7 @@
                 if (clear) clearTimeout(this.timers.snapshot);
 
                 if (repeat) {
-                    const accessory = await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier);
-                    const snapshot = await accessory.snapshot();
+                    const snapshot = await this.subject.snapshot();
 
                     if (snapshot) {
                         this.$store.commit("IO:SNAPSHOT:UPDATE", {
@@ -209,12 +217,18 @@
                         });
                     }
 
-                    this.timers.snapshot = setTimeout(() => this.cycle(true, false), CYCLE_TIMER);
+                    this.timers.snapshot = setTimeout(() => this.cycle(true, false), this.live ? 1000 : CYCLE_TIMER);
                 }
             },
 
-            stream() {
-                // STREAM
+            async stream() {
+                this.live = true;
+                this.cycle(true, true);
+            },
+
+            async stop() {
+                this.live = false;
+                this.cycle(true, true);
             },
         },
     };
@@ -317,7 +331,6 @@
             height: 100%;
             position: relative;
             box-sizing: border-box;
-            padding: 11px 11px 10px 10px;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -335,6 +348,20 @@
                 color: #ffffff8a;
                 font-weight: bold;
                 font-size: 14px;
+            }
+
+            .icon {
+                position: absolute;
+                bottom: 7px;
+                left: 10px;
+                color: #ffffff8a;
+                cursor: pointer;
+            }
+
+            .stream {
+                width: 100%;
+                height: 100%;
+                border-radius: 7px;
             }
         }
 
