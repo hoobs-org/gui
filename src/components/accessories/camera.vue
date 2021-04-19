@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="control">
+    <div id="control" :class="dashboard ? 'dashboard' : 'normal'">
         <div class="item">
             <div class="background">
                 <div v-if="!live || !source" class="panel" :style="style">
@@ -71,22 +71,6 @@
 
             span() {
                 if (!this.timelapse) return this.$t("now");
-
-                if (this.timelapse >= 604800) {
-                    const weeks = Math.round(this.timelapse / 604800);
-
-                    if (weeks <= 1) return `1 ${this.$t("week")}`;
-
-                    return `${weeks} ${this.$t("weeks")}`;
-                }
-
-                if (this.timelapse >= 86400) {
-                    const days = Math.round(this.timelapse / 86400);
-
-                    if (days <= 1) return `1 ${this.$t("day")}`;
-
-                    return `${days} ${this.$t("days")}`;
-                }
 
                 if (this.timelapse >= 3600) {
                     const hours = Math.round(this.timelapse / 3600);
@@ -266,10 +250,10 @@
             flex-direction: row;
             align-items: center;
             justify-content: space-around;
-            border-radius: 7px;
             border: 1px var(--accessory-border) solid;
             background-color: #000;
             background-repeat: no-repeat;
+            background-position: center center;
             background-size: cover;
 
             .timelapse {
@@ -298,7 +282,23 @@
             .stream {
                 width: 100%;
                 height: 100%;
-                border-radius: 7px;
+            }
+        }
+
+        &.dashboard {
+            height: 100%;
+
+            .item {
+                height: 100%;
+            }
+
+            .background {
+                height: 100%;
+                aspect-ratio: unset;
+            }
+
+            .panel {
+                border: 0 none;
             }
         }
 

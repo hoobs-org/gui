@@ -17,37 +17,63 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="widget">
-        <div ref="messages" class="messages">
-            <message v-for="(message, index) in messages" :key="`message:${index}`" :value="message" />
+    <div v-if="!loading" id="widget" :class="locked ? 'locked' : 'unlocked'">
+        <div ref="device" class="device">
+            <camera-accessory v-if="available" :accessory="accessory" :disabled="!locked" :dashboard="true" />
+            <unavailable-accessory v-else :item="item" :disabled="!locked" />
+            <div v-if="!locked" class="device-cover"></div>
         </div>
     </div>
 </template>
 
 <script>
-    const SCROLL_DELAY = 10;
+    const LOAD_RETRY_DELAY = 5 * 1000;
 
     export default {
-        name: "log-widget",
+        name: "camera-widget",
 
         components: {
-            "message": () => import(/* webpackChunkName: "layout-message" */ "@/components/elements/message.vue"),
+            "camera-accessory": () => import(/* webpackChunkName: "accessory-thermostat" */ "@/components/accessories/camera.vue"),
         },
 
-        computed: {
-            messages() {
-                return this.$store.state.log.filter((item) => item.level !== "debug");
+        props: {
+            item: {
+                type: Object,
+                required: true,
             },
+            locked: Boolean,
         },
 
-        mounted() {
-            setTimeout(() => {
-                if (this.$refs.messages) this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
-            }, SCROLL_DELAY);
+        data() {
+            return {
+                retries: 10,
+                loading: true,
+                accessory: null,
+                available: false,
+            };
         },
 
-        updated() {
-            if (this.$refs.messages) this.$refs.messages.scrollTo(0, this.$refs.messages.scrollHeight);
+        async mounted() {
+            await this.load();
+        },
+
+        methods: {
+            async load() {
+                this.accessory = await this.$hoobs.accessory(this.item.bridge, this.item.id);
+
+                if (this.accessory.accessory_identifier && this.accessory.type === "camera") {
+                    this.available = true;
+                    this.loading = false;
+                } else if (this.retries > 0) {
+                    this.retries -= 1;
+
+                    setTimeout(async () => {
+                        await this.load();
+                    }, LOAD_RETRY_DELAY);
+                } else {
+                    this.loading = false;
+                }
+            },
         },
     };
 </script>
@@ -56,29 +82,28 @@
     #widget {
         width: 100%;
         height: 100%;
-        display: flex;
-        flex-direction: column;
         box-sizing: border-box;
-        overflow: hidden;
-        padding: 20px;
-        color: var(--widget-text);
-        background: var(--widget-background);
-        backdrop-filter: var(--transparency);
         cursor: default;
+        user-select: none;
 
-        .dim {
-            opacity: 0.3;
+        .device {
+            width: 100%;
+            height: 100%;
+            position: relative;
+
+            .device-cover {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 200;
+            }
         }
 
-        .messages {
-            flex: 1;
-            font-size: 10px;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            overflow: auto;
-
-            &::-webkit-scrollbar {
-                display: none;
+        &.unlocked {
+            .device {
+                pointer-events: none;
             }
         }
     }

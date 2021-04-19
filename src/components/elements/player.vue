@@ -65,11 +65,6 @@
     .video-js {
         width: 100%;
         height: 100%;
-        border-radius: 7px;
-
-        .vjs-tech {
-            border-radius: 7px;
-        }
 
         .vjs-big-play-button {
             width: 100%;
@@ -104,7 +99,6 @@
             padding-top: 15px;
             background: none;
             background-image: linear-gradient(0deg, #000, transparent);
-            border-radius: 0 0 7px 7px;
         }
 
         .vjs-button > .vjs-icon-placeholder:before {
