@@ -30,7 +30,7 @@
     },
     "dependencies": {
         "@chenfengyuan/vue-qrcode": "^1.0.2",
-        "@hoobs/sdk": "^4.4.1",
+        "@hoobs/sdk": "^4.4.2",
         "@interactjs/core": "^1.10.1",
         "@interactjs/utils": "^1.10.1",
         "@jaames/iro": "^5.3.1",
@@ -48,6 +48,7 @@
         "lodash.debounce": "^4.0.8",
         "showdown": "^1.9.1",
         "showdown-highlight": "^2.1.5",
+        "video.js": "^7.11.8",
         "vue": "^2.6.12",
         "vue-chartkick": "^0.6.1",
         "vue-grid-layout": "^2.3.12",
