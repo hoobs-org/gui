@@ -63,6 +63,10 @@ actions.on("log", "history", () => {
     hoobs.sdk.log().then((messages: any) => { store.commit("LOG:HISTORY", messages); });
 });
 
+actions.on("window", "open", (url) => {
+    window.open(url);
+});
+
 router.beforeEach((to, _from, next) => {
     hoobs.sdk.auth.status().then((status) => {
         if (status === "disabled") store.commit("SESSION:DISABLE");

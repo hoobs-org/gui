@@ -17,67 +17,105 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="field">
+    <div v-if="running" id="field">
         <span v-if="schema.description && schema.description !== ''" class="description" v-html="schema.description"></span>
-        <div class="action">
-            <div class="button primary" v-on:click="action">{{ schema.title || "Undefined" }}</div>
+        <div v-if="schema.title && schema.populated_title" class="action">
+            <div v-if="value" class="button" v-on:click="clear">{{ schema.populated_title }}</div>
+            <div v-else class="button primary" v-on:click="open">{{ schema.title }}</div>
         </div>
+        <div v-else class="action">
+            <div class="button primary" v-on:click="open">{{ schema.title || "Undefined" }}</div>
+        </div>
+        <iframe ref="frame" :src="source" class="frame" frameborder="0"></iframe>
     </div>
 </template>
 
 <script>
-    const PLUGIN_URL = (process.env.API_URL || process.env.VUE_APP_API || "/api").replace("/api", "/ui/plugin");
-
     export default {
         name: "button-field",
 
         props: {
             schema: Object,
             value: [Object, String, Number, Boolean, Array],
+            items: [Object, Array],
             title: String,
             bridge: String,
             identifier: String,
         },
 
+        computed: {
+            running() {
+                return (this.$store.state.bridges.find((item) => item.id === this.bridge) || {}).running || false;
+            },
+        },
+
         data() {
             return {
-                action: (typeof this[this.schema.action || "dialog"] === "function") ? this[this.schema.action || "dialog"] : () => { /* null */ },
+                source: "about:blank",
             };
         },
 
         methods: {
+            loader() {
+                this.$refs.frame.contentWindow.$close = () => {
+                    this.$refs.frame.removeEventListener("load", this.loader);
+                    this.$action.emit("config", "update");
+
+                    this.source = "about:blank";
+                };
+            },
+
             update(value) {
                 this.$emit("input", value);
                 this.$emit("change", value);
             },
 
-            dialog() {
-                this.$dialog.open("plugin", {
-                    url: `${PLUGIN_URL}/${this.identifier}`,
-                    value: this.value,
-                    update: this.update,
-                    bridge: this.bridge,
-                });
+            clear() {
+                this.$emit("input", undefined);
+                this.$emit("change", undefined);
             },
 
-            popup() {
-                const left = (window.screen.width / 2) - (760 / 2);
-                const top = ((window.screen.height / 2) - (760 / 2)) / 2;
+            open() {
+                const url = `${this.$hoobs.config.host.get("ui")}/plugin/${encodeURIComponent(this.identifier)}/`;
+                const domain = ((window.location.href.split("/")[2]) || "").split(":");
 
-                const fetch = () => this.value;
-                const update = (response) => this.update(response);
+                const token = encodeURIComponent(btoa(JSON.stringify({
+                    host: domain[0],
+                    port: domain.length > 1 ? parseInt(domain[1], 10) : 80,
+                    bridge: this.bridge,
+                    plugin: this.identifier,
+                    token: this.$hoobs.config.token.authorization,
+                })));
 
-                const dialog = window.open(`${PLUGIN_URL}/${this.identifier}`, "HOOBS", `toolbar=no,status=no,menubar=no,resizable=yes,width=760,height=760,top=${top},left=${left}`);
+                switch (this.schema.action) {
+                    case "oauth":
+                        this.$emit("save");
 
-                dialog.addEventListener("load", () => {
-                    dialog.window.$hoobs = this.$hoobs;
-                    dialog.window.$bridge = this.bridge;
+                        setTimeout(() => {
+                            this.$refs.frame.removeEventListener("load", this.loader);
+                            this.$refs.frame.addEventListener("load", this.loader, true);
 
-                    Object.defineProperty(dialog.window, "$value", {
-                        get: () => fetch(),
-                        set: (response) => update(response),
-                    });
-                }, true);
+                            this.source = `${url}?token=${token}`;
+                        }, 100);
+
+                        break;
+
+                    case "window":
+                        this.$emit("save");
+                        this.$action.emit("window", "open", `${url}?token=${token}`);
+                        break;
+
+                    default:
+                        this.$dialog.open("plugin", {
+                            url: `${url}?token=${token}`,
+                            value: this.value,
+                            items: this.items,
+                            update: this.update,
+                            bridge: this.bridge,
+                        });
+
+                        break;
+                }
             },
         },
     };
@@ -101,6 +139,12 @@
 
         .action {
             padding: 0;
+        }
+
+        .frame {
+            width: 1px;
+            height: 1px;
+            visibility: hidden;
         }
     }
 </style>

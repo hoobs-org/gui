@@ -1,6 +1,6 @@
 {
     "name": "@hoobs/gui",
-    "version": "4.0.35",
+    "version": "4.0.44",
     "description": "Interface component for the certified HOOBS stack.",
     "license": "GPL-3.0",
     "keywords": [
@@ -24,13 +24,13 @@
     },
     "preferGlobal": true,
     "scripts": {
-        "build": "bin/build --lint",
         "lint": "vue-cli-service lint",
-        "serve": "vue-cli-service serve --modern --mode development --port 49826"
+        "build": "bin/build --lint",
+        "debug": "vue-cli-service serve --modern --mode development --port 49826"
     },
     "dependencies": {
         "@chenfengyuan/vue-qrcode": "^1.0.2",
-        "@hoobs/sdk": "^4.3.5",
+        "@hoobs/sdk": "^4.4.2",
         "@interactjs/core": "^1.10.1",
         "@interactjs/utils": "^1.10.1",
         "@jaames/iro": "^5.3.1",
@@ -42,11 +42,13 @@
         "compare-versions": "^3.6.0",
         "core-js": "^3.8.1",
         "emojer": "^1.1.5",
+        "file-saver": "^2.0.5",
         "github-api-emojis": "^1.0.3",
         "identicon.js": "^2.3.3",
         "lodash.debounce": "^4.0.8",
         "showdown": "^1.9.1",
         "showdown-highlight": "^2.1.5",
+        "video.js": "^7.11.8",
         "vue": "^2.6.12",
         "vue-chartkick": "^0.6.1",
         "vue-grid-layout": "^2.3.12",

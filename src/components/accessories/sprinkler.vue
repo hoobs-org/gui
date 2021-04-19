@@ -17,25 +17,33 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div id="control" :class="on ? 'on' : 'off'">
+    <div v-if="!hidden" id="control" :class="on ? 'on' : 'off'">
         <div :class="style">
-            <div v-if="features.brightness" class="background">
+            <div v-if="features.timer" class="background">
                 <div class="inner"></div>
             </div>
-            <svg v-if="features.brightness" viewBox="0 0 100 100" v-on:click.stop="select" v-on:mousedown.prevent="start(true)" v-on:touchstart.prevent="start()">
+            <svg v-if="features.timer" viewBox="0 0 100 100" v-on:click.stop="select" v-on:mousedown.prevent="start(true)" v-on:touchstart.prevent="start()">
                 <path class="range" :d="range" />
-                <path v-if="visable" class="marker" style="stroke: #fed800;" :d="marker" />
+                <path v-if="visable" class="marker" :d="marker" />
             </svg>
             <div class="switch">
-                <div v-if="on" class="inner" v-on:click="toggle" style="background: #fed800;">
-                    <icon name="lightbulb-group" class="icon" />
+                <div class="inner" v-on:click="toggle">
+                    <icon v-if="subject" :name="subject.icon && subject.icon !== '' ? subject.icon : 'sprinkler'" class="icon" />
                 </div>
-                <div v-else class="inner" v-on:click="toggle">
-                    <icon name="lightbulb-group" class="icon" />
+            </div>
+            <div v-if="!disabled" v-on:click="settings" class="settings">
+                <icon name="cog" class="icon" :title="$t('accessory_settings')" />
+            </div>
+            <div v-if="!disabled && features.battery" class="battery" :title="`${battery}%`">
+                <div class="charge">
+                    <icon :name="charge" class="icon" />
+                </div>
+                <div class="frame">
+                    <icon name="battery-outline" class="icon" />
                 </div>
             </div>
         </div>
-        <div class="name">{{ $t("all_lights") }}</div>
+        <div class="name">{{ display }}</div>
     </div>
 </template>
 
@@ -54,20 +62,33 @@
     const MAX_RADIANS = -Math.PI / 3;
 
     export default {
-        name: "brightness-accessory",
+        name: "sprinkler-accessory",
 
         props: {
-            id: String,
             disabled: Boolean,
-            features: Object,
-            room: Object,
+            accessory: Object,
         },
 
         computed: {
+            charge() {
+                if (!this.battery) return "battery-outline";
+                if (this.battery > 0 && this.battery < 10) return "battery-10";
+                if (this.battery > 10 && this.battery < 20) return "battery-20";
+                if (this.battery > 20 && this.battery < 30) return "battery-30";
+                if (this.battery > 30 && this.battery < 40) return "battery-40";
+                if (this.battery > 40 && this.battery < 50) return "battery-50";
+                if (this.battery > 50 && this.battery < 60) return "battery-60";
+                if (this.battery > 60 && this.battery < 70) return "battery-70";
+                if (this.battery > 70 && this.battery < 80) return "battery-80";
+                if (this.battery > 80 && this.battery < 90) return "battery-90";
+
+                return "battery";
+            },
+
             style() {
                 let result = "item";
 
-                if (this.features.brightness) result = `${result} brightness`;
+                if (this.features.timer) result = `${result} timer`;
 
                 return result;
             },
@@ -81,7 +102,7 @@
             },
 
             visable() {
-                return (this.brightness >= 0 && this.brightness <= 100);
+                return (this.timer >= 0 && this.timer <= 100);
             },
 
             position() {
@@ -101,60 +122,62 @@
 
             active() {
                 return {
-                    x: MID_X + Math.cos(this.map(this.brightness, 0, 100, MIN_RADIANS, MAX_RADIANS)) * RADIUS,
-                    y: MID_Y - Math.sin(this.map(this.brightness, 0, 100, MIN_RADIANS, MAX_RADIANS)) * RADIUS,
+                    x: MID_X + Math.cos(this.map(this.timer, 0, 100, MIN_RADIANS, MAX_RADIANS)) * RADIUS,
+                    y: MID_Y - Math.sin(this.map(this.timer, 0, 100, MIN_RADIANS, MAX_RADIANS)) * RADIUS,
                 };
             },
 
             arc() {
-                return Math.abs(this.map(0, 0, 100, MIN_RADIANS, MAX_RADIANS) - this.map(this.brightness, 0, 100, MIN_RADIANS, MAX_RADIANS)) < Math.PI ? 0 : 1;
+                return Math.abs(this.map(0, 0, 100, MIN_RADIANS, MAX_RADIANS) - this.map(this.timer, 0, 100, MIN_RADIANS, MAX_RADIANS)) < Math.PI ? 0 : 1;
             },
 
             sweep() {
-                return this.map(this.brightness, 0, 100, MIN_RADIANS, MAX_RADIANS) > this.map(0, 0, 100, MIN_RADIANS, MAX_RADIANS) ? 0 : 1;
+                return this.map(this.timer, 0, 100, MIN_RADIANS, MAX_RADIANS) > this.map(0, 0, 100, MIN_RADIANS, MAX_RADIANS) ? 0 : 1;
             },
         },
 
         data() {
             return {
                 on: false,
-                brightness: 0,
+                wheel: null,
+                timer: 0,
+                min: 0,
+                max: 3600,
+                battery: 0,
+                features: {
+                    timer: false,
+                    battery: false,
+                },
                 local: false,
-                accessories: [],
                 subject: null,
+                display: "",
+                hidden: false,
                 updater: Debounce(() => {
-                    if (this.room && !this.local) {
-                        if (this.subject && this.subject.type === "light") {
-                            const { ...subject } = this.subject;
-                            const index = this.accessories.findIndex((item) => item.accessory_identifier === subject.accessory_identifier);
+                    if (!this.local) {
+                        const timer = this.subject.characteristics.find((item) => item.type === "remaining_duration");
+                        const battery = this.subject.characteristics.find((item) => item.type === "battery_level");
 
-                            if (index >= 0) this.accessories[index] = subject;
-                        }
+                        this.display = this.subject.name;
+                        this.hidden = this.subject.hidden;
+                        this.on = (this.subject.characteristics.find((item) => item.type === "active") || {}).value || false;
 
-                        this.subject = null;
-                        this.brightness = 0;
-                        this.on = false;
-                        this.accessories = this.accessories || [];
+                        this.min = (timer || {}).min_value || 0;
+                        this.max = (timer || {}).max_value || 3600;
 
-                        for (let i = 0; i < this.accessories.length; i += 1) {
-                            if (this.accessories[i].type === "light") {
-                                const on = this.accessories[i].characteristics.find((item) => item.type === "on");
-                                const brightness = this.accessories[i].characteristics.find((item) => item.type === "brightness");
+                        this.timer = (((timer || {}).value || 100) * 100) / (this.max - this.min);
+                        this.battery = (battery || {}).value || 0;
 
-                                this.on = this.on || (on || {}).value || false;
-
-                                if ((on || {}).value) this.brightness = Math.max(this.brightness, (brightness || {}).value || 0);
-                            }
-                        }
+                        if (timer) this.features.timer = true;
+                        if (battery) this.features.battery = true;
                     }
                 }, UPDATE_DELAY),
                 commit: Debounce(async () => {
                     if (!this.disabled) {
                         this.local = true;
 
-                        if (this.room) await this.room.set("brightness", Math.round(this.brightness));
+                        await (await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier)).set("set_duration", Math.round((this.timer * (this.max - this.min)) / 100));
 
-                        setTimeout(() => { this.local = false; }, LOCAL_DELAY * (this.room.devices || 5));
+                        setTimeout(() => { this.local = false; }, LOCAL_DELAY);
                     }
                 }, UPDATE_DELAY),
             };
@@ -162,38 +185,41 @@
 
         created() {
             this.$store.subscribe(async (mutation) => {
-                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.room === this.id) {
+                if (mutation.type === "IO:ACCESSORY:CHANGE" && mutation.payload.data.accessory.accessory_identifier === this.subject.accessory_identifier) {
                     this.subject = mutation.payload.data.accessory;
                     this.updater();
-                }
-
-                if (mutation.type === "IO:ROOM:CHANGE" && mutation.payload.data.action === "control" && mutation.payload.data.service === "off") {
-                    setTimeout(async () => {
-                        this.on = false;
-                        this.accessories = this.room.accessories || [];
-                        this.updater();
-                    }, LOCAL_DELAY * (this.room.devices || 5));
                 }
             });
         },
 
-        async mounted() {
-            this.accessories = this.room.accessories || [];
+        mounted() {
+            this.subject = this.accessory;
             this.updater();
         },
 
         methods: {
+            settings() {
+                this.$dialog.open("accessory", {
+                    bridge: this.subject.bridge,
+                    id: this.subject.accessory_identifier,
+                });
+            },
+
             map(x, inMin, inMax, outMin, outMax) {
                 return (((x - inMin) * (outMax - outMin)) / (inMax - inMin)) + outMin;
             },
 
             async toggle() {
                 this.local = true;
-                this.on = !this.on;
 
-                await this.room.set("on", this.on);
+                const accessory = await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier);
+                const on = !this.on;
 
-                setTimeout(() => { this.local = false; }, LOCAL_DELAY * (this.room.devices || 5));
+                this.on = on;
+
+                await accessory.set("active", on);
+
+                setTimeout(() => { this.local = false; }, LOCAL_DELAY);
             },
 
             update(offsetX, offsetY) {
@@ -202,14 +228,15 @@
                     const start = -Math.PI / 2 - Math.PI / 6;
 
                     if (angle > MAX_RADIANS) {
-                        this.brightness = this.map(angle, MIN_RADIANS, MAX_RADIANS, 0, 100);
+                        this.timer = this.map(angle, MIN_RADIANS, MAX_RADIANS, 0, 100);
                     } else if (angle < start) {
-                        this.brightness = this.map(angle + 2 * Math.PI, MIN_RADIANS, MAX_RADIANS, 0, 100);
+                        this.timer = this.map(angle + 2 * Math.PI, MIN_RADIANS, MAX_RADIANS, 0, 100);
                     } else {
                         return;
                     }
 
-                    this.$emit("input", Math.round(this.brightness));
+                    this.on = this.timer > 0;
+                    this.$emit("input", Math.round(this.timer));
                 }
             },
 
@@ -229,7 +256,6 @@
                     window.removeEventListener("mousemove", this.pointer);
                     window.removeEventListener("mouseup", this.leave);
 
-                    this.on = true;
                     this.commit();
                 }
             },
@@ -239,7 +265,6 @@
                     window.removeEventListener("touchmove", this.touch);
                     window.removeEventListener("touchend", this.stop);
 
-                    this.on = true;
                     this.commit();
                 }
             },
@@ -282,6 +307,76 @@
         .name {
             text-align: center;
             padding: 14px 7px 7px 7px;
+        }
+
+        .battery {
+            width: 27px;
+            height: 27px;
+            box-sizing: border-box;
+            position: absolute;
+            border-radius: 50%;
+            background: var(--widget-background);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 3px;
+            top: -8px;
+            left: -6px;
+            cursor: default;
+
+            .icon {
+                height: 20px;
+                transform-origin: center;
+                transform: rotate(90deg);
+            }
+
+            .charge {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: absolute;
+                color: var(--accessory-text);
+                top: 0;
+                left: 0;
+            }
+
+            .frame {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: absolute;
+                color: var(--accessory-border);
+                top: 0;
+                left: 0;
+            }
+        }
+
+        .settings {
+            display: none;
+            position: absolute;
+            border-radius: 50%;
+            background: var(--widget-background);
+            justify-content: space-around;
+            align-items: center;
+            padding: 3px;
+            top: -6px;
+            right: -6px;
+            cursor: pointer;
+
+            .icon {
+                height: 22px;
+                opacity: 0.3;
+            }
+
+            &:hover {
+                .icon {
+                    opacity: 1;
+                }
+            }
         }
 
         .background {
@@ -337,7 +432,40 @@
             }
         }
 
-        .brightness {
+        .context {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            padding: 15%;
+            box-sizing: border-box;
+            pointer-events: none;
+            border-radius: 50%;
+            top: 0;
+            left: 0;
+
+            .inner {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                padding: 70% 0 0 0;
+                position: relative;
+                box-sizing: border-box;
+                background: var(--accessory-background);
+                pointer-events: all;
+                clip-path: inset(71% 0 0 0);
+                border-radius: 50%;
+                cursor: pointer;
+
+                .icon {
+                    height: 60%;
+                    color: var(--accessory-text);
+                }
+            }
+        }
+
+        .timer {
             .switch {
                 padding: 15%;
                 border: 0 none;
@@ -376,7 +504,17 @@
         &.on {
             .switch {
                 .inner {
-                    background: #fed800;
+                    background: #04a3ff;
+
+                    .icon {
+                        color: var(--accessory-highlight);
+                    }
+                }
+            }
+
+            .context {
+                .inner {
+                    background: #04a3ff;
 
                     .icon {
                         color: var(--accessory-highlight);
@@ -386,9 +524,31 @@
 
             svg {
                 .marker {
-                    stroke: #fed800;
+                    stroke: #04a3ff;
                     opacity: 1;
                 }
+            }
+        }
+
+        &:hover {
+            .settings {
+                display: flex;
+            }
+        }
+    }
+
+    [platform="mobile"] {
+        #control {
+            .settings {
+                display: flex;
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        #control {
+            .settings {
+                display: flex;
             }
         }
     }

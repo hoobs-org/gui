@@ -86,6 +86,17 @@ module.exports = {
         },
         {
             files: [
+                "src/components/accessories/camera.vue",
+            ],
+            rules: {
+                indent: "off",
+                "quote-props": "off",
+                "@typescript-eslint/indent": "off",
+                "vue/no-deprecated-destroyed-lifecycle": "off",
+            },
+        },
+        {
+            files: [
                 "src/components/dialogs/settings.vue",
             ],
             rules: {
@@ -104,6 +115,17 @@ module.exports = {
                 "quote-props": "off",
                 "@typescript-eslint/indent": "off",
                 "no-await-in-loop": "off",
+            },
+        },
+        {
+            files: [
+                "src/components/elements/player.vue",
+            ],
+            rules: {
+                indent: "off",
+                "quote-props": "off",
+                "@typescript-eslint/indent": "off",
+                "vue/no-deprecated-destroyed-lifecycle": "off",
             },
         },
         {

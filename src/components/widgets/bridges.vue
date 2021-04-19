@@ -57,6 +57,9 @@
         align-items: center;
         padding: 14px;
         position: relative;
+        color: var(--widget-text);
+        background: var(--widget-background);
+        backdrop-filter: var(--transparency);
         cursor: default;
         user-select: none;
 

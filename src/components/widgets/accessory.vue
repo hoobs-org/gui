@@ -90,12 +90,18 @@
         height: 100%;
         padding: 20px 30px;
         box-sizing: border-box;
+        color: var(--widget-text);
+        background: var(--widget-background);
+        backdrop-filter: var(--transparency);
         cursor: default;
         user-select: none;
 
         .device {
-            width: 100%;
-            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            margin: auto;
+            aspect-ratio: 155/214;
+            object-fit: contain;
             display: flex;
             flex-direction: row;
             justify-content: space-around;
