@@ -19,27 +19,27 @@
 <template>
     <span id="message">
         <span v-if="value.level === 'debug'" class="content">
-            <span class="dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
+            <span class="timestamp dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
             <span v-if="value.bridge !== 'hub'" v-on:click="navigation('bridges', value.bridge)" class="bridge" :style="bridge(value.display)">{{ value.display }}</span>
             <span v-on:click="navigation('config', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
             <span>{{ value.message }}</span>
         </span>
         <span v-else-if="value.level === 'error'" class="content">
-            <span class="dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
+            <span class="timestamp dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
             <span v-if="value.bridge !== 'hub'" v-on:click="navigation('bridges', value.bridge)" class="bridge" :style="bridge(value.display)">{{ value.display }}</span>
             <span v-on:click="navigation('config', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
             <span class="error">{{ $t("error") }}</span>
             <span class="error-text">{{ value.message }}</span>
         </span>
         <span v-else-if="value.level === 'warn'" class="content">
-            <span class="dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
+            <span class="timestamp dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
             <span v-if="value.bridge !== 'hub'" v-on:click="navigation('bridges', value.bridge)" class="bridge" :style="bridge(value.display)">{{ value.display }}</span>
             <span v-on:click="navigation('config', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
             <span class="warning">{{ $t("warning") }}</span>
             <span class="warning-text">{{ value.message }}</span>
         </span>
         <span v-else-if="value.level === 'info'" class="content">
-            <span class="dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
+            <span class="timestamp dim">{{ new Date(value.timestamp).toLocaleString() }}</span>
             <span v-if="value.bridge !== 'hub'" v-on:click="navigation('bridges', value.bridge)" class="bridge" :style="bridge(value.display)">{{ value.display }}</span>
             <span v-on:click="navigation('config', value.plugin)" class="prefix" :style="prefix(value.plugin)">{{ value.prefix }}</span>
             <span class="text">{{ value.message }}</span>
@@ -167,6 +167,38 @@
 
             &:hover {
                 text-decoration: underline;
+            }
+        }
+    }
+
+    [platform="mobile"] {
+        #message {
+            .content {
+                display: unset;
+                flex-direction: unset;
+                white-space: normal;
+                font-size: 0.8em;
+            }
+
+            .timestamp {
+                display: none;
+            }
+        }
+    }
+
+    [platform="tablet"] {
+        @media only screen and (orientation:portrait) {
+            #message {
+                .content {
+                    display: unset;
+                    flex-direction: unset;
+                    white-space: normal;
+                    font-size: 0.8em;
+                }
+
+                .timestamp {
+                    display: none;
+                }
             }
         }
     }

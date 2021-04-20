@@ -47,9 +47,6 @@
         padding: 14px;
         position: relative;
         cursor: default;
-        color: var(--widget-text);
-        background: var(--widget-background);
-        backdrop-filter: var(--transparency);
         user-select: none;
 
         .title {
