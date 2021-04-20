@@ -125,6 +125,8 @@
         }
 
         .content {
+            display: flex;
+            flex-direction: row;
             white-space: nowrap;
 
             span {
@@ -172,6 +174,8 @@
     [platform="mobile"] {
         #message {
             .content {
+                display: unset;
+                flex-direction: unset;
                 white-space: normal;
                 font-size: 0.8em;
             }
@@ -186,6 +190,8 @@
         @media only screen and (orientation:portrait) {
             #message {
                 .content {
+                    display: unset;
+                    flex-direction: unset;
                     white-space: normal;
                     font-size: 0.8em;
                 }
