@@ -143,14 +143,10 @@
         },
 
         async created() {
-            window.require.config({
-                paths: { "vs": "/vs" },
-            });
+            window.require.config({ paths: { "vs": "/vs" } });
 
             await (new Promise((resolve) => {
-                window.require(["/vs/editor/editor.main"], () => {
-                    resolve();
-                });
+                window.require(["/vs/editor/editor.main"], () => resolve());
             }));
         },
 
@@ -166,9 +162,7 @@
                     }
 
                     next();
-                }, () => {
-                    next(false);
-                });
+                }, () => next(false));
             } else {
                 this.$action.off("window", "resize");
                 this.$action.off("personalize", "update");
@@ -188,15 +182,10 @@
             this.$action.off("personalize", "update");
 
             this.$action.on("window", "resize", this.resize);
-
-            this.$action.on("config", "update", () => {
-                this.change(this.bridge);
-            });
+            this.$action.on("config", "update", () => this.change(this.bridge));
 
             this.$action.on("personalize", "update", () => {
-                if (this.identifier === "advanced") {
-                    this.change(this.bridge);
-                }
+                if (this.identifier === "advanced") this.change(this.bridge);
             });
 
             this.load(this.name && this.name !== "" ? `${this.scope}/${this.name}` : this.scope);
@@ -220,9 +209,7 @@
                     if (config.api.disable_auth !== working.disable_auth) {
                         reload = true;
 
-                        if (!config.api.disable_auth) {
-                            logout = true;
-                        }
+                        if (!config.api.disable_auth) logout = true;
                     }
 
                     config.api = working;
@@ -358,13 +345,8 @@
                     let foreground = theme.widget.text.default.replace("#", "");
                     let background = "00000000";
 
-                    if (foreground.length === 3) {
-                        foreground = foreground.split("").map((item) => `${item}${item}`).join("");
-                    }
-
-                    if (background.length === 3) {
-                        background = background.split("").map((item) => `${item}${item}`).join("");
-                    }
+                    if (foreground.length === 3) foreground = foreground.split("").map((item) => `${item}${item}`).join("");
+                    if (background.length === 3) background = background.split("").map((item) => `${item}${item}`).join("");
 
                     this.saved = (await (await this.$hoobs.bridge(bridge)).config.get()) || {};
 
@@ -386,13 +368,8 @@
                         window.monaco.editor.defineTheme("theme", {
                             base: theme.mode === "dark" ? "vs-dark" : "vs",
                             inherit: true,
-                            colors: {
-                                "editor.foreground": `#${foreground}`,
-                                "editor.background": `#${background}`,
-                            },
-                            rules: [
-                                { token: "", foreground, background },
-                            ],
+                            colors: { "editor.foreground": `#${foreground}`, "editor.background": `#${background}` },
+                            rules: [{ token: "", foreground, background }],
                         });
 
                         this.editor = window.monaco.editor.create(this.$refs.editor, {
@@ -404,14 +381,8 @@
                             renderLineHighlight: "none",
                             scrollBeyondLastLine: false,
                             contextmenu: false,
-                            minimap: {
-                                enabled: false,
-                            },
-                            scrollbar: {
-                                useShadows: false,
-                                horizontal: "hidden",
-                                vertical: "hidden",
-                            },
+                            minimap: { enabled: false },
+                            scrollbar: { useShadows: false, horizontal: "hidden", vertical: "hidden" },
                             lineNumbers: false,
                         });
 
@@ -507,64 +478,51 @@
                 }
             },
 
-            async load(identifier) {
+            load(identifier) {
                 this.loading = true;
 
-                const plugins = await this.$hoobs.plugins();
+                this.$hoobs.plugins().then((plugins) => {
+                    for (let i = 0; i < plugins.length; i += 1) {
+                        const plugin = plugins[i];
 
-                for (let i = 0; i < plugins.length; i += 1) {
-                    const plugin = plugins[i];
+                        if (plugin && plugin.schema && plugin.schema.config) {
+                            const { bridge } = plugin;
+                            const { version } = plugin;
 
-                    if (plugin && plugin.schema && plugin.schema.config) {
-                        const { bridge } = plugin;
-                        const { version } = plugin;
+                            let index = this.plugins.findIndex((item) => item.identifier === plugin.identifier);
 
-                        let index = this.plugins.findIndex((item) => item.identifier === plugin.identifier);
+                            if (index === -1) {
+                                index = this.plugins.length;
+                                plugin.bridges = [];
+                                plugin.display = this.$hoobs.repository.title(plugin.name);
 
-                        if (index === -1) {
-                            index = this.plugins.length;
-                            plugin.bridges = [];
-                            plugin.display = this.$hoobs.repository.title(plugin.name);
+                                delete plugin.bridge;
+                                delete plugin.version;
 
-                            delete plugin.bridge;
-                            delete plugin.version;
+                                this.plugins.push(plugin);
+                            }
 
-                            this.plugins.push(plugin);
+                            this.plugins[index].bridges.push({ id: bridge, version });
                         }
-
-                        this.plugins[index].bridges.push({
-                            id: bridge,
-                            version,
-                        });
                     }
-                }
 
-                this.plugins.sort((a, b) => {
-                    if (a.display < b.display) return -1;
-                    if (a.display > b.display) return 1;
+                    this.plugins.sort((a, b) => {
+                        if (a.display < b.display) return -1;
+                        if (a.display > b.display) return 1;
 
-                    return 0;
-                });
-
-                this.plugins.unshift({
-                    identifier: "hub",
-                    display: this.$t("hub"),
-                });
-
-                if (!this.$mobile) {
-                    this.plugins.push({
-                        identifier: "advanced",
-                        display: this.$t("advanced"),
+                        return 0;
                     });
-                }
 
-                this.switch(identifier);
+                    this.plugins.unshift({ identifier: "hub", display: this.$t("hub") });
+
+                    if (!this.$mobile) this.plugins.push({ identifier: "advanced", display: this.$t("advanced") });
+
+                    this.switch(identifier);
+                });
             },
 
             resize() {
-                if (this.editor) {
-                    this.editor.layout();
-                }
+                if (this.editor) this.editor.layout();
             },
         },
     };
