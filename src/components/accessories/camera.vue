@@ -315,6 +315,39 @@
         }
     }
 
+    @media not all and (min-resolution:.001dpcm) {
+        @supports (-webkit-appearance:none) {
+            #control {
+                .background {
+                    padding-top: 56.25%;
+                    position: relative;
+                }
+
+                .panel {
+                    width: unset;
+                    height: unset;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    position: absolute;
+                }
+
+                &.dashboard {
+                    .background {
+                        padding-top: unset;
+                    }
+
+                    .panel {
+                        width: 100%;
+                        height: 100%;
+                        position: relative;
+                    }
+                }
+            }
+        }
+    }
+
     [platform="mobile"] {
         #control {
             .settings {
