@@ -38,7 +38,7 @@
 </template>
 
 <script>
-    import countries from "@/lang/country-codes.json";
+    import countries from "@/lang/countries.json";
 
     export default {
         name: "location",

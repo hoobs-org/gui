@@ -102,7 +102,7 @@
 
 <script>
     import { Wait } from "@hoobs/sdk/lib/wait";
-    import Countries from "@/lang/country-codes.json";
+    import Countries from "@/lang/countries.json";
 
     const REDIRECT_DELAY = 1000;
 
