@@ -217,7 +217,7 @@
             align-items: center;
             padding: 3px;
             top: 6px;
-            left: 37px;
+            right: 7px;
             cursor: pointer;
 
             .icon {
@@ -259,7 +259,7 @@
             .timelapse {
                 position: absolute;
                 top: 7px;
-                right: 10px;
+                left: 10px;
                 color: #ffffff8a;
                 font-weight: bold;
                 font-size: 14px;
@@ -269,7 +269,7 @@
                 display: none;
                 position: absolute;
                 top: 7px;
-                left: 10px;
+                right: 37px;
                 color: #fff;
                 opacity: 0.8;
                 cursor: pointer;
@@ -298,7 +298,7 @@
             }
 
             .panel {
-                border: 0 none;
+                border: 1px var(--widget-border) solid;
             }
         }
 
