@@ -103,7 +103,7 @@
 
         ::-webkit-scrollbar-thumb {
             background-color: var(--application-border);
-            border-radius: 8px;
+            border-radius: 0;
         }
 
         ::-webkit-scrollbar-button {

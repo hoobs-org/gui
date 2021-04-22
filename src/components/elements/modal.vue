@@ -70,7 +70,6 @@
         box-sizing: border-box;
         background: var(--modal-mask);
         justify-content: space-around;
-        padding: 0 0 4% 0;
         overflow: hidden;
         z-index: 2000;
 
@@ -83,6 +82,7 @@
         }
 
         .window {
+            max-height: 100%;
             display: flex;
             flex-direction: column;
             padding: 10px;
@@ -90,6 +90,7 @@
             background: var(--modal-background);
             backdrop-filter: var(--transparency);
             border-top: 7px var(--modal-highlight) solid;
+            box-sizing: border-box;
             box-shadow: var(--elevation);
             overflow: auto;
         }
