@@ -81,13 +81,7 @@
                 background: #fff;
                 border-top: 0 none;
                 box-shadow: var(--elevation);
-                -ms-overflow-style: none;
-                scrollbar-width: none;
                 overflow: auto;
-
-                &::-webkit-scrollbar {
-                    display: none;
-                }
             }
 
             .content {

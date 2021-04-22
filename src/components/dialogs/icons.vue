@@ -93,12 +93,6 @@
             .results {
                 flex: 1;
                 overflow: auto;
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-
-                &::-webkit-scrollbar {
-                    display: none;
-                }
 
                 &.loading {
                     padding: 20px;
@@ -107,8 +101,8 @@
                 }
 
                 .icon {
-                    width: 41px;
-                    height: 41px;
+                    width: 43.3px;
+                    height: 43.3px;
                     display: inline-flex;
                     box-sizing: border-box;
                     flex-direction: row;

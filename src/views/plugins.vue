@@ -269,12 +269,7 @@
                 flex: 1;
                 display: flex;
                 margin: 0 20px 10px 5px;
-                -ms-overflow-style: none;
                 overflow: auto;
-
-                &::-webkit-scrollbar {
-                    display: none;
-                }
 
                 .input {
                     background: var(--widget-background);
@@ -304,12 +299,7 @@
                     flex: 1;
                     display: flex;
                     flex-direction: column;
-                    -ms-overflow-style: none;
                     overflow: auto;
-
-                    &::-webkit-scrollbar {
-                        display: none;
-                    }
                 }
 
                 .section {
