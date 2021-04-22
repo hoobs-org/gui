@@ -115,12 +115,6 @@
 
             .form {
                 overflow: auto;
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-
-                &::-webkit-scrollbar {
-                    display: none;
-                }
 
                 &.empty {
                     display: flex;

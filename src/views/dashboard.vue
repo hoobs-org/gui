@@ -177,17 +177,7 @@
         .content {
             flex: 1;
             overflow: auto;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            background: linear-gradient(
-                to bottom,
-                var(--application-background) 0%,
-                #00000000 30%
-            );
-
-            &::-webkit-scrollbar {
-                display: none;
-            }
+            background: linear-gradient(to bottom, var(--application-background) 0%, #00000000 30%);
 
             .widget {
                 border-radius: 0;

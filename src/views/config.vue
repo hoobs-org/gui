@@ -547,12 +547,7 @@
                 color: var(--widget-text);
                 background: var(--widget-background);
                 backdrop-filter: var(--transparency);
-                -ms-overflow-style: none;
                 overflow: auto;
-
-                &::-webkit-scrollbar {
-                    display: none;
-                }
 
                 .section {
                     display: flex;
