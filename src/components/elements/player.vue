@@ -44,6 +44,7 @@
 
         mounted() {
             this.player = Video(this.$refs.videoPlayer, {
+                liveui: true,
                 autoplay: true,
                 controls: true,
                 sources: [
@@ -73,6 +74,7 @@
             top: 0;
             left: 0;
             border: 0 none;
+            border-radius: 0;
             justify-content: space-around;
             align-items: center;
             align-content: center;
@@ -87,9 +89,52 @@
         }
 
         .vjs-volume-panel,
-        .vjs-loading-spinner,
         .vjs-picture-in-picture-control {
             display: none !important;
+        }
+    }
+
+    @keyframes vjs-spinner-fade {
+        0% {
+            border-top-color: #adadad;
+        }
+
+        20% {
+            border-top-color: #adadad;
+        }
+
+        35% {
+            border-top-color: white;
+        }
+
+        60% {
+            border-top-color: #adadad;
+        }
+
+        100% {
+            border-top-color: #adadad;
+        }
+    }
+
+    @-webkit-keyframes vjs-spinner-fade {
+        0% {
+            border-top-color: #adadad;
+        }
+
+        20% {
+            border-top-color: #adadad;
+        }
+
+        35% {
+            border-top-color: white;
+        }
+
+        60% {
+            border-top-color: #adadad;
+        }
+
+        100% {
+            border-top-color: #adadad;
         }
     }
 
