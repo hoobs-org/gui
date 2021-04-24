@@ -24,6 +24,9 @@
         </div>
         <div v-if="notifications.length === 0" class="empty">{{ $t("notifications_empty") }}</div>
         <div v-else class="list">
+            <div v-if="notifications.length > 1" class="clear-all">
+                <div v-on:click="clear" class="clear-all-button">{{ $t("clear") }}</div>
+            </div>
             <notification v-for="(notification, index) in notifications" :key="`notification:${index}`" :message="notification" />
         </div>
     </div>
@@ -48,6 +51,12 @@
                 active: true,
                 timeout: undefined,
             };
+        },
+
+        methods: {
+            clear() {
+                this.$store.commit("NOTIFICATION:DISMISS:ALL");
+            },
         },
     };
 </script>
@@ -85,6 +94,24 @@
         .list {
             flex: 1;
             overflow: auto;
+
+            .clear-all {
+                margin: 0 20px;
+                display: flex;
+                justify-content: flex-end;
+                user-select: none;
+
+                .clear-all-button {
+                    font-size: 14px;
+                    padding: 4px;
+                    cursor: pointer;
+                    opacity: 0.5;
+
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
+            }
         }
 
         .empty {
