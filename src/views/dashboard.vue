@@ -23,7 +23,7 @@
                 <icon name="widgets" class="icon" />
                 {{ $t("widgets") }}
             </div>
-            <div class="seperator desktop"></div>
+            <div v-if="!$mobile" class="seperator desktop"></div>
             <icon v-if="locked && !$mobile" v-on:click.stop="toggle()" :title="$t('sort_dashboard')" name="lock" class="icon desktop" />
             <icon v-else-if="!$mobile" v-on:click.stop="toggle()" :title="$t('sort_dashboard')" name="lock-open-variant" class="icon desktop" />
         </context>
