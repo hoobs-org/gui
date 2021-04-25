@@ -66,6 +66,11 @@
     .video-js {
         width: 100%;
         height: 100%;
+        outline: 0 none !important;
+
+        .vjs-tech {
+            outline: 0 none !important;
+        }
 
         .vjs-big-play-button {
             width: 100%;
@@ -76,6 +81,7 @@
             border: 0 none;
             border-radius: 0;
             justify-content: space-around;
+            outline: 0 none !important;
             align-items: center;
             align-content: center;
         }
@@ -89,6 +95,8 @@
         }
 
         .vjs-volume-panel,
+        .vjs-live-control,
+        .vjs-remaining-time,
         .vjs-picture-in-picture-control {
             display: none !important;
         }
@@ -191,7 +199,8 @@
             order: 2;
             flex: 8;
             font-size: 1em;
-            margin-right: 80px;
+            text-align: unset;
+            margin-left: 7px;
         }
 
         .vjs-fullscreen-control,
@@ -199,6 +208,8 @@
         .vjs-volume-panel {
             order: 3;
             flex: 1;
+            text-align: right;
+            margin-right: 7px;
         }
 
         .vjs-volume-panel:hover .vjs-volume-control.vjs-volume-horizontal {
