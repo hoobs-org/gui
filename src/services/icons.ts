@@ -956,6 +956,7 @@ import {
     mdiEyeOff,
     mdiWidgets,
     mdiSprinklerVariant,
+    mdiTelevisionClassic,
 } from "@mdi/js";
 
 const tags: { [key: string]: string } = {
@@ -1898,6 +1899,7 @@ const tags: { [key: string]: string } = {
     "eye-off": mdiEyeOff,
     widgets: mdiWidgets,
     sprinkler: mdiSprinklerVariant,
+    television: mdiTelevisionClassic,
 };
 
 export function icons(): string[] {
