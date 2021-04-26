@@ -27,6 +27,9 @@
                     <div class="row">
                         <text-field :title="$t('name')" style="flex: 1; padding-right: 5px" v-model="display" />
                     </div>
+                    <div v-if="accessory.type === 'camera' && accessory.supports_streaming" class="row">
+                        <checkbox id="streaming" :title="$t('enable_streaming')" v-model="streaming" />
+                    </div>
                     <div class="row">
                         <checkbox id="hidden" :title="$t('hidden')" v-model="hidden" />
                     </div>
@@ -113,6 +116,7 @@
                 items: [],
                 display: "",
                 hidden: false,
+                streaming: false,
                 room: "",
                 title: "",
                 icon: {
@@ -147,6 +151,13 @@
 
                 this.title = room.name || this.$t(room.id || "default");
             },
+
+            streaming() {
+                this.$store.commit("ACCESSORY:STREAMING", {
+                    id: this.accessory.accessory_identifier,
+                    data: this.streaming,
+                });
+            },
         },
 
         methods: {
@@ -169,6 +180,7 @@
                 this.display = this.accessory.name;
                 this.hidden = this.accessory.hidden;
                 this.room = this.accessory.room;
+                this.streaming = (this.accessory.supports_streaming && this.$store.state.streaming[this.accessory.accessory_identifier]);
                 this.loading = false;
 
                 switch (this.accessory.type) {

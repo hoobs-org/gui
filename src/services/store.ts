@@ -59,6 +59,7 @@ export default new Vuex.Store({
         auth: false,
         notifications: [],
         snapshots: {},
+        streaming: {},
         latest: null,
         navigation: false,
         accessory: null,
@@ -247,6 +248,10 @@ export default new Vuex.Store({
         "THEME:SET": (state: { [key: string]: any }, theme: number) => {
             state.theme = theme;
         },
+
+        "ACCESSORY:STREAMING": (state: { [key: string]: any }, payload: any) => {
+            state.streaming[payload.id] = payload.data;
+        },
     },
 
     plugins: [new Persistence({
@@ -261,6 +266,7 @@ export default new Vuex.Store({
             user: state.user,
             notifications: state.notifications,
             snapshots: state.snapshots,
+            streaming: state.streaming,
             navigation: state.navigation,
         }),
     }).plugin],
