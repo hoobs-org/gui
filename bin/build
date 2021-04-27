@@ -52,7 +52,7 @@ Program.command("gui", { isDefault: true })
 
         execSync(`${join(root, "node_modules", ".bin", "vue-cli-service")} build --modern`, { cwd: root, stdio: "inherit" });
 
-        if (command.pack) {
+        if (process.platform === "linux" && command.pack) {
             if (existsSync(join(root, "dist"))) execSync(`${join(root, "node_modules", ".bin", "rimraf")} ${join(root, "dist")}`, { cwd: root, stdio: "inherit" });
 
             mkdirSync(join(root, "dist"));
@@ -99,44 +99,6 @@ Program.command("gui", { isDefault: true })
 
             if (existsSync(join(root, "dist"))) execSync(`${join(root, "node_modules", ".bin", "rimraf")} ${join(root, "dist")}`, { cwd: root, stdio: "inherit" });
         }
-    });
-
-Program.command("publish")
-    .description("publish the gui to npm")
-    .action(() => {
-        const questions = [
-            {
-                type: "text",
-                name: "confirm",
-                initial: "no",
-                message: "type yes to confirm",
-                format: (value) => value.toLowerCase(),
-            },
-        ];
-
-        Prompt(questions).then((result) => {
-            if (result && result.confirm === "yes") {
-                execSync(`${join(root, "bin", "build")} gui`, {
-                    cwd: root,
-                    stdio: "inherit",
-                });
-
-                const pack = JSON.parse(JSON.stringify(pjson));
-
-                delete pack.scripts;
-                delete pack.dependencies;
-                delete pack.devDependencies;
-
-                writeFileSync(join(root, "package.json"), JSON.stringify(pack, null, 4));
-
-                execSync("yarn publish --access public", {
-                    cwd: root,
-                    stdio: "inherit",
-                });
-
-                writeFileSync(join(root, "package.json"), JSON.stringify(pjson, null, 4));
-            }
-        });
     });
 
 Program.parse(process.argv);
