@@ -413,8 +413,6 @@
 
                 if (redirect && window.location.href.match(/http:\/\/[a-zA-Z0-9-_~]*.local/gi)) {
                     setTimeout(() => { window.location.href = `http://${this.broadcast}.local`; }, REDIRECT_DELAY);
-                } else if (redirect && window.location.href.match(/http:\/\/[a-zA-Z][a-zA-Z0-9-_~]*/gi)) {
-                    setTimeout(() => { window.location.href = `http://${this.broadcast}`; }, REDIRECT_DELAY);
                 } else {
                     this.$dialog.close("settings");
                     this.$action.emit("settings", "update");
