@@ -20,7 +20,7 @@ sudo apt install -y hoobsd hoobs-gui
 If you have the HOOOBS CLI installed, you can simply run this command.
 
 ```
-sudo hoobs extention add gui
+sudo hoobs extension add gui
 ```
 
 ## Service
