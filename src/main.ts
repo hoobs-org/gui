@@ -109,6 +109,7 @@ Vue.component("number-field", () => import(/* webpackChunkName: "common-number" 
 Vue.component("integer-field", () => import(/* webpackChunkName: "common-integer" */ "./components/fields/integer.vue"));
 Vue.component("search-field", () => import(/* webpackChunkName: "common-search" */ "./components/fields/search.vue"));
 Vue.component("select-field", () => import(/* webpackChunkName: "common-select" */ "./components/fields/select.vue"));
+Vue.component("label-field", () => import(/* webpackChunkName: "common-label" */ "./components/fields/label.vue"));
 Vue.component("port-field", () => import(/* webpackChunkName: "common-port" */ "./components/fields/port.vue"));
 Vue.component("spinner", () => import(/* webpackChunkName: "common-spinner" */ "./components/elements/spinner.vue"));
 
