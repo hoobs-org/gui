@@ -19,7 +19,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const emojer = require("emojer");
-const emojis = require("github-api-emojis/lib/map");
+const emojis = require("github-api-emojis/lib/map.json");
 
 export default function emoji(): any {
     return [{
