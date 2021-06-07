@@ -112,6 +112,7 @@
         width: 100%;
         height: 100%;
         display: flex;
+        box-sizing: border-box;
         font-family: "Montserrat", sans-serif;
         color: var(--application-text);
         background: var(--application-background);
