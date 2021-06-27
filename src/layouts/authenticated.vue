@@ -116,6 +116,7 @@
         font-family: "Montserrat", sans-serif;
         color: var(--application-text);
         background: var(--application-background);
+        position: relative;
         overflow: hidden;
 
         .disable {

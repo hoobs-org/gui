@@ -87,7 +87,9 @@
                     this.loading = true;
 
                     this.$hoobs.auth.login(this.username.toLowerCase(), this.password, this.remember).then((response) => {
-                        if (response) {
+                        if (response && (this.$platform === "mobile" || this.$platform === "tablet")) {
+                            window.location.href = this.url;
+                        } else if (response) {
                             this.$router.push({ path: this.url });
                         } else {
                             this.errors.push(this.$t("invalid_username_password"));
