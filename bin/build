@@ -41,6 +41,7 @@ Program.version(pjson.version, "-v, --version", "output the current version")
 
 Program.command("gui", { isDefault: true })
     .description("build hoobs gui")
+    .option("-r, --repo <name>", "select the repo to publish to")
     .option("-l, --lint", "lint the code before building")
     .option("-p, --pack", "create pack file for offline testing")
     .action((command) => {
@@ -70,10 +71,10 @@ Program.command("gui", { isDefault: true })
 
             execSync(`tar -zcf ../hoobs-gui-v${pjson.version}.tar.gz .`, { cwd: join(root, "dist/usr"), stdio: "inherit" });
 
-            if (!existsSync(join(root, "../builds"))) mkdirSync(join(root, "../builds"));
-            if (existsSync(join(root, "../builds", `hoobs-gui-v${pjson.version}.tar.gz`))) unlinkSync(join(root, "../builds", `hoobs-gui-v${pjson.version}.tar.gz`));
+            if (!existsSync(join(root, "../repo/src"))) mkdirSync(join(root, "../repo/src"));
+            if (existsSync(join(root, "../repo/src", `hoobs-gui-v${pjson.version}.tar.gz`))) unlinkSync(join(root, "../repo/src", `hoobs-gui-v${pjson.version}.tar.gz`));
 
-            moveSync(join(root, "dist", `hoobs-gui-v${pjson.version}.tar.gz`), join(root, "../builds", `hoobs-gui-v${pjson.version}.tar.gz`));
+            moveSync(join(root, "dist", `hoobs-gui-v${pjson.version}.tar.gz`), join(root, "../repo/src", `hoobs-gui-v${pjson.version}.tar.gz`));
             mkdirSync(join(root, "dist/DEBIAN"));
 
             let control = "";
@@ -92,10 +93,11 @@ Program.command("gui", { isDefault: true })
             writeFileSync(join(root, "dist/DEBIAN/control"), control);
             execSync("dpkg-deb --build dist", { cwd: root, stdio: "inherit" });
 
-            if (existsSync(join(root, "../builds", `hoobs-gui-v${pjson.version}.deb`))) unlinkSync(join(root, "../builds", `hoobs-gui-v${pjson.version}.deb`));
+            if (!existsSync(join(root, "../repo/deb", command.repo || "edge"))) mkdirSync(join(root, "../repo/deb", command.repo || "edge"));
+            if (existsSync(join(root, "../repo/deb", command.repo || "edge", `hoobs-gui-v${pjson.version}.deb`))) unlinkSync(join(root, "../repo/deb", command.repo || "edge", `hoobs-gui-v${pjson.version}.deb`));
 
-            moveSync(join(root, "dist.deb"), join(root, "../builds", `hoobs-gui-v${pjson.version}.deb`));
-            execSync(`dpkg-sig --sign builder ${join(root, "../builds", `hoobs-gui-v${pjson.version}.deb`)}`, { cwd: root, stdio: "inherit" });
+            moveSync(join(root, "dist.deb"), join(root, "../repo/deb", command.repo || "edge", `hoobs-gui-v${pjson.version}.deb`));
+            execSync(`dpkg-sig --sign builder ${join(root, "../repo/deb", command.repo || "edge", `hoobs-gui-v${pjson.version}.deb`)}`, { cwd: root, stdio: "inherit" });
 
             if (existsSync(join(root, "dist"))) execSync(`${join(root, "node_modules", ".bin", "rimraf")} ${join(root, "dist")}`, { cwd: root, stdio: "inherit" });
         }
