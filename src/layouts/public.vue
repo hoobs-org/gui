@@ -39,6 +39,7 @@
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
+        position: relative;
         overflow: hidden;
     }
 
