@@ -8,7 +8,7 @@ The HOOBS GUI is part of a software stack. To use this you will need to install 
 First add the HOOBS repository to your sources.
 
 ```sh
-wget -qO- https://dl.hoobs.org/repo | sudo -E bash -
+wget -qO- https://dl.hoobs.org/stable | sudo -E bash -
 ```
 
 Then install hoobsd and the HOOBS GUI.
