@@ -21,7 +21,7 @@
         <div id="updates">
             <div class="content">
                 <div v-if="!updating" class="form">
-                    <div class="row section">{{ $t("software") }}</div>
+                    <div v-if="!loading && stack" class="row section">{{ $t("server") }}</div>
                     <div v-if="!loading && !status.upgraded" class="row">
                         {{ $t("version_server") }}: {{ status.current }}
                         <span class="value">{{ $t("available") }}</span>
@@ -38,14 +38,16 @@
                         {{ $t("version_node") }}: {{ status.node_current }}
                         <span class="value">{{ $t("available") }}</span>
                     </div>
+                    <div v-if="!loading && stack" class="row" style="margin-top: 7px;">
+                        <div v-on:click="upgrade()" class="button">{{ $t("update_now") }}</div>
+                    </div>
+                    <div v-if="!loading && plugins.length > 0" class="row section">{{ $t("plugins") }}</div>
                     <div v-for="(plugin, index) in plugins" :key="`plugin:${index}`" class="row">
                         {{ $hoobs.repository.title(plugin.name) }}: {{ plugin.latest }}
                         <span class="value">{{ $t("available") }}</span>
                     </div>
-                    <div v-if="!loading && !updated" class="row" style="margin-top: 7px;">
-                        <a v-if="stack" class="button" href="https://github.com/hoobs-org/HOOBS" target="_blank">{{ $t("changelog") }}</a>
-                        <div v-if="stack" v-on:click="upgrade()" class="button">{{ $t("update_now") }}</div>
-                        <div v-if="plugins.length > 0" v-on:click="update()" class="button">{{ $t("update_plugins") }}</div>
+                    <div v-if="!loading && plugins.length > 0" class="row" style="margin-top: 7px;">
+                        <div v-on:click="update()" class="button">{{ $t("update_plugins") }}</div>
                     </div>
                     <div v-if="!loading && updated" class="row updated">
                         <icon name="update" class="icon" />
@@ -226,7 +228,10 @@
         }
 
         .updated {
+            flex: 1;
             align-items: center;
+            margin: 0 auto;
+            padding-bottom: 10%;
 
             .icon {
                 height: 37px;
