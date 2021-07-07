@@ -97,8 +97,6 @@
             this.$dialog.on("close", () => {
                 this.dialogs -= 1;
             });
-
-            this.$hoobs.plugins();
         },
 
         async mounted() {
