@@ -119,6 +119,8 @@
 
                 this.loading = false;
                 this.updating = false;
+
+                this.$action.emit("dashboard", "update");
             },
 
             async upgrade() {
