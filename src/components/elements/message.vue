@@ -185,11 +185,8 @@
                 display: unset;
                 flex-direction: unset;
                 white-space: normal;
+                word-break: break-word;
                 font-size: 0.8em;
-            }
-
-            .timestamp {
-                display: none;
             }
         }
     }
