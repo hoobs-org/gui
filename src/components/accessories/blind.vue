@@ -80,7 +80,7 @@
 
         data() {
             return {
-                position: 0,
+                position: 100,
                 battery: 0,
                 features: {
                     battery: false,
@@ -95,7 +95,7 @@
 
                         this.display = this.subject.name;
                         this.hidden = this.subject.hidden;
-                        this.position = (this.subject.characteristics.find((item) => item.type === "target_position") || {}).value || false;
+                        this.position = 100 - ((this.subject.characteristics.find((item) => item.type === "target_position") || {}).value || 100);
                         this.battery = (battery || {}).value || 0;
 
                         if (battery) this.features.battery = true;
@@ -105,7 +105,7 @@
                     this.local = true;
 
                     const accessory = await this.$hoobs.accessory(this.subject.bridge, this.subject.accessory_identifier);
-                    await accessory.set("target_position", this.position);
+                    await accessory.set("target_position", 100 - this.position);
 
                     setTimeout(() => { this.local = false; }, LOCAL_DELAY);
                 }, UPDATE_DELAY),

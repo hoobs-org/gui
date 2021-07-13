@@ -18,7 +18,7 @@
 
 <template>
     <div :key="version" id="log">
-        <context v-if="!loading">
+        <context>
             <div ref="bridges" v-on:click.stop="menu('bridges')" class="button">
                 <icon name="layers" class="icon" />
                 {{ $t("bridges") }}
@@ -32,12 +32,8 @@
             <div class="seperator desktop"></div>
             <icon v-on:click="download()" :title="$t('download_log')" name="download" class="icon desktop" />
         </context>
-        <context v-else />
-        <div v-if="!loading" ref="messages" class="messages">
+        <div ref="messages" class="messages">
             <message v-for="(message, index) in messages" :key="`message:${index}`" :value="message" />
-        </div>
-        <div v-else class="loading">
-            <spinner />
         </div>
     </div>
 </template>
@@ -61,7 +57,6 @@
         data() {
             return {
                 version: 0,
-                loading: true,
                 downloading: false,
                 bottom: true,
                 debug: false,
@@ -122,8 +117,6 @@
                     }
                 }
             }).finally(() => {
-                this.loading = false;
-
                 setTimeout(() => {
                     this.$refs.messages.addEventListener("scroll", this.position);
 

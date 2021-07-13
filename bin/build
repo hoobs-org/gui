@@ -19,7 +19,6 @@
  **************************************************************************************************/
 
 const Program = require("commander");
-const Prompt = require("prompts");
 const { join } = require("path");
 const { execSync } = require("child_process");
 
@@ -29,6 +28,7 @@ const {
     readFileSync,
     writeFileSync,
     unlinkSync,
+    copyFileSync,
     moveSync,
     copySync,
 } = require("fs-extra");
@@ -93,11 +93,33 @@ Program.command("gui", { isDefault: true })
             writeFileSync(join(root, "dist/DEBIAN/control"), control);
             execSync("dpkg-deb --build dist", { cwd: root, stdio: "inherit" });
 
-            if (!existsSync(join(root, "../repo/deb", command.repo || "edge"))) mkdirSync(join(root, "../repo/deb", command.repo || "edge"));
-            if (existsSync(join(root, "../repo/deb", command.repo || "edge", `hoobs-gui-v${pjson.version}.deb`))) unlinkSync(join(root, "../repo/deb", command.repo || "edge", `hoobs-gui-v${pjson.version}.deb`));
+            switch (command.repo) {
+                case "stable":
+                    if (!existsSync(join(root, "../repo/deb/stable"))) mkdirSync(join(root, "../repo/deb/stable"));
+                    if (!existsSync(join(root, "../repo/deb/edge"))) mkdirSync(join(root, "../repo/deb/edge"));
+                    if (!existsSync(join(root, "../repo/deb/bleeding"))) mkdirSync(join(root, "../repo/deb/bleeding"));
 
-            moveSync(join(root, "dist.deb"), join(root, "../repo/deb", command.repo || "edge", `hoobs-gui-v${pjson.version}.deb`));
-            execSync(`dpkg-sig --sign builder ${join(root, "../repo/deb", command.repo || "edge", `hoobs-gui-v${pjson.version}.deb`)}`, { cwd: root, stdio: "inherit" });
+                    if (existsSync(join(root, "../repo/deb/stable", `hoobs-gui-v${pjson.version}.deb`))) unlinkSync(join(root, "../repo/deb/stable", `hoobs-gui-v${pjson.version}.deb`));
+                    if (existsSync(join(root, "../repo/deb/edge", `hoobs-gui-v${pjson.version}.deb`))) unlinkSync(join(root, "../repo/deb/edge", `hoobs-gui-v${pjson.version}.deb`));
+                    if (existsSync(join(root, "../repo/deb/bleeding", `hoobs-gui-v${pjson.version}.deb`))) unlinkSync(join(root, "../repo/deb/bleeding", `hoobs-gui-v${pjson.version}.deb`));
+
+                    copyFileSync(join(root, "dist.deb"), join(root, "../repo/deb/stable", `hoobs-gui-v${pjson.version}.deb`));
+                    copyFileSync(join(root, "dist.deb"), join(root, "../repo/deb/edge", `hoobs-gui-v${pjson.version}.deb`));
+                    copyFileSync(join(root, "dist.deb"), join(root, "../repo/deb/bleeding", `hoobs-gui-v${pjson.version}.deb`));
+
+                    unlinkSync(join(root, "dist.deb"));
+
+                    execSync(`dpkg-sig --sign builder ${join(root, "../repo/deb/stable", `hoobs-gui-v${pjson.version}.deb`)}`, { cwd: root, stdio: "inherit" });
+                    execSync(`dpkg-sig --sign builder ${join(root, "../repo/deb/edge", `hoobs-gui-v${pjson.version}.deb`)}`, { cwd: root, stdio: "inherit" });
+                    execSync(`dpkg-sig --sign builder ${join(root, "../repo/deb/bleeding", `hoobs-gui-v${pjson.version}.deb`)}`, { cwd: root, stdio: "inherit" });
+                    break;
+
+                case "edge":
+                    break;
+
+                default:
+                    break;
+            }
 
             if (existsSync(join(root, "dist"))) execSync(`${join(root, "node_modules", ".bin", "rimraf")} ${join(root, "dist")}`, { cwd: root, stdio: "inherit" });
         }
