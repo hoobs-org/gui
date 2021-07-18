@@ -115,9 +115,28 @@ Program.command("gui", { isDefault: true })
                     break;
 
                 case "edge":
+                    if (!existsSync(join(root, "../repo/deb/edge"))) mkdirSync(join(root, "../repo/deb/edge"));
+                    if (!existsSync(join(root, "../repo/deb/bleeding"))) mkdirSync(join(root, "../repo/deb/bleeding"));
+
+                    if (existsSync(join(root, "../repo/deb/edge", `hoobs-gui-v${pjson.version}.deb`))) unlinkSync(join(root, "../repo/deb/edge", `hoobs-gui-v${pjson.version}.deb`));
+                    if (existsSync(join(root, "../repo/deb/bleeding", `hoobs-gui-v${pjson.version}.deb`))) unlinkSync(join(root, "../repo/deb/bleeding", `hoobs-gui-v${pjson.version}.deb`));
+
+                    copyFileSync(join(root, "dist.deb"), join(root, "../repo/deb/edge", `hoobs-gui-v${pjson.version}.deb`));
+                    copyFileSync(join(root, "dist.deb"), join(root, "../repo/deb/bleeding", `hoobs-gui-v${pjson.version}.deb`));
+
+                    unlinkSync(join(root, "dist.deb"));
+
+                    execSync(`dpkg-sig --sign builder ${join(root, "../repo/deb/edge", `hoobs-gui-v${pjson.version}.deb`)}`, { cwd: root, stdio: "inherit" });
+                    execSync(`dpkg-sig --sign builder ${join(root, "../repo/deb/bleeding", `hoobs-gui-v${pjson.version}.deb`)}`, { cwd: root, stdio: "inherit" });
                     break;
 
                 default:
+                    if (!existsSync(join(root, "../repo/deb/bleeding"))) mkdirSync(join(root, "../repo/deb/bleeding"));
+                    if (existsSync(join(root, "../repo/deb/bleeding", `hoobs-gui-v${pjson.version}.deb`))) unlinkSync(join(root, "../repo/deb/bleeding", `hoobs-gui-v${pjson.version}.deb`));
+
+                    copyFileSync(join(root, "dist.deb"), join(root, "../repo/deb/bleeding", `hoobs-gui-v${pjson.version}.deb`));
+                    unlinkSync(join(root, "dist.deb"));
+                    execSync(`dpkg-sig --sign builder ${join(root, "../repo/deb/bleeding", `hoobs-gui-v${pjson.version}.deb`)}`, { cwd: root, stdio: "inherit" });
                     break;
             }
 
