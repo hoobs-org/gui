@@ -21,6 +21,7 @@ import Vuex from "vuex";
 import Persistence from "vuex-persist";
 import { Buffer } from "buffer/";
 import { units, timespan } from "./formatters";
+import { cloneJson } from "./json";
 
 Vue.use(Vuex);
 
@@ -84,7 +85,7 @@ export default new Vuex.Store({
             const bridges = [];
 
             for (let i = 0; i < keys.length; i += 1) {
-                const { ...bridge } = payload.data.bridges[keys[i]];
+                const bridge = cloneJson(payload.data.bridges[keys[i]]);
 
                 bridges.push({
                     id: keys[i],
@@ -204,7 +205,7 @@ export default new Vuex.Store({
 
         "NOTIFICATION:ADD": (state: { [key: string]: any }, payload: any) => {
             const now = (new Date()).getTime();
-            const { ...notification } = payload;
+            const notification = cloneJson(payload);
 
             notification.id = `${now}:${Math.random()}`;
             notification.time = now;
