@@ -75,6 +75,7 @@
 
 <script>
     import Semver from "compare-versions";
+    import { cloneJson } from "../../services/json";
 
     const REDIRECT_DELAY = 1000;
 
@@ -193,7 +194,7 @@
                 const waits = [];
 
                 for (let i = 0; i < this.plugins.length; i += 1) {
-                    const { ...plugin } = this.plugins[i];
+                    const plugin = cloneJson(this.plugins[i]);
 
                     waits.push(new Promise((resolve) => {
                         this.$hoobs.bridge(plugin.bridge).then((bridge) => {

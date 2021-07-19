@@ -41,6 +41,7 @@
 
 <script>
     import Debounce from "lodash.debounce";
+    import { cloneJson } from "../../services/json";
 
     const UPDATE_DELAY = 150;
     const LOCAL_DELAY = 1000;
@@ -125,7 +126,7 @@
                 updater: Debounce(() => {
                     if (this.room && !this.local) {
                         if (this.subject && this.subject.type === "light") {
-                            const { ...subject } = this.subject;
+                            const subject = cloneJson(this.subject);
                             const index = this.accessories.findIndex((item) => item.accessory_identifier === subject.accessory_identifier);
 
                             if (index >= 0) this.accessories[index] = subject;

@@ -78,6 +78,8 @@
 </template>
 
 <script>
+    import { cloneJson } from "../services/json";
+
     const BRIDGE_RESTART_DELAY = 4000;
     const MONACO_LOAD_DELAY = 10;
 
@@ -201,7 +203,7 @@
 
                 if (!this.identifier || this.identifier === "" || this.identifier === "hub") {
                     const config = await this.$hoobs.config.get();
-                    const { ...working } = this.working;
+                    const working = cloneJson(this.working);
 
                     let reload = false;
                     let logout = false;
@@ -231,7 +233,7 @@
                     const bridge = await this.$hoobs.bridge(this.bridge);
                     const plugins = await bridge.plugins.list();
 
-                    let { ...working } = this.working;
+                    let working = cloneJson(this.working);
 
                     working.accessories = working.accessories || [];
                     working.platforms = working.platforms || [];
@@ -265,7 +267,7 @@
                 } else {
                     const bridge = await this.$hoobs.bridge(this.bridge);
                     const config = await bridge.config.get();
-                    const { ...working } = this.working;
+                    const working = cloneJson(this.working);
 
                     let index = -1;
 
@@ -330,7 +332,7 @@
 
                 if (!this.identifier || this.identifier === "" || this.identifier === "hub") {
                     this.saved = (await this.$hoobs.config.get()).api || {};
-                    this.working = { ...this.saved };
+                    this.working = cloneJson(this.saved);
 
                     this.working.inactive_logoff = this.working.inactive_logoff || 30;
                     this.working.disable_auth = this.working.disable_auth || false;
@@ -358,7 +360,7 @@
                         delete this.saved.platforms[i].plugin_map;
                     }
 
-                    this.working = { ...this.saved };
+                    this.working = cloneJson(this.saved);
                     this.loading = false;
                     this.dirty = false;
 
@@ -406,7 +408,7 @@
                             break;
                     }
 
-                    this.working = { ...this.saved };
+                    this.working = cloneJson(this.saved);
                     this.loading = false;
                     this.dirty = false;
                 }
