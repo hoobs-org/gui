@@ -34,8 +34,6 @@
 </template>
 
 <script>
-    import { Wait } from "@hoobs/sdk/lib/wait";
-
     const SOCKET_RECONNECT_DELAY = 0.5 * 1000;
 
     export default {
@@ -72,8 +70,6 @@
 
             this.$action.on("io", "connected", () => {
                 setTimeout(async () => {
-                    await Wait();
-
                     if (this.reload) {
                         window.location.reload();
                     } else {
@@ -100,8 +96,6 @@
         },
 
         async mounted() {
-            await Wait();
-
             this.loading = false;
         },
     };

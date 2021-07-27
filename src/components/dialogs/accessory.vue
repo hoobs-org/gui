@@ -82,7 +82,6 @@
 </template>
 
 <script>
-    import { Wait } from "@hoobs/sdk/lib/wait";
     import { saveAs } from "file-saver";
     import { initial, layout } from "../../services/widgets";
 
@@ -165,8 +164,6 @@
                 this.loading = true;
                 this.accessory = null;
 
-                await Wait();
-
                 const config = await this.$hoobs.config.get();
                 const accessory = await this.$hoobs.accessory(this.options.bridge, this.options.id);
 
@@ -238,8 +235,6 @@
             },
 
             async save() {
-                await Wait();
-
                 const accessory = await this.$hoobs.accessory(this.accessory.bridge, this.accessory.accessory_identifier);
 
                 if (this.display !== this.accessory.name) await accessory.set("name", this.display);
@@ -267,7 +262,6 @@
                 config.dashboard.items = items;
 
                 await this.$hoobs.config.update(config);
-                await Wait();
 
                 this.$dialog.close("accessory");
                 this.$action.emit("dashboard", "update");
@@ -294,7 +288,6 @@
                 config.dashboard.items = items;
 
                 await this.$hoobs.config.update(config);
-                await Wait();
 
                 this.$dialog.close("accessory");
                 this.$action.emit("dashboard", "update");
