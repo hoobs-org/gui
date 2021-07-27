@@ -102,8 +102,8 @@
         name: "personalize",
 
         components: {
-            "color": () => import(/* webpackChunkName: "layout-color" */ "@/components/elements/color.vue"),
-            "backdrop": () => import(/* webpackChunkName: "layout-backdrop" */ "@/components/elements/backdrop.vue"),
+            "color": () => import(/* webpackChunkName: "layout" */ "@/components/elements/color.vue"),
+            "backdrop": () => import(/* webpackChunkName: "layout" */ "@/components/elements/backdrop.vue"),
         },
 
         data() {

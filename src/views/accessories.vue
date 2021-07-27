@@ -126,8 +126,8 @@
         },
 
         components: {
-            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
-            "draggable": () => import(/* webpackChunkName: "layout-draggable" */ "vuedraggable"),
+            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
+            "draggable": () => import(/* webpackChunkName: "common" */ "vuedraggable"),
 
             ...accessories(),
         },

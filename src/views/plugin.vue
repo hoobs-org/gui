@@ -89,11 +89,11 @@
         name: "plugin",
 
         components: {
-            "tabs": () => import(/* webpackChunkName: "layout-tabs" */ "@/components/elements/tabs.vue"),
-            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
-            "detail": () => import(/* webpackChunkName: "layout-detail" */ "@/components/elements/detail.vue"),
-            "rating": () => import(/* webpackChunkName: "layout-rating" */ "@/components/elements/rating.vue"),
-            "reviews": () => import(/* webpackChunkName: "layout-reviews" */ "@/components/elements/reviews.vue"),
+            "tabs": () => import(/* webpackChunkName: "common" */ "@/components/elements/tabs.vue"),
+            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
+            "detail": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/detail.vue"),
+            "rating": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/rating.vue"),
+            "reviews": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/reviews.vue"),
         },
 
         props: {

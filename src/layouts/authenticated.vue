@@ -40,8 +40,8 @@
         name: "authenticated",
 
         components: {
-            "navigation": () => import(/* webpackChunkName: "layout-navigation" */ "@/components/navigation.vue"),
-            "notification": () => import(/* webpackChunkName: "layout-notification" */ "@/components/elements/notification.vue"),
+            "navigation": () => import(/* webpackChunkName: "common" */ "@/components/navigation.vue"),
+            "notification": () => import(/* webpackChunkName: "common" */ "@/components/elements/notification.vue"),
         },
 
         computed: {

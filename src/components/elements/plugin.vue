@@ -44,7 +44,7 @@
         },
 
         components: {
-            "rating": () => import(/* webpackChunkName: "layout-rating" */ "@/components/elements/rating.vue"),
+            "rating": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/rating.vue"),
         },
 
         methods: {

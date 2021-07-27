@@ -138,8 +138,8 @@
         },
 
         components: {
-            "qrcode": () => import(/* webpackChunkName: "layout-qrcide" */ "@chenfengyuan/vue-qrcode"),
-            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
+            "qrcode": () => import(/* webpackChunkName: "bridges" */ "@chenfengyuan/vue-qrcode"),
+            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
         },
 
         computed: {

@@ -49,7 +49,7 @@
         name: "restore",
 
         components: {
-            "message": () => import(/* webpackChunkName: "layout-message" */ "@/components/elements/message.vue"),
+            "message": () => import(/* webpackChunkName: "config" */ "@/components/elements/message.vue"),
         },
 
         data() {

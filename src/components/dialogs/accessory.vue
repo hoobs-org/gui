@@ -89,8 +89,8 @@
         name: "settings",
 
         components: {
-            "icons": () => import(/* webpackChunkName: "dialog-icons" */ "@/components/dialogs/icons.vue"),
-            "rooms": () => import(/* webpackChunkName: "dialog-rooms" */ "@/components/dialogs/rooms.vue"),
+            "icons": () => import(/* webpackChunkName: "common" */ "@/components/dialogs/icons.vue"),
+            "rooms": () => import(/* webpackChunkName: "common" */ "@/components/dialogs/rooms.vue"),
         },
 
         props: {

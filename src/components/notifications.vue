@@ -37,7 +37,7 @@
         name: "notifications",
 
         components: {
-            "notification": () => import(/* webpackChunkName: "layout-notification" */ "@/components/elements/notification.vue"),
+            "notification": () => import(/* webpackChunkName: "common" */ "@/components/elements/notification.vue"),
         },
 
         computed: {

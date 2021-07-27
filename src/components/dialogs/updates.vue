@@ -83,7 +83,7 @@
         name: "updates",
 
         components: {
-            "message": () => import(/* webpackChunkName: "layout-message" */ "@/components/elements/message.vue"),
+            "message": () => import(/* webpackChunkName: "common" */ "@/components/elements/message.vue"),
         },
 
         data() {

@@ -97,21 +97,21 @@ Vue.use(graphing);
 
 Vue.use(themes, { hoobs, store });
 
-Vue.component("icon", () => import(/* webpackChunkName: "common-icon" */ "./components/elements/icon.vue"));
-Vue.component("modal", () => import(/* webpackChunkName: "common-modal" */ "./components/elements/modal.vue"));
-Vue.component("radio", () => import(/* webpackChunkName: "common-radio" */ "./components/fields/radio.vue"));
-Vue.component("context", () => import(/* webpackChunkName: "common-context" */ "./components/elements/context.vue"));
-Vue.component("checkbox", () => import(/* webpackChunkName: "common-checkbox" */ "./components/fields/checkbox.vue"));
-Vue.component("text-field", () => import(/* webpackChunkName: "common-text" */ "./components/fields/text.vue"));
-Vue.component("textarea-field", () => import(/* webpackChunkName: "common-textarea" */ "./components/fields/textarea.vue"));
-Vue.component("password-field", () => import(/* webpackChunkName: "common-password" */ "./components/fields/password.vue"));
-Vue.component("number-field", () => import(/* webpackChunkName: "common-number" */ "./components/fields/number.vue"));
-Vue.component("integer-field", () => import(/* webpackChunkName: "common-integer" */ "./components/fields/integer.vue"));
-Vue.component("search-field", () => import(/* webpackChunkName: "common-search" */ "./components/fields/search.vue"));
-Vue.component("select-field", () => import(/* webpackChunkName: "common-select" */ "./components/fields/select.vue"));
-Vue.component("label-field", () => import(/* webpackChunkName: "common-label" */ "./components/fields/label.vue"));
-Vue.component("port-field", () => import(/* webpackChunkName: "common-port" */ "./components/fields/port.vue"));
-Vue.component("spinner", () => import(/* webpackChunkName: "common-spinner" */ "./components/elements/spinner.vue"));
+Vue.component("icon", () => import(/* webpackChunkName: "common" */ "./components/elements/icon.vue"));
+Vue.component("modal", () => import(/* webpackChunkName: "common" */ "./components/elements/modal.vue"));
+Vue.component("radio", () => import(/* webpackChunkName: "common" */ "./components/fields/radio.vue"));
+Vue.component("context", () => import(/* webpackChunkName: "common" */ "./components/elements/context.vue"));
+Vue.component("checkbox", () => import(/* webpackChunkName: "common" */ "./components/fields/checkbox.vue"));
+Vue.component("text-field", () => import(/* webpackChunkName: "common" */ "./components/fields/text.vue"));
+Vue.component("textarea-field", () => import(/* webpackChunkName: "common" */ "./components/fields/textarea.vue"));
+Vue.component("password-field", () => import(/* webpackChunkName: "common" */ "./components/fields/password.vue"));
+Vue.component("number-field", () => import(/* webpackChunkName: "common" */ "./components/fields/number.vue"));
+Vue.component("integer-field", () => import(/* webpackChunkName: "common" */ "./components/fields/integer.vue"));
+Vue.component("search-field", () => import(/* webpackChunkName: "common" */ "./components/fields/search.vue"));
+Vue.component("select-field", () => import(/* webpackChunkName: "common" */ "./components/fields/select.vue"));
+Vue.component("label-field", () => import(/* webpackChunkName: "common" */ "./components/fields/label.vue"));
+Vue.component("port-field", () => import(/* webpackChunkName: "common" */ "./components/fields/port.vue"));
+Vue.component("spinner", () => import(/* webpackChunkName: "common" */ "./components/elements/spinner.vue"));
 
 tasks(store);
 

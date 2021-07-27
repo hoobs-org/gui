@@ -42,7 +42,7 @@
         name: "list",
 
         components: {
-            "draggable": () => import(/* webpackChunkName: "layout-draggable" */ "vuedraggable"),
+            "draggable": () => import(/* webpackChunkName: "common" */ "vuedraggable"),
         },
 
         props: {

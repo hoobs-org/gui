@@ -109,9 +109,9 @@
         name: "settings",
 
         components: {
-            "restore": () => import(/* webpackChunkName: "dialog-restore" */ "@/components/dialogs/restore.vue"),
-            "location": () => import(/* webpackChunkName: "dialog-location" */ "@/components/dialogs/location.vue"),
-            "message": () => import(/* webpackChunkName: "layout-message" */ "@/components/elements/message.vue"),
+            "restore": () => import(/* webpackChunkName: "config" */ "@/components/dialogs/restore.vue"),
+            "location": () => import(/* webpackChunkName: "config" */ "@/components/dialogs/location.vue"),
+            "message": () => import(/* webpackChunkName: "config" */ "@/components/elements/message.vue"),
         },
 
         computed: {

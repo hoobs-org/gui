@@ -32,7 +32,7 @@
         name: "plugin",
 
         components: {
-            "modal-frame": () => import(/* webpackChunkName: "layout-frame" */ "@/components/elements/frame.vue"),
+            "modal-frame": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/frame.vue"),
         },
 
         props: {
