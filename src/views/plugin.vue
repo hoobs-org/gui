@@ -78,7 +78,6 @@
 </template>
 
 <script>
-    import { Wait } from "@hoobs/sdk/lib/wait";
     import Semver from "compare-versions";
     import crypto from "crypto";
     import identicon from "identicon.js";
@@ -90,11 +89,11 @@
         name: "plugin",
 
         components: {
-            "tabs": () => import(/* webpackChunkName: "layout-tabs" */ "@/components/elements/tabs.vue"),
-            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
-            "detail": () => import(/* webpackChunkName: "layout-detail" */ "@/components/elements/detail.vue"),
-            "rating": () => import(/* webpackChunkName: "layout-rating" */ "@/components/elements/rating.vue"),
-            "reviews": () => import(/* webpackChunkName: "layout-reviews" */ "@/components/elements/reviews.vue"),
+            "tabs": () => import(/* webpackChunkName: "common" */ "@/components/elements/tabs.vue"),
+            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
+            "detail": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/detail.vue"),
+            "rating": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/rating.vue"),
+            "reviews": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/reviews.vue"),
         },
 
         props: {
@@ -181,7 +180,7 @@
                 this.downloads = {};
                 this.releases = {};
 
-                this.bridges = (await this.$hoobs.bridges.list());
+                this.bridges = (await this.$hoobs.bridges.list()).filter((item) => item.type === "bridge");
 
                 this.bridges.sort((a, b) => {
                     if (a.display < b.display) return -1;
@@ -271,18 +270,16 @@
                             waits.push(new Promise((resolve) => {
                                 this.$hoobs.bridges.add(data.display, data.port, data.pin, data.username, data.advertiser).then(() => {
                                     setTimeout(() => {
-                                        Wait().then(() => {
-                                            this.$hoobs.bridge(data.id).then((bridge) => {
-                                                if (bridge) {
-                                                    bridge.plugins.install(`${this.identifier}@${tag || "latest"}`).then((result) => {
-                                                        success = result;
+                                        this.$hoobs.bridge(data.id).then((bridge) => {
+                                            if (bridge) {
+                                                bridge.plugins.install(`${this.identifier}@${tag || "latest"}`).then((result) => {
+                                                    success = result;
 
-                                                        resolve();
-                                                    });
-                                                } else {
                                                     resolve();
-                                                }
-                                            });
+                                                });
+                                            } else {
+                                                resolve();
+                                            }
                                         });
                                     }, BRIDGE_CREATE_DELAY);
                                 });
@@ -291,15 +288,13 @@
 
                         Promise.all(waits).then(() => {
                             setTimeout(() => {
-                                Wait().then(() => {
-                                    if (success) {
-                                        this.$dialog.close("bridges");
-                                        this.load(this.identifier);
-                                    } else {
-                                        this.$dialog.close("bridges");
-                                        this.$alert(this.$t("plugin_install_failed"));
-                                    }
-                                });
+                                if (success) {
+                                    this.$dialog.close("bridges");
+                                    this.load(this.identifier);
+                                } else {
+                                    this.$dialog.close("bridges");
+                                    this.$alert(this.$t("plugin_install_failed"));
+                                }
                             }, SOCKET_RECONNECT_DELAY);
                         });
                     },
@@ -344,15 +339,13 @@
 
                             Promise.all(waits).then(() => {
                                 setTimeout(() => {
-                                    Wait().then(() => {
-                                        if (success) {
-                                            this.$dialog.close("bridges");
-                                            this.load(this.identifier);
-                                        } else {
-                                            this.$dialog.close("bridges");
-                                            this.$alert(this.$t("plugin_uninstall_failed"));
-                                        }
-                                    });
+                                    if (success) {
+                                        this.$dialog.close("bridges");
+                                        this.load(this.identifier);
+                                    } else {
+                                        this.$dialog.close("bridges");
+                                        this.$alert(this.$t("plugin_uninstall_failed"));
+                                    }
                                 }, SOCKET_RECONNECT_DELAY);
                             });
                         });
@@ -377,9 +370,7 @@
 
                 Promise.all(waits).then(() => {
                     setTimeout(() => {
-                        Wait().then(() => {
-                            this.load(this.identifier);
-                        });
+                        this.load(this.identifier);
                     }, SOCKET_RECONNECT_DELAY);
                 });
             },

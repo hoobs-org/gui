@@ -21,18 +21,18 @@ import Menus from "../plugins/menus";
 export default new Menus([
     {
         name: "application",
-        component: () => import(/* webpackChunkName: "menu-application" */ "@/components/menus/application.vue"),
+        component: () => import(/* webpackChunkName: "common" */ "@/components/menus/application.vue"),
     },
     {
         name: "notifications",
-        component: () => import(/* webpackChunkName: "menu-notifications" */ "@/components/notifications.vue"),
+        component: () => import(/* webpackChunkName: "common" */ "@/components/notifications.vue"),
     },
     {
         name: "bridges",
-        component: () => import(/* webpackChunkName: "menu-bridges" */ "@/components/menus/bridges.vue"),
+        component: () => import(/* webpackChunkName: "common" */ "@/components/menus/bridges.vue"),
     },
     {
         name: "plugins",
-        component: () => import(/* webpackChunkName: "menu-plugins" */ "@/components/menus/plugins.vue"),
+        component: () => import(/* webpackChunkName: "common" */ "@/components/menus/plugins.vue"),
     },
 ]);

@@ -33,7 +33,7 @@
         name: "camera-widget",
 
         components: {
-            "camera-accessory": () => import(/* webpackChunkName: "accessory-thermostat" */ "@/components/accessories/camera.vue"),
+            "camera-accessory": () => import(/* webpackChunkName: "accessories" */ "@/components/accessories/camera.vue"),
         },
 
         props: {

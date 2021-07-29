@@ -100,7 +100,7 @@
         },
 
         components: {
-            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
+            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
         },
 
         computed: {

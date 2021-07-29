@@ -36,7 +36,7 @@
         name: "modal",
 
         components: {
-            "welcome": () => import(/* webpackChunkName: "dialog-welcome" */ "@/components/elements/welcome.vue"),
+            "welcome": () => import(/* webpackChunkName: "common" */ "@/components/elements/welcome.vue"),
         },
 
         props: {

@@ -25,17 +25,20 @@
 </template>
 
 <script>
+    import PublicLayout from "@/layouts/public.vue";
+    import AuthenticatedLayout from "@/layouts/authenticated.vue";
+
     export default {
         name: "app",
 
         components: {
-            "public": () => import(/* webpackChunkName: "layout-public" */ "@/layouts/public.vue"),
-            "authenticated": () => import(/* webpackChunkName: "layout-authenticated" */ "@/layouts/authenticated.vue"),
+            "public": PublicLayout,
+            "authenticated": AuthenticatedLayout,
         },
 
         computed: {
             theme() {
-                return this.$store.state.theme;
+                return this.$store.state.theme || "dark";
             },
         },
 
@@ -81,6 +84,8 @@
 
     body {
         position: relative;
+        color: #999;
+        background: #141414;
     }
 
     #app {

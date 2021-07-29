@@ -92,9 +92,9 @@
         },
 
         components: {
-            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
-            "tabs": () => import(/* webpackChunkName: "layout-tabs" */ "@/components/elements/tabs.vue"),
-            "schema-form": () => import(/* webpackChunkName: "layout-schema" */ "@/components/form.vue"),
+            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
+            "tabs": () => import(/* webpackChunkName: "common" */ "@/components/elements/tabs.vue"),
+            "schema-form": () => import(/* webpackChunkName: "config" */ "@/components/form.vue"),
         },
 
         computed: {

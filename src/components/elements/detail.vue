@@ -143,7 +143,7 @@
         },
 
         components: {
-            "trend-chart": () => import(/* webpackChunkName: "layout-trend-chart" */ "vue-trend-chart"),
+            "trend-chart": () => import(/* webpackChunkName: "plugins" */ "vue-trend-chart"),
         },
 
         data() {

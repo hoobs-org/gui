@@ -34,16 +34,14 @@
 </template>
 
 <script>
-    import { Wait } from "@hoobs/sdk/lib/wait";
-
     const SOCKET_RECONNECT_DELAY = 0.5 * 1000;
 
     export default {
         name: "authenticated",
 
         components: {
-            "navigation": () => import(/* webpackChunkName: "layout-navigation" */ "@/components/navigation.vue"),
-            "notification": () => import(/* webpackChunkName: "layout-notification" */ "@/components/elements/notification.vue"),
+            "navigation": () => import(/* webpackChunkName: "common" */ "@/components/navigation.vue"),
+            "notification": () => import(/* webpackChunkName: "common" */ "@/components/elements/notification.vue"),
         },
 
         computed: {
@@ -72,8 +70,6 @@
 
             this.$action.on("io", "connected", () => {
                 setTimeout(async () => {
-                    await Wait();
-
                     if (this.reload) {
                         window.location.reload();
                     } else {
@@ -100,8 +96,6 @@
         },
 
         async mounted() {
-            await Wait();
-
             this.loading = false;
         },
     };

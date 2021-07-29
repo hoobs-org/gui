@@ -101,7 +101,6 @@
 </template>
 
 <script>
-    import { Wait } from "@hoobs/sdk/lib/wait";
     import Countries from "@/lang/countries.json";
 
     const REDIRECT_DELAY = 1000;
@@ -110,9 +109,9 @@
         name: "settings",
 
         components: {
-            "restore": () => import(/* webpackChunkName: "dialog-restore" */ "@/components/dialogs/restore.vue"),
-            "location": () => import(/* webpackChunkName: "dialog-location" */ "@/components/dialogs/location.vue"),
-            "message": () => import(/* webpackChunkName: "layout-message" */ "@/components/elements/message.vue"),
+            "restore": () => import(/* webpackChunkName: "config" */ "@/components/dialogs/restore.vue"),
+            "location": () => import(/* webpackChunkName: "config" */ "@/components/dialogs/location.vue"),
+            "message": () => import(/* webpackChunkName: "config" */ "@/components/elements/message.vue"),
         },
 
         computed: {
@@ -408,8 +407,6 @@
                 await this.$hoobs.config.update(config);
 
                 this.message = `${this.$t("applying_changes")}...`;
-
-                await Wait();
 
                 if (redirect && window.location.href.match(/http:\/\/[a-zA-Z0-9-_~]*.local/gi)) {
                     setTimeout(() => { window.location.href = `http://${this.broadcast}.local`; }, REDIRECT_DELAY);

@@ -94,8 +94,8 @@
         },
 
         components: {
-            "list": () => import(/* webpackChunkName: "layout-list" */ "@/components/elements/list.vue"),
-            "plugin": () => import(/* webpackChunkName: "layout-plugin" */ "@/components/elements/plugin.vue"),
+            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
+            "plugin": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/plugin.vue"),
         },
 
         computed: {

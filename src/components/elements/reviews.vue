@@ -42,7 +42,7 @@
         name: "reviews",
 
         components: {
-            "review": () => import(/* webpackChunkName: "layout-review" */ "@/components/elements/review.vue"),
+            "review": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/review.vue"),
         },
 
         props: {
