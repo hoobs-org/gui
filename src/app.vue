@@ -239,16 +239,18 @@
             }
         }
 
-        textarea {
-            background: var(--application-input);
-            color: var(--application-input-text);
-            border: 1px var(--application-border) solid;
-            border-radius: 0;
-            outline: 0 none !important;
-
-            &:focus {
-                border-color: var(--application-highlight);
+        .field {
+            textarea {
+                background: var(--application-input);
+                color: var(--application-input-text);
+                border: 1px var(--application-border) solid;
                 border-radius: 0;
+                outline: 0 none !important;
+
+                &:focus {
+                    border-color: var(--application-highlight);
+                    border-radius: 0;
+                }
             }
         }
 
