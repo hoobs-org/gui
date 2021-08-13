@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div v-else-if="screen === 'manual'" class="screen tight">
-                <div class="section">{{ plugin.display }}</div>
+                <div class="section tight">{{ plugin.display }}</div>
                 <tabs :values="bridges" v-on:change="exit" :value="bridge" field="id" display="display" class="tabs tight" />
                 <div ref="schema" class="editor"></div>
                 <div class="row actions">
@@ -709,7 +709,7 @@
                 overflow: auto;
 
                 &.tight {
-                    margin: 0 0 20px 0;
+                    margin: 0 20px 20px 0;
                 }
 
                 .section {
@@ -720,6 +720,10 @@
                     color: var(--application-highlight);
                     margin: 0 0 20px 0;
                     user-select: none;
+
+                    &.tight {
+                        margin: 0 0 20px 10px;
+                    }
 
                     &.extra {
                         margin: 20px 0;
