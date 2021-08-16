@@ -82,6 +82,10 @@
             &:hover {
                 opacity: 1;
             }
+
+            .title {
+                white-space: nowrap;
+            }
         }
 
         .fill {

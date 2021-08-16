@@ -21,7 +21,7 @@
         <context />
         <div v-if="!loading" class="content">
             <list value="identifier" display="display" :values="plugins" :selected="identifier" initial="hub" controller="config" />
-            <div v-if="identifier && identifier !== 'hub' && identifier !== 'advanced'" class="screen">
+            <div v-if="screen === 'schema'" class="screen">
                 <div class="wrapper">
                     <div class="section">{{ plugin.display }}</div>
                     <tabs :values="bridges" v-on:change="exit" :value="bridge" field="id" display="display" class="tabs" />
@@ -29,10 +29,21 @@
                     <div class="row actions">
                         <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
                         <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
+                        <div v-on:click="toggle" class="button">{{ $t("advanced") }}</div>
                     </div>
                 </div>
             </div>
-            <div v-else-if="identifier && identifier === 'advanced'" class="screen">
+            <div v-else-if="screen === 'manual'" class="screen tight">
+                <div class="section tight">{{ plugin.display }}</div>
+                <tabs :values="bridges" v-on:change="exit" :value="bridge" field="id" display="display" class="tabs tight" />
+                <div ref="schema" class="editor"></div>
+                <div class="row actions">
+                    <div v-on:click="save" class="button primary">{{ $t("save") }}</div>
+                    <router-link to="/config" class="button">{{ $t("cancel") }}</router-link>
+                    <div v-if="schema" v-on:click="toggle" class="button">{{ $t("visual") }}</div>
+                </div>
+            </div>
+            <div v-else-if="screen === 'advanced'" class="screen tight">
                 <tabs v-if="bridges.length > 0" :values="bridges" v-on:change="exit" :value="bridge" field="id" display="display" class="tabs tight" />
                 <div v-if="bridges.length > 0" ref="editor" class="editor"></div>
                 <div class="row actions">
@@ -101,6 +112,15 @@
             user() {
                 return this.$store.state.user;
             },
+
+            screen() {
+                if (this.identifier === "hub" || this.identifier === "") return "hub";
+                if (this.identifier === "advanced") return "advanced";
+                if (this.identifier && this.schema && !this.manual) return "schema";
+                if (this.identifier) return "manual";
+
+                return "hub";
+            },
         },
 
         watch: {
@@ -122,6 +142,23 @@
 
                 this.intermediate = false;
             },
+
+            manual() {
+                if (!this.intermediate) {
+                    if (this.dirty) {
+                        this.$confirm(this.$t("ok"), this.$t("unsaved_changes_warning"), () => {
+                            this.change(this.bridge);
+                        }, () => {
+                            this.intermediate = true;
+                            this.manual = !this.manual;
+                        });
+                    } else {
+                        this.change(this.bridge);
+                    }
+                }
+
+                this.intermediate = false;
+            },
         },
 
         data() {
@@ -130,6 +167,7 @@
                 intermediate: false,
                 loading: true,
                 dirty: false,
+                manual: false,
                 identifier: "",
                 type: null,
                 alias: null,
@@ -198,118 +236,195 @@
                 if (JSON.stringify(value) !== JSON.stringify(this.saved)) this.dirty = true;
             },
 
+            toggle() {
+                this.manual = !this.manual;
+            },
+
             async save() {
                 this.loading = true;
 
-                if (!this.identifier || this.identifier === "" || this.identifier === "hub") {
-                    const config = await this.$hoobs.config.get();
-                    const working = cloneJson(this.working);
+                let index;
+                let config;
+                let working;
+                let bridge;
+                let plugins;
 
-                    let reload = false;
-                    let logout = false;
+                let reload = false;
+                let logout = false;
 
-                    if (config.api.disable_auth !== working.disable_auth) {
-                        reload = true;
+                switch (this.screen) {
+                    case "hub":
+                        config = await this.$hoobs.config.get();
+                        working = cloneJson(this.working);
+                        reload = false;
+                        logout = false;
 
-                        if (!config.api.disable_auth) logout = true;
-                    }
+                        if (config.api.disable_auth !== working.disable_auth) {
+                            reload = true;
 
-                    config.api = working;
-                    config.api.origin = config.api.origin || "*";
-
-                    this.$hoobs.config.update(config);
-
-                    if (logout) await this.$hoobs.auth.logout();
-
-                    setTimeout(() => {
-                        if (reload) {
-                            window.location.reload();
-                        } else {
-                            this.dirty = false;
-                            this.change(this.bridge);
-                        }
-                    }, BRIDGE_RESTART_DELAY);
-                } else if (this.identifier === "advanced") {
-                    const bridge = await this.$hoobs.bridge(this.bridge);
-                    const plugins = await bridge.plugins.list();
-
-                    let working = cloneJson(this.working);
-
-                    working.accessories = working.accessories || [];
-                    working.platforms = working.platforms || [];
-
-                    if (this.editor) {
-                        try {
-                            working = JSON.parse(this.editor.getValue());
-                        } catch (_error) {
-                            working = this.working;
+                            if (!config.api.disable_auth) logout = true;
                         }
 
-                        for (let i = 0; i < working.platforms.length; i += 1) {
-                            const { identifier } = ((plugins.find((plugin) => plugin.alias === working.platforms[i].platform)) || {});
+                        config.api = working;
+                        config.api.origin = config.api.origin || "*";
 
-                            if (identifier) working.platforms[i].plugin_map = { plugin_name: identifier };
-                        }
+                        this.$hoobs.config.update(config);
 
-                        for (let i = 0; i < working.accessories.length; i += 1) {
-                            const { identifier } = ((plugins.find((plugin) => plugin.alias === working.accessories[i].accessory)) || {});
+                        if (logout) await this.$hoobs.auth.logout();
 
-                            if (identifier) working.accessories[i].plugin_map = { plugin_name: identifier };
-                        }
-                    }
+                        setTimeout(() => {
+                            if (reload) {
+                                window.location.reload();
+                            } else {
+                                this.dirty = false;
+                                this.change(this.bridge);
+                            }
+                        }, BRIDGE_RESTART_DELAY);
 
-                    await bridge.config.update(working);
+                        break;
 
-                    setTimeout(() => {
-                        this.dirty = false;
-                        this.change(this.bridge);
-                    }, BRIDGE_RESTART_DELAY);
-                } else {
-                    const bridge = await this.$hoobs.bridge(this.bridge);
-                    const config = await bridge.config.get();
-                    const working = cloneJson(this.working);
+                    case "advanced":
+                        bridge = await this.$hoobs.bridge(this.bridge);
+                        plugins = await bridge.plugins.list();
+                        working = cloneJson(this.working);
 
-                    let index = -1;
+                        working.accessories = working.accessories || [];
+                        working.platforms = working.platforms || [];
 
-                    switch (this.type) {
-                        case "accessory":
-                            index = config.accessories.findIndex((item) => item.accessory === this.alias);
-                            working.accessories = working.accessories || [];
+                        if (this.editor) {
+                            try {
+                                working = JSON.parse(this.editor.getValue());
+                            } catch (_error) {
+                                working = this.working;
+                            }
 
-                            while (index >= 0) {
-                                config.accessories.splice(index, 1);
-                                index = config.accessories.findIndex((item) => item.accessory === this.alias);
+                            for (let i = 0; i < working.platforms.length; i += 1) {
+                                const { identifier } = ((plugins.find((plugin) => plugin.alias === working.platforms[i].platform)) || {});
+
+                                if (identifier) working.platforms[i].plugin_map = { plugin_name: identifier };
                             }
 
                             for (let i = 0; i < working.accessories.length; i += 1) {
-                                working.accessories[i].accessory = this.alias;
-                                working.accessories[i].plugin_map = { plugin_name: this.identifier };
+                                const { identifier } = ((plugins.find((plugin) => plugin.alias === working.accessories[i].accessory)) || {});
+
+                                if (identifier) working.accessories[i].plugin_map = { plugin_name: identifier };
                             }
+                        }
 
-                            config.accessories = [...config.accessories, ...working.accessories];
-                            break;
+                        await bridge.config.update(working);
 
-                        default:
-                            index = config.platforms.findIndex((item) => item.platform === this.alias);
+                        setTimeout(() => {
+                            this.dirty = false;
+                            this.change(this.bridge);
+                        }, BRIDGE_RESTART_DELAY);
 
-                            while (index >= 0) {
-                                config.platforms.splice(index, 1);
+                        break;
+
+                    case "manual":
+                        bridge = await this.$hoobs.bridge(this.bridge);
+                        config = await bridge.config.get();
+                        working = cloneJson(this.working);
+
+                        if (this.editor) {
+                            try {
+                                working = JSON.parse(this.editor.getValue());
+                            } catch (_error) {
+                                working = this.working;
+                            }
+                        }
+
+                        index = -1;
+
+                        switch (this.type) {
+                            case "accessory":
+                                index = config.accessories.findIndex((item) => item.accessory === this.alias);
+                                working.accessories = working.accessories || [];
+
+                                while (index >= 0) {
+                                    config.accessories.splice(index, 1);
+                                    index = config.accessories.findIndex((item) => item.accessory === this.alias);
+                                }
+
+                                for (let i = 0; i < working.accessories.length; i += 1) {
+                                    working.accessories[i].accessory = this.alias;
+                                    working.accessories[i].plugin_map = { plugin_name: this.identifier };
+                                }
+
+                                config.accessories = [...config.accessories, ...working.accessories];
+                                break;
+
+                            default:
                                 index = config.platforms.findIndex((item) => item.platform === this.alias);
-                            }
 
-                            working.platform = this.alias;
-                            working.plugin_map = { plugin_name: this.identifier };
+                                while (index >= 0) {
+                                    config.platforms.splice(index, 1);
+                                    index = config.platforms.findIndex((item) => item.platform === this.alias);
+                                }
 
-                            config.platforms = [...config.platforms, working];
-                            break;
-                    }
+                                working.platform = this.alias;
+                                working.plugin_map = { plugin_name: this.identifier };
 
-                    await bridge.config.update(config);
+                                config.platforms = [...config.platforms, working];
+                                break;
+                        }
 
-                    setTimeout(() => {
-                        this.dirty = false;
-                        this.change(this.bridge);
-                    }, BRIDGE_RESTART_DELAY);
+                        await bridge.config.update(config);
+
+                        setTimeout(() => {
+                            this.dirty = false;
+                            this.change(this.bridge);
+                        }, BRIDGE_RESTART_DELAY);
+
+                        break;
+
+                    case "schema":
+                        bridge = await this.$hoobs.bridge(this.bridge);
+                        config = await bridge.config.get();
+                        working = cloneJson(this.working);
+
+                        index = -1;
+
+                        switch (this.type) {
+                            case "accessory":
+                                index = config.accessories.findIndex((item) => item.accessory === this.alias);
+                                working.accessories = working.accessories || [];
+
+                                while (index >= 0) {
+                                    config.accessories.splice(index, 1);
+                                    index = config.accessories.findIndex((item) => item.accessory === this.alias);
+                                }
+
+                                for (let i = 0; i < working.accessories.length; i += 1) {
+                                    working.accessories[i].accessory = this.alias;
+                                    working.accessories[i].plugin_map = { plugin_name: this.identifier };
+                                }
+
+                                config.accessories = [...config.accessories, ...working.accessories];
+                                break;
+
+                            default:
+                                index = config.platforms.findIndex((item) => item.platform === this.alias);
+
+                                while (index >= 0) {
+                                    config.platforms.splice(index, 1);
+                                    index = config.platforms.findIndex((item) => item.platform === this.alias);
+                                }
+
+                                working.platform = this.alias;
+                                working.plugin_map = { plugin_name: this.identifier };
+
+                                config.platforms = [...config.platforms, working];
+                                break;
+                        }
+
+                        await bridge.config.update(config);
+
+                        setTimeout(() => {
+                            this.dirty = false;
+                            this.change(this.bridge);
+                        }, BRIDGE_RESTART_DELAY);
+
+                        break;
                 }
             },
 
@@ -408,9 +523,50 @@
                             break;
                     }
 
+                    delete this.saved.plugin_map;
+
                     this.working = cloneJson(this.saved);
                     this.loading = false;
                     this.dirty = false;
+
+                    if (this.manual || !(((this.plugin || {}).schema || {}).config)) {
+                        const theme = await this.$hoobs.theme.get(this.$store.state.theme);
+
+                        let foreground = theme.widget.text.default.replace("#", "");
+                        let background = "00000000";
+
+                        if (foreground.length === 3) foreground = foreground.split("").map((item) => `${item}${item}`).join("");
+                        if (background.length === 3) background = background.split("").map((item) => `${item}${item}`).join("");
+
+                        setTimeout(() => {
+                            this.$refs.schema.innerHTML = "";
+
+                            window.monaco.editor.defineTheme("theme", {
+                                base: theme.mode === "dark" ? "vs-dark" : "vs",
+                                inherit: true,
+                                colors: { "editor.foreground": `#${foreground}`, "editor.background": `#${background}` },
+                                rules: [{ token: "", foreground, background }],
+                            });
+
+                            this.editor = window.monaco.editor.create(this.$refs.schema, {
+                                value: JSON.stringify(this.working, null, 4),
+                                language: "json",
+                                theme: "theme",
+                                wordWrap: "on",
+                                wrappingIndent: "indent",
+                                renderLineHighlight: "none",
+                                scrollBeyondLastLine: false,
+                                contextmenu: false,
+                                minimap: { enabled: false },
+                                scrollbar: { useShadows: false, horizontal: "hidden", vertical: "hidden" },
+                                lineNumbers: false,
+                            });
+
+                            this.editor.getModel().onDidChangeContent(() => {
+                                this.dirty = true;
+                            });
+                        }, MONACO_LOAD_DELAY);
+                    }
                 }
             },
 
@@ -421,6 +577,7 @@
                 this.schema = null;
                 this.plugin = null;
                 this.dirty = false;
+                this.manual = false;
 
                 this.bridges.sort((a, b) => {
                     if (a.display < b.display) return -1;
@@ -442,7 +599,7 @@
 
                     if (this.plugin && this.plugin.schema && this.plugin.schema.config) {
                         this.type = this.plugin.schema.pluginType || (this.plugin.schema.accessory ? "accessory" : "platform");
-                        this.alias = this.plugin.alias || this.plugin.schema.pluginAlias;
+                        this.alias = this.plugin.alias || this.plugin.schema.pluginAlias || this.$hoobs.repository.title(this.plugin.identifier);
                         this.bridges = this.bridges.filter((bridge) => this.plugin.bridges.findIndex((item) => item.id === bridge.id) >= 0);
 
                         switch (this.type) {
@@ -473,7 +630,9 @@
                                 break;
                         }
                     } else {
-                        this.$router.push("/config");
+                        this.type = (this.plugin.details[0] || {}).type || "platform";
+                        this.alias = this.plugin.alias || (this.plugin.details[0] || {}).alias || this.$hoobs.repository.title(this.plugin.identifier);
+                        this.bridges = this.bridges.filter((bridge) => this.plugin.bridges.findIndex((item) => item.id === bridge.id) >= 0);
                     }
 
                     this.change(((this.bridges || [])[0] || {}).id || "");
@@ -487,7 +646,7 @@
                     for (let i = 0; i < plugins.length; i += 1) {
                         const plugin = plugins[i];
 
-                        if (plugin && plugin.schema && plugin.schema.config) {
+                        if (plugin) {
                             const { bridge } = plugin;
                             const { version } = plugin;
 
@@ -516,9 +675,7 @@
                     });
 
                     this.plugins.unshift({ identifier: "hub", display: this.$t("hub") });
-
-                    if (!this.$mobile) this.plugins.push({ identifier: "advanced", display: this.$t("advanced") });
-
+                    this.plugins.push({ identifier: "advanced", display: this.$t("advanced") });
                     this.switch(identifier);
                 });
             },
@@ -551,6 +708,10 @@
                 backdrop-filter: var(--transparency);
                 overflow: auto;
 
+                &.tight {
+                    margin: 0 20px 20px 0;
+                }
+
                 .section {
                     display: flex;
                     flex-direction: row;
@@ -559,6 +720,10 @@
                     color: var(--application-highlight);
                     margin: 0 0 20px 0;
                     user-select: none;
+
+                    &.tight {
+                        margin: 0 0 20px 10px;
+                    }
 
                     &.extra {
                         margin: 20px 0;
@@ -573,7 +738,7 @@
                     margin: 20px 0;
 
                     &.tight {
-                        margin: 0 0 7px 0;
+                        margin: 0 0 7px 10px;
                     }
                 }
 

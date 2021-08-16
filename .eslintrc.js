@@ -86,6 +86,18 @@ module.exports = {
         },
         {
             files: [
+                "src/views/config.vue",
+            ],
+            rules: {
+                indent: "off",
+                "quote-props": "off",
+                "@typescript-eslint/indent": "off",
+                "default-case": "off",
+                "no-loop-func": "off",
+            },
+        },
+        {
+            files: [
                 "src/components/accessories/camera.vue",
             ],
             rules: {
