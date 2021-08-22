@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
+import { deflate, inflate } from "pako";
+
 export function parseJson<T>(value: string, replacement: T): T {
     try {
         return <T>JSON.parse(value);
@@ -38,4 +40,19 @@ export function formatJson(object: { [key: string]: any }, pretty?: boolean): st
     if (pretty) return JSON.stringify(object, null, 4);
 
     return JSON.stringify(object);
+}
+
+export function compressJson(value: { [key: string]: any }): Uint8Array {
+    const buffer = new TextEncoder().encode(JSON.stringify(value));
+    const results = deflate(buffer);
+
+    return results;
+}
+
+export function decompressJson(value: Uint8Array): { [key: string]: any } {
+    try {
+        return JSON.parse((new TextDecoder()).decode(inflate(value)));
+    } catch (_error) {
+        return {};
+    }
 }
