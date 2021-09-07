@@ -19,7 +19,7 @@ debug() {
 }
 
 include() {
-    if [[ -f "../repo/debian/pool/main/h/hoobs-gui/hoobs-gui-$2_$3.deb" ]]; then
+    if [[ -f "../repo/debian/pool/main/h/hoobs-gui/hoobs-gui_$2_$3.deb" ]]; then
         echo "$2-$3 already published"
     else
         case $1 in
