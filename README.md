@@ -17,12 +17,6 @@ Then install hoobsd and the HOOBS GUI.
 sudo apt install -y hoobsd hoobs-gui
 ```
 
-If you have the HOOOBS CLI installed, you can simply run this command.
-
-```
-sudo hoobs extension add gui
-```
-
 ## Service
 The GUI will not be available right away, you will need to restart the hoobsd service.
 

@@ -2,6 +2,7 @@ gui: clean lint paths metadata deploy
 	dpkg-deb --build dist
 	cp dist.deb builds/hoobs-gui-$(shell project version)-hoobs-all.deb
 	dpkg-sig --sign builder builds/hoobs-gui-$(shell project version)-hoobs-all.deb
+	rm -f dist.deb
 	rm -fR dist
 
 lint:
