@@ -27,6 +27,8 @@ import themes from "./plugins/themes";
 import mobile from "./plugins/mobile";
 import drag from "./plugins/drag";
 
+import { decompressJson } from "./services/json";
+
 import actions from "./services/actions";
 import dialogs from "./services/dialogs";
 import router from "./services/router";
@@ -41,23 +43,14 @@ const markdown = converter();
 hoobs.sdk.config.token.get(() => store.state.session);
 hoobs.sdk.config.token.set((token: string) => { store.commit("SESSION:SET", token); });
 
-io.on("log", (data) => store.commit("IO:LOG", data));
-io.on("monitor", (data) => store.commit("IO:MONITOR", data));
-io.on("notification", (data) => store.commit("IO:NOTIFICATION", data));
-io.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
-io.on("room_change", (data) => store.commit("IO:ROOM:CHANGE", data));
-
-io.on("connect", async () => {
-    actions.emit("io", "connected");
-});
-
-io.on("reconnect", async () => {
-    actions.emit("io", "connected");
-});
-
-io.on("disconnect", async () => {
-    actions.emit("io", "disconnected");
-});
+io.on("log", (data) => store.commit("IO:LOG", decompressJson(data)));
+io.on("monitor", (data) => store.commit("IO:MONITOR", decompressJson(data)));
+io.on("notification", (data) => store.commit("IO:NOTIFICATION", decompressJson(data)));
+io.on("accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", decompressJson(data)));
+io.on("room_change", (data) => store.commit("IO:ROOM:CHANGE", decompressJson(data)));
+io.on("connect", () => actions.emit("io", "connected"));
+io.on("reconnect", () => actions.emit("io", "connected"));
+io.on("disconnect", () => actions.emit("io", "disconnected"));
 
 actions.on("log", "history", () => {
     hoobs.sdk.log().then((messages: any) => { store.commit("LOG:HISTORY", messages); });

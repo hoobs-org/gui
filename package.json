@@ -1,6 +1,6 @@
 {
     "name": "@hoobs/gui",
-    "version": "4.0.88",
+    "version": "4.0.90",
     "description": "Interface component for the certified HOOBS stack.",
     "license": "GPL-3.0",
     "keywords": [
@@ -35,7 +35,6 @@
         "@interactjs/utils": "^1.10.1",
         "@jaames/iro": "^5.3.1",
         "@mdi/js": "^5.9.55",
-        "buffer": "^6.0.3",
         "chart.js": "^2.9.4",
         "color-scheme": "^1.0.1",
         "colorthief": "^2.3.2",
@@ -46,6 +45,7 @@
         "github-api-emojis": "^1.0.3",
         "identicon.js": "^2.3.3",
         "lodash.debounce": "^4.0.8",
+        "pako": "^2.0.4",
         "showdown": "^1.9.1",
         "showdown-highlight": "^2.1.5",
         "video.js": "^7.12.3",
@@ -63,6 +63,7 @@
         "@babel/core": "^7.14.3",
         "@babel/preset-env": "^7.14.4",
         "@types/chart.js": "^2.9.29",
+        "@types/pako": "^1.0.2",
         "@types/showdown": "^1.9.3",
         "@types/vue-chartkick": "^0.5.1",
         "@typescript-eslint/eslint-plugin": "^4.26.0",

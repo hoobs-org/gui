@@ -59,6 +59,7 @@ module.exports = {
             "error",
             4,
         ],
+        "import/no-extraneous-dependencies": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "spaced-comment": "off",
@@ -74,6 +75,7 @@ module.exports = {
                 indent: "off",
                 "quote-props": "off",
                 "@typescript-eslint/indent": "off",
+                "import/no-extraneous-dependencies": "off",
             },
         },
         {
