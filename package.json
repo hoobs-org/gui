@@ -22,12 +22,10 @@
     "author": {
         "name": "Michael J Kellsy"
     },
-    "preferGlobal": true,
-    "scripts": {
-        "lint": "vue-cli-service lint",
-        "build": "bin/build --lint",
-        "debug": "vue-cli-service serve --modern --mode development --port 49826"
+    "engines": {
+        "nodesource": "node_14.x"
     },
+    "preferGlobal": true,
     "dependencies": {
         "@chenfengyuan/vue-qrcode": "^1.0.2",
         "@hoobs/sdk": "^4.4.11",
@@ -87,6 +85,6 @@
         "sass-loader": "^10.1.0",
         "typescript": "~4.1.3",
         "vue-template-compiler": "^2.6.11",
-        "webpack": "^5.11.1"
+        "webpack": "^4.46.0"
     }
 }

@@ -1,7 +1,7 @@
 const { resolve } = require("path");
 
 module.exports = {
-    outputDir: resolve(__dirname, "./lib/hoobs"),
+    outputDir: resolve(__dirname, "./dist/usr/lib/hoobs"),
 
     configureWebpack: {
         performance: {

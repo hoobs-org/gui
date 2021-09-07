@@ -1,0 +1,112 @@
+#!/bin/bash
+
+COUNT=0
+
+version() {
+    case $1 in
+        nodesource )
+            echo `node -e 'console.log(require("./package.json").engines.nodesource)'`
+            ;;
+
+        * )
+            echo `node -e 'console.log(require("./package.json").version)'`
+            ;;
+    esac
+}
+
+debug() {
+    ./node_modules/.bin/vue-cli-service serve --modern --mode development --port 49826
+}
+
+include() {
+    if [[ -f "../repo/debian/pool/main/h/hoobs-gui/hoobs-gui-$2_$3.deb" ]]; then
+        echo "$2-$3 already published"
+    else
+        case $1 in
+            stable )
+                reprepro -b ../repo/debian includedeb bleeding builds/hoobs-gui-$2-hoobs-$3.deb
+                reprepro -b ../repo/debian includedeb edge builds/hoobs-gui-$2-hoobs-$3.deb
+                reprepro -b ../repo/debian includedeb stable builds/hoobs-gui-$2-hoobs-$3.deb
+                ;;
+
+            edge )
+                reprepro -b ../repo/debian includedeb bleeding builds/hoobs-gui-$2-hoobs-$3.deb
+                reprepro -b ../repo/debian includedeb edge builds/hoobs-gui-$2-hoobs-$3.deb
+                ;;
+
+            bleeding )
+                reprepro -b ../repo/debian includedeb bleeding builds/hoobs-gui-$2-hoobs-$3.deb
+                ;;
+        esac
+    fi
+}
+
+publish() {
+    current=$(version)
+
+    case $1 in
+        stable )
+            include "stable" "$current" "all"
+            ;;
+
+        edge )
+            include "edge" "$current" "all"
+            ;;
+
+        bleeding )
+            include "bleeding" "$current" "all"
+            ;;
+
+        list )
+            list $2
+            ;;
+    esac
+}
+
+list() {
+    case $1 in
+        stable )
+            reprepro -b ../repo/debian list stable hoobs-gui
+            ;;
+
+        edge )
+            reprepro -b ../repo/debian list edge hoobs-gui
+            ;;
+
+        bleeding )
+            reprepro -b ../repo/debian list bleeding hoobs-gui
+            ;;
+
+        * )
+            reprepro -b ../repo/debian list stable hoobs-gui
+            reprepro -b ../repo/debian list edge hoobs-gui
+            reprepro -b ../repo/debian list bleeding hoobs-gui
+            ;;
+    esac
+}
+
+case $1 in
+    version )
+        version $2
+        ;;
+
+    lint )
+        make lint
+        ;;
+
+    debug )
+        debug
+        ;;
+
+    build )
+        make gui
+        ;;
+
+    publish )
+        publish $2 $3
+        ;;
+
+    clean )
+        make clean
+        ;;
+esac
