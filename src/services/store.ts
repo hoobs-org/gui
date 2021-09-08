@@ -63,6 +63,7 @@ export default new Vuex.Store({
         streaming: {},
         latest: null,
         navigation: false,
+        terminal: false,
         accessory: null,
         room: null,
         theme: null,
@@ -252,6 +253,10 @@ export default new Vuex.Store({
 
         "ACCESSORY:STREAMING": (state: { [key: string]: any }, payload: any) => {
             state.streaming[payload.id] = payload.data;
+        },
+
+        "TERMINAL:STATE": (state: { [key: string]: any }, payload: any) => {
+            state.terminal = payload;
         },
     },
 

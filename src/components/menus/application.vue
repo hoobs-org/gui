@@ -46,18 +46,21 @@
             user() {
                 return this.$store.state.user;
             },
+
+            terminal() {
+                return this.$store.state.terminal;
+            },
         },
 
         data() {
             return {
                 auth: false,
-                terminal: false,
             };
         },
 
         async mounted() {
             this.auth = (await this.$hoobs.auth.status()) === "enabled";
-            this.terminal = (await this.$hoobs.status() || {}).terminal;
+            this.$store.commit("TERMINAL:STATE", (await this.$hoobs.status() || {}).terminal);
         },
 
         methods: {
