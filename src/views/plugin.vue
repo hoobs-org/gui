@@ -89,9 +89,6 @@
     import crypto from "crypto";
     import identicon from "identicon.js";
 
-    const SOCKET_RECONNECT_DELAY = 2 * 1000;
-    const BRIDGE_CREATE_DELAY = 8 * 1000;
-
     export default {
         name: "plugin",
 
@@ -277,34 +274,22 @@
                             }));
                         } else {
                             waits.push(new Promise((resolve) => {
-                                this.$hoobs.bridges.add(data.display, data.port, data.pin, data.username, data.advertiser).then(() => {
-                                    setTimeout(() => {
-                                        this.$hoobs.bridge(data.id).then((bridge) => {
-                                            if (bridge) {
-                                                bridge.plugins.install(`${this.identifier}@${tag || "latest"}`).then((result) => {
-                                                    success = result;
+                                this.$hoobs.bridges.add(data.display, data.port, data.pin, data.username, data.advertiser, `${this.identifier}@${tag || "latest"}`).then((result) => {
+                                    success = result;
 
-                                                    resolve();
-                                                });
-                                            } else {
-                                                resolve();
-                                            }
-                                        });
-                                    }, BRIDGE_CREATE_DELAY);
+                                    resolve();
                                 });
                             }));
                         }
 
                         Promise.all(waits).then(() => {
-                            setTimeout(() => {
-                                if (success) {
-                                    this.$dialog.close("bridges");
-                                    this.load(this.identifier);
-                                } else {
-                                    this.$dialog.close("bridges");
-                                    this.$alert(this.$t("plugin_install_failed"));
-                                }
-                            }, SOCKET_RECONNECT_DELAY);
+                            if (success) {
+                                this.$dialog.close("bridges");
+                                this.load(this.identifier);
+                            } else {
+                                this.$dialog.close("bridges");
+                                this.$alert(this.$t("plugin_install_failed"));
+                            }
                         });
                     },
                 });
@@ -325,45 +310,37 @@
                                     bridge.plugins.uninstall(this.identifier).then((result) => {
                                         success = result;
 
-                                        setTimeout(() => {
-                                            if (success && remove) {
-                                                bridge.plugins.list().then((plugins) => {
-                                                    if (plugins.length === 0) {
-                                                        bridge.remove().then(() => {
-                                                            setTimeout(() => {
-                                                                resolve();
-                                                            }, BRIDGE_CREATE_DELAY);
-                                                        });
-                                                    } else {
-                                                        resolve();
-                                                    }
-                                                });
-                                            } else {
-                                                resolve();
-                                            }
-                                        }, SOCKET_RECONNECT_DELAY);
+                                        if (success && remove) {
+                                            bridge.plugins.list().then((plugins) => {
+                                                if (plugins.length === 0) {
+                                                    bridge.remove().then(() => resolve());
+                                                } else {
+                                                    resolve();
+                                                }
+                                            });
+                                        } else {
+                                            resolve();
+                                        }
                                     });
                                 }));
                             }
 
                             Promise.all(waits).then(() => {
-                                setTimeout(() => {
-                                    if (success && this.plugin.deleted) {
-                                        this.$dialog.close("bridges");
+                                if (success && this.plugin.deleted) {
+                                    this.$dialog.close("bridges");
 
-                                        if (bridge) {
-                                            this.$router.push({ path: `/plugins/${bridge.id}` });
-                                        } else {
-                                            this.$router.push({ path: "/plugins" });
-                                        }
-                                    } else if (success) {
-                                        this.$dialog.close("bridges");
-                                        this.load(this.identifier);
+                                    if (bridge) {
+                                        this.$router.push({ path: `/plugins/${bridge.id}` });
                                     } else {
-                                        this.$dialog.close("bridges");
-                                        this.$alert(this.$t("plugin_uninstall_failed"));
+                                        this.$router.push({ path: "/plugins" });
                                     }
-                                }, SOCKET_RECONNECT_DELAY);
+                                } else if (success) {
+                                    this.$dialog.close("bridges");
+                                    this.load(this.identifier);
+                                } else {
+                                    this.$dialog.close("bridges");
+                                    this.$alert(this.$t("plugin_uninstall_failed"));
+                                }
                             });
                         });
                     },
@@ -385,11 +362,7 @@
                     }));
                 }
 
-                Promise.all(waits).then(() => {
-                    setTimeout(() => {
-                        this.load(this.identifier);
-                    }, SOCKET_RECONNECT_DELAY);
-                });
+                Promise.all(waits).then(() => this.load(this.identifier));
             },
 
             locate(ref) {
