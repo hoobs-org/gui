@@ -31,7 +31,7 @@
         <div v-if="auth" class="seperator desktop"></div>
         <div v-if="user.permissions.controller" v-on:click="$dialog.open('settings')" class="item">{{ $t("hub_settings") }}</div>
         <div v-on:click="$dialog.open('personalize')" class="item">{{ $t("personalize") }}</div>
-        <div v-if="!$mobile && user.permissions.terminal" v-on:click="terminal()" class="item desktop">{{ $t("terminal") }}</div>
+        <div v-if="!$mobile && terminal && user.permissions.terminal" v-on:click="open()" class="item desktop">{{ $t("terminal") }}</div>
         <div v-if="auth" class="seperator desktop"></div>
         <div v-if="auth" v-on:click="logout()" class="item">{{ $t("logout") }}</div>
         <icon v-on:click="$menu.close()" name="close" class="icon close mobile" />
@@ -51,11 +51,13 @@
         data() {
             return {
                 auth: false,
+                terminal: false,
             };
         },
 
         async mounted() {
-            this.auth = await this.$hoobs.auth.status() === "enabled";
+            this.auth = (await this.$hoobs.auth.status()) === "enabled";
+            this.terminal = (await this.$hoobs.status() || {}).terminal;
         },
 
         methods: {
@@ -65,7 +67,7 @@
                 window.open("https://support.hoobs.org/docs");
             },
 
-            terminal() {
+            open() {
                 this.$menu.close();
 
                 if (this.$route.name !== "terminal") this.$router.push({ path: "/terminal" });
