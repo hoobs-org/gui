@@ -209,6 +209,8 @@
         "password_confirm_description": "Zadejte své vybrané heslo znovu.",
         "password_description": "Zadejte heslo. Heslo musí být minimálně 5 znaků.",
         "password_mismatch": "Hesla se neshodují.",
+        "password_reset": "Reset Password",
+        "password_reset_warning": "This will reset the terminal password to hoobsadmin for the hoobs user. Are you sure you want to continue?",
         "password_weak": "Heslo je příliš slabé.",
         "permission_accessories": "Zobrazit & Ovládat příslušenství",
         "permission_bridges": "Přidat, Upravit a ovládat bridge",

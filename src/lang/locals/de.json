@@ -209,6 +209,8 @@
         "password_confirm_description": "Wiederhole dein gewünschtes Passwort.",
         "password_description": "Gib dein gewünschtes Passwort ein. Passwörter müssen mindestens 5 Zeichen lang sein.",
         "password_mismatch": "Passwörter stimmen nicht überein.",
+        "password_reset": "Reset Password",
+        "password_reset_warning": "This will reset the terminal password to hoobsadmin for the hoobs user. Are you sure you want to continue?",
         "password_weak": "Passwort zu schwach.",
         "permission_accessories": "Zubehör steuern und einsehen",
         "permission_bridges": "Bridges Hinzufügen, Bearbeiten & Steuern",

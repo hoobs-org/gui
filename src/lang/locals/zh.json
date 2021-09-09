@@ -209,6 +209,8 @@
         "password_confirm_description": "再次输入您期望的密码。",
         "password_description": "输入您期望的密码。密码必须至少5个字符长度。",
         "password_mismatch": "密码不匹配。",
+        "password_reset": "Reset Password",
+        "password_reset_warning": "This will reset the terminal password to hoobsadmin for the hoobs user. Are you sure you want to continue?",
         "password_weak": "密码太弱。",
         "permission_accessories": "查看和控制配件",
         "permission_bridges": "添加编辑和控制桥接器",

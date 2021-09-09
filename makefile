@@ -22,6 +22,9 @@ metadata:
 	sed "s/__ARCH__/all/" > dist/DEBIAN/control
 
 deploy:
+	cp ../lang/builds/* src/lang/locals/
+	cp ../lang/countries.json src/lang/
+	cp ../lang/emojis.json src/lang/
 	./node_modules/.bin/vue-cli-service build --modern
 	cp LICENSE dist/usr/lib/hoobs/
 	node -e 'const pjson = require("./package.json"); delete pjson.dependencies; delete pjson.devDependencies; delete pjson.engines; require("fs").writeFileSync("dist/usr/lib/hoobs/package.json", JSON.stringify(pjson, null, 4));'
