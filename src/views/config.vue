@@ -64,8 +64,8 @@
                     <div class="row">
                         <integer-field :title="$t('update_interval')" :description="$t('update_interval_description')" :min="2" :max="300" v-model="working.polling_seconds" v-on:input="updated" />
                     </div>
-                    <div v-if="(status.product === 'box' || status.product === 'card') && user.permissions.terminal" class="section extra" style="margin-bottom: 7px;">{{ $t("terminal") }}</div>
-                    <div v-if="(status.product === 'box' || status.product === 'card') && user.permissions.terminal" class="row actions" style="margin-bottom: 20px;">
+                    <div v-if="(product === 'box' || product === 'card') && user.permissions.terminal" class="section extra" style="margin-bottom: 7px;">{{ $t("terminal") }}</div>
+                    <div v-if="(product === 'box' || product === 'card') && user.permissions.terminal" class="row actions" style="margin-bottom: 20px;">
                         <div v-on:click="reset" class="button">{{ $t("password_reset") }}</div>
                     </div>
                     <div class="section">{{ $t("interface") }}</div>
@@ -115,6 +115,10 @@
         computed: {
             user() {
                 return this.$store.state.user;
+            },
+
+            product() {
+                return this.$store.state.product;
             },
 
             screen() {
@@ -167,7 +171,6 @@
 
         data() {
             return {
-                status: {},
                 version: 0,
                 intermediate: false,
                 loading: true,
@@ -233,7 +236,6 @@
                 if (this.identifier === "advanced") this.change(this.bridge);
             });
 
-            this.status = (await this.$hoobs.status()) || {};
             this.load(this.name && this.name !== "" ? `${this.scope}/${this.name}` : this.scope);
         },
 
