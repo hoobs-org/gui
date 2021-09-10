@@ -40,6 +40,10 @@ export default new Dialogs([
         component: () => import(/* webpackChunkName: "config" */ "@/components/dialogs/settings.vue"),
     },
     {
+        name: "network",
+        component: () => import(/* webpackChunkName: "config" */ "@/components/dialogs/network.vue"),
+    },
+    {
         name: "personalize",
         component: () => import(/* webpackChunkName: "layout" */ "@/components/dialogs/personalize.vue"),
     },
