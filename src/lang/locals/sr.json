@@ -80,6 +80,7 @@
         "configuration": "Konfiguracija",
         "confirm": "Potvrdi",
         "connect": "Connect",
+        "connected": "Connected",
         "connecting": "Povezivanje",
         "cors_orgin": "Cross Site Resource Sharing",
         "cors_orgin_description": "Restrict this interface to specific URLs (it's best to leave this blank).",
@@ -180,6 +181,7 @@
         "name": "Ime",
         "name_description": "Unesite ime i prezime.",
         "network": "Network",
+        "networks": "Networks",
         "night": "Noć",
         "no_accessories": "No accessories available",
         "no_carbon_monoxide": "Nema Karbon Monoksida",
@@ -292,6 +294,7 @@
         "sort_dashboard": "Sortiraj kontrolnu tablu",
         "sort_rooms": "Sortiraj prostorije",
         "start": "Start",
+        "status": "Status",
         "stop": "Stop",
         "sunday": "Nedelja",
         "sunday_abbr": "Ned",
@@ -395,6 +398,7 @@
         "wednesday_abbr": "Sre",
         "welcome": "Dobrodošli u HOOBS",
         "widgets": "Widgets",
+        "wifi": "Wi-Fi",
         "write_review": "Write a Review"
     }
 }

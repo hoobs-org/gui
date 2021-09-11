@@ -80,6 +80,7 @@
         "configuration": "Configuração",
         "confirm": "Confirmar",
         "connect": "Connect",
+        "connected": "Connected",
         "connecting": "Conectando",
         "cors_orgin": "Compartilhamento de recursos entre sites",
         "cors_orgin_description": "Restrinja esta interface a URLs específicos (é melhor deixar em branco).",
@@ -180,6 +181,7 @@
         "name": "Nome",
         "name_description": "Nome Completo",
         "network": "Network",
+        "networks": "Networks",
         "night": "Noite",
         "no_accessories": "No accessories available",
         "no_carbon_monoxide": "No Carbon Monoxide",
@@ -292,6 +294,7 @@
         "sort_dashboard": "Sort Dashboard",
         "sort_rooms": "Sort Rooms",
         "start": "Start",
+        "status": "Status",
         "stop": "Stop",
         "sunday": "Domingo",
         "sunday_abbr": "Dom",
@@ -395,6 +398,7 @@
         "wednesday_abbr": "Qua",
         "welcome": "Welcome to HOOBS™",
         "widgets": "Widgets",
+        "wifi": "Wi-Fi",
         "write_review": "Write a Review"
     }
 }

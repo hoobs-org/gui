@@ -80,6 +80,7 @@
         "configuration": "Konfigurace",
         "confirm": "Potvrdit",
         "connect": "Connect",
+        "connected": "Connected",
         "connecting": "Připojování",
         "cors_orgin": "Sdílení zdrojů napříč sítí",
         "cors_orgin_description": "Omezit rozhraní na specifickou URL (lepší nechat prázdné)",
@@ -180,6 +181,7 @@
         "name": "Jméno",
         "name_description": "Zadejte celé své jméno.",
         "network": "Network",
+        "networks": "Networks",
         "night": "Noc",
         "no_accessories": "Žádné příslušenství není dostupné",
         "no_carbon_monoxide": "Žádný karbon monoxid",
@@ -292,6 +294,7 @@
         "sort_dashboard": "Seřadit dashboard",
         "sort_rooms": "Seřadit místnosti",
         "start": "Start",
+        "status": "Status",
         "stop": "Stop",
         "sunday": "Neděle",
         "sunday_abbr": "Ne",
@@ -395,6 +398,7 @@
         "wednesday_abbr": "St",
         "welcome": "Vítejte v HOOBS™",
         "widgets": "Widgety",
+        "wifi": "Wi-Fi",
         "write_review": "Napsat recenzi"
     }
 }
