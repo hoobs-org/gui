@@ -399,6 +399,8 @@
         "welcome": "欢迎来到HOOBS™",
         "widgets": "小组件",
         "wifi": "Wi-Fi",
+        "wifi_disable_warning": "There are no other connections available. Are you sure you want to disable Wi-Fi?",
+        "wifi_password_message": "Enter the password for",
         "write_review": "参与评论"
     }
 }
