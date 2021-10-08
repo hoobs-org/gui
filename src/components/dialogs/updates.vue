@@ -189,15 +189,20 @@
                 }
 
                 await Promise.all(waits);
-                await (await this.$hoobs.system()).upgrade();
 
-                this.$action.on("io", "disconnected", () => {
-                    this.$action.emit("io", "reload");
+                if (this.stack || this.status.upgradable.length > 0) {
+                    await (await this.$hoobs.system()).upgrade();
 
-                    setTimeout(() => {
-                        this.$dialog.close("updates");
-                    }, REDIRECT_DELAY);
-                });
+                    this.$action.on("io", "disconnected", () => {
+                        this.$action.emit("io", "reload");
+
+                        setTimeout(() => {
+                            this.$dialog.close("updates");
+                        }, REDIRECT_DELAY);
+                    });
+                } else {
+                    this.$dialog.close("updates");
+                }
             },
         },
     };
