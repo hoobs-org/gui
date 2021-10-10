@@ -105,12 +105,20 @@
                     </div>
                 </div>
             </form>
-            <div v-else class="initial desktop">
-                <div v-if="bridges.length > 0" class="message">
-                    {{ $t("bridge_select_add") }}
-                    <router-link to="/bridges/add">{{ $t("bridge_add") }}</router-link>
+            <div v-else-if="bridges.length > 0" class="screen grid">
+                <div class="cards">
+                    <router-link v-for="(bridge, index) in bridges" :key="`bridge:${index}`" :to="`/bridges/${bridge.id}`" class="card">
+                        <div v-if="details[bridge.id].setup_id">
+                            <qrcode :value="details[bridge.id].setup_id" :options="{ width: 160, color: { dark: theme.widget.text.default, light: '#00000000' }}" />
+                        </div>
+                        <div class="details">
+                            <span class="title">{{ bridge.display }}</span>
+                        </div>
+                    </router-link>
                 </div>
-                <div v-else class="message">
+            </div>
+            <div v-else class="initial desktop">
+                <div class="message">
                     {{ $t("bridge_initilize") }}
                     <router-link to="/bridges/add">{{ $t("bridge_add") }}</router-link>
                 </div>
@@ -170,6 +178,7 @@
                 bridges: [],
                 subject: null,
                 status: null,
+                details: {},
                 file: null,
                 filename: null,
                 display: "",
@@ -237,6 +246,7 @@
 
                 this.subject = null;
                 this.status = null;
+                this.details = {};
                 this.file = null;
                 this.filename = null;
                 this.display = "";
@@ -269,6 +279,7 @@
                     }
                 } else {
                     this.generate();
+                    this.details = (await this.$hoobs.status()).bridges;
                     this.port = this.port || 50826;
 
                     const bridges = await this.$hoobs.bridges.list();
@@ -414,6 +425,10 @@
                 backdrop-filter: var(--transparency);
                 overflow: auto;
 
+                &.grid {
+                    background: transparent;
+                }
+
                 .title {
                     font-size: 17px;
                 }
@@ -439,6 +454,41 @@
 
                 .actions {
                     padding-top: 0;
+                }
+
+                .cards {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    .card {
+                        width: 160px;
+                        height: 205px;
+                        position: relative;
+                        margin: 0 0 10px 10px;
+                        display: flex;
+                        flex-direction: column;
+                        color: var(--widget-text) !important;
+                        text-decoration: none !important;
+                        background: var(--widget-background);
+                    }
+
+                    .details {
+                        flex: 1;
+                        padding: 0 17px 17px 17px;
+                        display: flex;
+                        flex-direction: column;
+                        color: var(--widget-text);
+                        text-decoration: none;
+                        overflow: hidden;
+
+                        .title {
+                            font-size: 16px;
+                            overflow: hidden;
+                            text-align: center;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
                 }
             }
 
@@ -471,6 +521,10 @@
                     padding: 20px 20px 10px 20px;
                     margin: 0;
 
+                    &.grid {
+                        display: none;
+                    }
+
                     .actions {
                         flex-direction: row;
                     }
@@ -489,6 +543,10 @@
                         backdrop-filter: unset;
                         padding: 20px 20px 10px 20px;
                         margin: 0;
+
+                        &.grid {
+                            display: none;
+                        }
 
                         .actions {
                             flex-direction: row;
