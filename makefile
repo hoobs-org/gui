@@ -14,6 +14,7 @@ paths:
 	mkdir -p dist/DEBIAN
 	mkdir -p dist/usr
 	mkdir -p dist/usr/lib
+	mkdir -p lang/locals
 
 metadata:
 	cat control | \
