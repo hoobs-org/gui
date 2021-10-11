@@ -1,12 +1,9 @@
-gui: clean lint paths metadata deploy
+gui: clean paths locals lint metadata deploy
 	dpkg-deb --build dist
 	cp dist.deb builds/hoobs-gui-$(shell project version)-hoobs-all.deb
 	dpkg-sig --sign builder builds/hoobs-gui-$(shell project version)-hoobs-all.deb
 	rm -f dist.deb
 	rm -fR dist
-
-lint:
-	./node_modules/.bin/vue-cli-service lint
 
 paths:
 	mkdir -p builds
@@ -16,6 +13,14 @@ paths:
 	mkdir -p dist/usr/lib
 	mkdir -p lang/locals
 
+locals:
+	cp ../lang/builds/* src/lang/locals/
+	cp ../lang/countries.json src/lang/
+	cp ../lang/emojis.json src/lang/
+
+lint:
+	./node_modules/.bin/vue-cli-service lint
+
 metadata:
 	cat control | \
 	sed "s/__VERSION__/$(shell project version)/" | \
@@ -23,9 +28,6 @@ metadata:
 	sed "s/__ARCH__/all/" > dist/DEBIAN/control
 
 deploy:
-	cp ../lang/builds/* src/lang/locals/
-	cp ../lang/countries.json src/lang/
-	cp ../lang/emojis.json src/lang/
 	./node_modules/.bin/vue-cli-service build --modern
 	cp LICENSE dist/usr/lib/hoobs/
 	node -e 'const pjson = require("./package.json"); delete pjson.dependencies; delete pjson.devDependencies; delete pjson.engines; require("fs").writeFileSync("dist/usr/lib/hoobs/package.json", JSON.stringify(pjson, null, 4));'
