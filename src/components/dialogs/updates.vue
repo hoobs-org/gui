@@ -112,7 +112,7 @@
             async load() {
                 this.loading = true;
 
-                this.status = await this.$hoobs.status();
+                this.status = await (await this.$hoobs.system()).updates();
                 this.version = await this.$hoobs.version();
 
                 this.plugins = ((await this.$hoobs.plugins()) || []).filter((item) => !Semver.compare(item.version, item.latest, ">="));
