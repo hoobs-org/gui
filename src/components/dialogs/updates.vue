@@ -20,44 +20,41 @@
     <modal :title="$t('updates')" :draggable="true" width="740px" height="547px">
         <div id="updates">
             <div class="content">
-                <div v-if="!updating" class="form">
-                    <div v-if="!loading && plugins.length > 0" class="row section">{{ $t("plugins") }}</div>
-                    <div v-if="!loading && plugins.length > 0">
+                <div v-if="!loading && !updating" class="form">
+                    <div v-if="plugins.length > 0" class="row section">{{ $t("plugins") }}</div>
+                    <div v-if="plugins.length > 0">
                         <div v-for="(plugin, index) in plugins" :key="`plugin:${index}`" class="row">
                             {{ $hoobs.repository.title(plugin.name) }}: {{ plugin.latest }}
                             <span class="value">{{ $t("available") }}</span>
                         </div>
                     </div>
-                    <div v-if="!loading && stack" class="row section">{{ $t("software") }}</div>
-                    <div v-if="!loading && !status.upgraded" class="row">
+                    <div v-if="stack" class="row section">{{ $t("software") }}</div>
+                    <div v-if="!status.upgraded" class="row">
                         {{ $t("version_server") }}: {{ status.current }}
                         <span class="value">{{ $t("available") }}</span>
                     </div>
-                    <div v-if="!loading && !status.gui_upgraded" class="row">
+                    <div v-if="!status.gui_upgraded" class="row">
                         {{ $t("version_gui") }}: {{ status.gui_current }}
                         <span class="value">{{ $t("available") }}</span>
                     </div>
-                    <div v-if="!loading && !status.cli_upgraded" class="row">
+                    <div v-if="!status.cli_upgraded" class="row">
                         {{ $t("version_cli") }}: {{ status.cli_current }}
                         <span class="value">{{ $t("available") }}</span>
                     </div>
-                    <div v-if="!loading && !status.node_upgraded" class="row">
+                    <div v-if="!status.node_upgraded" class="row">
                         {{ $t("version_node") }}: {{ status.node_current }}
                         <span class="value">{{ $t("available") }}</span>
                     </div>
-                    <div v-if="!loading && status.upgradable.length > 0" class="row section">{{ $t("system") }}</div>
-                    <div v-if="!loading && status.upgradable.length > 0">
+                    <div v-if="status.upgradable.length > 0" class="row section">{{ $t("system") }}</div>
+                    <div v-if="status.upgradable.length > 0">
                         <div v-for="(application, index) in status.upgradable" :key="`application:${index}`" class="row">
                             {{ $hoobs.repository.title(application.package) }}: {{ application.available }}
                             <span class="value">{{ $t("available") }}</span>
                         </div>
                     </div>
-                    <div v-if="!loading && updated" class="row updated">
+                    <div v-if="updated" class="row updated">
                         <icon name="update" class="icon" />
                         <div class="text">{{ $t("updated") }}</div>
-                    </div>
-                    <div v-if="loading" class="row loading">
-                        <spinner />
                     </div>
                 </div>
                 <div v-else class="status">
@@ -80,8 +77,6 @@
 <script>
     import Semver from "compare-versions";
     import { cloneJson } from "../../services/json";
-
-    const REDIRECT_DELAY = 1000;
 
     export default {
         name: "updates",
@@ -199,10 +194,7 @@
 
                     this.$action.on("io", "disconnected", () => {
                         this.$action.emit("io", "reload");
-
-                        setTimeout(() => {
-                            this.$dialog.close("updates");
-                        }, REDIRECT_DELAY);
+                        this.$dialog.close("updates");
                     });
                 } else {
                     this.$dialog.close("updates");
