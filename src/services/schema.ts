@@ -79,6 +79,9 @@ export function merge(first: any, second: any) {
 
 export function component(name: string) {
     switch (name) {
+        case "field:desktop":
+            return () => import(/* webpackChunkName: "config" */ "@/components/fields/desktop.vue");
+
         case "field:button":
             return () => import(/* webpackChunkName: "config" */ "@/components/fields/button.vue");
 
@@ -129,7 +132,7 @@ export function component(name: string) {
 export function field(schema: { [key: string]: any }) {
     if (schema.widget === "button") return component("field:button");
     if (schema.widget === "web:button") return component("field:button");
-    if (schema.widget === "app:button") return undefined;
+    if (schema.widget === "app:button") return component("field:desktop");
     if (schema.widget === "textarea") return component("field:textarea");
 
     if (schema.oneOf !== undefined && Array.isArray(schema.oneOf)) {
