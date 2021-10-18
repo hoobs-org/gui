@@ -85,6 +85,12 @@
             "message": () => import(/* webpackChunkName: "common" */ "@/components/elements/message.vue"),
         },
 
+        computed: {
+            platform() {
+                return this.$store.state.platform;
+            },
+        },
+
         data() {
             return {
                 loading: true,
@@ -115,8 +121,15 @@
 
                 if (!this.status.gui_version) this.status.gui_upgraded = true;
 
-                this.stack = !(this.status.upgraded && this.status.cli_upgraded && this.status.node_upgraded && this.status.gui_upgraded);
-                this.updated = !(this.stack || this.plugins.length > 0 || this.status.upgradable.length > 0);
+                if (this.platform === "linux" || this.platform === "docker") {
+                    this.stack = !(this.status.upgraded && this.status.cli_upgraded && this.status.node_upgraded && this.status.gui_upgraded);
+                    this.updated = !(this.stack || this.plugins.length > 0 || this.status.upgradable.length > 0);
+                } else {
+                    const download = (((await Request.get("https://support.hoobs.org/api/releases/hoobsd/latest")).data) || {}).results;
+
+                    this.stack = !Semver.compare(this.status.version, download.version || this.status.version, ">=");
+                    this.updated = !(this.stack || this.plugins.length > 0);
+                }
 
                 this.loading = false;
                 this.updating = false;
@@ -190,13 +203,19 @@
 
                 await Promise.all(waits);
 
-                if (this.stack || this.status.upgradable.length > 0) {
-                    await (await this.$hoobs.system()).upgrade();
+                if (this.platform === "linux" || this.platform === "docker") {
+                    if (this.stack || this.status.upgradable.length > 0) {
+                        await (await this.$hoobs.system()).upgrade();
 
-                    this.$action.on("io", "disconnected", () => {
-                        this.$action.emit("io", "reload");
+                        this.$action.on("io", "disconnected", () => {
+                            this.$action.emit("io", "reload");
+                            this.$dialog.close("updates");
+                        });
+                    } else {
                         this.$dialog.close("updates");
-                    });
+                    }
+                } else if (this.stack) {
+                    window.location.href = "https://support.hoobs.org/downloads/hoobsd";
                 } else {
                     this.$dialog.close("updates");
                 }
