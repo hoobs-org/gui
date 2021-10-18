@@ -73,6 +73,7 @@ export default new Vuex.Store({
         broadcast: "",
         product: "",
         terminal: false,
+        platform: null,
         accessory: null,
         room: null,
         theme: null,
@@ -279,6 +280,10 @@ export default new Vuex.Store({
 
         "TERMINAL:STATE": (state: { [key: string]: any }, payload: any) => {
             state.terminal = payload;
+        },
+
+        "PLATFORM:STATE": (state: { [key: string]: any }, payload: any) => {
+            state.platform = payload;
         },
 
         "THEME:SET": (state: { [key: string]: any }, theme: number) => {
