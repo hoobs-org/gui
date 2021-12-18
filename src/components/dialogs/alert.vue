@@ -28,9 +28,6 @@
 <script>
     export default {
         name: "alert",
-
-        props: {
-            options: Object,
-        },
+        props: { options: Object },
     };
 </script>

@@ -35,7 +35,7 @@
                     <div v-else class="title">
                         <rating :value="plugin.rating" />
                         <h1>{{ $hoobs.repository.title(plugin.name) }}</h1>
-                        <div v-if="((plugin.tags && plugin.tags.latest) || plugin.version)" class="version">{{ plugin.version || plugin.tags.latest }} • Published {{ $hoobs.dates.age(plugin.published) }}</div>
+                        <div class="version">{{ plugin.version }} • Published {{ $hoobs.dates.age(plugin.published) }}</div>
                     </div>
                 </div>
                 <div class="header">
@@ -53,21 +53,28 @@
                 <tabs v-if="!plugin.deleted" :values="tabs" v-on:change="change" :value="section" class="tabs" />
                 <div ref="layout" class="layout">
                     <div v-if="section === 'details'" :class="plugin.deleted ? 'section tight' : 'section'">
-                        <div class="markdown" v-html="readme()"></div>
+                        <div class="markdown" v-html="readme || ''"></div>
                     </div>
                     <div v-if="section === 'reviews'" class="section">
                         <reviews :identifier="identifier" />
                     </div>
                     <div v-if="section === 'versions'" class="section">
                         <div class="heading">{{ $t("tags") }}</div>
-                        <div v-for="(tag, index) in releases.tags" :key="`tag:${index}`" class="version">
+                        <div v-for="(tag, index) in plugin.tags" :key="`tag:${index}`" class="version">
                             <icon v-on:click="install(tag.tag, true)" name="download" class="icon" :title="$t('plugin_install')" />
                             <div v-on:click="install(tag.tag, true)" class="value">{{ tag.version }}</div>
                             <div class="fill"></div>
                             <div class="value">{{ tag.tag }}</div>
                         </div>
                         <div class="heading">{{ $t("releases") }}</div>
-                        <div v-for="(release, index) in releases.versions" :key="`version:${index}`" class="version">
+                        <div v-for="(release, index) in plugin.versions" :key="`version:${index}`" class="version">
+                            <icon v-on:click="install(release.version, true)" name="download" class="icon" :title="$t('plugin_install')" />
+                            <div v-on:click="install(release.version, true)" class="value" :title="$t('plugin_install')">{{ release.version }}</div>
+                            <div class="fill"></div>
+                            <div class="value">{{ $hoobs.dates.age(release.published) }}</div>
+                        </div>
+                        <div class="heading">{{ $t("prereleases") }}</div>
+                        <div v-for="(release, index) in plugin.betas" :key="`version:${index}`" class="version">
                             <icon v-on:click="install(release.version, true)" name="download" class="icon" :title="$t('plugin_install')" />
                             <div v-on:click="install(release.version, true)" class="value" :title="$t('plugin_install')">{{ release.version }}</div>
                             <div class="fill"></div>
@@ -100,10 +107,7 @@
             "reviews": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/reviews.vue"),
         },
 
-        props: {
-            name: String,
-            scope: String,
-        },
+        props: { name: String, scope: String },
 
         computed: {
             user() {
@@ -130,18 +134,9 @@
                 version: 0,
                 loading: true,
                 tabs: [
-                    {
-                        value: "details",
-                        display: this.$t("details"),
-                    },
-                    {
-                        value: "reviews",
-                        display: this.$t("reviews"),
-                    },
-                    {
-                        value: "versions",
-                        display: this.$t("versions"),
-                    },
+                    { value: "details", display: this.$t("details") },
+                    { value: "reviews", display: this.$t("reviews") },
+                    { value: "versions", display: this.$t("versions") },
                 ],
                 section: "details",
                 sections: [],
@@ -150,7 +145,7 @@
                 installed: [],
                 available: [],
                 plugin: {},
-                releases: {},
+                readme: null,
                 query: "",
                 from: "",
             };
@@ -180,12 +175,12 @@
                 this.installed = [];
                 this.available = [];
                 this.plugin = {};
+                this.readme = null;
                 this.active = null;
                 this.current = null;
                 this.homepage = null;
                 this.repository = null;
                 this.downloads = {};
-                this.releases = {};
 
                 this.bridges = (await this.$hoobs.bridges.list()).filter((item) => item.type === "bridge");
 
@@ -203,10 +198,9 @@
 
                 if (identifier && identifier !== "") {
                     this.plugin = await this.$hoobs.repository.details(identifier);
+                    this.readme = await this.$hoobs.repository.readme(identifier);
 
-                    if (this.plugin) {
-                        this.releases = this.versions(this.plugin);
-                    } else {
+                    if (!this.plugin) {
                         this.plugin = {
                             deleted: true,
                             name: identifier,
@@ -398,24 +392,6 @@
                 return null;
             },
 
-            versions(plugin) {
-                const tags = Object.keys(plugin.tags || {}).filter((tag) => plugin.times[plugin.tags[tag]]).map((tag) => ({
-                    tag,
-                    version: plugin.tags[tag],
-                    published: plugin.times[plugin.tags[tag]],
-                }));
-
-                const versions = Object.keys(plugin.versions).reverse().filter((key) => plugin.times[key]).map((key) => ({
-                    version: key,
-                    published: plugin.times[key],
-                }));
-
-                return {
-                    tags,
-                    versions,
-                };
-            },
-
             intersect() {
                 const bridges = this.bridges.filter((item) => item.type === "bridge").map((item) => item.id);
                 const installed = this.installed.map((item) => item.id);
@@ -437,29 +413,6 @@
 
             change(value) {
                 this.section = value;
-            },
-
-            readme() {
-                if (this.plugin.deleted) return this.$t("plugin_deleted");
-
-                const { latest } = (this.plugin.tags || {});
-
-                if (this.plugin.override_readme && this.plugin.curated && this.plugin.curated !== "") return this.$markdown(this.plugin.curated);
-                if (latest && this.plugin.versions[latest] && this.plugin.versions[latest].readme && this.plugin.versions[latest].readme !== "") return this.$markdown(this.plugin.versions[latest].readme);
-
-                if (this.plugin.versions) {
-                    const keys = Object.keys(this.plugin.versions).reverse();
-
-                    for (let i = 0; i < keys.length; i += 1) {
-                        if ((!latest || Semver.compare(keys[i], latest, "<=")) && this.plugin.versions[keys[i]].readme && this.plugin.versions[keys[i]].readme !== "") {
-                            return this.$markdown(this.plugin.versions[keys[i]].readme);
-                        }
-                    }
-                }
-
-                if (this.plugin.details && this.plugin.details !== "") return this.$markdown(this.plugin.details);
-
-                return this.$markdown(this.plugin.description);
             },
 
             navigate(controller, action, query) {

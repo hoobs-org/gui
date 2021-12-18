@@ -54,9 +54,7 @@ export default new Vuex.Store({
         heap: 0,
         temp: null,
         session: "",
-        user: {
-            permissions: {},
-        },
+        user: { permissions: {} },
         auth: false,
         version: {
             hoobsd: "0.0.0",
@@ -149,9 +147,7 @@ export default new Vuex.Store({
             if (state.latest) clearTimeout(state.latest.timer);
 
             state.latest = {
-                timer: setTimeout(() => {
-                    state.latest = null;
-                }, 10 * 1000),
+                timer: setTimeout(() => { state.latest = null; }, 10 * 1000),
                 notification,
             };
 
@@ -183,9 +179,7 @@ export default new Vuex.Store({
                     permissions: user.permissions || {},
                 };
             } else {
-                state.user = {
-                    permissions: {},
-                };
+                state.user = { permissions: {} };
             }
         },
 

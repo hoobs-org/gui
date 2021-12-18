@@ -1,6 +1,6 @@
 {
     "name": "hoobs-gui",
-    "version": "4.1.17",
+    "version": "4.1.20",
     "description": "Interface component for the certified HOOBS stack.",
     "license": "GPL-3.0",
     "keywords": [
@@ -38,14 +38,10 @@
         "colorthief": "^2.3.2",
         "compare-versions": "^3.6.0",
         "core-js": "^3.8.1",
-        "emojer": "^1.1.5",
         "file-saver": "^2.0.5",
-        "github-api-emojis": "^1.0.3",
         "identicon.js": "^2.3.3",
         "lodash.debounce": "^4.0.8",
         "pako": "^2.0.4",
-        "showdown": "^1.9.1",
-        "showdown-highlight": "^2.1.5",
         "video.js": "^7.12.3",
         "vue": "^2.6.12",
         "vue-chartkick": "^0.6.1",

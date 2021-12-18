@@ -105,16 +105,7 @@
 <script>
     export default {
         name: "signal",
-
-        props: {
-            quality: {
-                type: Number,
-                required: true,
-            },
-            secure: {
-                type: Boolean,
-            },
-        },
+        props: { quality: { type: Number, required: true }, secure: { type: Boolean } },
     };
 </script>
 

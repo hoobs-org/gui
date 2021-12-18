@@ -80,10 +80,7 @@
 
     export default {
         name: "updates",
-
-        components: {
-            "message": () => import(/* webpackChunkName: "common" */ "@/components/elements/message.vue"),
-        },
+        components: { "message": () => import(/* webpackChunkName: "common" */ "@/components/elements/message.vue") },
 
         computed: {
             platform() {
@@ -194,9 +191,7 @@
 
                     waits.push(new Promise((resolve) => {
                         this.$hoobs.bridge(plugin.bridge).then((bridge) => {
-                            bridge.plugins.upgrade(plugin.identifier).then(() => {
-                                resolve();
-                            });
+                            bridge.plugins.upgrade(plugin.identifier).then(() => resolve());
                         });
                     }));
                 }

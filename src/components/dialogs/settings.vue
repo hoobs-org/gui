@@ -281,9 +281,7 @@
                     this.$action.on("io", "disconnected", () => {
                         this.$action.emit("io", "reload");
 
-                        setTimeout(() => {
-                            this.$dialog.close("settings");
-                        }, REDIRECT_DELAY);
+                        setTimeout(() => this.$dialog.close("settings"), REDIRECT_DELAY);
                     });
                 });
             },
@@ -324,9 +322,7 @@
 
                     await (await this.$hoobs.system()).shutdown();
 
-                    this.$action.on("io", "disconnected", () => {
-                        this.$dialog.close("settings");
-                    });
+                    this.$action.on("io", "disconnected", () => this.$dialog.close("settings"));
                 });
             },
 
@@ -385,9 +381,7 @@
                     this.$action.on("io", "disconnected", () => {
                         this.$action.emit("io", "reload");
 
-                        setTimeout(() => {
-                            this.$dialog.close("settings");
-                        }, REDIRECT_DELAY);
+                        setTimeout(() => this.$dialog.close("settings"), REDIRECT_DELAY);
                     });
                 });
             },

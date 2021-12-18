@@ -52,11 +52,7 @@
 
     export default {
         name: "message",
-
-        props: {
-            value: Object,
-            compact: Boolean,
-        },
+        props: { value: Object, compact: Boolean },
 
         methods: {
             format(value) {
@@ -72,9 +68,7 @@
                 scheme.scheme("analogic");
                 scheme.variation("hard");
 
-                if (double) {
-                    return this.analogic(scheme.colors()[7]);
-                }
+                if (double) return this.analogic(scheme.colors()[7]);
 
                 return `#${scheme.colors()[7]}`;
             },

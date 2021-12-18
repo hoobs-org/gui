@@ -33,10 +33,7 @@
 <script>
     export default {
         name: "context",
-
-        props: {
-            override: String,
-        },
+        props: { override: String },
 
         computed: {
             notifications() {

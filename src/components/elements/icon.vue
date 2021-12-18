@@ -12,13 +12,7 @@
 
     export default {
         name: "icon",
-
-        props: {
-            name: {
-                type: String,
-                required: true,
-            },
-        },
+        props: { name: { type: String, required: true } },
 
         computed: {
             path() {

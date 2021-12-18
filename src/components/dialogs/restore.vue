@@ -47,10 +47,7 @@
 
     export default {
         name: "restore",
-
-        components: {
-            "message": () => import(/* webpackChunkName: "config" */ "@/components/elements/message.vue"),
-        },
+        components: { "message": () => import(/* webpackChunkName: "config" */ "@/components/elements/message.vue") },
 
         data() {
             return {
@@ -64,9 +61,7 @@
 
         async mounted() {
             this.loading = true;
-
             this.files = await this.$hoobs.backup.catalog(5);
-
             this.loading = false;
         },
 
@@ -127,9 +122,7 @@
                     this.$action.on("io", "disconnected", () => {
                         this.$action.emit("io", "reload");
 
-                        setTimeout(() => {
-                            this.$dialog.close("settings");
-                        }, REDIRECT_DELAY);
+                        setTimeout(() => this.$dialog.close("settings"), REDIRECT_DELAY);
                     });
                 }
             },
@@ -184,9 +177,7 @@
                     this.$action.on("io", "disconnected", () => {
                         this.$action.emit("io", "reload");
 
-                        setTimeout(() => {
-                            this.$dialog.close("settings");
-                        }, REDIRECT_DELAY);
+                        setTimeout(() => this.$dialog.close("settings"), REDIRECT_DELAY);
                     });
                 }
             },

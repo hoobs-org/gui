@@ -46,10 +46,7 @@
 
     export default {
         name: "root-field",
-
-        components: {
-            "schema": () => import(/* webpackChunkName: "config" */ "@/components/elements/schema.vue"),
-        },
+        components: { "schema": () => import(/* webpackChunkName: "config" */ "@/components/elements/schema.vue") },
 
         props: {
             field: String,
@@ -61,9 +58,7 @@
         },
 
         data() {
-            return {
-                items: (this.value !== undefined) ? this.value : [],
-            };
+            return { items: (this.value !== undefined) ? this.value : [] };
         },
 
         methods: {

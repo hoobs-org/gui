@@ -34,26 +34,14 @@
 <script>
     export default {
         name: "modal",
-
-        components: {
-            "welcome": () => import(/* webpackChunkName: "common" */ "@/components/elements/welcome.vue"),
-        },
+        components: { "welcome": () => import(/* webpackChunkName: "common" */ "@/components/elements/welcome.vue") },
 
         props: {
             title: String,
             welcome: String,
-            width: {
-                type: String,
-                default: "auto",
-            },
-            height: {
-                type: String,
-                default: "auto",
-            },
-            draggable: {
-                type: Boolean,
-                default: false,
-            },
+            width: { type: String, default: "auto" },
+            height: { type: String, default: "auto" },
+            draggable: { type: Boolean, default: false },
         },
     };
 </script>

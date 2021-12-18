@@ -23,9 +23,7 @@
 </template>
 
 <script>
-    export default {
-        name: "public",
-    };
+    export default { name: "public" };
 </script>
 
 <style lang="scss">

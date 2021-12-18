@@ -41,14 +41,8 @@
 
         props: {
             value: String,
-            size: {
-                type: String,
-                default: "47px",
-            },
-            delay: {
-                type: Number,
-                default: 500,
-            },
+            size: { type: String, default: "47px" },
+            delay: { type: Number, default: 500 },
         },
 
         data() {
@@ -58,9 +52,7 @@
         },
 
         mounted() {
-            setTimeout(() => {
-                this.display = true;
-            }, this.delay);
+            setTimeout(() => { this.display = true; }, this.delay);
         },
     };
 </script>

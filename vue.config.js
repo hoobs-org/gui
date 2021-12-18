@@ -4,9 +4,7 @@ module.exports = {
     outputDir: resolve(__dirname, "./dist/usr/lib/hoobs"),
 
     configureWebpack: {
-        performance: {
-            hints: false,
-        },
+        performance: { hints: false },
         optimization: {
             runtimeChunk: "single",
             splitChunks: {

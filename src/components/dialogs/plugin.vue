@@ -30,14 +30,8 @@
 <script>
     export default {
         name: "plugin",
-
-        components: {
-            "modal-frame": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/frame.vue"),
-        },
-
-        props: {
-            options: Object,
-        },
+        components: { "modal-frame": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/frame.vue") },
+        props: { options: Object },
 
         data() {
             return {
@@ -66,10 +60,7 @@
             loader() {
                 this.$refs.frame.contentWindow.$bridge = this.options.bridge;
                 this.$refs.frame.contentWindow.$plugin = this.options.plugin;
-
-                this.$refs.frame.contentWindow.$open = (url, options) => {
-                    window.open(url, "", options);
-                };
+                this.$refs.frame.contentWindow.$open = (url, options) => window.open(url, "", options);
 
                 this.$refs.frame.contentWindow.$close = (reload) => {
                     this.$dialog.close("plugin");

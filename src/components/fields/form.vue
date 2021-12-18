@@ -47,10 +47,7 @@
 
     export default {
         name: "form-field",
-
-        components: {
-            "schema": () => import(/* webpackChunkName: "config" */ "@/components/elements/schema.vue"),
-        },
+        components: { "schema": () => import(/* webpackChunkName: "config" */ "@/components/elements/schema.vue") },
 
         props: {
             field: [String, Number],

@@ -46,10 +46,7 @@
 <script>
     export default {
         name: "welcome",
-
-        props: {
-            message: String,
-        },
+        props: { message: String },
     };
 </script>
 

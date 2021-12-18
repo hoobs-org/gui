@@ -79,14 +79,8 @@
 
     export default {
         name: "bridges",
-
-        components: {
-            "message": () => import(/* webpackChunkName: "common" */ "@/components/elements/message.vue"),
-        },
-
-        props: {
-            options: Object,
-        },
+        components: { "message": () => import(/* webpackChunkName: "common" */ "@/components/elements/message.vue") },
+        props: { options: Object },
 
         data() {
             return {
@@ -101,13 +95,10 @@
                 advertiser: "bonjour",
                 current: null,
                 messages: [],
-                advertisers: [{
-                    value: "bonjour",
-                    text: this.$t("bridge_bonjour"),
-                }, {
-                    value: "ciao",
-                    text: this.$t("bridge_ciao"),
-                }],
+                advertisers: [
+                    { value: "bonjour", text: this.$t("bridge_bonjour") },
+                    { value: "ciao", text: this.$t("bridge_ciao") },
+                ],
             };
         },
 

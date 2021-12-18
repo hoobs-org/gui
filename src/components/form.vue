@@ -41,10 +41,7 @@
 
     export default {
         name: "schema-form",
-
-        components: {
-            "schema": () => import(/* webpackChunkName: "config" */ "@/components/elements/schema.vue"),
-        },
+        components: { "schema": () => import(/* webpackChunkName: "config" */ "@/components/elements/schema.vue") },
 
         props: {
             schema: Object,
@@ -54,9 +51,7 @@
         },
 
         data() {
-            return {
-                items: this.value || scaffold(this.schema),
-            };
+            return { items: this.value || scaffold(this.schema) };
         },
 
         watch: {

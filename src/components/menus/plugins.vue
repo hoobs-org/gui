@@ -28,16 +28,10 @@
 <script>
     export default {
         name: "plugins",
-
-        props: {
-            options: Object,
-        },
+        props: { options: Object },
 
         data() {
-            return {
-                left: 0,
-                selected: [],
-            };
+            return { left: 0, selected: [] };
         },
 
         mounted() {

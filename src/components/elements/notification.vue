@@ -34,11 +34,7 @@
 <script>
     export default {
         name: "notification",
-
-        props: {
-            message: Object,
-            snack: Boolean,
-        },
+        props: { message: Object, snack: Boolean },
 
         methods: {
             dismiss(id) {

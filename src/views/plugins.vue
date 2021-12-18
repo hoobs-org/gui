@@ -88,15 +88,8 @@
 <script>
     export default {
         name: "plugins",
-
-        props: {
-            id: String,
-        },
-
-        components: {
-            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
-            "plugin": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/plugin.vue"),
-        },
+        props: { id: String },
+        components: { "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"), "plugin": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/plugin.vue") },
 
         computed: {
             user() {
@@ -141,11 +134,7 @@
                 return 0;
             });
 
-            this.bridges.unshift({
-                id: "library",
-                display: this.$t("library"),
-            });
-
+            this.bridges.unshift({ id: "library", display: this.$t("library") });
             this.load(this.id);
         },
 

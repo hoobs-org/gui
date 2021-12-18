@@ -171,9 +171,7 @@ export const draft = {
             items: { $ref: "#" },
         },
         nonNegativeInteger: { type: "integer", minimum: 0 },
-        nonNegativeIntegerDefault0: {
-            allOf: [{ $ref: "#/definitions/nonNegativeInteger" }, { default: 0 }],
-        },
+        nonNegativeIntegerDefault0: { allOf: [{ $ref: "#/definitions/nonNegativeInteger" }, { default: 0 }] },
         simpleTypes: { enum: ["array", "boolean", "integer", "null", "number", "object", "string"] },
         stringArray: {
             type: "array",
@@ -202,10 +200,7 @@ export const draft = {
         minLength: { $ref: "#/definitions/nonNegativeIntegerDefault0" },
         pattern: { type: "string", format: "regex" },
         additionalItems: { $ref: "#" },
-        items: {
-            anyOf: [{ $ref: "#" }, { $ref: "#/definitions/schemaArray" }],
-            default: true,
-        },
+        items: { anyOf: [{ $ref: "#" }, { $ref: "#/definitions/schemaArray" }], default: true },
         maxItems: { $ref: "#/definitions/nonNegativeInteger" },
         minItems: { $ref: "#/definitions/nonNegativeIntegerDefault0" },
         uniqueItems: { type: "boolean", default: false },
@@ -230,10 +225,7 @@ export const draft = {
             propertyNames: { format: "regex" },
             default: {},
         },
-        dependencies: {
-            type: "object",
-            additionalProperties: { anyOf: [{ $ref: "#" }, { $ref: "#/definitions/stringArray" }] },
-        },
+        dependencies: { type: "object", additionalProperties: { anyOf: [{ $ref: "#" }, { $ref: "#/definitions/stringArray" }] } },
         propertyNames: { $ref: "#" },
         const: true,
         enum: {

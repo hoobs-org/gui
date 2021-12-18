@@ -28,13 +28,7 @@
 
     export default {
         name: "player",
-
-        props: {
-            source: {
-                type: String,
-                require: true,
-            },
-        },
+        props: { source: { type: String, require: true } },
 
         data() {
             return {
@@ -47,12 +41,7 @@
                 liveui: true,
                 autoplay: true,
                 controls: true,
-                sources: [
-                    {
-                        src: this.source,
-                        type: "video/mp4",
-                    },
-                ],
+                sources: [{ src: this.source, type: "video/mp4" }],
             });
         },
 

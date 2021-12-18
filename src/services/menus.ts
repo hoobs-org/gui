@@ -19,20 +19,8 @@
 import Menus from "../plugins/menus";
 
 export default new Menus([
-    {
-        name: "application",
-        component: () => import(/* webpackChunkName: "common" */ "@/components/menus/application.vue"),
-    },
-    {
-        name: "notifications",
-        component: () => import(/* webpackChunkName: "common" */ "@/components/notifications.vue"),
-    },
-    {
-        name: "bridges",
-        component: () => import(/* webpackChunkName: "common" */ "@/components/menus/bridges.vue"),
-    },
-    {
-        name: "plugins",
-        component: () => import(/* webpackChunkName: "common" */ "@/components/menus/plugins.vue"),
-    },
+    { name: "application", component: () => import(/* webpackChunkName: "common" */ "@/components/menus/application.vue") },
+    { name: "notifications", component: () => import(/* webpackChunkName: "common" */ "@/components/notifications.vue") },
+    { name: "bridges", component: () => import(/* webpackChunkName: "common" */ "@/components/menus/bridges.vue") },
+    { name: "plugins", component: () => import(/* webpackChunkName: "common" */ "@/components/menus/plugins.vue") },
 ]);

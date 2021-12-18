@@ -27,37 +27,25 @@
         name: "activity-widget",
 
         data() {
-            return {
-                key: 1,
-                colors: [],
-            };
+            return { key: 1, colors: [] };
         },
 
         created() {
             this.$store.subscribe((mutation) => {
-                if (mutation.type === "THEME:SET") {
-                    this.$theme.get().then((theme) => {
-                        this.colors = [theme.application.highlight, theme.application.accent];
-                    });
-                }
+                if (mutation.type === "THEME:SET") this.$theme.get().then((theme) => { this.colors = [theme.application.highlight, theme.application.accent]; });
             });
         },
 
         mounted() {
-            this.$theme.get().then((theme) => {
-                this.colors = [theme.application.highlight, theme.application.accent];
-            });
+            this.$theme.get().then((theme) => { this.colors = [theme.application.highlight, theme.application.accent]; });
         },
 
         computed: {
             graph() {
-                return [{
-                    name: `${this.$t("cpu")} ${(this.cpu || {}).used || 0}%`,
-                    data: this.cpu.history,
-                }, {
-                    name: `${this.$t("memory")} ${(this.memory || {}).load || 0}%`,
-                    data: this.memory.history,
-                }];
+                return [
+                    { name: `${this.$t("cpu")} ${(this.cpu || {}).used || 0}%`, data: this.cpu.history },
+                    { name: `${this.$t("memory")} ${(this.memory || {}).load || 0}%`, data: this.memory.history },
+                ];
             },
 
             cpu() {

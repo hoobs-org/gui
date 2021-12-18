@@ -82,9 +82,7 @@ export default class Dialogs {
             },
 
             methods: {
-                $alert: (message: string) => {
-                    this.open("alert", { message });
-                },
+                $alert: (message: string) => this.open("alert", { message }),
 
                 $confirm: (action: string, message: string, confirm: () => void, cancel?: () => void) => {
                     this.open("confirm", {

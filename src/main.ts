@@ -21,7 +21,6 @@ import hoobs from "@hoobs/sdk";
 import Vue from "vue";
 import App from "./app.vue";
 
-import converter from "./plugins/markdown";
 import graphing from "./plugins/graphing";
 import themes from "./plugins/themes";
 import mobile from "./plugins/mobile";
@@ -36,7 +35,6 @@ import tasks from "./services/tasks";
 import lang from "./lang";
 
 const io = hoobs.sdk.io();
-const markdown = converter();
 
 hoobs.sdk.config.token.get(() => store.state.session);
 hoobs.sdk.config.token.set((token: string) => { store.commit("SESSION:SET", token); });
@@ -75,7 +73,6 @@ Vue.use(menus);
 Vue.use(mobile);
 Vue.use(dialogs);
 Vue.use(actions);
-Vue.use(markdown);
 Vue.use(graphing);
 
 Vue.use(themes, { hoobs, store });

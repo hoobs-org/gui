@@ -40,11 +40,7 @@
 
     export default {
         name: "authenticated",
-
-        components: {
-            "navigation": () => import(/* webpackChunkName: "common" */ "@/components/navigation.vue"),
-            "notification": () => import(/* webpackChunkName: "common" */ "@/components/elements/notification.vue"),
-        },
+        components: { "navigation": () => import(/* webpackChunkName: "common" */ "@/components/navigation.vue"), "notification": () => import(/* webpackChunkName: "common" */ "@/components/elements/notification.vue") },
 
         computed: {
             notifications() {

@@ -32,9 +32,7 @@ export function path(theme: string, hoobs?: any | unknown): string {
             return `/defaults/${theme}/theme.css`;
 
         default:
-            if (hoobs) {
-                return `${hoobs.sdk.config.host.get("themes")}/${theme}/theme.css`;
-            }
+            if (hoobs) return `${hoobs.sdk.config.host.get("themes")}/${theme}/theme.css`;
 
             return "/defaults/dark/theme.css";
     }

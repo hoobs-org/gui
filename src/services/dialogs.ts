@@ -19,56 +19,17 @@
 import Dialogs from "../plugins/dialogs";
 
 export default new Dialogs([
-    {
-        name: "alert",
-        component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/alert.vue"),
-    },
-    {
-        name: "confirm",
-        component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/confirm.vue"),
-    },
-    {
-        name: "about",
-        component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/about.vue"),
-    },
-    {
-        name: "updates",
-        component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/updates.vue"),
-    },
-    {
-        name: "settings",
-        component: () => import(/* webpackChunkName: "config" */ "@/components/dialogs/settings.vue"),
-    },
-    {
-        name: "network",
-        component: () => import(/* webpackChunkName: "config" */ "@/components/dialogs/network.vue"),
-    },
-    {
-        name: "personalize",
-        component: () => import(/* webpackChunkName: "layout" */ "@/components/dialogs/personalize.vue"),
-    },
-    {
-        name: "dashboard",
-        component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/dashboard.vue"),
-    },
-    {
-        name: "bridges",
-        component: () => import(/* webpackChunkName: "plugins" */ "@/components/dialogs/bridges.vue"),
-    },
-    {
-        name: "plugin",
-        component: () => import(/* webpackChunkName: "plugins" */ "@/components/dialogs/plugin.vue"),
-    },
-    {
-        name: "accessory",
-        component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/accessory.vue"),
-    },
-    {
-        name: "hidden",
-        component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/hidden.vue"),
-    },
-    {
-        name: "cache",
-        component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/cache.vue"),
-    },
+    { name: "alert", component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/alert.vue") },
+    { name: "confirm", component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/confirm.vue") },
+    { name: "about", component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/about.vue") },
+    { name: "updates", component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/updates.vue") },
+    { name: "settings", component: () => import(/* webpackChunkName: "config" */ "@/components/dialogs/settings.vue") },
+    { name: "network", component: () => import(/* webpackChunkName: "config" */ "@/components/dialogs/network.vue") },
+    { name: "personalize", component: () => import(/* webpackChunkName: "layout" */ "@/components/dialogs/personalize.vue") },
+    { name: "dashboard", component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/dashboard.vue") },
+    { name: "bridges", component: () => import(/* webpackChunkName: "plugins" */ "@/components/dialogs/bridges.vue") },
+    { name: "plugin", component: () => import(/* webpackChunkName: "plugins" */ "@/components/dialogs/plugin.vue") },
+    { name: "accessory", component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/accessory.vue") },
+    { name: "hidden", component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/hidden.vue") },
+    { name: "cache", component: () => import(/* webpackChunkName: "common" */ "@/components/dialogs/cache.vue") },
 ]);

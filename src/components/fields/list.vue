@@ -51,10 +51,7 @@
 
     export default {
         name: "list-field",
-
-        components: {
-            "schema": () => import(/* webpackChunkName: "config" */ "@/components/elements/schema.vue"),
-        },
+        components: { "schema": () => import(/* webpackChunkName: "config" */ "@/components/elements/schema.vue") },
 
         props: {
             field: [String, Number],
@@ -66,10 +63,7 @@
         },
 
         data() {
-            return {
-                label: "",
-                items: (this.value !== undefined) ? this.value : [],
-            };
+            return { label: "", items: (this.value !== undefined) ? this.value : [] };
         },
 
         mounted() {

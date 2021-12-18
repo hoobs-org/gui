@@ -52,13 +52,13 @@
                 <span>{{ $t("certified_hoobs") }}</span>
             </div>
         </div>
-        <div v-if="plugin.author && (plugin.author.name || plugin.author.username)" class="title">
+        <div v-if="plugin.author" class="title">
             <h1>{{ $t("author") }}</h1>
         </div>
-        <div v-if="plugin.author && (plugin.author.name || plugin.author.username)" class="item">
+        <div v-if="plugin.author" class="item">
             <div class="tag">
                 <img class="gravatar" :src="plugin.gravitar" />
-                <span>{{ plugin.author.name || plugin.author.username }}</span>
+                <span>{{ plugin.author.name }}</span>
             </div>
         </div>
         <div v-if="plugin.downloads && downloads.data" class="title">
@@ -82,19 +82,8 @@
             <h1>License</h1>
         </div>
         <div class="item">
-            <div class="value">{{ plugin.version || plugin.tags.latest }}</div>
+            <div class="value">{{ plugin.version }}</div>
             <div v-if="plugin.license" class="value">{{ plugin.license || "" }}</div>
-        </div>
-        <div v-if="support" class="title">
-            <h1>{{ $t("support") }}</h1>
-        </div>
-        <div v-if="support" class="item">
-            <div class="value">
-                <a :href="support" target="_blank">
-                    <icon name="help-circle" class="icon" />
-                    {{ $t("plugin_issues") }}
-                </a>
-            </div>
         </div>
         <div class="title">
             <h1>{{ $t("homepage") }}</h1>
@@ -105,7 +94,7 @@
                     <icon name="link" class="icon" />
                     {{ domain(homepage) }}
                 </a>
-                <a :href="`https://plugins.hoobs.org/plugin/${plugin.name}`" target="_blank">
+                <a :href="`https://plugins.hoobs.org/${plugin.name}`" target="_blank">
                     <icon name="link" class="icon" />
                     hoobs.org
                 </a>
@@ -136,15 +125,8 @@
 
     export default {
         name: "detail",
-
-        props: {
-            plugin: Object,
-            installed: Array,
-        },
-
-        components: {
-            "trend-chart": () => import(/* webpackChunkName: "plugins" */ "vue-trend-chart"),
-        },
+        props: { plugin: Object, installed: Array },
+        components: { "trend-chart": () => import(/* webpackChunkName: "plugins" */ "vue-trend-chart") },
 
         data() {
             return {
@@ -153,7 +135,6 @@
                 homepage: null,
                 repository: null,
                 bridges: [],
-                support: null,
                 downloads: {},
             };
         },
@@ -187,10 +168,7 @@
                         count += 1;
 
                         if (i % 7 === 0 && count > 0) {
-                            points.push({
-                                date: last,
-                                value: parseInt((total / count).toFixed(0), 10),
-                            });
+                            points.push({ date: last, value: parseInt((total / count).toFixed(0), 10) });
 
                             total = 0;
                             count = 0;
@@ -198,12 +176,7 @@
                     }
                 }
 
-                if (count > 0) {
-                    points.push({
-                        date: last,
-                        value: parseInt((total / count).toFixed(0), 10),
-                    });
-                }
+                if (count > 0) points.push({ date: last, value: parseInt((total / count).toFixed(0), 10) });
 
                 average = parseInt((sum / this.plugin.downloads.length).toFixed(0), 10);
             }
@@ -214,13 +187,6 @@
                 smooth: true,
                 fill: true,
             };
-
-            if (this.plugin.versions) {
-                const version = Object.keys(this.plugin.versions).pop();
-                const latest = this.plugin.versions[version];
-
-                if (latest && (latest.bugs || {}).url) this.support = latest.bugs.url;
-            }
         },
 
         methods: {
@@ -235,25 +201,16 @@
             },
 
             url(value) {
-                if (!value || value === "") {
-                    return null;
-                }
+                if (!value || value === "") return null;
 
                 const parts = (value || "").split("//");
 
-                if (parts.length < 2) {
-                    return null;
-                }
+                if (parts.length < 2) return null;
 
                 let ssl = true;
 
-                if (parts[0].endsWith("http:")) {
-                    ssl = false;
-                }
-
-                if (ssl) {
-                    return `https://${parts[1]}`;
-                }
+                if (parts[0].endsWith("http:")) ssl = false;
+                if (ssl) return `https://${parts[1]}`;
 
                 return `http://${parts[1]}`;
             },
@@ -269,9 +226,7 @@
                 scheme.scheme("analogic");
                 scheme.variation("hard");
 
-                if (double) {
-                    return this.analogic(scheme.colors()[7]);
-                }
+                if (double) return this.analogic(scheme.colors()[7]);
 
                 return `#${scheme.colors()[7]}`;
             },

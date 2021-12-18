@@ -35,10 +35,7 @@
 <script>
     export default {
         name: "notifications",
-
-        components: {
-            "notification": () => import(/* webpackChunkName: "common" */ "@/components/elements/notification.vue"),
-        },
+        components: { "notification": () => import(/* webpackChunkName: "common" */ "@/components/elements/notification.vue") },
 
         computed: {
             notifications() {
@@ -47,10 +44,7 @@
         },
 
         data() {
-            return {
-                active: true,
-                timeout: undefined,
-            };
+            return { active: true, timeout: undefined };
         },
 
         methods: {

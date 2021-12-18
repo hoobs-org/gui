@@ -32,9 +32,9 @@
             </div>
         </div>
         <div ref="content" class="content">
-            <div class="markdown" v-html="$markdown(value.body)"></div>
+            <div class="markdown" v-html="value.body"></div>
             <div v-if="value.response" class="response">Developer Response</div>
-            <div v-if="value.response" class="markdown rebuttal" v-html="$markdown(value.response)"></div>
+            <div v-if="value.response" class="markdown rebuttal" v-html="value.response"></div>
         </div>
     </div>
 </template>
@@ -42,14 +42,8 @@
 <script>
     export default {
         name: "review",
-
-        components: {
-            "rating": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/rating.vue"),
-        },
-
-        props: {
-            value: Object,
-        },
+        components: { "rating": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/rating.vue") },
+        props: { value: Object },
     };
 </script>
 

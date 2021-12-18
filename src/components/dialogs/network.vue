@@ -78,11 +78,7 @@
 <script>
     export default {
         name: "netwsork",
-
-        components: {
-            "signal": () => import(/* webpackChunkName: "common" */ "@/components/elements/signal.vue"),
-            "chevron": () => import(/* webpackChunkName: "common" */ "@/components/elements/chevron.vue"),
-        },
+        components: { "signal": () => import(/* webpackChunkName: "common" */ "@/components/elements/signal.vue"), "chevron": () => import(/* webpackChunkName: "common" */ "@/components/elements/chevron.vue") },
 
         data() {
             return {

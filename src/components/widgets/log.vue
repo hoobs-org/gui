@@ -29,10 +29,7 @@
 
     export default {
         name: "log-widget",
-
-        components: {
-            "message": () => import(/* webpackChunkName: "common" */ "@/components/elements/message.vue"),
-        },
+        components: { "message": () => import(/* webpackChunkName: "common" */ "@/components/elements/message.vue") },
 
         computed: {
             messages() {
