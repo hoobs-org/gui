@@ -28,7 +28,7 @@
     "preferGlobal": true,
     "dependencies": {
         "@chenfengyuan/vue-qrcode": "^1.0.2",
-        "@hoobs/sdk": "^4.5.11",
+        "@hoobs/sdk": "^4.7.1",
         "@interactjs/core": "^1.10.1",
         "@interactjs/utils": "^1.10.1",
         "@jaames/iro": "^5.3.1",
