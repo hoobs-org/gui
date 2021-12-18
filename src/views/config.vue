@@ -93,6 +93,7 @@
 </template>
 
 <script>
+    import { parse } from "best-effort-json-parser";
     import { cloneJson } from "../services/json";
 
     const BRIDGE_RESTART_DELAY = 4000;
@@ -305,7 +306,7 @@
 
                         if (this.editor) {
                             try {
-                                working = JSON.parse(this.editor.getValue());
+                                working = parse(this.editor.getValue());
                             } catch (_error) {
                                 working = this.working;
                             }
@@ -339,7 +340,7 @@
 
                         if (this.editor) {
                             try {
-                                working = JSON.parse(this.editor.getValue());
+                                working = parse(this.editor.getValue());
                             } catch (_error) {
                                 working = this.working;
                             }
