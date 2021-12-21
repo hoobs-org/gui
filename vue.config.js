@@ -3,6 +3,8 @@ const { resolve } = require("path");
 module.exports = {
     outputDir: resolve(__dirname, "./dist/usr/lib/hoobs"),
 
+    devServer: { disableHostCheck: true },
+
     configureWebpack: {
         performance: { hints: false },
         optimization: {
