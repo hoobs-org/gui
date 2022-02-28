@@ -202,17 +202,13 @@
                     if ((i + 1) !== rooms[i].sequence) {
                         updates.push(new Promise((resolve) => {
                             this.$hoobs.room(rooms[i].id).then((room) => {
-                                room.set("sequence", (i + 1)).finally(() => {
-                                    resolve();
-                                });
-                            }).catch(() => {
-                                resolve();
-                            });
+                                room.set("sequence", (i + 1)).finally(() => resolve());
+                            }).catch(() => resolve());
                         }));
                     }
                 }
 
-                await Promise.all(updates);
+                await Promise.allSettled(updates);
             },
 
             async lock() {
@@ -234,17 +230,13 @@
                     if ((i + 1) !== this.accessories[i].sequence) {
                         updates.push(new Promise((resolve) => {
                             this.$hoobs.accessory(this.accessories[i].bridge, this.accessories[i].accessory_identifier).then((accessory) => {
-                                accessory.set("sequence", (i + 1)).finally(() => {
-                                    resolve();
-                                });
-                            }).catch(() => {
-                                resolve();
-                            });
+                                accessory.set("sequence", (i + 1)).finally(() => resolve());
+                            }).catch(() => resolve());
                         }));
                     }
                 }
 
-                await Promise.all(updates);
+                await Promise.allSettled(updates);
             },
 
             load(id) {

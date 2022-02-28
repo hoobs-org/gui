@@ -17,7 +17,7 @@
  -------------------------------------------------------------------------------------------------->
 
 <template>
-    <div v-if="!loading" id="widget" :class="locked ? 'locked' : 'unlocked'">
+    <div id="widget" :class="locked ? 'locked' : 'unlocked'">
         <div ref="device" class="device">
             <camera-accessory v-if="available" :accessory="accessory" :disabled="!locked" :dashboard="true" />
             <unavailable-accessory v-else :item="item" :disabled="!locked" />
@@ -37,7 +37,6 @@
         data() {
             return {
                 retries: 10,
-                loading: true,
                 accessory: null,
                 available: false,
             };
@@ -54,13 +53,11 @@
 
                     if (this.accessory.accessory_identifier && this.accessory.type === "camera") {
                         this.available = true;
-                        this.loading = false;
                     } else if (this.retries > 0) {
                         this.retries -= 1;
+                        this.available = false;
 
                         setTimeout(() => this.load(), LOAD_RETRY_DELAY);
-                    } else {
-                        this.loading = false;
                     }
                 });
             },
