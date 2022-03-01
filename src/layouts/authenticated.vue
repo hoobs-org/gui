@@ -55,7 +55,7 @@
         data() {
             return {
                 reload: false,
-                loading: true,
+                loading: false,
                 dialogs: 0,
             };
         },
