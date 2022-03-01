@@ -44,6 +44,7 @@
 
         async created() {
             this.$theme.load();
+            this.$action.emit("personalize", "update");
 
             window.addEventListener("resize", () => {
                 this.$action.emit("window", "resize");

@@ -42,8 +42,6 @@ hoobs.sdk.config.token.set((token: string) => { store.commit("SESSION:SET", toke
 actions.on("io", "log", (data) => store.commit("IO:LOG", data));
 actions.on("io", "monitor", (data) => store.commit("IO:MONITOR", data));
 actions.on("io", "notification", (data) => store.commit("IO:NOTIFICATION", data));
-actions.on("io", "accessory_change", (data) => store.commit("IO:ACCESSORY:CHANGE", data));
-actions.on("io", "room_change", (data) => store.commit("IO:ROOM:CHANGE", data));
 
 actions.on("log", "history", () => hoobs.sdk.log().then((messages: any) => { store.commit("LOG:HISTORY", messages); }));
 actions.on("window", "open", (url) => window.open(url));
