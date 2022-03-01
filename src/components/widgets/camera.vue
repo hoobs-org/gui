@@ -31,7 +31,12 @@
 
     export default {
         name: "camera-widget",
-        components: { "camera-accessory": () => import(/* webpackChunkName: "accessories" */ "@/components/accessories/camera.vue") },
+
+        components: {
+            "camera-accessory": () => import(/* webpackChunkName: "accessories" */ "@/components/accessories/camera.vue"),
+            "unavailable-accessory": () => import(/* webpackChunkName: "accessories" */ "@/components/accessories/unavailable.vue"),
+        },
+
         props: { item: { type: Object, required: true }, locked: Boolean },
 
         data() {
