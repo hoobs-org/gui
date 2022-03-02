@@ -147,7 +147,7 @@
                     this.timers.timelapse = null;
                 }
 
-                if (this.subject && this.subject.snapshot && repeat && (!this.live || !this.source)) {
+                if (this.subject && typeof this.subject.snapshot === "function" && repeat && (!this.live || !this.source)) {
                     const snapshot = await this.subject.snapshot();
 
                     if (snapshot) {
