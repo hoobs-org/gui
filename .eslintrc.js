@@ -148,5 +148,11 @@ module.exports = {
                 "consistent-return": "off",
             },
         },
+        {
+            files: ["src/services/icons.ts"],
+            rules: {
+                "import/no-unresolved": "off",
+            },
+        },
     ],
 };

@@ -19,6 +19,7 @@ debug() {
 
     cp ../lang/builds/* src/lang/locals/
     cp ../lang/countries.json src/lang/
+    cp ../lang/icons.json src/lang/
 
     ./node_modules/.bin/vue-cli-service serve --modern --mode development --port 49826
 }
