@@ -92,16 +92,12 @@
 <script>
     import Validators from "../services/validators";
 
+    import List from "@/components/elements/list.vue";
+
     export default {
         name: "users",
-
-        props: {
-            id: String,
-        },
-
-        components: {
-            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
-        },
+        props: { id: String },
+        components: { "list": List },
 
         computed: {
             user() {

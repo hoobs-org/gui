@@ -77,9 +77,11 @@
     import Validators from "../../services/validators";
     import { mac } from "../../services/formatters";
 
+    import Message from "@/components/elements/message.vue";
+
     export default {
         name: "bridges",
-        components: { "message": () => import(/* webpackChunkName: "common" */ "@/components/elements/message.vue") },
+        components: { "message": Message },
         props: { options: Object },
 
         data() {

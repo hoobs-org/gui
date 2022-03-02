@@ -96,15 +96,21 @@
     import crypto from "crypto";
     import identicon from "identicon.js";
 
+    import Tabs from "@/components/elements/tabs.vue";
+    import List from "@/components/elements/list.vue";
+    import Detail from "@/components/elements/detail.vue";
+    import Rating from "@/components/elements/rating.vue";
+    import Reviews from "@/components/elements/reviews.vue";
+
     export default {
         name: "plugin",
 
         components: {
-            "tabs": () => import(/* webpackChunkName: "common" */ "@/components/elements/tabs.vue"),
-            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
-            "detail": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/detail.vue"),
-            "rating": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/rating.vue"),
-            "reviews": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/reviews.vue"),
+            "tabs": Tabs,
+            "list": List,
+            "detail": Detail,
+            "rating": Rating,
+            "reviews": Reviews,
         },
 
         props: { name: String, scope: String },

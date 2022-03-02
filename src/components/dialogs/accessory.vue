@@ -85,9 +85,12 @@
     import { saveAs } from "file-saver";
     import { initial, layout } from "../../services/widgets";
 
+    import Icons from "@/components/dialogs/icons.vue";
+    import Rooms from "@/components/dialogs/rooms.vue";
+
     export default {
         name: "settings",
-        components: { "icons": () => import(/* webpackChunkName: "common" */ "@/components/dialogs/icons.vue"), "rooms": () => import(/* webpackChunkName: "common" */ "@/components/dialogs/rooms.vue") },
+        components: { "icons": Icons, "rooms": Rooms },
         props: { options: Object },
 
         computed: {

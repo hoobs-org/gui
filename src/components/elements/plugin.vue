@@ -36,10 +36,12 @@
     import crypto from "crypto";
     import identicon from "identicon.js";
 
+    import Rating from "@/components/elements/rating.vue";
+
     export default {
         name: "plugin",
         props: { subject: Object },
-        components: { "rating": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/rating.vue") },
+        components: { "rating": Rating },
 
         methods: {
             icon() {

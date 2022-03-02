@@ -86,10 +86,13 @@
 </template>
 
 <script>
+    import List from "@/components/elements/list.vue";
+    import Plugin from "@/components/elements/plugin.vue";
+
     export default {
         name: "plugins",
         props: { id: String },
-        components: { "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"), "plugin": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/plugin.vue") },
+        components: { "list": List, "plugin": Plugin },
 
         computed: {
             user() {

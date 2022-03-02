@@ -103,15 +103,19 @@
 <script>
     import Countries from "@/lang/countries.json";
 
+    import Restore from "@/components/dialogs/restore.vue";
+    import Location from "@/components/dialogs/location.vue";
+    import Message from "@/components/elements/message.vue";
+
     const REDIRECT_DELAY = 1000;
 
     export default {
         name: "settings",
 
         components: {
-            "restore": () => import(/* webpackChunkName: "config" */ "@/components/dialogs/restore.vue"),
-            "location": () => import(/* webpackChunkName: "config" */ "@/components/dialogs/location.vue"),
-            "message": () => import(/* webpackChunkName: "config" */ "@/components/elements/message.vue"),
+            "restore": Restore,
+            "location": Location,
+            "message": Message,
         },
 
         computed: {

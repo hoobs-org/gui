@@ -78,9 +78,11 @@
     import Semver from "compare-versions";
     import { cloneJson } from "../../services/json";
 
+    import Message from "@/components/elements/message.vue";
+
     export default {
         name: "updates",
-        components: { "message": () => import(/* webpackChunkName: "common" */ "@/components/elements/message.vue") },
+        components: { "message": Message },
 
         computed: {
             platform() {

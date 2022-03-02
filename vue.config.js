@@ -7,15 +7,7 @@ module.exports = {
 
     configureWebpack: {
         performance: { hints: false },
-        optimization: {
-            runtimeChunk: "single",
-            splitChunks: {
-                chunks: "all",
-                maxInitialRequests: Infinity,
-                minSize: 0,
-                maxSize: 10000,
-            },
-        },
+        optimization: { runtimeChunk: "single" },
     },
 
     chainWebpack: (config) => {

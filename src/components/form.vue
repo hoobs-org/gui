@@ -39,9 +39,11 @@
 <script>
     import { scaffold, prune } from "../services/schema";
 
+    import Schema from "@/components/elements/schema.vue";
+
     export default {
         name: "schema-form",
-        components: { "schema": () => import(/* webpackChunkName: "config" */ "@/components/elements/schema.vue") },
+        components: { "schema": Schema },
 
         props: {
             schema: Object,

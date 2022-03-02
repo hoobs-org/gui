@@ -44,9 +44,11 @@
 <script>
     import { scaffold } from "../../services/schema";
 
+    import Schema from "@/components/elements/schema.vue";
+
     export default {
         name: "root-field",
-        components: { "schema": () => import(/* webpackChunkName: "config" */ "@/components/elements/schema.vue") },
+        components: { "schema": Schema },
 
         props: {
             field: String,

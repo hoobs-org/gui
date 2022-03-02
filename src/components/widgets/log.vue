@@ -25,11 +25,13 @@
 </template>
 
 <script>
+    import Message from "@/components/elements/message.vue";
+
     const SCROLL_DELAY = 10;
 
     export default {
         name: "log-widget",
-        components: { "message": () => import(/* webpackChunkName: "common" */ "@/components/elements/message.vue") },
+        components: { "message": Message },
 
         computed: {
             messages() {

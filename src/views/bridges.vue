@@ -133,6 +133,10 @@
 
 <script>
     import Sanitize from "@hoobs/sdk/lib/sanitize";
+
+    import QRCode from "@chenfengyuan/vue-qrcode";
+    import List from "@/components/elements/list.vue";
+
     import Validators from "../services/validators";
     import { mac } from "../services/formatters";
 
@@ -140,15 +144,8 @@
 
     export default {
         name: "bridges",
-
-        props: {
-            id: String,
-        },
-
-        components: {
-            "qrcode": () => import(/* webpackChunkName: "bridges" */ "@chenfengyuan/vue-qrcode"),
-            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
-        },
+        props: { id: String },
+        components: { "qrcode": QRCode, "list": List },
 
         computed: {
             user() {

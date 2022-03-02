@@ -43,11 +43,13 @@
 </template>
 
 <script>
+    import Message from "@/components/elements/message.vue";
+
     const REDIRECT_DELAY = 1000;
 
     export default {
         name: "restore",
-        components: { "message": () => import(/* webpackChunkName: "config" */ "@/components/elements/message.vue") },
+        components: { "message": Message },
 
         data() {
             return {

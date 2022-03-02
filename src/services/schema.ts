@@ -17,6 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
+import DesktopField from "@/components/fields/desktop.vue";
+import ButtonField from "@/components/fields/button.vue";
+import OneOfField from "@/components/fields/oneof.vue";
+import RootField from "@/components/fields/root.vue";
+import ListField from "@/components/fields/list.vue";
+import AnyOfField from "@/components/fields/anyof.vue";
+import FormField from "@/components/fields/form.vue";
+import KeysField from "@/components/fields/keys.vue";
+
 export function prune(input: any): any {
     if (typeof (input) === "object") {
         if (input instanceof Date) {
@@ -80,28 +89,28 @@ export function merge(first: any, second: any) {
 export function component(name: string) {
     switch (name) {
         case "field:desktop":
-            return () => import(/* webpackChunkName: "config" */ "@/components/fields/desktop.vue");
+            return DesktopField;
 
         case "field:button":
-            return () => import(/* webpackChunkName: "config" */ "@/components/fields/button.vue");
+            return ButtonField;
 
         case "field:oneof":
-            return () => import(/* webpackChunkName: "config" */ "@/components/fields/oneof.vue");
+            return OneOfField;
 
         case "field:root":
-            return () => import(/* webpackChunkName: "config" */ "@/components/fields/root.vue");
+            return RootField;
 
         case "field:list":
-            return () => import(/* webpackChunkName: "config" */ "@/components/fields/list.vue");
+            return ListField;
 
         case "field:anyof":
-            return () => import(/* webpackChunkName: "config" */ "@/components/fields/anyof.vue");
+            return AnyOfField;
 
         case "field:form":
-            return () => import(/* webpackChunkName: "config" */ "@/components/fields/form.vue");
+            return FormField;
 
         case "field:keys":
-            return () => import(/* webpackChunkName: "config" */ "@/components/fields/keys.vue");
+            return KeysField;
 
         case "field:textarea":
             return "textarea-field";

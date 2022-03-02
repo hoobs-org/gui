@@ -33,9 +33,11 @@
 </template>
 
 <script>
+    import Notification from "@/components/elements/notification.vue";
+
     export default {
         name: "notifications",
-        components: { "notification": () => import(/* webpackChunkName: "common" */ "@/components/elements/notification.vue") },
+        components: { "notification": Notification },
 
         computed: {
             notifications() {

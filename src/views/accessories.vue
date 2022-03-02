@@ -112,7 +112,10 @@
 </template>
 
 <script>
+    import Draggable from "vuedraggable";
+
     import Sanitize from "@hoobs/sdk/lib/sanitize";
+    import List from "@/components/elements/list.vue";
 
     import Validators from "../services/validators";
     import { accessories, types } from "../services/accessories";
@@ -126,8 +129,8 @@
         },
 
         components: {
-            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
-            "draggable": () => import(/* webpackChunkName: "common" */ "vuedraggable"),
+            "list": List,
+            "draggable": Draggable,
 
             ...accessories(),
         },

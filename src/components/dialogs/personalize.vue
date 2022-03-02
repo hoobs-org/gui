@@ -98,9 +98,12 @@
     import ColorExtractor from "colorthief/dist/color-thief";
     import Colors from "@/services/colors";
 
+    import Color from "@/components/elements/color.vue";
+    import Backdrop from "@/components/elements/backdrop.vue";
+
     export default {
         name: "personalize",
-        components: { "color": () => import(/* webpackChunkName: "layout" */ "@/components/elements/color.vue"), "backdrop": () => import(/* webpackChunkName: "layout" */ "@/components/elements/backdrop.vue") },
+        components: { "color": Color, "backdrop": Backdrop },
 
         data() {
             return {

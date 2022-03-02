@@ -36,11 +36,14 @@
 <script>
     import { decompressJson } from "../services/json";
 
+    import Navigation from "@/components/navigation.vue";
+    import Notification from "@/components/elements/notification.vue";
+
     const SOCKET_RECONNECT_DELAY = 0.5 * 1000;
 
     export default {
         name: "authenticated",
-        components: { "navigation": () => import(/* webpackChunkName: "common" */ "@/components/navigation.vue"), "notification": () => import(/* webpackChunkName: "common" */ "@/components/elements/notification.vue") },
+        components: { "navigation": Navigation, "notification": Notification },
 
         computed: {
             notifications() {

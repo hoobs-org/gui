@@ -40,9 +40,11 @@
 </template>
 
 <script>
+    import Rating from "@/components/elements/rating.vue";
+
     export default {
         name: "review",
-        components: { "rating": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/rating.vue") },
+        components: { "rating": Rating },
         props: { value: Object },
     };
 </script>

@@ -27,16 +27,14 @@
 </template>
 
 <script>
+    import CameraAccessory from "@/components/accessories/camera.vue";
+    import UnavailableAccessory from "@/components/accessories/unavailable.vue";
+
     const LOAD_RETRY_DELAY = 5 * 1000;
 
     export default {
         name: "camera-widget",
-
-        components: {
-            "camera-accessory": () => import(/* webpackChunkName: "accessories" */ "@/components/accessories/camera.vue"),
-            "unavailable-accessory": () => import(/* webpackChunkName: "accessories" */ "@/components/accessories/unavailable.vue"),
-        },
-
+        components: { "camera-accessory": CameraAccessory, "unavailable-accessory": UnavailableAccessory },
         props: { item: { type: Object, required: true }, locked: Boolean },
 
         data() {

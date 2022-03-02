@@ -76,9 +76,12 @@
 </template>
 
 <script>
+    import Signal from "@/components/elements/signal.vue";
+    import Chevron from "@/components/elements/chevron.vue";
+
     export default {
         name: "netwsork",
-        components: { "signal": () => import(/* webpackChunkName: "common" */ "@/components/elements/signal.vue"), "chevron": () => import(/* webpackChunkName: "common" */ "@/components/elements/chevron.vue") },
+        components: { "signal": Signal, "chevron": Chevron },
 
         data() {
             return {

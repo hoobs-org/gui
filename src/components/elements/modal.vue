@@ -32,9 +32,11 @@
 </template>
 
 <script>
+    import Welcome from "@/components/elements/welcome.vue";
+
     export default {
         name: "modal",
-        components: { "welcome": () => import(/* webpackChunkName: "common" */ "@/components/elements/welcome.vue") },
+        components: { "welcome": Welcome },
 
         props: {
             title: String,

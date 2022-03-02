@@ -28,9 +28,11 @@
 </template>
 
 <script>
+    import ModalFrame from "@/components/elements/frame.vue";
+
     export default {
         name: "plugin",
-        components: { "modal-frame": () => import(/* webpackChunkName: "plugins" */ "@/components/elements/frame.vue") },
+        components: { "modal-frame": ModalFrame },
         props: { options: Object },
 
         data() {

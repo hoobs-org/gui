@@ -122,11 +122,12 @@
 
 <script>
     import ColorScheme from "color-scheme";
+    import TrendChart from "vue-trend-chart";
 
     export default {
         name: "detail",
         props: { plugin: Object, installed: Array },
-        components: { "trend-chart": () => import(/* webpackChunkName: "plugins" */ "vue-trend-chart") },
+        components: { "trend-chart": TrendChart },
 
         data() {
             return {

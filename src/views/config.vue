@@ -96,6 +96,10 @@
     import { parse } from "best-effort-json-parser";
     import { cloneJson } from "../services/json";
 
+    import List from "@/components/elements/list.vue";
+    import Tabs from "@/components/elements/tabs.vue";
+    import SchemaForm from "@/components/form.vue";
+
     const BRIDGE_RESTART_DELAY = 4000;
     const MONACO_LOAD_DELAY = 10;
 
@@ -108,9 +112,9 @@
         },
 
         components: {
-            "list": () => import(/* webpackChunkName: "common" */ "@/components/elements/list.vue"),
-            "tabs": () => import(/* webpackChunkName: "common" */ "@/components/elements/tabs.vue"),
-            "schema-form": () => import(/* webpackChunkName: "config" */ "@/components/form.vue"),
+            "list": List,
+            "tabs": Tabs,
+            "schema-form": SchemaForm,
         },
 
         computed: {

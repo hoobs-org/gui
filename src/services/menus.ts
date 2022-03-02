@@ -16,11 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.                          *
  **************************************************************************************************/
 
+import ApplicationMenu from "@/components/menus/application.vue";
+import NotificationsMenu from "@/components/notifications.vue";
+import BridgesMenu from "@/components/menus/bridges.vue";
+import PluginsMenu from "@/components/menus/plugins.vue";
+
 import Menus from "../plugins/menus";
 
 export default new Menus([
-    { name: "application", component: () => import(/* webpackChunkName: "common" */ "@/components/menus/application.vue") },
-    { name: "notifications", component: () => import(/* webpackChunkName: "common" */ "@/components/notifications.vue") },
-    { name: "bridges", component: () => import(/* webpackChunkName: "common" */ "@/components/menus/bridges.vue") },
-    { name: "plugins", component: () => import(/* webpackChunkName: "common" */ "@/components/menus/plugins.vue") },
+    { name: "application", component: ApplicationMenu },
+    { name: "notifications", component: NotificationsMenu },
+    { name: "bridges", component: BridgesMenu },
+    { name: "plugins", component: PluginsMenu },
 ]);
