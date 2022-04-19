@@ -60,6 +60,7 @@
             }
 
             if (this.value === undefined && this.default !== undefined) {
+                this.$emit("input", this.default, this.value);
                 this.$emit("change", this.default, this.value);
 
                 setTimeout(() => {
