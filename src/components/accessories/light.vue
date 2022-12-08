@@ -529,6 +529,7 @@
 
                 .icon {
                     height: 50%;
+                    width: 50%;
                     color: var(--accessory-text);
                 }
             }
@@ -582,6 +583,7 @@
 
                     .icon {
                         height: 50%;
+                        width: 50%;
                     }
                 }
             }
